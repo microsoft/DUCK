@@ -39,7 +39,8 @@
     "gulp-uncss": "^1.0.1",
     "js-yaml": "^3.4.6",
     "rimraf": "^2.4.3",
-    "yargs": "^3.8.0"
+    "yargs": "^3.8.0",
+    "gulp-go": "~1.1.0"
   },
   "repository": {
     "type": "git",

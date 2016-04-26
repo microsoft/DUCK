@@ -7,6 +7,7 @@ import gulp     from 'gulp';
 import rimraf   from 'rimraf';
 import yaml     from 'js-yaml';
 import fs       from 'fs';
+import gulpgo   from 'gulp-go';
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
