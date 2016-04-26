@@ -12,7 +12,7 @@ This is a Gulp-powered build system with these features:
 
 ## Installation
 
-To use this template, your computer needs:
+The project build requires:
 
 - [NodeJS](https://nodejs.org/en/) (0.12 or greater)
 - [Git](https://git-scm.com/)
