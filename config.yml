@@ -55,6 +55,9 @@ PATHS:
     - "bower_components/foundation-sites/js/foundation.tabs.js"
     - "bower_components/foundation-sites/js/foundation.toggler.js"
     - "bower_components/foundation-sites/js/foundation.tooltip.js"
+    # Angular
+    - "bower_components/angular/angular.js"
+    - "bower_components/angular-ui-router/release/angular-ui-router.js"
     # Paths to your own project code are here
     - "frontend/src/assets/js/!(app).js"
     - "frontend/src/assets/js/app.js"
