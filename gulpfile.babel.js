@@ -25,7 +25,7 @@ function loadConfig() {
 
 // Build the "dist" folder by running all of the below tasks
 gulp.task('build',
-    gulp.series(clean, gulp.parallel(pages, sass, javascript, images, copy)));
+    gulp.series(clean, backend, gulp.parallel(pages, sass, javascript, images, copy)));
 
 // Build the site, run the server, and watch for file changes
 gulp.task('default',
@@ -107,6 +107,14 @@ function server(done) {
     done();
 }
 
+var go;
+
+function backend(done) {
+    go = gulpgo.run("main.go", ["--arg1", "value1"], {cwd: "backend", stdio: 'inherit'});
+    done();
+}
+
+
 // Watch for changes to static assets, pages, Sass, and JavaScript
 function watch() {
     gulp.watch(PATHS.assets, copy);
@@ -115,4 +123,7 @@ function watch() {
     gulp.watch('frontend/src/assets/scss/**/*.scss', sass);
     gulp.watch('frontend/src/assets/js/**/*.js', gulp.series(javascript, browser.reload));
     gulp.watch('frontend/src/assets/img/**/*', gulp.series(images, browser.reload));
+    gulp.watch(["backend/**/*.go"]).on("change", function () {
+        go.restart();
+    });
 }
