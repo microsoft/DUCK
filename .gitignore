@@ -18,3 +18,5 @@ idea
 
 /tmp/
 docker-dir/image/
+.vscode/
+main.exe*
