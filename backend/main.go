@@ -1,7 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"net/http"
+	"fmt"
+	"flag"
+)
 
 func main() {
-	fmt.Println("Hello")
+
+	var webDir string;
+
+	flag.StringVar(&webDir, "webdir", "frontend", "The root directory for serving web content")
+	flag.Parse()
+
+	fmt.Println("Web root: " + webDir)
+
+	http.Handle("/", http.FileServer(http.Dir(webDir)))
+	http.ListenAndServe(":3000", nil)
 }
