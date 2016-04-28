@@ -4,7 +4,7 @@
   "authors": [
     "Microsoft Corporation"
   ],
-  "description": "DUCK Prokect.",
+  "description": "DUCK Project.",
   "main": "gulpfile.js",
   "license": "Apache 2.0",
   "ignore": [
