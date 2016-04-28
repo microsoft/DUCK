@@ -3,13 +3,13 @@
 This is a Gulp-powered build system with the following features:
 
 - Sass compilation and prefixing
-- JavaScript concatenation
-- Built-in BrowserSync server
+- JavaScript transpilation based on Babel and concatenation
+- Go compilation
+- Dynamic browser reloading using BrowserSync
 - For production builds:
   - CSS compression
   - JavaScript compression
   - Image compression
-- Go compilation
 
 ## Installation
 
