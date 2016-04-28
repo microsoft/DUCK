@@ -25,7 +25,7 @@ function loadConfig() {
 
 // Build the "dist" folder by running all of the below tasks
 gulp.task("build",
-    gulp.series(clean, backend, gulp.parallel(pages, sass, javascript, images, copy)));
+    gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, copy)));
 
 // Build the site, run the server, and watch for file changes
 gulp.task("default",
@@ -71,6 +71,19 @@ function sass() {
 }
 
 // Combine JavaScript into one file. In production, the file is minified.
+function vendorJS() {
+    return gulp.src(PATHS.vendorJS)
+        .pipe($.sourcemaps.init())
+        .pipe($.concat("vendor.js"))
+        .pipe($.if(PRODUCTION, $.uglify()
+            .on("error", e => {
+                console.log(e);
+            })
+        ))
+        .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
+        .pipe(gulp.dest(PATHS.dist + "/assets/js"));
+}
+
 function javascript() {
     return gulp.src(PATHS.javascript)
         .pipe($.sourcemaps.init())

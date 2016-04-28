@@ -1,4 +1,4 @@
-# Your project's server will run on localhost:xxxx at this port
+# Test server proxy port
 PORT: 8000
 
 # Autoprefixer will make sure your CSS works with these browsers
@@ -14,7 +14,6 @@ UNCSS_OPTIONS:
     - !!js/regexp .foundation-mq
     - !!js/regexp ^\.is-.*
 
-# Gulp will reference these paths when it copies files
 PATHS:
   # Path to dist folder
   dist: "frontend/dist"  
@@ -22,20 +21,18 @@ PATHS:
   assets:
     - "frontend/src/assets/**/*"
     - "!frontend/src/assets/{img,js,scss}/**/*"
-  # Paths to Sass libraries, which can then be loaded with @import
+  # Sass libraries, which can then be loaded with @import
   sass:
     - "bower_components/foundation-sites/scss"
     - "bower_components/motion-ui/src"
-  # Paths to JavaScript libraries, which are compined into one file
-  javascript:
+  vendorJS:
     # Libraries requried by Foundation
     - "bower_components/jquery/dist/jquery.js"
     - "bower_components/what-input/what-input.js"
     # Core Foundation files
     - "bower_components/foundation-sites/js/foundation.core.js"
     - "bower_components/foundation-sites/js/foundation.util.*.js"
-    # Individual Foundation components
-    # If you aren't using a component, just remove it from the list
+    # Foundation components - optional if not used
     - "bower_components/foundation-sites/js/foundation.abide.js"
     - "bower_components/foundation-sites/js/foundation.accordion.js"
     - "bower_components/foundation-sites/js/foundation.accordionMenu.js"
@@ -58,6 +55,8 @@ PATHS:
     # Angular
     - "bower_components/angular/angular.js"
     - "bower_components/angular-ui-router/release/angular-ui-router.js"
-    # Paths to your own project code are here
+
+    # App specific
+  javascript:
     - "frontend/src/assets/js/!(app).js"
     - "frontend/src/assets/js/app.js"
