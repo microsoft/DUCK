@@ -14,11 +14,37 @@ app.factory("AppInfo", function () {
     };
 });
 
-app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider",
-    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider) {
+app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide",
+    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide) {
 
         // set the debug log level
         $logProvider.debugEnabled(true);
+
+        // decorate the logger to prepend DUCK prefix
+        $provide.decorator('$log', ['$delegate', function ($delegate) {
+            // pointer to original log methods
+            var origDebug = $delegate.debug;
+            var origInfo = $delegate.info;
+
+            // override method to prepend DUCK prefix
+            $delegate.debug = function () {
+                var args = [].slice.call(arguments);
+                args[0] = ["DUCK", ': ', args[0]].join('');
+
+                //invoke original method
+                origDebug.apply(null, args)
+            };
+
+            $delegate.info = function () {
+                var args = [].slice.call(arguments);
+                args[0] = ["DUCK", ': ', args[0]].join('');
+
+                //invoke original method
+                origInfo.apply(null, args)
+            };
+
+            return $delegate;
+        }]);
 
         // setup URL structure
         $urlRouterProvider.otherwise("/");
@@ -43,11 +69,12 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
             })
     }]);
 
+
 app.controller("AppController", function (CurrentUser, AppInfo, $log) {
-    $log.info("Initializing DUCK version " + AppInfo.version);
+    $log.info("Initializing version " + AppInfo.version);
 
     CurrentUser.initialize();
-    
+
 });
 
 app.run(function ($rootScope) {
@@ -104,7 +131,7 @@ Foundation.reflow = function (elem, plugins) {
             // PATCH: end replaced code
 
             if ($el.attr('data-options')) {
-                var thing = $el.attr('data-options').split(';').forEach(function (e, i) {
+                $el.attr('data-options').split(';').forEach(function (e) {
                     var opt = e.split(':').map(function (el) {
                         return el.trim();
                     });
