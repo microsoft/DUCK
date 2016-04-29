@@ -24,7 +24,7 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
         $urlRouterProvider.otherwise("/");
 
         $locationProvider.html5Mode({
-            enabled: true,
+            enabled: false,
             requireBase: false
         });
 

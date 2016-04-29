@@ -1,5 +1,30 @@
 <div ng-controller="SigninController as signin">
-    <div class="row align-center">
-        <a class="button small " ng-click="signin.signin()">SIGNIN</a>
+    <div class="row">
+        <div class="medium-6 medium-centered large-4 large-centered columns">
+            <form>
+                <div class="row column log-in-form">
+                    <label class="text-center padding-bottom-3">
+                        <img src="assets/img/duck.128.png">
+                    </label>
+                    <h4 class="text-center">Please Sign In</h4>
+                    <label>
+                        Email
+                        <input type="text" placeholder="somebody@example.com">
+                    </label>
+                    <label>
+                        Password
+                        <input type="password" placeholder="Password">
+                    </label>
+                    <p><a type="submit" ng-click="signin.signin()" class="button expanded">Sign In</a></p>
+                    <p class="text-center"><a href="#">Forgot your password?</a></p>
+                </div>
+            </form>
+
+        </div>
     </div>
+
+
+    <!--<div class="row align-center">-->
+    <!--<a class="button small " ng-click="signin.signin()">SIGNIN</a>-->
+    <!--</div>-->
 </div>
