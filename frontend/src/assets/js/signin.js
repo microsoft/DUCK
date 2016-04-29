@@ -5,6 +5,10 @@
  */
 var signinModule = angular.module("duck.signin", ["ui.router"]);
 
-signinModule.controller("SigninController", function ($scope) {
+signinModule.controller("SigninController", function ($state) {
+
+    this.signin = function () {
+        $state.go("main");
+    }
 
 });

@@ -1,31 +1,49 @@
-<div class="top-bar" ng-controller="MainController as main">
-    <div class="top-bar-title">
-        <div>
-            <img src="assets/img/duck.png">
+<div ng-controller="MainController as main">
+    <div class="top-bar">
+        <div class="top-bar-title">
+            <div>
+                <img src="assets/img/duck.png">
+            </div>
+        </div>
+        <div id="responsive-menu">
+            <div class="top-bar-left">
+                <ul class="dropdown menu" data-dropdown-menu>
+                    <li>
+                        <a href="#">One</a>
+                        <ul class="menu vertical">
+                            <li><a href="#">One</a></li>
+                            <li><a href="#">Two</a></li>
+                            <li><a href="#">Three</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Two</a></li>
+                    <li><a href="#">Three</a></li>
+                </ul>
+            </div>
+            <div class="top-bar-right">
+                <ul class="menu">
+                    <li>
+                        <a data-open="logoutModel" class="button secondary">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div id="responsive-menu">
-        <div class="top-bar-left">
-            <ul class="dropdown menu" data-dropdown-menu>
-                <li>
-                    <a href="#">One</a>
-                    <ul class="menu vertical">
-                        <li><a href="#">One</a></li>
-                        <li><a href="#">Two</a></li>
-                        <li><a href="#">Three</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Two</a></li>
-                <li><a href="#">Three</a></li>
-            </ul>
+
+    <div ui-view class=""></div>
+
+    <div class="reveal tiny" id="logoutModel" data-reveal ng-controller="SignoutController as signout">
+        <h4>Logout</h4>
+        <div class="row">
+            <p class="lead">Are you sure you want to logout?</p>
         </div>
-        <div class="top-bar-right">
-            <ul class="menu">
-                <li>
-                    <a ui-sref="signin" ng-click="main.logout()" class="button secondary">Logout</a>
-                </li>
-            </ul>
+        <div class="row float-right">
+            <div class="column ">
+                <a class="button small" data-close ng-click="signout.signout()">YES</a>
+                <a class="button small secondary" data-close>NO</a>
+            </div>
         </div>
     </div>
+
 </div>
-<!--<div ui-view class=""></div>-->
+
