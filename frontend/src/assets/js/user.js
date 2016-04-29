@@ -66,6 +66,7 @@ userModule.service("CurrentUser", function ($log) {
         this.lastName = "anonymous";
         this.token = null;
         this.id = "";
+        $log.debug("Current user logged out and set to anonymous");
     }
 
 });

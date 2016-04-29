@@ -14,12 +14,13 @@ mainModule.controller("MainController", function ($scope) {
 
 });
 
-mainModule.controller("SignoutController", function ($state) {
+mainModule.controller("SignoutController", function (CurrentUser, $state) {
 
     /**
      * Logs the user out of the system by clearing the local storage token.
      */
     this.signout = function () {
+        CurrentUser.reset();
         $state.go("signin");
     }
 
