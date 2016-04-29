@@ -4,7 +4,7 @@
  * @type {angular.Module}
  */
 
-var app = angular.module("application", ["duck.main", "duck.signin", "ui.router"]);
+var app = angular.module("duck.application", ["duck.main", "duck.user", "duck.signin", "ui.router"]);
 
 app.factory("AppInfo", function () {
 
@@ -14,34 +14,40 @@ app.factory("AppInfo", function () {
     };
 });
 
+app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider",
+    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider) {
 
-app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", function ($urlRouterProvider, $locationProvider, $stateProvider) {
+        // set the debug log level
+        $logProvider.debugEnabled(true);
 
-    // setup URL structure
-    $urlRouterProvider.otherwise("/");
+        // setup URL structure
+        $urlRouterProvider.otherwise("/");
 
-    $locationProvider.html5Mode({
-        enabled: true,
-        requireBase: false
-    });
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });
 
-    $locationProvider.hashPrefix("!");
+        $locationProvider.hashPrefix("!");
 
-    // define the application states
-    $stateProvider
-        .state("main", {  // the top-level state for protected (signed in) areas of the application
-            url: "/",
-            templateUrl: "../../main.html"
-        })
+        // define the application states
+        $stateProvider
+            .state("main", {  // the top-level state for protected (signed in) areas of the application
+                url: "/",
+                templateUrl: "../../main.html"
+            })
 
-        .state("signin", {   // signin and registration process
-            url: "/signin",
-            templateUrl: "../../signin.html"
-        })
-}]);
+            .state("signin", {   // signin and registration process
+                url: "/signin",
+                templateUrl: "../../signin.html"
+            })
+    }]);
 
-app.controller("AppController", function ($scope) {
+app.controller("AppController", function (CurrentUser, AppInfo, $log) {
+    $log.info("Initializing DUCK version " + AppInfo.version);
 
+    CurrentUser.initialize();
+    
 });
 
 app.run(function ($rootScope) {
