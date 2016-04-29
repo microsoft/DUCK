@@ -3,13 +3,13 @@
     <meta charset="utf-8"/>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUCK</title>
+    <title>Microsoft DUCK</title>
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 
-<div ng-controller="AppController">
-    Message: {{test}}
+<div ng-controller="AppController as application">
+    <div ui-view></div>
 </div>
 
 <script src="assets/js/vendor.js"></script>

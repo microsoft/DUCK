@@ -1,0 +1,31 @@
+<div class="top-bar" ng-controller="MainController as main">
+    <div class="top-bar-title">
+        <div>
+            <img src="assets/img/duck.png">
+        </div>
+    </div>
+    <div id="responsive-menu">
+        <div class="top-bar-left">
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li>
+                    <a href="#">One</a>
+                    <ul class="menu vertical">
+                        <li><a href="#">One</a></li>
+                        <li><a href="#">Two</a></li>
+                        <li><a href="#">Three</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Two</a></li>
+                <li><a href="#">Three</a></li>
+            </ul>
+        </div>
+        <div class="top-bar-right">
+            <ul class="menu">
+                <li>
+                    <a ui-sref="signin" ng-click="main.logout()" class="button secondary">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--<div ui-view class=""></div>-->
