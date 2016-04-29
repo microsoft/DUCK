@@ -75,6 +75,7 @@ app.controller("AppController", function (CurrentUser, AppInfo, $log) {
 
     CurrentUser.initialize();
 
+    $log.info("Application initialized");
 });
 
 app.run(function ($rootScope) {
