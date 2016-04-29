@@ -9,13 +9,15 @@ userModule.service("CurrentUser", function ($log) {
     this.loggedIn = false;
     this.firstName = "anonymous";
     this.lastName = "anonymous";
-    this.token = null;
+    this.token = null;  // the JSON Web Token provided by the server
     this.id = "";
 
+    /**
+     * Initializes the current user from local storage if present; otherwise initializes an anonymous user.
+     */
     this.initialize = function () {
-
         if (localStorage.getItem("duck.token") === null) {
-            $log.debug("Current user initialized");
+            $log.debug("Current user initialized as anonymous");
             return;
         }
         this.firstName = localStorage.getItem("duck.firstName");
@@ -26,6 +28,10 @@ userModule.service("CurrentUser", function ($log) {
         $log.debug("Current user initialized");
     };
 
+    /**
+     * Initializes the current user from the given data.
+     * @param data the data
+     */
     this.initializeWith = function (data) {
         this.firstName = data.firstName;
         this.lastName = data.lastName;
@@ -36,6 +42,9 @@ userModule.service("CurrentUser", function ($log) {
         this.save();
     };
 
+    /**
+     * Saves the current user to local storage.
+     */
     this.save = function () {
         localStorage.setItem("duck.firstName", this.firstName);
         localStorage.setItem("duck.lastName", this.lastName);
@@ -43,6 +52,9 @@ userModule.service("CurrentUser", function ($log) {
         localStorage.setItem("duck.id", this.id);
     };
 
+    /**
+     * Resets the current user to anonymous.
+     */
     this.reset = function () {
         localStorage.removeItem("duck.firstName");
         localStorage.removeItem("duck.lastName");
