@@ -72,3 +72,11 @@ $form-radius: $global-radius;
 .padding-bottom-3 {
   padding-bottom: 3em;
 }
+
+.fixed-nav {
+  width: 100% !important;
+  left: 0 !important;;
+  position: fixed !important;;
+  top: 0 !important;;
+  z-index: 99 !important;
+}
