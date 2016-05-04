@@ -4,6 +4,23 @@
 var gatewayModule = angular.module("duck.gateway", []);
 
 /**
+ * Signs the user into the system by creating a login.
+ */
+gatewayModule.service('SigninService', function (CurrentUser, $http, $q) {
+
+    this.signin = function (username, password) {
+        return $q(function (resolve, reject) {
+            $http.post('/login', {username, password: password}).success(function (data) {
+                CurrentUser.initializeWith(data);
+                resolve();
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+    }
+});
+
+/**
  * Interceptor that adds an authorization token to the outbound request and handles errors reported from the server.
  */
 gatewayModule.config(["$httpProvider", function ($httpProvider, $injector) {
@@ -26,9 +43,6 @@ gatewayModule.config(["$httpProvider", function ($httpProvider, $injector) {
                 }
                 if (response.status === 401) {
                     $injector.get("$state").go("signin");
-                } else {
-                    // FIXME
-                    alert("Server Error");
                 }
                 return $q.reject(response);
             }
@@ -36,4 +50,21 @@ gatewayModule.config(["$httpProvider", function ($httpProvider, $injector) {
     }]);
 
 }]);
+
+
+gatewayModule.run(function ($rootScope, $state, CurrentUser) {
+
+    $rootScope.$on('$stateChangeStart', function (event, toState) {
+        if (!toState.requireSignin || !CurrentUser.loggedIn) {
+            // first case: no login required for this state, transition
+            // second case: user logged in, transition
+            return;
+        }
+
+        // user not logged in and attempting to access a restricted state, transition to signin instead
+        event.preventDefault();
+        $state.go('signin');
+    });
+});
+
 

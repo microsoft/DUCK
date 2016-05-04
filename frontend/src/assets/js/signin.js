@@ -5,10 +5,25 @@
  */
 var signinModule = angular.module("duck.signin", ["ui.router"]);
 
-signinModule.controller("SigninController", function ($state) {
+signinModule.controller("SigninController", function ($state, SigninService) {
+    this.username = "";
+    this.password = "";
 
     this.signin = function () {
-        $state.go("main");
+        if (this.username.length < 1 || this.password.length < 1) {
+            // FIXME
+            alert("Invalid username/password");
+        }
+        var promise = SigninService.signin(this.username, this.password);
+        promise.then(function (data) {
+                $state.go("main");
+            }, function (code) {
+                // FIXME
+                alert('Login Failed: ' + code);
+            }
+        );
+
+
     }
 
 });

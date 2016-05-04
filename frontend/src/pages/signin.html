@@ -9,11 +9,11 @@
                     <h4 class="text-center">Please Sign In</h4>
                     <label>
                         Email
-                        <input type="text" placeholder="somebody@example.com">
+                        <input type="text" placeholder="somebody@example.com" ng-model="signin.username">
                     </label>
                     <label>
                         Password
-                        <input type="password" placeholder="Password">
+                        <input type="password" placeholder="Password"  ng-model="signin.password">
                     </label>
                     <p><a type="submit" ng-click="signin.signin()" class="button expanded">Sign In</a></p>
                     <p class="text-center"><a href="#">Forgot your password?</a></p>

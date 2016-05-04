@@ -60,12 +60,15 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
         $stateProvider
             .state("main", {  // the top-level state for protected (signed in) areas of the application
                 url: "/",
-                templateUrl: "../../main.html"
+                templateUrl: "../../main.html",
+                requireSignin: true
             })
 
             .state("signin", {   // signin and registration process
                 url: "/signin",
-                templateUrl: "../../signin.html"
+                templateUrl: "../../signin.html",
+                requireSignin: false
+                
             })
     }]);
 
