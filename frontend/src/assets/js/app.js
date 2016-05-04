@@ -4,7 +4,7 @@
  * @type {angular.Module}
  */
 
-var app = angular.module("duck.application", ["duck.main", "duck.user", "duck.signin", "ui.router"]);
+var app = angular.module("duck.application", ["duck.main", "duck.user", "duck.signin", "duck.common", "ui.router"]);
 
 app.factory("AppInfo", function () {
 
