@@ -1,13 +1,14 @@
 "use strict";
 
-import plugins  from "gulp-load-plugins";
-import yargs    from "yargs";
-import browser  from "browser-sync";
-import gulp     from "gulp";
-import rimraf   from "rimraf";
-import yaml     from "js-yaml";
-import fs       from "fs";
-import gulpgo   from "gulp-go";
+import plugins from "gulp-load-plugins";
+import yargs from "yargs";
+import browser from "browser-sync";
+import gulp from "gulp";
+import rimraf from "rimraf";
+import yaml from "js-yaml";
+import fs from "fs";
+import gulpgo from "gulp-go";
+import gutil from "gulp-util";
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -16,7 +17,14 @@ const $ = plugins();
 const PRODUCTION = !!(yargs.argv.production);
 
 // Load settings from settings.yml
-const { COMPATIBILITY, PORT, UNCSS_OPTIONS, PATHS } = loadConfig();
+const {COMPATIBILITY, PORT, UNCSS_OPTIONS, PATHS} = loadConfig();
+
+
+if (process.env.GOPATH === undefined || process.env.GOPATH === null) {
+    gutil.log(gutil.colors.red("GOPATH not set, aborting build"));
+    process.exit(1);
+}
+
 
 function loadConfig() {
     let ymlFile = fs.readFileSync("config.yml", "utf8");
