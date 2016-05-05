@@ -15,6 +15,10 @@ import (
 type response struct {
 	Message string `json:"message"`
 }
+type user struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
 
 func helloHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, response{Message: "Hello World"})
@@ -24,16 +28,27 @@ func messageHandler(c echo.Context) error {
 }
 
 func loginHandler(c echo.Context) error {
-	username := c.FormValue("username")
-	password := c.FormValue("password")
 
-	if username == "duck" && password == "duck" {
+	u := new(user)
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+
+	if u.Username == "duck" && u.Password == "duck" {
+
+		//set vars -> we should get this from the DB
+		firstName := "Duck"
+		lastName := "Goose"
+		id := "e6eb5f0a-2ec0-4f79-b0c9-df6e6bb66032"
+
 		// Create token
 		token := jwt.New(jwt.SigningMethodHS256)
 
 		// Set claims
-		token.Claims["name"] = "Jon Snow"
-		token.Claims["admin"] = true
+		token.Claims["firstName"] = firstName
+		token.Claims["lastName"] = lastName
+		token.Claims["id"] = id
+		token.Claims["permissions"] = 1024 //FIXME
 		token.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
 		// Generate encoded token and send it as response.
@@ -42,7 +57,10 @@ func loginHandler(c echo.Context) error {
 			return err
 		}
 		return c.JSON(http.StatusOK, map[string]string{
-			"token": t,
+			"token":     t,
+			"firstName": firstName,
+			"lastName":  lastName,
+			"id":        id,
 		})
 	}
 
