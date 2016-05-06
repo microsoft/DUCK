@@ -15,7 +15,7 @@ signinModule.controller("SigninController", function ($state, SigninService) {
             alert("Invalid username/password");
         }
         var promise = SigninService.signin(this.username, this.password);
-        promise.then(function (data) {
+        promise.then(function () {
                 $state.go("main");
             }, function (code) {
                 // FIXME
