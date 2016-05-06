@@ -3,7 +3,7 @@
  *
  * @type {angular.Module}
  */
-var userModule = angular.module("duck.user", []);
+var userModule = angular.module("duck.user");
 
 userModule.service("CurrentUser", function ($log) {
     this.loggedIn = false;

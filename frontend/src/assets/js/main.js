@@ -3,7 +3,7 @@
  *
  * @type {angular.Module}
  */
-var mainModule = angular.module("duck.main", ["ui.router"]);
+var mainModule = angular.module("duck.main");
 
 mainModule.controller("MainController", function ($scope) {
 

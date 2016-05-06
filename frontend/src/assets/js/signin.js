@@ -3,7 +3,7 @@
  *
  * @type {angular.Module}
  */
-var signinModule = angular.module("duck.signin", ["ui.router"]);
+var signinModule = angular.module("duck.signin");
 
 signinModule.controller("SigninController", function ($state, SigninService) {
     this.username = "";

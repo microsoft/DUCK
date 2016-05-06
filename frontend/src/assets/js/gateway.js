@@ -1,7 +1,7 @@
 /**
  * Defines the gateway module. Gateway services manage client communications with the server.
  */
-var gatewayModule = angular.module("duck.gateway", []);
+var gatewayModule = angular.module("duck.gateway");
 
 /**
  * Signs the user into the system by creating a login.
