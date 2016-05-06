@@ -55,7 +55,7 @@ gatewayModule.config(["$httpProvider", function ($httpProvider, $injector) {
 gatewayModule.run(function ($rootScope, $state, CurrentUser) {
 
     $rootScope.$on('$stateChangeStart', function (event, toState) {
-        if (!toState.requireSignin || !CurrentUser.loggedIn) {
+        if (!toState.requireSignin || CurrentUser.loggedIn) {
             // first case: no login required for this state, transition
             // second case: user logged in, transition
             return;
