@@ -31,6 +31,7 @@ Then, from the cloned directory, install the required dependencies:
 ```bash
 cd duck
 npm install
+npm install -g bower
 bower install
 ```
 
