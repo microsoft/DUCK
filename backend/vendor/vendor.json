@@ -1,0 +1,79 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "XYxZEScqPha5TmAkwWZzLVNMp7I=",
+			"path": "github.com/dgrijalva/jwt-go",
+			"revision": "a2c85815a77d0f951e33ba4db5ae93629a1530af",
+			"revisionTime": "2016-04-13T00:36:00Z"
+		},
+		{
+			"checksumSHA1": "xJu2WUj7lg1qj3ajcJemBlnnX20=",
+			"path": "github.com/labstack/echo",
+			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
+			"revisionTime": "2016-05-07T14:45:03Z"
+		},
+		{
+			"checksumSHA1": "+odlTzR1MmpwIVH2e0xEXGOa+XE=",
+			"path": "github.com/labstack/echo/engine",
+			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
+			"revisionTime": "2016-05-07T14:45:03Z"
+		},
+		{
+			"checksumSHA1": "D7Pu+U7jOlag32AD4uUve8ahXKI=",
+			"path": "github.com/labstack/echo/engine/standard",
+			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
+			"revisionTime": "2016-05-07T14:45:03Z"
+		},
+		{
+			"checksumSHA1": "flRb3gjVKfCOo55PCT7RTxcBls4=",
+			"path": "github.com/labstack/echo/middleware",
+			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
+			"revisionTime": "2016-05-07T14:45:03Z"
+		},
+		{
+			"checksumSHA1": "SnErH4s8HFFr39b7WLXO0K+6AMc=",
+			"path": "github.com/labstack/gommon/bytes",
+			"revision": "2e62be24dbb1ceb226554aaccfe5a89ec71043b3",
+			"revisionTime": "2016-04-30T23:27:34Z"
+		},
+		{
+			"checksumSHA1": "LnzDopuGp/VMkmtInf+Mka8yPz8=",
+			"path": "github.com/labstack/gommon/color",
+			"revision": "2e62be24dbb1ceb226554aaccfe5a89ec71043b3",
+			"revisionTime": "2016-04-30T23:27:34Z"
+		},
+		{
+			"checksumSHA1": "8btg474B4jCYrXe2/ss8CXJVr5g=",
+			"path": "github.com/labstack/gommon/log",
+			"revision": "2e62be24dbb1ceb226554aaccfe5a89ec71043b3",
+			"revisionTime": "2016-04-30T23:27:34Z"
+		},
+		{
+			"checksumSHA1": "eCAikaJ4Ygh1/jMDyxSbOmYse1Y=",
+			"path": "github.com/mattn/go-colorable",
+			"revision": "4dfd151041a75c254953363cf78a0d9f38b46b0d",
+			"revisionTime": "2016-05-02T06:48:10Z"
+		},
+		{
+			"checksumSHA1": "lFTCvc9PnfeWLuoH5hpFJ1AgyUY=",
+			"path": "github.com/mattn/go-isatty",
+			"revision": "56b76bdf51f7708750eac80fa38b952bb9f32639",
+			"revisionTime": "2015-12-11T00:06:21Z"
+		},
+		{
+			"checksumSHA1": "kLYNAx9DYk4W/OuC6dl6W1yLaSk=",
+			"path": "github.com/valyala/fasttemplate",
+			"revision": "3b874956e03f1636d171bda64b130f9135f42cff",
+			"revisionTime": "2016-03-15T19:31:34Z"
+		},
+		{
+			"checksumSHA1": "9jjO5GjLa0XF/nfWihF02RoH4qc=",
+			"path": "golang.org/x/net/context",
+			"revision": "35ec611a141ee705590b9eb64d673f9e6dfeb1ac",
+			"revisionTime": "2016-04-28T06:05:50Z"
+		}
+	],
+	"rootPath": "github.com/Metaform/duck/backend"
+}
