@@ -95,7 +95,7 @@ func main() {
 	api.GET("/:message", messageHandler)
 
 	//create restricted sub-router
-	restricted := api.Group("/restricted", middleware.JWTAuth([]byte("secret")))
+	restricted := api.Group("/restricted", middleware.JWT([]byte("secret")))
 	//set restricted routes for api
 	restricted.GET("", helloHandler)
 	restricted.GET("/:message", messageHandler)
