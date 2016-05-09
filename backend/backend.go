@@ -15,10 +15,12 @@ import (
 type response struct {
 	Message string `json:"message"`
 }
+
 type user struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
 
 func helloHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, response{Message: "Hello World"})
@@ -91,7 +93,6 @@ func main() {
 
 	//set routes for api
 	api.GET("", helloHandler)
-
 	api.GET("/:message", messageHandler)
 
 	//create restricted sub-router
