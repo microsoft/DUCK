@@ -21,6 +21,10 @@ type user struct {
 	Password string `json:"password"`
 }
 
+type configuration struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
 
 func helloHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, response{Message: "Hello World"})
@@ -72,6 +76,7 @@ func loginHandler(c echo.Context) error {
 func main() {
 
 	var webDir string
+	jwtKey := []byte("secret")
 
 	flag.StringVar(&webDir, "webdir", "frontend", "The root directory for serving web content")
 	flag.Parse()
@@ -89,14 +94,28 @@ func main() {
 	//username: duck  password:duck
 	e.POST("/login", loginHandler)
 	//create sub-router for api functions
-	api := e.Group("/api")
-
+	api := e.Group("/v1")
 	//set routes for api
 	api.GET("", helloHandler)
 	api.GET("/:message", messageHandler)
 
+	//User resources
+	users := api.Group("/users", middleware.JWT(jwtKey))
+
+	users.POST("", helloHandler)
+	users.DELETE("/:id", helloHandler)
+	users.PUT("/:id", helloHandler)
+
+	//data use statement document resources
+	documents := api.Group("/documents", middleware.JWT(jwtKey))
+	documents.POST("", helloHandler)
+
+	//ruleset resources
+	rulesets := api.Group("/rulesets", middleware.JWT(jwtKey))
+	rulesets.POST("", helloHandler)
+
 	//create restricted sub-router
-	restricted := api.Group("/restricted", middleware.JWT([]byte("secret")))
+	restricted := api.Group("/restricted", middleware.JWT(jwtKey))
 	//set restricted routes for api
 	restricted.GET("", helloHandler)
 	restricted.GET("/:message", messageHandler)
