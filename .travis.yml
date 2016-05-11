@@ -1,6 +1,8 @@
 language: node_js
+dist: trusty
 
 before_script:
+  - export GOPATH=~/gocode
   - npm install -g gulp
   - npm install -g bower
   - bower install
