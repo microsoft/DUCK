@@ -3,9 +3,9 @@
  *
  * @type {angular.Module}
  */
-var userModule = angular.module("duck.user");
+var coreModule = angular.module("duck.core");
 
-userModule.service("CurrentUser", function ($log) {
+coreModule.service("CurrentUser", function ($log) {
     this.loggedIn = false;
     this.firstName = "anonymous";
     this.lastName = "anonymous";

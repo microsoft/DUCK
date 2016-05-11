@@ -59,4 +59,5 @@ PATHS:
     # App specific
   javascript:
     - "frontend/src/assets/js/!(app).js"
+    - "frontend/src/assets/js/**"
     - "frontend/src/assets/js/app.js"

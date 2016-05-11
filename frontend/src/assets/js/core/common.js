@@ -1,9 +1,9 @@
 /**
  * Base services.
  */
-var commonModule = angular.module('duck.common');
+var coreModule = angular.module('duck.core');
 
-commonModule.service("ObjectUtils", function () {
+coreModule.service("ObjectUtils", function () {
     this.isNull = function (obj) {
         return obj === undefined || obj === null;
     };

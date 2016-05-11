@@ -3,9 +3,9 @@
 /**
  * Event bus implementation that wraps Angular and potentially other implementations. Avoids proliferation of $scope references.
  */
-var eventModule = angular.module('duck.event');
+var coreModule = angular.module('duck.core');
 
-eventModule.service("EventBus", function ($rootScope) {
+coreModule.service("EventBus", function ($rootScope) {
 
     /**
      * Publishes a message to a topic.
