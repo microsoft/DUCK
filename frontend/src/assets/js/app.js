@@ -4,7 +4,7 @@
  * @type {angular.Module}
  */
 
-var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.core", "duck.signin", "duck.gateway", "ui.router"]);
+var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.signin", "duck.gateway", "ui.router"]);
 
 app.factory("AppInfo", function () {
 
@@ -69,13 +69,19 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
                 url: "/signin",
                 templateUrl: "../../signin.html",
                 requireSignin: false
-                
+
             })
 
             .state("main.home", {  // home screen
                 url: "",
                 templateUrl: "../../home.html",
-                // parent: "main",
+                requireSignin: true
+            })
+
+            .state("main.editor", {
+                url: "editor?documentId",
+                templateUrl: "../../editor.html",
+                reloadOnSearch: false,
                 requireSignin: true
             })
 

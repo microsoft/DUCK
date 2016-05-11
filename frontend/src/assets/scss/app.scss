@@ -83,7 +83,13 @@ $form-radius: $global-radius;
 }
 
 .padding-top-6 {
-  padding-bottom: 6em;
+  padding-top: 6em;
+}
+
+.not-found-message {
+  padding-top: 10em;
+  color: $medium-gray !important;
+
 }
 
 .fixed-nav {
@@ -96,6 +102,10 @@ $form-radius: $global-radius;
 
 .white {
   color: white !important;
+}
+
+.medium-gray {
+  color: $medium-gray !important;
 }
 
 // image overlay classes
