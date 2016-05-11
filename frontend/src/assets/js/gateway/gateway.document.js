@@ -7,6 +7,18 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
 
     var context = this;
 
+    // FIXME - remove when server is enabled
+    this.summaries = new Hashtable();
+    this.summaries.put("1", {name: "Customer Document v1", id: "1"});
+    this.summaries.put("2", {name: "Third-Party Document v2", id: "2"});
+    this.summaries.put("3", {name: "Partner Document", id: "3"});
+
+    this.documents = new Hashtable();
+    this.documents.put("1", {name: "Customer Document v1", id: "1", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
+    this.documents.put("2", {name: "Third-Party Document v2", id: "2", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
+    this.documents.put("3", {name: "Partner Document", id: "3", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
+    // end remove
+
     /**
      * Retrieves summaries for data use statement documents authored by the current user.
      *
@@ -20,9 +32,9 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
             }
             var url = "/v1/documents/" + CurrentUser.id + "/summary";
 
-            // disable server call until implemented
+            // FIXME disable server call until implemented
             if (true) {
-                resolve([{name: "Customer Document v1"}, {name: "Third-Party Document v2"}, {name: "Partner Document"}]);
+                resolve(context.summaries.values());
                 return;
             }
 
@@ -53,7 +65,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
 
             // disable server call until implemented
             if (true) {
-                resolve({name: "Customer Document v1", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
+                resolve(context.documents.get(documentId));
                 return;
             }
 

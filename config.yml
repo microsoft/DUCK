@@ -58,7 +58,9 @@ PATHS:
     # Angular
     - "bower_components/angular/angular.js"
     - "bower_components/angular-ui-router/release/angular-ui-router.js"
-    # App specific
+    # Libraries used by the app
+    - "bower_components/jshashtable/hashtable.js"
+    - "bower_components/jshashset/hashset.js"
   javascript:
     - "frontend/src/assets/js/!(app).js"
     - "frontend/src/assets/js/**"
