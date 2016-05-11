@@ -3,7 +3,7 @@ var gatewayModule = angular.module("duck.gateway");
 /**
  * Manages synchronization of user statement documents with the backend.
  */
-gatewayModule.service('DocumentService', function (CurrentUser, $http, $q) {
+gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q) {
 
     var context = this;
 
@@ -30,6 +30,9 @@ gatewayModule.service('DocumentService', function (CurrentUser, $http, $q) {
             });
         });
 
-    }
+    };
 
+    this.getDocument = function (documentId) {
+
+    }
 });
