@@ -10,6 +10,13 @@ gatewayModule.service('SigninService', function (CurrentUser, $http, $q) {
 
     this.signin = function (username, password) {
         return $q(function (resolve, reject) {
+            // FIXME workaround until backend fixed
+            if (true) {
+                CurrentUser.initializeWith({firstName: "Andy", lastName: "Author", id: "123", token: "124"});
+                resolve();
+                return;
+            }
+
             $http.post('/login', {username, password: password}).success(function (data) {
                 CurrentUser.initializeWith(data);
                 resolve();
