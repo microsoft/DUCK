@@ -3,6 +3,7 @@
 @import 'settings';
 @import 'foundation';
 @import 'motion-ui';
+@import 'font-awesome';
 
 @include foundation-global-styles;
 @include foundation-grid;
@@ -69,6 +70,14 @@ $form-radius: $global-radius;
   border-radius: $form-radius;
 }
 
+.padding-top-0-5 {
+  padding-top: .5em !important;
+}
+
+.padding-right-1 {
+  padding-right: 1em !important;
+}
+
 .padding-bottom-3 {
   padding-bottom: 3em;
 }
@@ -83,6 +92,10 @@ $form-radius: $global-radius;
   position: fixed !important;;
   top: 0 !important;;
   z-index: 99 !important;
+}
+
+.white {
+  color: white !important;
 }
 
 // image overlay classes
@@ -100,7 +113,7 @@ $form-radius: $global-radius;
   position: absolute;
   overflow: hidden;
   top: 10%;
-  left: 0
+  left: 0;
 }
 
 .overlay-fade-in {
@@ -122,6 +135,8 @@ $form-radius: $global-radius;
     //background-color: rgba(0, 78, 105, .7);
     background-color: rgba(20, 33, 40, .7);
     transition: all 0.4s ease-in-out;
+    padding-bottom: 5em !important;
+
   }
 
   &:hover img {

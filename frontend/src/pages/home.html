@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="row column text-right">
-        <a class="button">Create Document</a>
+        <a class="button"> <i class="fa fa-plus white"></i> Create</a>
     </div>
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
         <h5>No documents on file</h5>
@@ -15,9 +15,14 @@
             <div class="image-wrapper overlay-fade-in">
                 <img class="thumbnail" src="http://placehold.it/125x140">
                 <div class="image-overlay-content">
-                    <div style="padding-top: 1.5em">
-                        <a class="button">Edit</a>
+                    <div class="text-right padding-right-1 padding-top-0-5">
+                        <a class="padding-right-1" href=""><i class="fa fa-cloud-download white"></i> </a>
+                        <a href=""><i class="fa fa-trash white"></i> </a>
                     </div>
+                    <div>
+                        <a href="" class="button">Edit</a>
+                    </div>
+
                 </div>
                 <h6>{{summary.name}}</h6>
             </div>

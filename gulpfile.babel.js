@@ -34,10 +34,10 @@ function loadConfig() {
 
 // Build the "dist" folder by running all of the below tasks
 gulp.task("build",
-    gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, copy)));
+    gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, fonts, copy)));
 
 gulp.task("test",
-    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, copy)));
+    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, fonts, copy)));
 
 // Build the site, run the server, and watch for file changes
 gulp.task("default",
@@ -118,6 +118,12 @@ function images() {
         })))
         .pipe(gulp.dest(PATHS.dist + "/assets/img"));
 }
+
+function fonts() {
+    return gulp.src(PATHS.fonts)
+        .pipe(gulp.dest(PATHS.dist + "/assets/fonts"));
+}
+
 
 // proxy the backend server to support browser reloading
 function server(done) {
