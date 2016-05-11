@@ -1,0 +1,20 @@
+<div class="row" ng-controller="HomeController as home">
+    <div class="callout primary">
+        <div class="row column">
+            <h3>My Documents</h3>
+        </div>
+    </div>
+    <div class="row column text-right">
+        <a class="button">Create Document</a>
+    </div>
+    <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
+        <h5>No documents on file</h5>
+    </div>
+    <div class="row small-up-2 medium-up-3 large-up-4" ng-if="home.summaries.length > 0">
+        <div class="column text-center" ng-repeat="summary in home.summaries">
+            <img class="thumbnail" src="http://placehold.it/125x140">
+            <h6>{{summary.name}}</h6>
+        </div>
+    </div>
+
+</div>

@@ -16,7 +16,7 @@ signinModule.controller("SigninController", function ($state, SigninService) {
         }
         var promise = SigninService.signin(this.username, this.password);
         promise.then(function () {
-                $state.go("main");
+                $state.go("main.home");
             }, function (code) {
                 // FIXME
                 alert('Login Failed: ' + code);

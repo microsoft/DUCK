@@ -4,7 +4,7 @@
  * @type {angular.Module}
  */
 
-var app = angular.module("duck.application", ["duck.main", "duck.core", "duck.signin", "duck.gateway", "ui.router"]);
+var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.core", "duck.signin", "duck.gateway", "ui.router"]);
 
 app.factory("AppInfo", function () {
 
@@ -61,6 +61,7 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
             .state("main", {  // the top-level state for protected (signed in) areas of the application
                 url: "/",
                 templateUrl: "../../main.html",
+                abstract: true,
                 requireSignin: true
             })
 
@@ -70,6 +71,14 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
                 requireSignin: false
                 
             })
+
+            .state("main.home", {  // home screen
+                url: "",
+                templateUrl: "../../home.html",
+                // parent: "main",
+                requireSignin: true
+            })
+
     }]);
 
 
