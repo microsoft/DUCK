@@ -4,8 +4,15 @@
             <h4>My Documents</h4>
         </div>
     </div>
-    <div class="row column text-right">
-        <a data-open="createModal" href="" class="button">Create</a>
+    <div class="row">
+        <div class=" column">
+            <label>
+                <input ng-model="home.summaryFilter" type="text" placeholder="Filter documents">
+            </label>
+        </div>
+        <div class=" column text-right">
+            <a data-open="createModal" href="" class="button">Create</a>
+        </div>
     </div>
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
         <h5>No documents on file</h5>
