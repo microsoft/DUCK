@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="row column text-right">
-        <a class="button"> <i class="fa fa-plus white"></i> Create</a>
+        <a data-open="createModal" href="" class="button">Create</a>
     </div>
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
         <h5>No documents on file</h5>
@@ -16,8 +16,8 @@
                 <img class="thumbnail" src="http://placehold.it/125x140">
                 <div class="image-overlay-content">
                     <div class="text-right padding-right-1 padding-top-0-5">
-                        <a class="padding-right-1" href=""><i class="fa fa-cloud-download white"></i> </a>
-                        <a href=""><i class="fa fa-trash white"></i> </a>
+                        <a class="padding-right-1" href="" title="Download"><i class="fa fa-cloud-download white"></i> </a>
+                        <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" title="Delete"><i class="fa fa-trash white"></i> </a>
                     </div>
                     <div>
                         <a href="" class="button">Edit</a>
@@ -29,4 +29,32 @@
         </div>
     </div>
 
+    <div class="reveal tiny" id="deleteModal" data-reveal>
+        <h4>Delete</h4>
+        <div class="row">
+            <p class="lead">Are you sure you want to delete {{home.toDelete.name}}?</p>
+        </div>
+        <div class="row float-right">
+            <div class="column ">
+                <a class="button small secondary" data-close>NO</a>
+                <a class="button small" data-close ng-click="">DELETE</a>
+            </div>
+        </div>
+    </div>
+    <div class="reveal tiny" id="createModal" data-reveal>
+        <h4>Create Document</h4>
+        <div class="row">
+            <div class="column">
+                <label>Name
+                    <input ng-model="home.newName" type="text" placeholder="Document name">
+                </label>
+            </div>
+        </div>
+        <div class="row float-right">
+            <div class="column ">
+                <a class="button small secondary" data-close>CANCEL</a>
+                <a class="button small" data-close ng-click="">CREATE</a>
+            </div>
+        </div>
+    </div>
 </div>
