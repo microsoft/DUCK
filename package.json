@@ -5,6 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp",
+    "test": "gulp test",
     "build": "gulp build --production"
   },
   "author": "jmarino@metaformsystems.com",

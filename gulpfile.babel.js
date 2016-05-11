@@ -9,6 +9,7 @@ import yaml from "js-yaml";
 import fs from "fs";
 import gulpgo from "gulp-go";
 import gutil from "gulp-util";
+import child from "child_process";
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -34,6 +35,9 @@ function loadConfig() {
 // Build the "dist" folder by running all of the below tasks
 gulp.task("build",
     gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, copy)));
+
+gulp.task("test",
+    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, copy)));
 
 // Build the site, run the server, and watch for file changes
 gulp.task("default",
@@ -125,6 +129,13 @@ function server(done) {
 }
 
 var go;
+
+// launch the backend serving the web distribution directory
+function backendCompile(done) {
+    // go = gulpgo.run("backend.go", ["--webdir", __dirname + "/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
+    child.spawnSync('go', ['install']);
+    done();
+}
 
 // launch the backend serving the web distribution directory
 function backend(done) {
