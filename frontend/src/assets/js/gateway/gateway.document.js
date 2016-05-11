@@ -53,8 +53,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
 
             // disable server call until implemented
             if (true) {
-                resolve();
-                // resolve({name: "Document 1", statements: [{"order": 1, "Statement 1"}, {"order": 2, "Statement 2"}]});
+                resolve({name: "Document 1", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
                 return;
             }
 
