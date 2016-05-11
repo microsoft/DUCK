@@ -5,12 +5,13 @@
         </div>
     </div>
     <div class="row">
-        <div class=" column">
-            <label>
-                <input ng-model="home.summaryFilter" type="text" placeholder="Filter documents">
-            </label>
+        <div class="small-1 columns middle">
+            <label for="search-box" class="search-label text-right middle"><i class="fa fa-search"></i></label>
         </div>
-        <div class=" column text-right">
+        <div class="medium-5 columns">
+            <input id="search-box" class="search-box" ng-model="home.summaryFilter" type="text" placeholder="Search documents">
+        </div>
+        <div class=" column medium-3 text-right">
             <a data-open="createModal" href="" class="button">Create</a>
         </div>
     </div>
@@ -18,7 +19,7 @@
         <h5>No documents on file</h5>
     </div>
     <div class="row small-up-2 medium-up-3 large-up-4" ng-if="home.summaries.length > 0">
-        <div class="column text-center " ng-repeat="summary in home.summaries">
+        <div class="column text-center " ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
             <div class="image-wrapper overlay-fade-in">
                 <img class="thumbnail" src="http://placehold.it/125x140">
                 <div class="image-overlay-content">

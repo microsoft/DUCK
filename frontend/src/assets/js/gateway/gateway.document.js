@@ -22,7 +22,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
 
             // disable server call until implemented
             if (true) {
-                resolve([{name: "Document 1"}, {name: "Document 2"}, {name: "Document 3"}]);
+                resolve([{name: "Customer Document v1"}, {name: "Third-Party Document v2"}, {name: "Partner Document"}]);
                 return;
             }
 
@@ -53,7 +53,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
 
             // disable server call until implemented
             if (true) {
-                resolve({name: "Document 1", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
+                resolve({name: "Customer Document v1", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
                 return;
             }
 
