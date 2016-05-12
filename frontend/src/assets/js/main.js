@@ -1,12 +1,12 @@
 /**
  * This module handles the protected (signed in) areas of the application.
- *
- * @type {angular.Module}
  */
 var mainModule = angular.module("duck.main");
 
-mainModule.controller("MainController", function ($scope) {
-
+mainModule.controller("MainController", function ($scope, LocaleService) {
+    var controller = this;
+    
+    controller.locales = LocaleService.getLocales();
     // signal that the main controller has been loaded and Foundation should be initialized
     if (!$scope.initFoundation) {
         $scope.initFoundation = true;
