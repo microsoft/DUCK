@@ -1,9 +1,9 @@
-<div ng-controller="EditorController as editor">
-    <div class="row" ng-if="!editor.noDocument">
+<div ng-controller="EditorController as editorController">
+    <div class="row" ng-if="!editorController.noDocument">
+        <h4>{{editorController.document.name}}</h4>
     </div>
 
-
-    <div class="row columns text-center padding-top-6" ng-if="editor.noDocument">
+    <div class="row columns text-center padding-top-6" ng-if="editorController.noDocument">
         <i class="fa fa-4x fa-exclamation-triangle medium-gray" aria-hidden="true"></i>
         <h5>No document found</h5>
     </div>

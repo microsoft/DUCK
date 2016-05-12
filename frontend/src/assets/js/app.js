@@ -1,10 +1,7 @@
 /**
  * This module bootstraps the application, including defining URLs and pages.
- *
- * @type {angular.Module}
  */
-
-var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.signin", "duck.gateway", "ui.router"]);
+var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.signin", "duck.gateway", "ui.router", "ngAnimate"]);
 
 app.factory("AppInfo", function () {
 
@@ -14,8 +11,11 @@ app.factory("AppInfo", function () {
     };
 });
 
-app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide",
-    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide) {
+app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide", "$qProvider",
+    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide, $qProvider) {
+
+        // suppress warning when a rejected promise is not handled
+        $qProvider.errorOnUnhandledRejections(false);
 
         // set the debug log level
         $logProvider.debugEnabled(true);
@@ -97,6 +97,8 @@ app.controller("AppController", function (CurrentUser, AppInfo, $log) {
 });
 
 app.run(function ($rootScope) {
+    // $qProvider.errorOnUnhandledRejections(false);
+    // $QProvider().errorOnUnhandledRejections(false);
     // load Foundation after the main controller has been initialized (as determined by the target scope)
     $rootScope.$on('$viewContentLoaded', function (event) {
         if (event.targetScope.initFoundation) {

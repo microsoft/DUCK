@@ -2,7 +2,7 @@
     <div class=" top-bar fixed-nav" data-top-anchor="1">
         <div class="top-bar-title">
             <div>
-                <img src="assets/img/duck.png">
+                <a ui-sref="main.home" href=""><img src="assets/img/duck.png"></a>
             </div>
         </div>
         <div id="responsive-menu">
@@ -33,9 +33,10 @@
     <br>
     <br>
 
-    <div ui-view class=""></div>
+    <div ui-view class="mainSlider"></div>
 
     <div class="reveal tiny" id="logoutModal" data-reveal ng-controller="SignoutController as signout">
+         <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
         <h4>Sign Out</h4>
         <div class="row">
             <p class="lead">Are you sure you want to sign out?</p>
