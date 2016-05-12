@@ -76,7 +76,7 @@ func loginHandler(c echo.Context) error {
 func main() {
 
 	var webDir string
-	//jwtKey := []byte("secret")
+	jwtKey := []byte("secret")
 
 	flag.StringVar(&webDir, "webdir", "frontend", "The root directory for serving web content")
 	flag.Parse()
@@ -100,25 +100,25 @@ func main() {
 	api.GET("/:message", messageHandler)
 
 	////User resources
-	//users := api.Group("/users", middleware.JWT(jwtKey))
-	//
-	//users.POST("", helloHandler)
-	//users.DELETE("/:id", helloHandler)
-	//users.PUT("/:id", helloHandler)
-	//
-	////data use statement document resources
-	//documents := api.Group("/documents", middleware.JWT(jwtKey))
-	//documents.POST("", helloHandler)
-	//
-	////ruleset resources
-	//rulesets := api.Group("/rulesets", middleware.JWT(jwtKey))
-	//rulesets.POST("", helloHandler)
-	//
-	////create restricted sub-router
-	//restricted := api.Group("/restricted", middleware.JWT(jwtKey))
-	////set restricted routes for api
-	//restricted.GET("", helloHandler)
-	//restricted.GET("/:message", messageHandler)
+	users := api.Group("/users", middleware.JWT(jwtKey))
+
+	users.POST("", helloHandler)
+	users.DELETE("/:id", helloHandler)
+	users.PUT("/:id", helloHandler)
+
+	//data use statement document resources
+	documents := api.Group("/documents", middleware.JWT(jwtKey))
+	documents.POST("", helloHandler)
+
+	//ruleset resources
+	rulesets := api.Group("/rulesets", middleware.JWT(jwtKey))
+	rulesets.POST("", helloHandler)
+
+	//create restricted sub-router
+	restricted := api.Group("/restricted", middleware.JWT(jwtKey))
+	//set restricted routes for api
+	restricted.GET("", helloHandler)
+	restricted.GET("/:message", messageHandler)
 
 	// serves the static files
 	e.Static("/", webDir)
