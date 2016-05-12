@@ -74,6 +74,10 @@ $form-radius: $global-radius;
   padding-top: .5em !important;
 }
 
+.padding-top-1 {
+  padding-top: 1em !important;
+}
+
 .padding-top-2 {
   padding-top: 2em !important;
 }
@@ -196,6 +200,39 @@ $form-radius: $global-radius;
   color: $medium-gray !important;
   border: 0;
   white-space: nowrap;
+}
+
+.sidebar {
+  position: fixed;
+  width: 200px;
+  top: 200px;
+  left: 0;
+}
+
+.editor-left-padding {
+  padding-left: 10em !important;
+
+  ///* Medium only */
+  @media screen and (min-width: 40em) and (max-width: 63.9375em) {
+    padding-left: 10em !important;
+  }
+
+  /* Large and up */
+  @media screen and (min-width: 74.9376em) {
+    padding-left: 10em !important;
+  }
+
+  /* Large only */
+  @media screen and (min-width: 64em) and (max-width: 74.9375em) {
+    padding-left: 10em !important;
+
+  }
+
+  /* Extra large and up */
+  @media screen and (min-width: 82em) {
+    padding-left: 5em !important;
+  }
+
 }
 
 // animations
