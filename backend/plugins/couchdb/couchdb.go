@@ -1,0 +1,21 @@
+/*
+create DB
+
+
+create User
+get user
+update user
+delete user
+
+create document
+get document
+update document
+delete document
+
+create RuleSet
+get RuleSet
+update RuleSet
+delete RuleSet
+
+
+*/

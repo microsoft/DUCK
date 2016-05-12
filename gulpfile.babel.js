@@ -145,7 +145,7 @@ function backendCompile(done) {
 
 // launch the backend serving the web distribution directory
 function backend(done) {
-    go = gulpgo.run("backend.go", ["--webdir", __dirname + "/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
+    go = gulpgo.run("main.go", ["--webdir", __dirname + "/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
     done();
 }
 

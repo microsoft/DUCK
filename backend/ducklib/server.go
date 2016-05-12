@@ -1,17 +1,15 @@
-package main
+package ducklib
 
 import (
-	"flag"
-	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 )
 
+//structs
 type response struct {
 	Message string `json:"message"`
 }
@@ -21,10 +19,7 @@ type user struct {
 	Password string `json:"password"`
 }
 
-type configuration struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
+//route Handlers
 
 func helloHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, response{Message: "Hello World"})
@@ -73,16 +68,10 @@ func loginHandler(c echo.Context) error {
 	return echo.ErrUnauthorized
 }
 
-func main() {
+//GetServer returns Echo instance with predefined routes
+func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 
-	var webDir string
-	jwtKey := []byte("secret")
-
-	flag.StringVar(&webDir, "webdir", "frontend", "The root directory for serving web content")
-	flag.Parse()
-
-	fmt.Println("Web root: " + webDir)
-
+    TestDB()
 	//New echo instance
 	e := echo.New()
 
@@ -123,7 +112,6 @@ func main() {
 	// serves the static files
 	e.Static("/", webDir)
 
-	//start server
-	e.Run(standard.New(":3000"))
+	return e
 
 }
