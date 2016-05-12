@@ -3,9 +3,11 @@
  */
 var mainModule = angular.module("duck.main");
 
-mainModule.controller("MainController", function ($scope, LocaleService) {
+mainModule.controller("MainController", function ($scope, CurrentUser, LocaleService) {
     var controller = this;
-    
+
+    controller.CurrentUser = CurrentUser;
+
     controller.locales = LocaleService.getLocales();
     // signal that the main controller has been loaded and Foundation should be initialized
     if (!$scope.initFoundation) {
