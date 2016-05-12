@@ -1,6 +1,13 @@
 <div ng-controller="EditorController as editorController">
     <div class="row padding-top-1" ng-if="!editorController.noDocument">
-        <h4>{{editorController.document.name}}</h4>
+        <div class="small-10 columns">
+            <h4>{{editorController.document.name}}</h4>
+        </div>
+        <div class="small-1 columns middle">
+            <!--<div class="label alert"><i class="fa fa-warning"></i> Conflicts</div>-->
+            <div class="label success"><i class="fa fa-check"></i> OK</div>
+            <!--<div class="label secondary"><i class="fa fa-question"></i> Not Validated</div>-->
+        </div>
     </div>
     <hr>
     <div class="sidebar">
@@ -18,11 +25,11 @@
             <li data-ng-repeat="statement in statements" data-as-sortable-item>
                 <div data-as-sortable-item-handle>
                     <div class="row">
-                        <div class="small-10 columns" ng-click="editorController.editStatement(statement.id)">
+                        <div class="small-10 columns" ng-click="editorController.editStatement(statement)">
                             {{statement.content}}
                         </div>
                         <div class="small-1 columns text-right">
-                            <a ng-click="editorController.deleteStatement(statement.id)"><i class="fa fa-trash medium-gray"></i> </a>
+                            <a ng-click="editorController.deleteStatement(statement)"><i class="fa fa-trash medium-gray"></i> </a>
                         </div>
                     </div>
                 </div>

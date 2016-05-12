@@ -10,11 +10,11 @@ homeModule.controller("EditorController", function (DataUseDocumentService, $sta
         return;
     }
 
-    controller.deleteStatement = function (id) {
+    controller.deleteStatement = function (statement) {
         alert("TODO: Not Implemented");
     };
 
-    controller.editStatement = function (id) {
+    controller.editStatement = function (statement) {
         alert("TODO: Not Implemented");
     };
 
