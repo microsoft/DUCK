@@ -10,6 +10,8 @@ import fs from "fs";
 import gulpgo from "gulp-go";
 import gutil from "gulp-util";
 import child from "child_process";
+import addsrc from 'gulp-add-src';
+
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -77,6 +79,8 @@ function sass() {
         }))
         .pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS)))
         .pipe($.if(PRODUCTION, $.cssnano()))
+        .pipe(addsrc.append(PATHS.css))
+        .pipe($.concat('app.css'))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
         .pipe(gulp.dest(PATHS.dist + "/assets/css"))
         .pipe(browser.reload({stream: true}));
@@ -126,12 +130,19 @@ function fonts() {
 
 
 // proxy the backend server to support browser reloading
+// function server(done) {
+//     browser.init({
+//         proxy: "localhost:3000",
+//         port: PORT
+//     });
+//     done();
+// }
+
 function server(done) {
-    browser.init({
-        proxy: "localhost:3000",
-        port: PORT
-    });
-    done();
+  browser.init({
+    server: PATHS.dist, port: PORT
+  });
+  done();
 }
 
 var go;
