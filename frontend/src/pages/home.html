@@ -1,33 +1,34 @@
 <div class="row" ng-controller="HomeController as home">
-    <div class="callout primary">
-        <div class="row column">
-            <h4>My Documents</h4>
-        </div>
+    <div class="row column">
+        <h4>My Documents</h4>
     </div>
     <div class="row">
-        <div class="small-1 columns middle">
-            <label for="search-box" class="search-label text-right middle"><i class="fa fa-search"></i></label>
+        <div class="small-1 columns middle icon-label-wrapper">
+            <label for="search-box" class="search-label middle"><i class="fa fa-search"></i></label>
         </div>
-        <div class="medium-5 columns">
+        <div class="small-4 columns">
             <input id="search-box" class="search-box" ng-model="home.summaryFilter" type="text" placeholder="Search documents">
         </div>
-        <div class=" column medium-3 text-right">
+        <div class="small-4 columns text-right">
+            <label for="exampleFileUpload" class="button"><i class="fa fa-cloud-upload"></i> Upload File</label>
+            <input type="file" id="exampleFileUpload" class="show-for-sr">
             <a data-open="createModal" href="" class="button">Create</a>
         </div>
+
     </div>
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
         <h5>No documents on file</h5>
     </div>
-    <div class="row small-up-2 medium-up-3 large-up-4" ng-if="home.summaries.length > 0">
-        <div class="column text-center " ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
+    <div class="row small-up-4" ng-if="home.summaries.length > 0">
+        <div class="columns text-center" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
             <div class="image-wrapper overlay-fade-in">
-                <img class="thumbnail" src="http://placehold.it/125x140">
+                <img class="" src="http://placehold.it/300x350">
                 <div class="image-overlay-content">
                     <div class="text-right padding-right-1 padding-top-0-5">
                         <a class="padding-right-1" href="" title="Download"><i class="fa fa-cloud-download white"></i> </a>
                         <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" title="Delete"><i class="fa fa-trash white"></i> </a>
                     </div>
-                    <div>
+                    <div class="padding-top-2">
                         <a href="" class="button" ng-click="home.editDocument(summary.id)">Edit</a>
                     </div>
 
@@ -43,7 +44,7 @@
             <p class="lead">Are you sure you want to delete {{home.toDelete.name}}?</p>
         </div>
         <div class="row float-right">
-            <div class="column ">
+            <div class="columns">
                 <a class="button small secondary" data-close>NO</a>
                 <a class="button small" data-close ng-click="">DELETE</a>
             </div>
@@ -52,14 +53,14 @@
     <div class="reveal tiny" id="createModal" data-reveal>
         <h4>Create Document</h4>
         <div class="row">
-            <div class="column">
+            <div class="columns">
                 <label>Name
                     <input ng-model="home.newName" type="text" placeholder="Document name">
                 </label>
             </div>
         </div>
         <div class="row float-right">
-            <div class="column ">
+            <div class="columns ">
                 <a class="button small secondary" data-close>CANCEL</a>
                 <a class="button small" data-close ng-click="">CREATE</a>
             </div>
