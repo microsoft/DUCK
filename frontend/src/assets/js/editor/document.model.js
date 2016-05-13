@@ -5,6 +5,7 @@ var homeModule = angular.module("duck.editor");
  */
 homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
     this.document = null;
+    this.dirty = false;
 
     var context = this;
 
@@ -32,6 +33,7 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
         context.document.statements.without(function (element) {
             return element === statement;
         });
+        context.dirty = true;
     };
 
     /**
@@ -41,6 +43,7 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
      */
     this.addStatement = function (statement) {
         context.document.statements.push(statement);
+        context.dirty = true;
     };
 
     /**
@@ -48,6 +51,7 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
      */
     this.save = function () {
         // TODO implement
+        context.false = true;
     }
 
 }); 
