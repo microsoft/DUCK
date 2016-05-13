@@ -59,6 +59,8 @@ $global-radius: 3px;
 
 $sidebar-background: rgba(13, 28, 34, 1);
 
+$sidebar-icon-disabled: rgba(37, 68, 79, 1);
+
 // Setting the form border color
 $form-border-color: $medium-gray;
 // Setting the form padding
@@ -222,7 +224,7 @@ $form-radius: $global-radius;
 
 .top-bar {
   a {
-    color: $light-gray!important;
+    color: $light-gray !important;
   }
 
 }
@@ -230,7 +232,7 @@ $form-radius: $global-radius;
 .top-bar-menu {
   @extend .menu;
   border: 1px solid $topbar-background;
-  color:$light-gray!important;
+  color: $light-gray !important;
 }
 
 .fa-1-5x {
@@ -289,6 +291,13 @@ $form-radius: $global-radius;
 .as-sortable-hidden {
 }
 
+.sidebar-icon-disabled {
+  color: $sidebar-icon-disabled;
+  &:hover,
+  &:focus {
+    color: $sidebar-icon-disabled;
+  }
 
+}
 
 

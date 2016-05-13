@@ -53,6 +53,13 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
     this.save = function () {
         // TODO implement
         context.false = false;
+    };
+
+    this.revert = function () {
+        if (context.document === null) {
+            return;
+        }
+        context.initialize(context.document.id);
     }
 
 }); 

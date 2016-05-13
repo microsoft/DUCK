@@ -10,6 +10,14 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
         return;
     }
 
+    controller.dirty = function () {
+        return DocumentModel.dirty;
+    };
+
+    controller.revert = function () {
+        return DocumentModel.revert();
+    };
+    
     controller.editStatement = function (statement) {
         alert("TODO: Not Implemented");
     };
