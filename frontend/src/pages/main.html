@@ -27,19 +27,21 @@
 
     <div ui-view class="mainSlider main-offset"></div>
 
-    <div class="reveal tiny" id="signoutModal" data-reveal ng-controller="SignoutController as signout">
+    <div class="reveal tiny" id="signoutModal" data-reveal ng-controller="SignoutController as signout" data-overlay="false">
         <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
         <h4>Sign Out</h4>
         <div class="row">
-            <p class="lead">Are you sure you want to sign out?</p>
+            Are you sure you want to sign out?
         </div>
-        <div class="row float-right">
+        <div class="row float-right padding-top-2">
             <div class="column ">
                 <a class="button small secondary" data-close>NO</a>
                 <a class="button small" data-close ng-click="signout.signout()">YES</a>
             </div>
         </div>
     </div>
+
+
 
 </div>
 

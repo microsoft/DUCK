@@ -1,0 +1,12 @@
+<div class="reveal tiny" id="abandonChanges" data-reveal data-overlay="false" ng-controller="AbandonController as abandon">
+    <h4>Abandon Changes</h4>
+    <div class="row">
+        Are you sure you want to abandon all changes?
+    </div>
+    <div class="row float-right padding-top-2">
+        <div class="column ">
+            <a class="button small secondary" data-close>NO</a>
+            <a class="button small" data-close ng-click="abandon.confirm()">YES</a>
+        </div>
+    </div>
+</div>

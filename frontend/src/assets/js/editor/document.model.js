@@ -70,7 +70,15 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
             return;
         }
         context.initialize(context.document.id);
-    }
+    };
+
+    /**
+     * Marks the local state as edited.
+     */
+    this.markDirty = function () {
+        context.dirty = true;
+    };
+
 
 }); 
     

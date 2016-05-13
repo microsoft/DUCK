@@ -45,13 +45,13 @@
         <h5>No document found</h5>
     </div>
 
-    <div class="reveal tiny" id="undoModal" data-reveal>
+    <div class="reveal tiny" id="undoModal" data-reveal data-overlay="false">
         <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
         <h4>Undo Changes</h4>
         <div class="row">
-            <p class="lead">Are you sure you want to undo all changes?</p>
+            Are you sure you want to undo all changes?
         </div>
-        <div class="row float-right">
+        <div class="row float-right padding-top-2">
             <div class="column ">
                 <a class="button small secondary" data-close>NO</a>
                 <a class="button small" data-close ng-click="editorController.revert()">YES</a>

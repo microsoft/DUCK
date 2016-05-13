@@ -2,6 +2,7 @@
  * Defines application modules
  */
 angular.module('duck.core', []);
+angular.module("duck.component", []);
 angular.module("duck.i18n", []);
 angular.module("duck.gateway", []);
 angular.module("duck.main", ["ui.router", "ngAnimate"]);

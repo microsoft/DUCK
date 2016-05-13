@@ -1,6 +1,7 @@
 var homeModule = angular.module("duck.editor");
 
-homeModule.controller("EditorController", function (DocumentModel, $stateParams, ObjectUtils, $scope) {
+homeModule.controller("EditorController", function (DocumentModel, $stateParams, ObjectUtils, AbandonComponent, $scope, $rootScope) {
+
     var controller = this;
 
     var documentId = ObjectUtils.notNull($stateParams.documentId) ? $stateParams.documentId : null;
@@ -10,6 +11,18 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
         return;
     }
 
+    var unregisterDirtyCheck = $rootScope.$on("$stateChangeStart", function (event, toState) {
+        if (!DocumentModel.dirty) {
+            return;
+        }
+        AbandonComponent.open(event, toState);
+    });
+
+    $scope.$on("$destroy", function () {
+        unregisterDirtyCheck();
+    });
+
+
     controller.dirty = function () {
         return DocumentModel.dirty;
     };
@@ -17,7 +30,7 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
     controller.revert = function () {
         return DocumentModel.revert();
     };
-    
+
     controller.editStatement = function (statement) {
         alert("TODO: Not Implemented");
     };
@@ -35,7 +48,7 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
         $scope.document = DocumentModel.document;
     }, function (status) {
         // FIXME display error
-        alert('Failed: ' + status);
+        alert("Failed: " + status);
     });
 
 
@@ -43,8 +56,7 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
     controller.dragControlListeners = {
         allowDuplicates: true,
         orderChanged: function (event) {
-            // var source = event.source.index;
-            // var destination = event.dest.index;
+            DocumentModel.markDirty();
         }
     };
 
