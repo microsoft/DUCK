@@ -18,6 +18,10 @@ homeModule.controller("EditorController", function (DataUseDocumentService, $sta
         alert("TODO: Not Implemented");
     };
 
+    controller.addStatement = function () {
+        $scope.statements.push({id: $scope.statements.length + 1, content: "Another statement " + ($scope.statements.length + 1)});
+    };
+
     DataUseDocumentService.getDocument(documentId).then(function (document) {
         controller.document = document;
     }, function (status) {
@@ -32,9 +36,11 @@ homeModule.controller("EditorController", function (DataUseDocumentService, $sta
         content: "Your data may be used for advertising purposes."
     }];
 
-    $scope.dragControlListeners = {
-        containment: '#board',//optional param.
-        allowDuplicates: true //optional param allows duplicates to be dropped.
+    controller.dragControlListeners = {
+        allowDuplicates: true,
+        orderChanged: function (event) {
+            console.log("*" + event)
+        }
     };
 
 

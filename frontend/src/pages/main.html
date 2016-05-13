@@ -13,24 +13,21 @@
                     <li><a href="" ui-sref="account">{{main.CurrentUser.firstName}} {{main.CurrentUser.lastName}}</a></li>
                     <li class="padding-right-1">
                         <a href="#"><i class="fa fa-globe"></i> </a>
-                        <ul class="menu vertical">
+                        <ul class="top-bar-menu vertical" >
                             <li ng-repeat="locale in main.locales"><a href="#">{{locale}}</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a data-open="logoutModal" class="button secondary">Logout</a>
+                        <a data-open="signoutModal" class="button secondary hollow">Sign Out</a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-    <br>
-    <br>
-    <br>
 
-    <div ui-view class="mainSlider"></div>
+    <div ui-view class="mainSlider main-offset"></div>
 
-    <div class="reveal tiny" id="logoutModal" data-reveal ng-controller="SignoutController as signout">
+    <div class="reveal tiny" id="signoutModal" data-reveal ng-controller="SignoutController as signout">
         <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
         <h4>Sign Out</h4>
         <div class="row">

@@ -4,7 +4,7 @@ i18NModule.service("LocaleService", function () {
     var context = this;
 
     this.getLocales = function () {
-        return ["English (US)", "Italian", "German", "Chineese"];
+        return ["English (US)", "Italian", "German", "Chinese"];
     }
 
 });
