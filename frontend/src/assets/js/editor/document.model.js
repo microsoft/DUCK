@@ -19,6 +19,7 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
         return $q(function (resolve) {
             DataUseDocumentService.getDocument(documentId).then(function (document) {
                 context.document = document;
+                context.dirty = false;
                 resolve();
             });
         });
@@ -51,7 +52,7 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
      */
     this.save = function () {
         // TODO implement
-        context.false = true;
+        context.false = false;
     }
 
 }); 
