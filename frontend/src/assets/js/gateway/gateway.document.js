@@ -14,9 +14,9 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
     this.summaries.put("3", {name: "Partner Document", id: "3"});
 
     this.documents = new Hashtable();
-    this.documents.put("1", {name: "Customer Document v1", id: "1", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
-    this.documents.put("2", {name: "Third-Party Document v2", id: "2", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
-    this.documents.put("3", {name: "Partner Document", id: "3", statements: [{order: 1, content: "Statement 1"}, {order: 2, content: "Statement 2"}]});
+    this.documents.put("1", {name: "Customer Document v1", id: "1", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
+    this.documents.put("2", {name: "Third-Party Document v2", id: "2", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
+    this.documents.put("3", {name: "Partner Document", id: "3", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
     // end remove
 
     /**

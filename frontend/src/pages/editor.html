@@ -11,19 +11,19 @@
     <div class="row columns editor-canvas" style=" padding-left: 200px !important;">
         <div class="row padding-top-2" ng-if="!editorController.noDocument">
             <div class="small-10 columns">
-                <h4>{{editorController.document.name}}</h4>
+                <h4>{{document.name}}</h4>
             </div>
             <div class="small-1 columns middle">
                 <!--<div class="label alert"><i class="fa fa-warning"></i> Conflicts</div>-->
-                <div class="label success"><i class="fa fa-check"></i> OK</div>
+                <div class="label success"><i class="fa fa-check"></i> Validated</div>
                 <!--<div class="label secondary"><i class="fa fa-question"></i> Not Validated</div>-->
             </div>
             <hr>
         </div>
 
-        <div class="row column">
-            <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="statements">
-                <li data-ng-repeat="statement in statements" data-as-sortable-item>
+        <div class="row column" ng-if="document">
+            <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
+                <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
                     <div data-as-sortable-item-handle>
                         <div class="row">
                             <div class="small-10 columns" ng-click="editorController.editStatement(statement)">
