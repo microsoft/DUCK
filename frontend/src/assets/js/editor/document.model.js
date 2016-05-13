@@ -4,13 +4,20 @@ var homeModule = angular.module("duck.editor");
  * Manages the current document being edited.
  */
 homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
+    /**
+     * A local copy of the document.
+     */
     this.document = null;
+
+    /**
+     * Tracks the local edit state of the document.
+     */
     this.dirty = false;
 
     var context = this;
 
     /**
-     * Retrieves the document from the backend and uses it to initialize the model.
+     * Retrieves the document from the backend and uses it to initialize the local model.
      *
      * @param documentId the document id
      * @return a promise that will be resolved after initialization has successfully completed or failed
@@ -48,13 +55,16 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
     };
 
     /**
-     * Saves the document to the backend.
+     * Saves the local model to the backend.
      */
     this.save = function () {
         // TODO implement
         context.false = false;
     };
 
+    /**
+     * Reverts local changes to the document.
+     */
     this.revert = function () {
         if (context.document === null) {
             return;
