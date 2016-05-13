@@ -11,7 +11,10 @@ homeModule.controller("EditorController", function (DataUseDocumentService, $sta
     }
 
     controller.deleteStatement = function (statement) {
-        alert("TODO: Not Implemented");
+        $scope.statements.without(function(element){
+            return element === statement;
+        });
+        controller.listContents();
     };
 
     controller.editStatement = function (statement) {
@@ -36,10 +39,19 @@ homeModule.controller("EditorController", function (DataUseDocumentService, $sta
         content: "Your data may be used for advertising purposes."
     }];
 
+    controller.listContents = function () {
+        $scope.statements.forEach(function (statement) {
+            console.log(statement.content);
+        });
+        console.log("-----------------------");
+    };
+
     controller.dragControlListeners = {
         allowDuplicates: true,
         orderChanged: function (event) {
-            console.log("*" + event)
+            var source = event.source.index;
+            var destination = event.dest.index;
+            listContents();
         }
     };
 

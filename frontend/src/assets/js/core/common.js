@@ -45,3 +45,16 @@ coreModule.service("ObjectUtils", function () {
 
 
 });
+
+/**
+ * Removes elements matched by the provided function. Unlike Array.filter(), this function modifies the original array rather than returning a new one.
+ *
+ * @param func the matching function
+ */
+Array.prototype.without = function (func) {
+    for (var i = this.length - 1; i >= 0; i--) {
+        if (func(this[i])) {
+            this.splice(i, 1);
+        }
+    }
+};
