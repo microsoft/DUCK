@@ -4,7 +4,10 @@
             <li><a ui-sref="main.home" href=""><i class="fa fa-1-5x fa-chevron-left"></i> Documents</a></li>
             <li class="padding-top-2"></li>
             <li><a href="" ng-click="editorController.addStatement()"><i class="fa fa-1-5x fa-plus"></i> New Statement</a></li>
-            <li><a data-open="undoModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href=""><i class="fa fa-1-5x fa-undo"></i> Undo</a></li>
+            <li>
+                <a data-open="revertModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href="">
+                    <i class="fa fa-1-5x fa-undo"></i> Revert
+                </a></li>
             <li><a ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href=""><i class="fa fa-1-5x fa-save"></i> Save</a></li>
             <li><a href=""><i class="fa fa-1-5x fa-check-circle-o"></i> Validate</a></li>
             <li><a href=""><i class="fa fa-1-5x fa-cloud-download"></i> Download</a></li>
@@ -27,9 +30,10 @@
             <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
                 <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
                     <div data-as-sortable-item-handle>
-                        <div class="row">
-                            <div class="small-10 columns" ng-click="editorController.editStatement(statement)">
-                                {{statement.content}}
+                        <div class="row noselect">
+                            <div class="small-10 columns" ng-dblclick="editorController.toggleEdit(statement)">
+                                <div class="section-fade" ng-if="editorController.editing(statement)" ng-include="'editor/eng-edit.html'"></div>
+                                <div ng-if="!editorController.editing(statement)" ng-include="'editor/eng.html'"></div>
                             </div>
                             <div class="small-1 columns text-right">
                                 <a ng-click="editorController.deleteStatement(statement)"><i class="fa fa-trash medium-gray"></i> </a>
@@ -45,11 +49,11 @@
         <h5>No document found</h5>
     </div>
 
-    <div class="reveal tiny" id="undoModal" data-reveal data-overlay="false">
+    <div class="reveal tiny" id="revertModal" data-reveal data-overlay="false">
         <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
-        <h4>Undo Changes</h4>
+        <h4>Revert Changes</h4>
         <div class="row">
-            Are you sure you want to undo all changes?
+            Are you sure you want to revert all changes?
         </div>
         <div class="row float-right padding-top-2">
             <div class="column ">

@@ -23,6 +23,14 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
     });
 
 
+    controller.toggleEdit = function (statement) {
+        DocumentModel.toggleEdit(statement);
+    };
+
+    controller.editing = function (statement) {
+        return DocumentModel.editing(statement);
+    };
+    
     controller.dirty = function () {
         return DocumentModel.dirty;
     };
@@ -30,11 +38,7 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
     controller.revert = function () {
         return DocumentModel.revert();
     };
-
-    controller.editStatement = function (statement) {
-        alert("TODO: Not Implemented");
-    };
-
+    
     controller.deleteStatement = function (statement) {
         DocumentModel.deleteStatement(statement);
     };

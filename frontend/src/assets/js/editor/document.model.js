@@ -44,6 +44,14 @@ homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
         context.dirty = true;
     };
 
+    this.toggleEdit = function(statement) {
+        statement.$_edit = !statement.$_edit;
+    };
+
+    this.editing = function(statement) {
+        return statement.$_edit; 
+    };
+    
     /**
      * Adds the statement in the local model (i.e. it is not synchronized to the backend.
      *

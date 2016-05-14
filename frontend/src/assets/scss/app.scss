@@ -254,14 +254,15 @@ $form-radius: $global-radius;
   @include mui-hinge($state: out, $from: top, $fade: true, $timing: map-get($motion-ui-easings, bounceInOut));
 }
 
-.mainSlider.ng-enter {
+.section-fade.ng-enter {
   @include mui-animation(fade);
   animation-duration: 1s;
 }
 
-.mainSlider.ng-leave {
+.section-fade.ng-leave {
   opacity: 0;
 }
+
 
 // ng-sortable
 .as-sortable-item, .as-sortable-placeholder {
@@ -300,4 +301,14 @@ $form-radius: $global-radius;
 
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                         not supported by any browser */
+}
 
