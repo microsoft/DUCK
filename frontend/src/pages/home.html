@@ -52,14 +52,10 @@
     </div>
     <div class="reveal tiny" id="createModal" data-reveal data-overlay="false">
         <h4>Create Document</h4>
-        <div class="row">
-            <div class="columns">
-                <label>Name
-                    <input ng-model="home.newName" type="text" placeholder="Document name">
-                </label>
-            </div>
+        <div class="row padding-top-2">
+            <input ng-model="home.newName" type="text" placeholder="Document name">
         </div>
-        <div class="row float-right">
+        <div class="row float-right padding-top-2">
             <div class="columns ">
                 <a class="button small secondary" data-close>CANCEL</a>
                 <a class="button small" data-close ng-click="">CREATE</a>
