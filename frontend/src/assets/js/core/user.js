@@ -1,7 +1,5 @@
 /**
  * This module defines the current user service.
- *
- * @type {angular.Module}
  */
 var coreModule = angular.module("duck.core");
 
