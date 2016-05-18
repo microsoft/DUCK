@@ -97,3 +97,9 @@ $global-radius: 3px;
   left: 80% !important
 }
 
+.validation-label {
+  @include label;
+  color: #0C1C22;
+  background-color: $success-color;
+}
+
