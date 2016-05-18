@@ -1,0 +1,21 @@
+$sidebar-background: rgba(13, 28, 34, 1);
+
+$sidebar-icon-disabled: rgba(37, 68, 79, 1);
+
+.sidebar {
+  position: fixed;
+  width: 200px;
+  left: 0;
+  height: 100%;
+  background-color: $sidebar-background;
+}
+
+.sidebar-icon-disabled {
+  color: $sidebar-icon-disabled;
+  &:hover,
+  &:focus {
+    color: $sidebar-icon-disabled;
+  }
+
+}
+

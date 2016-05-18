@@ -1,0 +1,21 @@
+.fixed-nav {
+  width: 100% !important;
+  left: 0 !important;;
+  position: fixed !important;;
+  top: 0 !important;;
+  z-index: 99 !important;
+}
+
+.top-bar {
+  a {
+    color: $light-gray !important;
+  }
+
+}
+
+.top-bar-menu {
+  @extend .menu;
+  border: 1px solid $topbar-background !important;
+  color: $light-gray !important;
+}
+

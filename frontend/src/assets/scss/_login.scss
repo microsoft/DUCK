@@ -1,0 +1,17 @@
+/**
+ * Styles for the login screen
+ */
+
+// Setting the form border color
+$form-border-color: $medium-gray;
+// Setting the form padding
+$form-padding: $global-padding;
+// Setting the form border radius
+$form-radius: $global-radius;
+
+.log-in-form {
+  border: 0 solid $form-border-color;
+  padding: 10em;
+  border-radius: $form-radius;
+}
+

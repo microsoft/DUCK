@@ -4,6 +4,15 @@
 @import 'foundation';
 @import 'motion-ui';
 @import 'font-awesome';
+@import "padding";
+@import "ngsortable";
+@import "_overlay";
+@import "animations";
+@import "search";
+@import "editor";
+@import "sidebar";
+@import "login";
+@import "top-nav";
 
 @include foundation-global-styles;
 @include foundation-grid;
@@ -57,63 +66,8 @@ $global-padding: 1rem;
 // Global value used for all elements that have a border radius.
 $global-radius: 3px;
 
-$sidebar-background: rgba(13, 28, 34, 1);
-
-$sidebar-icon-disabled: rgba(37, 68, 79, 1);
-
-// Setting the form border color
-$form-border-color: $medium-gray;
-// Setting the form padding
-$form-padding: $global-padding;
-// Setting the form border radius
-$form-radius: $global-radius;
-
-.log-in-form {
-  border: 0 solid $form-border-color;
-  padding: 10em;
-  border-radius: $form-radius;
-}
-
-.padding-top-0-5 {
-  padding-top: .5em !important;
-}
-
-.padding-top-1 {
-  padding-top: 1em !important;
-}
-
-.padding-top-2 {
-  padding-top: 2em !important;
-}
-
-.padding-right-1 {
-  padding-right: 1em !important;
-}
-
-.padding-left-1 {
-  padding-left: 1em !important;
-}
-
-.padding-bottom-3 {
-  padding-bottom: 3em;
-}
-
-.padding-top-6 {
-  padding-top: 6em;
-}
-
-.not-found-message {
-  padding-top: 10em;
-  color: $medium-gray !important;
-
-}
-
-.fixed-nav {
-  width: 100% !important;
-  left: 0 !important;;
-  position: fixed !important;;
-  top: 0 !important;;
-  z-index: 99 !important;
+.fa-1-5x {
+  font-size: 1.5em;
 }
 
 .white {
@@ -124,181 +78,8 @@ $form-radius: $global-radius;
   color: $medium-gray !important;
 }
 
-// image overlay classes
-
-.image-wrapper {
-  overflow: hidden;
-  position: relative;
-  text-align: center;
-  border-radius: $global-radius;
-}
-
-.image-overlay-content {
-  width: 100%;
-  height: 50%;
-  position: absolute;
-  overflow: hidden;
-  top: 20%;
-  left: 0;
-}
-
-.overlay-fade-in {
-
-  p {
-    letter-spacing: 0.15em;
-    color: #f4f4f4;
-    font-size: 28px;
-    opacity: 0;
-    transition: all 0.2s linear;
-  }
-
-  img {
-    transition: all 0.2s linear;
-  }
-
-  .image-overlay-content {
-    opacity: 0;
-    background-color: rgba(20, 33, 40, .7);
-    transition: all 0.4s ease-in-out;
-    padding-bottom: 5em !important;
-
-  }
-
-  &:hover img {
-    //transform: scale(1.2);
-  }
-
-  &:hover .image-overlay-content {
-    opacity: 1;
-  }
-
-  &:hover h2, p, .button {
-    opacity: 1;
-  }
-
-  &:hover p {
-    transition-delay: 0.1s;
-  }
-
-  &:hover .button {
-    transition-delay: 0.2s;
-  }
-}
-
-// end image overlay classes
-
 .main-offset {
   padding-top: 50px;
-}
-
-.search-box {
-  border-width: 0 !important;
-  border-bottom-width: 1px !important;
-  background-color: rgba(255, 255, 255, 0) !important;
-  box-shadow: none !important;
-}
-
-.search-box:focus {
-  border-bottom-width: 1px !important;
-  box-shadow: none !important;
-}
-
-.icon-label-wrapper {
-  width: 1% !important;
-  padding-right: 0 !important
-}
-
-.search-label {
-  color: $medium-gray !important;
-  border: 0;
-  white-space: nowrap;
-}
-
-.sidebar {
-  position: fixed;
-  width: 200px;
-  left: 0;
-  height: 100%;
-  background-color: $sidebar-background;
-}
-
-.top-bar {
-  a {
-    color: $light-gray !important;
-  }
-
-}
-
-.top-bar-menu {
-  @extend .menu;
-  border: 1px solid $topbar-background;
-  color: $light-gray !important;
-}
-
-.fa-1-5x {
-  font-size: 1.5em;
-}
-
-.editor-canvas {
-  padding-left: 200px !important;
-
-}
-
-// animations
-
-.hinge-in {
-  @include mui-hinge($state: in, $from: top, $fade: true, $timing: map-get($motion-ui-easings, bounceInOut));
-}
-
-.hinge-out {
-  @include mui-hinge($state: out, $from: top, $fade: true, $timing: map-get($motion-ui-easings, bounceInOut));
-}
-
-.section-fade.ng-enter {
-  @include mui-animation(fade);
-  animation-duration: 1s;
-}
-
-.section-fade.ng-leave {
-  opacity: 0;
-}
-
-
-// ng-sortable
-.as-sortable-item, .as-sortable-placeholder {
-  min-height: 50px;
-  margin: 1px 2px 5px 1px;
-  padding: 2em;
-}
-
-.as-sortable-item {
-  border: solid 1px $medium-gray;
-  background-color: #ffffff;
-}
-
-.as-sortable-item-handle {
-}
-
-.as-sortable-placeholder {
-  border: 1px dashed darkgrey;
-  box-sizing: border-box;
-  background-color: #dbdbdb;
-}
-
-.as-sortable-drag {
-  opacity: .8;
-}
-
-.as-sortable-hidden {
-}
-
-.sidebar-icon-disabled {
-  color: $sidebar-icon-disabled;
-  &:hover,
-  &:focus {
-    color: $sidebar-icon-disabled;
-  }
-
 }
 
 .noselect {
@@ -308,7 +89,5 @@ $form-radius: $global-radius;
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
-  /* Non-prefixed version, currently
-                         not supported by any browser */
 }
 

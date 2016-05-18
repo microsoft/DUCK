@@ -1,0 +1,20 @@
+/**
+ * Animation styles.
+ */
+.hinge-in {
+  @include mui-hinge($state: in, $from: top, $fade: true, $timing: map-get($motion-ui-easings, bounceInOut));
+}
+
+.hinge-out {
+  @include mui-hinge($state: out, $from: top, $fade: true, $timing: map-get($motion-ui-easings, bounceInOut));
+}
+
+.section-fade.ng-enter {
+  @include mui-animation(fade);
+  animation-duration: 1s;
+}
+
+.section-fade.ng-leave {
+  opacity: 0;
+}
+

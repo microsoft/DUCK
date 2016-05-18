@@ -1,0 +1,22 @@
+.search-box {
+  border-width: 0 !important;
+  border-bottom-width: 1px !important;
+  background-color: rgba(255, 255, 255, 0) !important;
+  box-shadow: none !important;
+}
+
+.search-box:focus {
+  border-bottom-width: 1px !important;
+  box-shadow: none !important;
+}
+
+.icon-label-wrapper {
+  width: 1% !important;
+  padding-right: 0 !important
+}
+
+.search-label {
+  color: $medium-gray !important;
+  border: 0;
+  white-space: nowrap;
+}
