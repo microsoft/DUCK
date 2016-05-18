@@ -10,14 +10,21 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
     // FIXME - remove when server is enabled
     this.summaries = new Hashtable();
     this.summaries.put("1", {name: "Customer Document v1", id: "1"});
-    this.summaries.put("2", {name: "Third-Party Document v2", id: "2"});
-    this.summaries.put("3", {name: "Partner Document", id: "3"});
+    // this.summaries.put("2", {name: "Third-Party Document v2", id: "2"});
+    // this.summaries.put("3", {name: "Partner Document", id: "3"});
 
     this.documents = new Hashtable();
-    this.documents.put("1", {name: "Customer Document v1", id: "1", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
-    this.documents.put("2", {name: "Third-Party Document v2", id: "2", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
-    this.documents.put("3", {name: "Partner Document", id: "3", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
-    // end remove
+    this.documents.put("1", {
+        name: "Customer Document v1", id: "1",
+        statements: [{
+            useScope: "cloud services defined in the services agreement", qualifier: "account", dataCategory: "data", sourceScope: "those cloud services",
+            action: "provide", resultScope: "cloud services defined in the service agreement"
+        }]
+    });
+    // this.documents.put("2", {name: "Third-Party Document v2", id: "2", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
+    // this.documents.put("3", {name: "Partner Document", id: "3", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
+    // FIXME end remove
+
 
     /**
      * Retrieves summaries for data use statement documents authored by the current user.
