@@ -1,6 +1,7 @@
 var editorModule = angular.module("duck.editor");
 
-editorModule.controller("EditorController", function (DocumentModel, UseScopeLookupService, $stateParams, ObjectUtils, AbandonComponent, $scope, $rootScope) {
+editorModule.controller("EditorController", function (DocumentModel, ValueLookupService,
+                                                      $stateParams, ObjectUtils, AbandonComponent, $scope, $rootScope) {
 
     var controller = this;
 
@@ -10,6 +11,8 @@ editorModule.controller("EditorController", function (DocumentModel, UseScopeLoo
     if (controller.noDocument) {
         return;
     }
+
+    controller.active = true;
 
     var unregisterDirtyCheck = $rootScope.$on("$stateChangeStart", function (event, toState) {
         if (!DocumentModel.dirty) {
@@ -22,12 +25,42 @@ editorModule.controller("EditorController", function (DocumentModel, UseScopeLoo
         unregisterDirtyCheck();
     });
 
-    // setup autocomplete - requires $scope
+    // setup autocompletes - requires $scope
     $scope.useScopeCompletion = {
         suggest: function (term) {
-            return UseScopeLookupService.lookup("eng", term)
+            return ValueLookupService.lookup("useScope", "eng", term)
         }
     };
+    $scope.qualifierCompletion = {
+        suggest: function (term) {
+            return ValueLookupService.lookup("qualifier", "eng", term)
+        }
+    };
+
+    $scope.dataCategoryCompletion = {
+        suggest: function (term) {
+            return ValueLookupService.lookup("dataCategory", "eng", term)
+        }
+    };
+
+    $scope.sourceScopeCompletion = {
+        suggest: function (term) {
+            return ValueLookupService.lookup("sourceScope", "eng", term)
+        }
+    };
+
+    $scope.actionCompletion = {
+        suggest: function (term) {
+            return ValueLookupService.lookup("action", "eng", term)
+        }
+    };
+
+    $scope.resultScopeCompletion = {
+        suggest: function (term) {
+            return ValueLookupService.lookup("resultScope", "eng", term)
+        }
+    };
+
 
 
     controller.toggleEdit = function (statement) {
