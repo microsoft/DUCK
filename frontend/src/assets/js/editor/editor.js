@@ -1,6 +1,6 @@
-var homeModule = angular.module("duck.editor");
+var editorModule = angular.module("duck.editor");
 
-homeModule.controller("EditorController", function (DocumentModel, $stateParams, ObjectUtils, AbandonComponent, $scope, $rootScope) {
+editorModule.controller("EditorController", function (DocumentModel, UseScopeLookupService, $stateParams, ObjectUtils, AbandonComponent, $scope, $rootScope) {
 
     var controller = this;
 
@@ -22,6 +22,13 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
         unregisterDirtyCheck();
     });
 
+    // setup autocomplete - requires $scope
+    $scope.useScopeCompletion = {
+        suggest: function (term) {
+            return UseScopeLookupService.lookup("eng", term)
+        }
+    };
+
 
     controller.toggleEdit = function (statement) {
         DocumentModel.toggleEdit(statement);
@@ -30,7 +37,7 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
     controller.editing = function (statement) {
         return DocumentModel.editing(statement);
     };
-    
+
     controller.dirty = function () {
         return DocumentModel.dirty;
     };
@@ -38,7 +45,7 @@ homeModule.controller("EditorController", function (DocumentModel, $stateParams,
     controller.revert = function () {
         return DocumentModel.revert();
     };
-    
+
     controller.deleteStatement = function (statement) {
         DocumentModel.deleteStatement(statement);
     };

@@ -1,9 +1,9 @@
-var homeModule = angular.module("duck.editor");
+var editorModule = angular.module("duck.editor");
 
 /**
  * Manages the current document being edited.
  */
-homeModule.service("DocumentModel", function (DataUseDocumentService, $q) {
+editorModule.service("DocumentModel", function (DataUseDocumentService, $q) {
     /**
      * A local copy of the document.
      */

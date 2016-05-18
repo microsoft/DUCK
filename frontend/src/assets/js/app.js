@@ -16,7 +16,7 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
     function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide, $qProvider) {
 
         // suppress warning when a rejected promise is not handled
-        $qProvider.errorOnUnhandledRejections(false);
+        //$qProvider.errorOnUnhandledRejections(false);
 
         // set the debug log level
         $logProvider.debugEnabled(true);
