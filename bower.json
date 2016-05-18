@@ -23,7 +23,9 @@
     "jshashtable": "~3.0.0",
     "jshashset": "~3.0.0",
     "font-awesome": "~4.6.2",
-    "ng-sortable": "~1.3.6"
+    "ng-sortable": "~1.3.6",
+    "angular-mass-autocomplete": "~0.2.3",
+    "fuse.js": "~2.2.0"
   },
   "private": true
 }

@@ -66,6 +66,8 @@ PATHS:
     - "bower_components/jshashtable/hashtable.js"
     - "bower_components/jshashset/hashset.js"
     - "bower_components/ng-sortable/dist/ng-sortable.js"
+    - "bower_components/angular-mass-autocomplete/massautocomplete.js"
+    - "bower_components/fuse.js/src/fuse.js"
   javascript:
     - "frontend/src/assets/js/!(app).js"
     - "frontend/src/assets/js/**"
