@@ -6,5 +6,7 @@ This document tracks third-party software distributed by this project:
 - JSHashtable fork [https://github.com/enriquecastl/jshashtable]
 - JSHashSet fork [https://github.com/enriquecastl/jshashset]
 - ngSortable [https://github.com/a5hik/ng-sortable]
+- Fuse.js [http://kiro.me/projects/fuse.html]
+- Mass AutoComplete [http://hakib.github.io/MassAutocomplete/]
 
 
