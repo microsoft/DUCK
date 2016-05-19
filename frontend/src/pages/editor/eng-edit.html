@@ -1,9 +1,13 @@
 <div class="row">
     <div mass-autocomplete>
-        <input placeholder="use scope"
+        <error-label fragment="statement.errors.useScope"></error-label>
+        <input error-marker="statement.errors.useScope"
+               clxass="error-highlight"
+               placeholder="use scope"
                ng-model="statement.useScope"
                mass-autocomplete-item="useScopeCompletion"
-               pu-elastic-input style="min-width: 10px; max-width: 1000px;"> uses
+               pu-elastic-input style="min-width: 10px; max-width: 1000px;">
+        uses
         <input placeholder="qualifier"
                ng-model="statement.qualifier"
                mass-autocomplete-item="qualifierCompletion"
@@ -16,7 +20,9 @@
                ng-model="statement.sourceScope"
                mass-autocomplete-item="sourceScopeCompletion"
                pu-elastic-input style="min-width: 10px; max-width: 1000px;"> to
-        <input placeholder="action"
+        <error-label fragment="statement.errors.action"></error-label>
+        <input error-marker="statement.errors.action"
+               placeholder="action"
                ng-model="statement.action"
                mass-autocomplete-item="actionCompletion"
                pu-elastic-input style="min-width: 10px; max-width: 1000px;"> the
@@ -26,11 +32,27 @@
                pu-elastic-input style="min-width: 10px; max-width: 1000px;">
     </div>
 </div>
+<div class="row padding-top-2">
+    <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
+        <div ng-show="statement.errors.useScope.active">
+            <error-label fragment="statement.errors.useScope"></error-label>
+            {{statement.errors.useScope.message}}
+        </div>
+        <div ng-show="statement.errors.action.active">
+            <error-label fragment="statement.errors.action"></error-label>
+            {{statement.errors.action.message}}
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <hr>
 </div>
-<div class="row">
-    {{statement.useScope}} uses {{statement.qualifier}} {{statement.dataCategory}} from {{statement.sourceScope}} to
-    {{statement.action}} the {{statement.resultScope}}
+<div class="row" ng-show="!editorController.emptyStatement(statement)">
+    <h5>Preview</h5>
+    <div class="row column">
+        {{statement.useScope}} uses {{statement.qualifier}} {{statement.dataCategory}} from {{statement.sourceScope}} to
+        {{statement.action}} the {{statement.resultScope}}
+    </div>
 </div>
 

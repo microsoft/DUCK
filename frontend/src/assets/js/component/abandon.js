@@ -1,7 +1,7 @@
 /**
  * Defines UI components.
  */
-var componentModule = angular.module('duck.component');
+var componentModule = angular.module("duck.component");
 
 /**
  * Manages the abandon changes modal, e.g. opened when a user navigates from a page with edits that have not been saved.
@@ -19,7 +19,7 @@ componentModule.service("AbandonComponent", function ($state, $rootScope) {
         context.event = event;
         context.toState = toState;
         event.preventDefault();
-        $('#abandonChanges').foundation("open");
+        $("#abandonChanges").foundation("open");
     };
 
     /**
@@ -28,7 +28,7 @@ componentModule.service("AbandonComponent", function ($state, $rootScope) {
     this.confirm = function () {
         $state.go(context.toState.name, null, {notify: false}).then(function () {
             // workaround for angular router issue: https://github.com/angular-ui/ui-router/issues/178
-            $rootScope.$broadcast('$stateChangeSuccess', context.toState);
+            $rootScope.$broadcast("$stateChangeSuccess", context.toState);
         });
 
     }

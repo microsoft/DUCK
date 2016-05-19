@@ -3,7 +3,7 @@ var editorModule = angular.module("duck.editor");
 /**
  * Manages the current document being edited.
  */
-editorModule.service("DocumentModel", function (DataUseDocumentService, $q) {
+editorModule.service("DocumentModel", function (DataUseDocumentService, $q, ObjectUtils) {
     /**
      * A local copy of the document.
      */
@@ -25,6 +25,12 @@ editorModule.service("DocumentModel", function (DataUseDocumentService, $q) {
     this.initialize = function (documentId) {
         return $q(function (resolve) {
             DataUseDocumentService.getDocument(documentId).then(function (document) {
+                document.statements.forEach(function (statement) {
+                    statement.errors = {
+                        useScope: {active: false, level: null, action: false},
+                        action: {active: false, level: null, action: false}
+                    };
+                });
                 context.document = document;
                 context.dirty = false;
                 resolve();
@@ -44,22 +50,22 @@ editorModule.service("DocumentModel", function (DataUseDocumentService, $q) {
         context.dirty = true;
     };
 
-    this.toggleEdit = function(statement) {
+    this.toggleEdit = function (statement) {
         statement.$_edit = !statement.$_edit;
     };
 
-    this.edit = function(statement) {
+    this.edit = function (statement) {
         statement.$_edit = true;
     };
 
-    this.close = function(statement) {
+    this.close = function (statement) {
         statement.$_edit = false;
     };
-    
-    this.editing = function(statement) {
-        return statement.$_edit; 
+
+    this.editing = function (statement) {
+        return statement.$_edit;
     };
-    
+
     /**
      * Adds the statement in the local model (i.e. it is not synchronized to the backend.
      *
@@ -95,6 +101,20 @@ editorModule.service("DocumentModel", function (DataUseDocumentService, $q) {
         context.dirty = true;
     };
 
+    this.validateSyntax = function (statement) {
+        if (ObjectUtils.isNull(statement)) {
+            context.document.statements.forEach(function (statement) {
+                statement.errors.useScope = {active: true, level: "error", errorNumber: 1, message: "Use scope is not recognized"};
+                statement.errors.action = {active: true, level: "warning", errorNumber: 2, message: "Action is not an ISO-defined term"};
+            })
+        } else {
+            statement.errors.useScope = {active: true, level: "error", errorNumber: 1};
+            statement.errors.action = {active: true, level: "warning", errorNumber: 2};
+        }
+    };
 
+    this.emptyStatement = function (statement) {
+        return (ObjectUtils.isNull(statement.useScope) ||  statement.useScope.trim().length === 0) &&  (ObjectUtils.isNull(statement.action) ||  statement.action.trim().length === 0)
+    }
 }); 
     

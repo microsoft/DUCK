@@ -75,6 +75,16 @@ $global-radius: 3px;
   color: white !important;
 }
 
+.error-highlight {
+  background-color: lighten( $alert-color, 20% ) !important;
+  border:0 !important;
+}
+
+.warning-highlight {
+  background-color: lighten( $warning-color, 20% ) !important;
+  border:0 !important;
+}
+
 .medium-gray {
   color: $medium-gray !important;
 }
