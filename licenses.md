@@ -8,5 +8,5 @@ This document tracks third-party software distributed by this project:
 - ngSortable [https://github.com/a5hik/ng-sortable]
 - Fuse.js [http://kiro.me/projects/fuse.html]
 - Mass AutoComplete [http://hakib.github.io/MassAutocomplete/]
-
+- Elastic Input [http://jacek-pulit.github.io/angular-elastic-input/]
 

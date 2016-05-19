@@ -26,26 +26,40 @@
             <hr>
         </div>
 
-        <div class="row column" ng-if="document">
-            <div class="button-group tiny">
-                <a class="button secondary" ng-class="{'hollow':!editorController.active}" ng-click="editorController.active = true">Active</a>
-                <a class="button secondary" ng-class="{'hollow':editorController.active}" ng-click="editorController.active = false">Passive</a>
-            </div>
-            <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
-                <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
-                    <div data-as-sortable-item-handle>
-                        <div class="row noselect">
-                            <div class="small-11 columns" ng-dblclick="editorController.toggleEdit(statement)">
-                                <div class="section-fade" ng-if="editorController.editing(statement)" ng-include="'editor/eng-edit.html'"></div>
-                                <div ng-if="!editorController.editing(statement)" ng-include="'editor/eng.html'"></div>
-                            </div>
-                            <div class="small-1 columns text-right">
-                                <a ng-click="editorController.deleteStatement(statement)"><i class="fa fa-trash medium-gray"></i> </a>
-                            </div>
-                        </div>
+        <div ng-if="document">
+            <div class="row" ng-if="document">
+                <div class="clearfix">
+                    <div class="button-group small float-right noselect">
+                        <a class="button secondary" ng-class="{'hollow':!editorController.active}" ng-click="editorController.active = true">Active</a>
+                        <a class="button secondary" ng-class="{'hollow':editorController.active}" ng-click="editorController.active = false">Passive</a>
                     </div>
-                </li>
-            </ul>
+                    <div class="button-group small float-left noselect">
+                        <a class="button hollow" ng-click="editorController.editAll()" title="Edit all statements">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </a>
+                        <a class="button hollow" ng-click="editorController.closeAll()" title="Close all statement editors">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row column">
+                    <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
+                        <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
+                            <div data-as-sortable-item-handle>
+                                <div class="row noselect">
+                                    <div class="small-11 columns" ng-dbxlclick="editorController.toggleEdit(statement)">
+                                        <div class="section-fade" ng-if="editorController.editing(statement)" ng-include="'editor/eng-edit.html'"></div>
+                                        <div ng-if="!editorController.editing(statement)" ng-include="'editor/eng.html'"></div>
+                                    </div>
+                                    <div class="small-1 columns text-right">
+                                        <a ng-click="editorController.deleteStatement(statement)"><i class="fa fa-trash medium-gray"></i> </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row columns text-center padding-top-6" ng-if="editorController.noDocument">

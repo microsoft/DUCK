@@ -48,6 +48,14 @@ editorModule.service("DocumentModel", function (DataUseDocumentService, $q) {
         statement.$_edit = !statement.$_edit;
     };
 
+    this.edit = function(statement) {
+        statement.$_edit = true;
+    };
+
+    this.close = function(statement) {
+        statement.$_edit = false;
+    };
+    
     this.editing = function(statement) {
         return statement.$_edit; 
     };

@@ -2,6 +2,8 @@
  * Mass autocomplete control styles.
  */
 .ac-container {
+  // TODO width should be set as a media query
+  width: 600px !important;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
@@ -13,7 +15,6 @@
   -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   z-index: 999;
-
   .ac-menu {
     border: 1px solid #ccc;
     list-style: none;

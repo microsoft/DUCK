@@ -1,11 +1,29 @@
 <div class="row">
     <div mass-autocomplete>
-        <input ng-model="statement.useScope" mass-autocomplete-item="useScopeCompletion"> uses
-        <input ng-model="statement.qualifier" mass-autocomplete-item="qualifierCompletion">
-        <input ng-model="statement.dataCategory" mass-autocomplete-item="dataCategoryCompletion"> from
-        <input ng-model="statement.sourceScope" mass-autocomplete-item="sourceScopeCompletion"> to
-        <input ng-model="statement.action" mass-autocomplete-item="actionCompletion"> the
-        <input ng-model="statement.resultScope" mass-autocomplete-item="resultScopeCompletion">
+        <input placeholder="use scope"
+               ng-model="statement.useScope"
+               mass-autocomplete-item="useScopeCompletion"
+               pu-elastic-input style="min-width: 10px; max-width: 1000px;"> uses
+        <input placeholder="qualifier"
+               ng-model="statement.qualifier"
+               mass-autocomplete-item="qualifierCompletion"
+               pu-elastic-input style="min-width: 10px; max-width: 1000px;">
+        <input placeholder="data category"
+               ng-model="statement.dataCategory"
+               mass-autocomplete-item="dataCategoryCompletion"
+               pu-elastic-input style="min-width: 10px; max-width: 1000px;"> from
+        <input placeholder="source scope"
+               ng-model="statement.sourceScope"
+               mass-autocomplete-item="sourceScopeCompletion"
+               pu-elastic-input style="min-width: 10px; max-width: 1000px;"> to
+        <input placeholder="action"
+               ng-model="statement.action"
+               mass-autocomplete-item="actionCompletion"
+               pu-elastic-input style="min-width: 10px; max-width: 1000px;"> the
+        <input placeholder="result scope"
+               ng-model="statement.resultScope"
+               mass-autocomplete-item="resultScopeCompletion"
+               pu-elastic-input style="min-width: 10px; max-width: 1000px;">
     </div>
 </div>
 <div class="row">

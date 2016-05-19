@@ -69,6 +69,7 @@ PATHS:
     - "bower_components/ng-sortable/dist/ng-sortable.js"
     - "bower_components/angular-mass-autocomplete/massautocomplete.js"
     - "bower_components/fuse.js/src/fuse.js"
+    - "bower_components/angular-elastic-input/dist/angular-elastic-input.js"
   javascript:
     - "frontend/src/assets/js/!(app).js"
     - "frontend/src/assets/js/**"

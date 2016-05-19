@@ -71,6 +71,18 @@ editorModule.controller("EditorController", function (DocumentModel, ValueLookup
         return DocumentModel.editing(statement);
     };
 
+    controller.editAll= function () {
+        return DocumentModel.document.statements.forEach(function(statement){
+            DocumentModel.edit(statement);
+        });
+    };
+
+    controller.closeAll= function () {
+        return DocumentModel.document.statements.forEach(function(statement){
+            DocumentModel.close(statement);
+        });
+    };
+
     controller.dirty = function () {
         return DocumentModel.dirty;
     };
