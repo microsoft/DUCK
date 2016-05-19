@@ -22,27 +22,26 @@ editorModule.service("ValueLookupService", function ($sce, $log) {
 
     // TODO the cache will be populated from a backend request
     this.populate("useScope", ["this company", "this product", "this site", "this application"]);
-    this.populate("qualifier",["unlinked pseudonymized", "all"] );
+    this.populate("qualifier", ["unlinked pseudonymized", "all"]);
     this.populate("dataCategory", ["email addresses", "telemetry data", "surfing habits"]);
     this.populate("sourceScope", ["this capability"]);
-    this.populate("action",["provide", "inform"] );
+    this.populate("action", ["provide", "inform"]);
     this.populate("resultScope", ["the services listed in this services agreement"]);
     // TODO end cache population
 
 
     /**
      * Performs a fuzzy lookup of a set of values matching the given term.
-     * 
+     *
      * @param type the value type, e.g. use scope or qualifier
      * @param locale the language, e.g. "eng"
      * @param term the term to match
-     * @return {Array} containing matching values
+     * @return {Array} containing matching values in the form {value, label}
      */
     this.lookup = function (type, locale, term) {
         if (!term) {
             return [];
         }
-
         var typeCache = context.cache.get(type);
         if (typeCache == null) {
             $log.error("Unknown symbol type: " + type);
@@ -54,7 +53,14 @@ editorModule.service("ValueLookupService", function ($sce, $log) {
             $log.error("Unknown locale when looking up symbol type '" + type + "': " + locale);
             return;
         }
-
+        if (term.trim().length === 0) {
+            // return all options
+            var vals = [];
+            symbolTable.values.forEach(function (val) {
+                vals.push({value: val, label: $sce.trustAsHtml(val)});
+            });
+            return vals;
+        }
         return symbolTable.fuse
             .search(term)
             .slice(0, 10)
