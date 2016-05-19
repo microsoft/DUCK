@@ -8,7 +8,7 @@ import (
 
 	//Database lugin, change this if you have another Plugin/database
 
-	_ "github.com/Metaform/duck/backend/plugins/dbplugin"
+	_ "github.com/Metaform/duck/backend/plugins/couchbase"
 
 	"github.com/Metaform/duck/backend/ducklib"
 )

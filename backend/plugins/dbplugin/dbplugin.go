@@ -10,11 +10,14 @@ type MyDatabase struct {
 }
 
 func (mdb *MyDatabase) Print() {
-	fmt.Println("Extension Printed sth")
+	fmt.Println("Testextension Printed sth")
 }
 
 func (mdb *MyDatabase) Save() {
-	fmt.Println("Extension saved sth")
+	fmt.Println("Testextension saved sth")
+}
+func (mdb *MyDatabase) Init(url string) error {
+	fmt.Println("Testextension initialized")
 }
 
 func init() {

@@ -1,6 +1,10 @@
 package ducklib
 
-import "github.com/Metaform/duck/backend/pluginregistry"
+import (
+	"fmt"
+
+	"github.com/Metaform/duck/backend/pluginregistry"
+)
 
 type Database struct {
 	url          string
@@ -12,7 +16,7 @@ type Database struct {
 var db = pluginregistry.DatabasePlugin
 
 func NewDatabase() *Database {
-	return &Database{databasename: "DUCK"}
+	return &Database{databasename: "duck", url: "http://127.0.0.1:5984"}
 }
 
 func TestDB() {
@@ -21,6 +25,15 @@ func TestDB() {
 	db.Save()
 }
 
-func (self *Database) Init() {
+//Init initializes the database and checks for connection errors
+func (database *Database) Init() {
+	err := db.Init(database.url, database.databasename)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
 
+//Init initializes the database and checks for connection errors
+func (database *Database) GetLogin(username string) (string, error) {
+	return db.GetLogin(username)
 }

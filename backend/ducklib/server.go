@@ -3,6 +3,7 @@ package ducklib
 import (
 	"net/http"
 	"time"
+	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
@@ -19,6 +20,8 @@ type user struct {
 	Password string `json:"password"`
 }
 
+var datab *Database
+
 //route Handlers
 
 func helloHandler(c echo.Context) error {
@@ -34,8 +37,9 @@ func loginHandler(c echo.Context) error {
 	if err := c.Bind(u); err != nil {
 		return err
 	}
+	pw, err := datab.GetLogin(u.Username) //TODO compare with encrypted pw
 
-	if u.Username == "duck" && u.Password == "duck" {
+	if err == nil && u.Password == pw {
 
 		//set vars -> we should get this from the DB
 		firstName := "Duck"
@@ -64,14 +68,16 @@ func loginHandler(c echo.Context) error {
 			"id":        id,
 		})
 	}
-
+	fmt.Println(err)
 	return echo.ErrUnauthorized
 }
 
 //GetServer returns Echo instance with predefined routes
 func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 
-    TestDB()
+	datab = NewDatabase()
+	datab.Init()
+
 	//New echo instance
 	e := echo.New()
 
