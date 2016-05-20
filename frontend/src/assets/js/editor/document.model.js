@@ -3,7 +3,7 @@ var editorModule = angular.module("duck.editor");
 /**
  * Manages the current document being edited.
  */
-editorModule.service("DocumentModel", function (DataUseDocumentService, $q, ObjectUtils) {
+editorModule.service("DocumentModel", function (TaxonomyService, DataUseDocumentService, $q, ObjectUtils) {
     /**
      * A local copy of the document.
      */
@@ -31,6 +31,8 @@ editorModule.service("DocumentModel", function (DataUseDocumentService, $q, Obje
                         action: {active: false, level: null, action: false}
                     };
                 });
+                // FIXME: hardcode locale for now
+                document.locale = "eng";
                 context.document = document;
                 context.dirty = false;
                 resolve();
@@ -101,20 +103,38 @@ editorModule.service("DocumentModel", function (DataUseDocumentService, $q, Obje
         context.dirty = true;
     };
 
-    this.validateSyntax = function (statement) {
-        if (ObjectUtils.isNull(statement)) {
-            context.document.statements.forEach(function (statement) {
-                statement.errors.useScope = {active: true, level: "error", errorNumber: 1, message: "Use scope is not recognized"};
-                statement.errors.action = {active: true, level: "warning", errorNumber: 2, message: "Action is not an ISO-defined term"};
-            })
-        } else {
-            statement.errors.useScope = {active: true, level: "error", errorNumber: 1};
-            statement.errors.action = {active: true, level: "warning", errorNumber: 2};
-        }
+    this.validateSyntax = function () {
+        var errorNumber = 1;
+        context.document.statements.forEach(function (statement) {
+            if (ObjectUtils.isNull(statement.errors)) {
+                return;
+            }
+            if (!ObjectUtils.isEmptyString(statement.useScope)) {
+                if (TaxonomyService.contains("scope", context.document.locale, statement.useScope)) {
+                    context.resetValidation(statement.errors.useScope);
+                } else {
+                    statement.errors.useScope.active = true;
+                    statement.errors.useScope.level = "error";
+                    statement.errors.useScope.errorNumber = errorNumber;
+                    statement.errors.useScope.message = "Use scope is not recognized";
+                    errorNumber++;
+                }
+            } else {
+                context.resetValidation(statement.errors.useScope);
+            }
+            // statement.errors.action = {active: true, level: "warning", errorNumber: 2, message: "Action is not an ISO-defined term"};
+        })
+    };
+
+    this.resetValidation = function (errorObject) {
+        errorObject.active = false;
+        errorObject.level = null;
+        errorObject.errorNumber = 0;
+        errorObject.message = null;
     };
 
     this.emptyStatement = function (statement) {
-        return (ObjectUtils.isNull(statement.useScope) ||  statement.useScope.trim().length === 0) &&  (ObjectUtils.isNull(statement.action) ||  statement.action.trim().length === 0)
+        return (ObjectUtils.isNull(statement.useScope) || statement.useScope.trim().length === 0) && (ObjectUtils.isNull(statement.action) || statement.action.trim().length === 0)
     }
 }); 
     

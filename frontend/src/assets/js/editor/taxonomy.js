@@ -1,10 +1,9 @@
 var editorModule = angular.module("duck.editor");
 
 /**
- * Provides fuzzy lookup of data use statement field values. A field value is used to populate an ISO-identified segment of the data use statement such as use
- * scope or qualifier.
+ * Manages the ISO 19944 Taxonomy including fuzzy lookup of data use statement element values.
  */
-editorModule.service("ValueLookupService", function ($sce, $log) {
+editorModule.service("TaxonomyService", function ($sce, $log) {
     var context = this;
 
     context.cache = new Hashtable();  // key: symbol type, value: Hashtable [key: locale, value: list of symbol values]
@@ -21,12 +20,11 @@ editorModule.service("ValueLookupService", function ($sce, $log) {
     };
 
     // TODO the cache will be populated from a backend request
-    this.populate("useScope", ["this company", "this product", "this site", "this application"]);
+    this.populate("scope", ["this capability", "this application or this service","services listed in the service agreement","the CSP Services",
+        "all the CSP Products and services", "third-party product and services"]);
     this.populate("qualifier", ["unlinked pseudonymized", "all"]);
     this.populate("dataCategory", ["email addresses", "telemetry data", "surfing habits"]);
-    this.populate("sourceScope", ["this capability"]);
     this.populate("action", ["provide", "inform"]);
-    this.populate("resultScope", ["the services listed in this services agreement"]);
     // TODO end cache population
 
 
@@ -73,5 +71,23 @@ editorModule.service("ValueLookupService", function ($sce, $log) {
             });
     };
 
+    this.contains = function (type, locale, term) {
+        if (!term || term.trim().length === 0) {
+            return false;
+        }
+
+        var typeCache = context.cache.get(type);
+        if (typeCache == null) {
+            $log.error("Unknown symbol type: " + type);
+            return false;
+        }
+
+        var symbolTable = typeCache.get(locale);
+        if (symbolTable == null) {
+            $log.error("Unknown locale when looking up symbol type '" + type + "': " + locale);
+            return false;
+        }
+        return symbolTable.values.includes(term);
+    }
 
 });

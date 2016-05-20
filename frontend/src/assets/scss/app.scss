@@ -76,21 +76,29 @@ $global-radius: 3px;
 }
 
 .error-highlight {
-  background-color: lighten( $alert-color, 20% ) !important;
-  border:0 !important;
+  background-color: lighten($alert-color, 20%) !important;
+  border: 0 !important;
 }
 
 .warning-highlight {
-  background-color: lighten( $warning-color, 20% ) !important;
-  border:0 !important;
+  background-color: lighten($warning-color, 20%) !important;
+  border: 0 !important;
 }
 
 .medium-gray {
   color: $medium-gray !important;
 }
 
+.dark-gray {
+  color: #B5B5B5 !important;
+}
+
 .main-offset {
   padding-top: 50px;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .noselect {

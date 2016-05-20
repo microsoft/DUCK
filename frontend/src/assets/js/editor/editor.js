@@ -1,6 +1,6 @@
 var editorModule = angular.module("duck.editor");
 
-editorModule.controller("EditorController", function (DocumentModel, ValueLookupService,
+editorModule.controller("EditorController", function (DocumentModel, TaxonomyService,
                                                       $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
@@ -73,10 +73,6 @@ editorModule.controller("EditorController", function (DocumentModel, ValueLookup
         });
     };
 
-    controller.validateSyntax = function () {
-        DocumentModel.validateSyntax();
-    };
-
     controller.hasErrors = function (statement) {
         var errors = statement.errors;
         if (ObjectUtils.isNull(errors)) {
@@ -111,39 +107,59 @@ editorModule.controller("EditorController", function (DocumentModel, ValueLookup
         // setup autocompletes - requires $scope
         $scope.useScopeCompletion = {
             suggest: function (term) {
-                return ValueLookupService.lookup("useScope", "eng", term)
+                return TaxonomyService.lookup("scope", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
             }
         };
+
         $scope.qualifierCompletion = {
             suggest: function (term) {
-                return ValueLookupService.lookup("qualifier", "eng", term)
+                return TaxonomyService.lookup("qualifier", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
             }
         };
 
         $scope.dataCategoryCompletion = {
             suggest: function (term) {
-                return ValueLookupService.lookup("dataCategory", "eng", term)
+                return TaxonomyService.lookup("dataCategory", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
             }
         };
 
         $scope.sourceScopeCompletion = {
             suggest: function (term) {
-                return ValueLookupService.lookup("sourceScope", "eng", term)
+                return TaxonomyService.lookup("scope", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
             }
         };
 
         $scope.actionCompletion = {
             suggest: function (term) {
-                return ValueLookupService.lookup("action", "eng", term)
+                return TaxonomyService.lookup("action", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
             }
         };
 
         $scope.resultScopeCompletion = {
             suggest: function (term) {
-                return ValueLookupService.lookup("resultScope", "eng", term)
+                return TaxonomyService.lookup("scope", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
             }
         };
     }
 
 });
+
 

@@ -19,11 +19,16 @@ componentModule.directive('errorLabel', function () {
 /**
  * Highlights the statement fragment if it is in error.
  */
-componentModule.directive('errorMarker', function () {
+componentModule.directive('errorMarker', function (ObjectUtils) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
-            scope.$watch(attrs.errorMarker, function (value) {
+            scope.$watchCollection(attrs.errorMarker, function (value) {
+                if (ObjectUtils.isNull(value) || ObjectUtils.isNull(value.active) || ObjectUtils.isNull(value.level)) {
+                    element.removeClass('error-highlight');
+                    element.removeClass('warning-highlight');
+                    return;
+                }
                 if (value.active && value.level === "error") {
                     element.addClass('error-highlight');
                 } else if (value.active && value.level === "warning") {
