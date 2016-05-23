@@ -1,7 +1,7 @@
 var editorModule = angular.module("duck.editor");
 
-editorModule.controller("EditorController", function (DocumentModel, ValueLookupService,
-                                                      $stateParams, ObjectUtils, AbandonComponent, $scope, $rootScope) {
+editorModule.controller("EditorController", function (DocumentModel, TaxonomyService,
+                                                      $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
 
@@ -25,42 +25,7 @@ editorModule.controller("EditorController", function (DocumentModel, ValueLookup
         unregisterDirtyCheck();
     });
 
-    // setup autocompletes - requires $scope
-    $scope.useScopeCompletion = {
-        suggest: function (term) {
-            return ValueLookupService.lookup("useScope", "eng", term)
-        }
-    };
-    $scope.qualifierCompletion = {
-        suggest: function (term) {
-            return ValueLookupService.lookup("qualifier", "eng", term)
-        }
-    };
-
-    $scope.dataCategoryCompletion = {
-        suggest: function (term) {
-            return ValueLookupService.lookup("dataCategory", "eng", term)
-        }
-    };
-
-    $scope.sourceScopeCompletion = {
-        suggest: function (term) {
-            return ValueLookupService.lookup("sourceScope", "eng", term)
-        }
-    };
-
-    $scope.actionCompletion = {
-        suggest: function (term) {
-            return ValueLookupService.lookup("action", "eng", term)
-        }
-    };
-
-    $scope.resultScopeCompletion = {
-        suggest: function (term) {
-            return ValueLookupService.lookup("resultScope", "eng", term)
-        }
-    };
-
+    initializeCompletions();
 
 
     controller.toggleEdit = function (statement) {
@@ -71,14 +36,14 @@ editorModule.controller("EditorController", function (DocumentModel, ValueLookup
         return DocumentModel.editing(statement);
     };
 
-    controller.editAll= function () {
-        return DocumentModel.document.statements.forEach(function(statement){
+    controller.editAll = function () {
+        return DocumentModel.document.statements.forEach(function (statement) {
             DocumentModel.edit(statement);
         });
     };
 
-    controller.closeAll= function () {
-        return DocumentModel.document.statements.forEach(function(statement){
+    controller.closeAll = function () {
+        return DocumentModel.document.statements.forEach(function (statement) {
             DocumentModel.close(statement);
         });
     };
@@ -96,7 +61,28 @@ editorModule.controller("EditorController", function (DocumentModel, ValueLookup
     };
 
     controller.addStatement = function () {
-        DocumentModel.addStatement({id: $scope.document.statements.length + 1, content: "Another statement " + ($scope.document.statements.length + 1)});
+        // useScope: "cloud services defined in the services agreement", qualifier: "account", dataCategory: "data", sourceScope: "those cloud services",
+        //             action: "provide", resultScope: "cloud services defined in the service agreement"
+        DocumentModel.addStatement({
+            useScope: null,
+            qualifier: null,
+            dataCategory: null,
+            sourceScope: null,
+            action: null,
+            resultScope: null
+        });
+    };
+
+    controller.hasErrors = function (statement) {
+        var errors = statement.errors;
+        if (ObjectUtils.isNull(errors)) {
+            return false;
+        }
+        return errors.useScope.active || errors.action.active;
+    };
+
+    controller.emptyStatement = function (statement) {
+        return DocumentModel.emptyStatement(statement);
     };
 
     DocumentModel.initialize(documentId).then(function () {
@@ -116,5 +102,64 @@ editorModule.controller("EditorController", function (DocumentModel, ValueLookup
         }
     };
 
+    function initializeCompletions() {
+
+        // setup autocompletes - requires $scope
+        $scope.useScopeCompletion = {
+            suggest: function (term) {
+                return TaxonomyService.lookup("scope", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
+            }
+        };
+
+        $scope.qualifierCompletion = {
+            suggest: function (term) {
+                return TaxonomyService.lookup("qualifier", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
+            }
+        };
+
+        $scope.dataCategoryCompletion = {
+            suggest: function (term) {
+                return TaxonomyService.lookup("dataCategory", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
+            }
+        };
+
+        $scope.sourceScopeCompletion = {
+            suggest: function (term) {
+                return TaxonomyService.lookup("scope", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
+            }
+        };
+
+        $scope.actionCompletion = {
+            suggest: function (term) {
+                return TaxonomyService.lookup("action", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
+            }
+        };
+
+        $scope.resultScopeCompletion = {
+            suggest: function (term) {
+                return TaxonomyService.lookup("scope", "eng", term)
+            },
+            on_detach: function(value){
+                DocumentModel.validateSyntax();
+            }
+        };
+    }
 
 });
+
+

@@ -16,6 +16,10 @@ coreModule.service("ObjectUtils", function () {
         return this.isNull(array) || array.length < 1;
     };
 
+    this.isEmptyString = function (value) {
+        return this.isNull(value) || value.trim().length === 0;
+    };
+    
     /**
      * Safely evaluates the expression on the object; if null or undefined, returns the default value.
      * @param root the object to evaluate on
@@ -58,3 +62,4 @@ Array.prototype.without = function (func) {
         }
     }
 };
+
