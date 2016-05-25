@@ -31,12 +31,12 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
 
     // TODO the cache will be populated from a backend request
     this.populate("scope", [
-        {value: "this capability", category: "1"},
-        {value: "this application or this service", category: "2"},
-        {value: "services listed in the service agreement", category: "3"},
-        {value: "the CSP Services", category: "4"},
-        {value: "all the CSP Products and services", category: "5"},
-        {value: "third-party product and services", category: "6"}]);
+        {value: "this capability", subtype: "capability", category: "1"},
+        {value: "this application or this service", subtype: "service", category: "2"},
+        {value: "services listed in the service agreement", subtype: "services-agreement", category: "3"},
+        {value: "the CSP Services", subtype: "csp-services", category: "4"},
+        {value: "all the CSP Products and services", subtype: "csp-products", category: "5"},
+        {value: "third-party product and services", subtype: "third-party", category: "6"}]);
 
     this.populate("qualifier", [{value: "unlinked pseudonymized"}, {value: "all"}]);
     this.populate("dataCategory", [{value: "email addresses"}, {value: "telemetry data"}, {value: "surfing habits"}]);
@@ -113,16 +113,49 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
      * @param dictionaries an array of dictionaries containing term objects in the form {value, type, subtype, dictionaryType}.
      */
     this.activate = function (dictionaries) {
+        // Sort all entries in reverse alphabetical order. This is because they must be inserted under their respective categories and the insertion
+        // algorithm used below inserts at the first entry after the category is found. Hence, when iterating through the list, we need to do so in reverse
+        // order so the highest entry is inserted last, at the top slot before the category. Otherwise, if the list were in alphabetical order, the
+        // insertion algorithm would need to insert the entry at the last position after the category (and before the next category), which is less efficient.
+        var terms = [];
         dictionaries.forEach(function (dictionary) {
             dictionary.forEach(function (term) {
-                // put the term in each locale taxonomy
-                var localeCache = context.cache.get(term.type);
-                localeCache.values().forEach(function (symbolTable) {
+                terms.push(term);
+            })
+        });
+        terms.sort(function (entry1, entry2) {
+            // note the comparison is correct
+            return entry2.value.localeCompare(entry1.value);
+        });
+
+        //dictionaries.forEach(function (dictionary) {
+        terms.forEach(function (term) {
+            // put the term in each locale taxonomy
+            var localeCache = context.cache.get(term.type);
+            localeCache.values().forEach(function (symbolTable) {
+                var inserted = false;
+                // items must be inserted under their category type; iterate until the category is found and splice the entry in
+                for (var i = 0; i < symbolTable.entries.length; i++) {
+                    if (term.subtype === symbolTable.entries[i].subtype) {
+                        symbolTable.entries.splice(i + 1, 0, {
+                            value: term.value,
+                            subtype: term.subtype,
+                            dictionary: true,
+                            dictionaryType: term.dictionaryType
+                        });
+                        symbolTable.values.splice(i + 1, 0, term.value);
+                        inserted = true;
+                        break;
+                    }
+                }
+                if (!inserted) {
+                    // no category, add at the end
                     symbolTable.entries.push({value: term.value, subtype: term.subtype, dictionary: true, dictionaryType: term.dictionaryType});
                     symbolTable.values.push(term.value);
-                })
-            });
+                }
+            })
         });
+        //});
         context.reindex();
 
     };
@@ -168,13 +201,13 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
     };
 
     this.formatLabel = function (entry) {
-        if (entry.category) {
+        if (!entry.dictionary) {
             return $sce.trustAsHtml("<div class='clearfix'><div class='float-left'><strong>" + entry.value + "</strong></div>" +
                 "<div class='dark-gray float-right'  style='z-index:10000'</div>" +
                 "<div class='dark-gray float-right'>ISO</div>" +
                 "</div>");
         } else {
-            return $sce.trustAsHtml("    " + entry.value);
+            return $sce.trustAsHtml("&nbsp;&nbsp;&nbsp;&nbsp;" + entry.value);
 
         }
     };
