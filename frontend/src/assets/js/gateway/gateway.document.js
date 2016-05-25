@@ -3,7 +3,7 @@ var gatewayModule = angular.module("duck.gateway");
 /**
  * Manages synchronization of user statement documents with the backend.
  */
-gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q) {
+gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $http, $q) {
 
     var context = this;
 
@@ -18,7 +18,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, $http, $q
         name: "Customer Document v1", id: "1",
         statements: [{
             useScope: "this product", qualifier: "account", dataCategory: "data", sourceScope: "those cloud services",
-            action: "provide", resultScope: "cloud services defined in the service agreement"
+            action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next()
         }]
     });
     // this.documents.put("2", {name: "Third-Party Document v2", id: "2", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});

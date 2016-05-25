@@ -6,13 +6,18 @@
 var coreModule = angular.module('duck.core');
 
 coreModule.service("EventBus", function ($rootScope) {
-
+    var context = this;
+    
     /**
      * Publishes a message to a topic.
      * @param topic the topic
      * @param message the message
      */
     this.publish = function (topic, message) {
+        if (context.startsWith(topic, "ui.")) {  // modal event - open the Foundation modal
+            $("#" + topic.substring(3)).foundation("open");
+            return;
+        }
         $rootScope.$broadcast(topic, message)
     };
 

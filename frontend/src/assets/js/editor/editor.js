@@ -1,6 +1,6 @@
 var editorModule = angular.module("duck.editor");
 
-editorModule.controller("EditorController", function (DocumentModel, TaxonomyService,
+editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus,
                                                       $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
@@ -13,6 +13,9 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     }
 
     controller.active = true;
+    
+    // dynamic watches setup during statement editing
+    controller.watches = new Hashtable();
 
     var unregisterDirtyCheck = $rootScope.$on("$stateChangeStart", function (event, toState) {
         if (!DocumentModel.dirty) {
@@ -23,10 +26,10 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     $scope.$on("$destroy", function () {
         unregisterDirtyCheck();
+        DocumentModel.release();
     });
 
     initializeCompletions();
-
 
     controller.toggleEdit = function (statement) {
         DocumentModel.toggleEdit(statement);
@@ -109,8 +112,36 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             suggest: function (term) {
                 return TaxonomyService.lookup("scope", "eng", term)
             },
-            on_detach: function(value){
+            on_attach: function (value) {
+                DocumentModel.document.statements.forEach(function (statement) {
+                    if (!DocumentModel.editing(statement)) {
+                        return;
+                    }
+                    
+                    // Register a watch all all use scopes of statements being edited. The watches monitor for the new term option selected by the user.
+                    // If this occurs, an event to open the new term dialog is fired
+                    var unregister = $scope.$watch(function () {
+                        return statement.useScope
+                    }, function (newValue) {
+                        console.log("value:" + newValue);
+                        if (newValue === "_new") {   // new term entered
+                            statement.useScope = "";
+                            EventBus.publish("ui.newTerm");
+                        }
+                    });
+                    var other = controller.watches.put(statement.trackingId, unregister);
+                    if (other !== null) {
+                        // unregister a previous watch setup for the statement
+                        other();
+                    }
+                });
+
+            },
+            on_detach: function (value) {
                 DocumentModel.validateSyntax();
+                controller.watches.values().forEach(function (unregister) {
+                    unregister();     // deregister watches
+                });
             }
         };
 
@@ -118,7 +149,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             suggest: function (term) {
                 return TaxonomyService.lookup("qualifier", "eng", term)
             },
-            on_detach: function(value){
+            on_detach: function (value) {
                 DocumentModel.validateSyntax();
             }
         };
@@ -127,7 +158,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             suggest: function (term) {
                 return TaxonomyService.lookup("dataCategory", "eng", term)
             },
-            on_detach: function(value){
+            on_detach: function (value) {
                 DocumentModel.validateSyntax();
             }
         };
@@ -136,7 +167,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             suggest: function (term) {
                 return TaxonomyService.lookup("scope", "eng", term)
             },
-            on_detach: function(value){
+            on_detach: function (value) {
                 DocumentModel.validateSyntax();
             }
         };
@@ -145,7 +176,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             suggest: function (term) {
                 return TaxonomyService.lookup("action", "eng", term)
             },
-            on_detach: function(value){
+            on_detach: function (value) {
                 DocumentModel.validateSyntax();
             }
         };
@@ -154,7 +185,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             suggest: function (term) {
                 return TaxonomyService.lookup("scope", "eng", term)
             },
-            on_detach: function(value){
+            on_detach: function (value) {
                 DocumentModel.validateSyntax();
             }
         };
