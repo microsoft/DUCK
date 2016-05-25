@@ -123,7 +123,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                     var unregister = $scope.$watch(function () {
                         return statement.useScope
                     }, function (newValue) {
-                        console.log("value:" + newValue);
                         if (newValue === "_new") {   // new term entered
                             statement.useScope = "";
                             EventBus.publish("ui.newTerm");

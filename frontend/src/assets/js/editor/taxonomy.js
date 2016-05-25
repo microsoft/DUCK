@@ -72,7 +72,7 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             symbolTable.entries.forEach(function (entry) {
                 vals.push({value: entry.value, label: context.formatLabel(entry)});
             });
-            vals.push({value: "_new", label: "New term..."});
+            vals.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
             return vals;
         }
         var ret = symbolTable.fuse
@@ -85,7 +85,7 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
                     label: label
                 };
             });
-        ret.push({value: "_new", label: "New term..."});
+        ret.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
         return ret;
     };
 
