@@ -68,7 +68,7 @@ responsible for executing application logic to process the request. This results
 
 ### Authentication and Identity Management   
    
-Authentication and identity management is sdesigned for high-availability, clustered environments and is based on [JSON Web Token](https://tools.ietf
+Authentication and identity management is designed for high-availability, clustered environments and is based on [JSON Web Token](https://tools.ietf
 .org/html/rfc7519). After a user logs in, an encrypted JWT is sent to the client which is set to expire after a configurable period of time. The token 
 contains encrypted credentials. The client must present the token in an HTTP header for each request to the backend API. On receipt, the backend validates 
 the token and determines whether to let the request process or reject it. The scheme allows the server to verify the validity of the token (relatively) 
@@ -83,7 +83,7 @@ between clients and the runtimes. No other configuration is required.
 ### Compliance Checking
 
 Compliance checking of data use documents against a ruleset is done using the Carnaedes argumentation engine. The engine is to be embedded (statically 
-linked) as Golang library. Embedding the engine (as opposed to accessing it over HTTP as a service) simplifies the end-user deployment experience as the 
+linked) as a Golang library. Embedding the engine (as opposed to accessing it over HTTP as a service) simplifies the end-user deployment experience as the 
 backend will be a single executable that need only be configured to use a database.  
 
 ### Extensibility
@@ -100,10 +100,10 @@ The frontend is designed to be loosely coupled with the backend. It is based on 
 * ZURB Foundation
     
 AngularJS provides UI-side service lifecycle management, databinding, templating, MVC, and REST communications with the backend. ZURB Foundation provides 
-grid-based UI layout, cross-browser support, componentry, and typography. In addition Sass (SCSS) is used for CSS extensibility.
+grid-based UI layout, cross-browser support, componentry, and typography. In addition, Sass (SCSS) is used for CSS extensibility.
 
 The frontend UI is constrained to (mostly) coarse-grained requests to the backend as defined by the API. Consequently, nearly all rendering and validation 
-will be performed on the client. The enhances fault-tolerance as well as performance since it avoids server invocation latency as well as introduces higher 
+will be performed on the client. This enhances fault-tolerance as well as performance since it avoids server invocation latency as well as introduces higher 
 tolerance for network and server-side interruptions. From an end-user perspective, this will assist DUCK in providing a consistent and performant UI 
 experience.  
  
