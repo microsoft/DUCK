@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/labstack/echo/engine/standard"
 
@@ -20,13 +19,13 @@ var (
 
 //loads config & checks if db has to be setup
 func init() {
-	flag.StringVar(&webDir, "webdir", "frontend", "The root directory for serving web content")
+	flag.StringVar(&webDir, "webdir", "frontend/dist", "The root directory for serving web content")
 
 }
 
 func main() {
 	flag.Parse()
-	fmt.Println("Web root: " + webDir)
+	//fmt.Println("Web root: " + webDir)
 
 	//set routes
 	e := ducklib.GetServer(webDir, jwtKey)

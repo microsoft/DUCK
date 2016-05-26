@@ -7,7 +7,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
 
     var context = this;
 
-    // FIXME - remove when server is enabled
+ /*   // FIXME - remove when server is enabled
     this.summaries = new Hashtable();
     this.summaries.put("1", {name: "Customer Document v1", id: "1"});
     // this.summaries.put("2", {name: "Third-Party Document v2", id: "2"});
@@ -24,7 +24,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
     // this.documents.put("2", {name: "Third-Party Document v2", id: "2", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
     // this.documents.put("3", {name: "Partner Document", id: "3", statements: [{content: "Statement 1"}, {content: "Statement 2"}]});
     // FIXME end remove
-
+*/
 
     /**
      * Retrieves summaries for data use statement documents authored by the current user.
@@ -40,7 +40,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var url = "/v1/documents/" + CurrentUser.id + "/summary";
 
             // FIXME disable server call until implemented
-            if (true) {
+            if (false) {
                 resolve(context.summaries.values());
                 return;
             }
@@ -71,7 +71,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var url = "/v1/documents/" + CurrentUser.id + "/" + documentId;
 
             // disable server call until implemented
-            if (true) {
+            if (false) {
                 resolve(context.documents.get(documentId));
                 return;
             }
