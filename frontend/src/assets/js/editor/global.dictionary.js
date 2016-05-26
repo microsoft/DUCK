@@ -34,7 +34,7 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
             return;
         }
         context.dictionary = new Hashtable();
-        context.dictionary.put("Office 360", {value: "Office 360", type: "scope", subtype: "service", dictionaryType: "global"})
+        context.dictionary.put("Office 360", {value: "Office 360", type: "scope", subtype: "service", dictionaryType: "global"});
         context.dictionary.put("Microsoft Azure", {value: "Microsoft Azure", type: "scope", subtype: "service", dictionaryType: "global"})
     }
 

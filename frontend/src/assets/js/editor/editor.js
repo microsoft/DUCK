@@ -13,7 +13,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     }
 
     controller.active = true;
-    
+
     // dynamic watches setup during statement editing
     controller.watches = new Hashtable();
 
@@ -110,14 +110,16 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         // setup autocompletes - requires $scope
         $scope.useScopeCompletion = {
             suggest: function (term) {
-                return TaxonomyService.lookup("scope", "eng", term)
+                var terms = TaxonomyService.lookup("scope", "eng", term);
+                terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
+                return terms
             },
             on_attach: function (value) {
                 DocumentModel.document.statements.forEach(function (statement) {
                     if (!DocumentModel.editing(statement)) {
                         return;
                     }
-                    
+
                     // Register a watch all all use scopes of statements being edited. The watches monitor for the new term option selected by the user.
                     // If this occurs, an event to open the new term dialog is fired
                     var unregister = $scope.$watch(function () {
@@ -125,6 +127,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                     }, function (newValue) {
                         if (newValue === "_new") {   // new term entered
                             statement.useScope = "";
+                            DocumentModel.setCurrentStatement(statement);
                             EventBus.publish("ui.newTerm");
                         }
                     });
@@ -190,6 +193,35 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         };
     }
 
+});
+
+editorModule.controller("NewTermController", function (DocumentModel, TaxonomyService, ObjectUtils, $scope) {
+    $scope.clear = function () {
+        $scope.newTermValue = "";
+        $scope.newCategory = "";
+        $scope.newDictionary = "document";
+    };
+
+    $scope.newCategoryCompletion = {
+        suggest: function (term) {
+            return TaxonomyService.lookup("scope", "eng", term, true);
+        },
+        auto_select_first: true
+    };
+
+    $scope.addTerm = function() {
+        var statement = DocumentModel.getCurrentStatement();
+        statement.useScope = $scope.newTermValue;
+        DocumentModel.clearCurrentStatement();
+        $scope.clear();
+    };
+    
+    $scope.cancel = function() {
+        DocumentModel.clearCurrentStatement();
+        $scope.clear();
+    };
+
+    $scope.clear();
 });
 
 

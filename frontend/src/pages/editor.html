@@ -87,20 +87,38 @@
         </div>
     </div>
 
-    <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" nxg-controller="">
-        <h4>New Term</h4>
-        <div class="row">
-            <input style="min-width: 400px" ng-model="term">
-        </div>
-        <div class="row">
-            <input ng-model="category">
-        </div>
-        <div class="row float-right padding-top-2">
-            <div class="column ">
-                <a class="button small secondary" data-close>CANCEL</a>
-                <a class="button small" data-close ng-click="abandon.confirm()">ADD</a>
-            </div>
+    <!-- Mass autocomplete div needs to wrap reveal div to workaround positioning problem described here:
+         https://github.com/hakib/MassAutocomplete/issues/13 -->
+    <div mass-autocomplete>
+        <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" data-close-on-click="false" ng-controller="NewTermController as termController">
+            <h4>New Term</h4>
+            {{currentStatement}}
+            <form name="newTermForm">
+                <div class="row padding-top-1">
+                    <input style="min-width: 400px" ng-model="newTermValue" required>
+                </div>
+                <div class="row padding-top-1">
+                    <label>Category</label>
+                </div>
+                <div class="row">
+                    <input class="expanded" style="min-width: 400px" ng-model="newCategory" mass-autocomplete-item="newCategoryCompletion" required>
+                </div>
+                <div class="row padding-top-1">
+                    <fieldset>
+                        <legend>Dictionary</legend>
+                        <input type="radio" name="dictionary" value="document" id="docDictionary" ng-model="newDictionary" checked="checked">
+                        <label for="docDictionary">Document</label>
+                        <input type="radio" name="dictionary" value="global" id="globalDictionary" ng-model="newDictionary" required>
+                        <label for="globalDictionary">Global</label>
+                    </fieldset>
+                </div>
+                <div class="float-right padding-top-2">
+                    <div class="column">
+                        <a class="button small secondary" ng-click="clear()" data-close>CANCEL</a>
+                        <a class="button small" data-close ng-disabled="newTermForm.$invalid" ng-click="addTerm()">ADD</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-
 </div>

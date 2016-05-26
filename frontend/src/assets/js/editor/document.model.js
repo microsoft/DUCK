@@ -14,6 +14,8 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
      */
     this.dirty = false;
 
+    this.currentStatement = null;
+    
     var context = this;
 
     /**
@@ -64,6 +66,25 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
             return element === statement;
         });
         context.dirty = true;
+    };
+
+    /**
+     * Sets the current statement for editing purposes.
+     * @param statement the current statement
+     */
+    this.setCurrentStatement = function (statement) {
+        this.currentStatement = statement;
+    };
+
+    /**
+     * Clears the current statement.
+     */
+    this.clearCurrentStatement = function () {
+        this.currentStatement = null;
+    };
+
+    this.getCurrentStatement = function(){
+        return this.currentStatement;
     };
 
     this.toggleEdit = function (statement) {

@@ -22,7 +22,6 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             caseSensitive: false,
             threshold: 0.4,
             keys: ["value", "category"]
-            // id: "value"
         });
         var localeCache = new Hashtable();
         localeCache.put("eng", {entries: entries, values: values, fuse: fuse});
@@ -49,9 +48,10 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
      * @param type the value type, e.g. use scope or qualifier
      * @param locale the language, e.g. "eng"
      * @param term the term to match
+     * @param categories if true, include only terms that are categories
      * @return {Array} containing matching values in the form {value, label}
      */
-    this.lookup = function (type, locale, term) {
+    this.lookup = function (type, locale, term, categories) {
         if (!term) {
             return [];
         }
@@ -72,7 +72,6 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             symbolTable.entries.forEach(function (entry) {
                 vals.push({value: entry.value, label: context.formatLabel(entry)});
             });
-            vals.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
             return vals;
         }
         var ret = symbolTable.fuse
@@ -82,10 +81,16 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
                 var label = context.formatLabel(entry);
                 return {
                     value: entry.value,
-                    label: label
+                    label: label,
+                    dictionary: entry.dictionary
                 };
             });
-        ret.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
+        if (categories) {
+            // filter terms that are not categories
+            ret = ret.filter(function (term) {
+                return !term.dictionary
+            })
+        }
         return ret;
     };
 

@@ -14,8 +14,9 @@
   -ms-transform: translate3d(0, 0, 0);
   -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-  z-index: 999;
+  z-index: 100000;    // set a high value to place in front of modals
   .ac-menu {
+    z-index: 100000;    // set a high value to place in front of modals
     border: 1px solid #ccc;
     list-style: none;
     padding: 1em;
