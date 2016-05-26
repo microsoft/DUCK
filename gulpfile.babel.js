@@ -10,7 +10,7 @@ import fs from "fs";
 import gulpgo from "gulp-go";
 import gutil from "gulp-util";
 import child from "child_process";
-import addsrc from 'gulp-add-src';
+import addsrc from "gulp-add-src";
 
 
 // Load all Gulp plugins into one variable
@@ -144,10 +144,10 @@ function fonts() {
 // }
 
 function server(done) {
-  browser.init({
-    server: PATHS.dist, port: PORT
-  });
-  done();
+    browser.init({
+        server: PATHS.dist, port: PORT
+    });
+    done();
 }
 
 var go;
@@ -165,15 +165,19 @@ function backend(done) {
     done();
 }
 
+function reloadBrowser(done) {
+    browser.reload();
+    done();
+}
 
 // Watch for changes to frontend assets and backend Go code
 function watch() {
     gulp.watch(PATHS.assets, copy);
-    gulp.watch("frontend/src/pages/**/*.html", gulp.series(pages, browser.reload));
-    gulp.watch("frontend/src/{layouts,partials}/**/*.html", gulp.series(resetPages, pages, partials, browser.reload));
+    gulp.watch("frontend/src/pages/**/*.html", gulp.series(pages, reloadBrowser));
+    gulp.watch("frontend/src/{layouts,partials}/**/*.html", gulp.series(resetPages, pages, partials, reloadBrowser));
     gulp.watch("frontend/src/assets/scss/**/*.scss", sass);
-    gulp.watch("frontend/src/assets/js/**/*.js", gulp.series(javascript, browser.reload));
-    gulp.watch("frontend/src/assets/img/**/*", gulp.series(images, browser.reload));
+    gulp.watch("frontend/src/assets/js/**/*.js", gulp.series(javascript, reloadBrowser));
+    gulp.watch("frontend/src/assets/img/**/*", gulp.series(images, reloadBrowser));
     gulp.watch(["backend/**/*.go"]).on("change", function () {
         go.restart();
     });
