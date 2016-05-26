@@ -83,7 +83,22 @@ func putHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, Response{Ok: true})
 }
+func postHandler(c echo.Context) error {
 
+	resp, err := ioutil.ReadAll(c.Request().Body())
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
+
+	err = datab.PostEntry(resp)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, Response{Ok: true})
+}
 func loginHandler(c echo.Context) error {
 
 	u := new(Login)
@@ -154,14 +169,14 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 	////User resources
 	users := api.Group("/users", middleware.JWT(jwtKey)) //base URI
 
-	users.POST("/", helloHandler)
+	users.POST("/", postHandler)
 	users.DELETE("/:id", deleteHandler)
 	users.PUT("/:id", helloHandler)
 
 	//data use statement document resources
 	documents := api.Group("/documents") //base URI
 	//	documents := api.Group("/documents", middleware.JWT(jwtKey))                                          //base URI
-	documents.POST("/", helloHandler)                  //create document
+	documents.POST("", postHandler)                    //create document
 	documents.PUT("/:id", putHandler)                  //update document
 	documents.DELETE("/:id", deleteHandler)            //delete document
 	documents.GET("/:userid/summary", getDocSummaries) //return document summaries for the author

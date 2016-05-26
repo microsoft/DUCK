@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/Metaform/duck/backend/pluginregistry"
+	"github.com/twinj/uuid"
 )
 
 type Database struct {
@@ -131,5 +132,12 @@ func (database *Database) PutEntry(id string, content []byte) error {
 	}
 
 	return nil
+
+}
+
+func (database *Database) PostEntry(content []byte) error {
+	u := uuid.NewV4()
+
+	return database.PutEntry(uuid.Formatter(u, uuid.Clean), content)
 
 }
