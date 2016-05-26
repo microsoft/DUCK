@@ -195,10 +195,11 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
 });
 
-editorModule.controller("NewTermController", function (DocumentModel, TaxonomyService, ObjectUtils, $scope) {
+editorModule.controller("NewTermController", function (DocumentModel, TaxonomyService, GlobalDictionary, ObjectUtils, $scope) {
     $scope.clear = function () {
         $scope.newTermValue = "";
         $scope.newCategory = "";
+        $scope.newCategoryValue = "";
         $scope.newDictionary = "document";
     };
 
@@ -206,17 +207,25 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
         suggest: function (term) {
             return TaxonomyService.lookup("scope", "eng", term, true);
         },
+        on_select: function (category) {
+            $scope.newCategory = category;
+        },
         auto_select_first: true
     };
 
-    $scope.addTerm = function() {
+    $scope.addTerm = function () {
         var statement = DocumentModel.getCurrentStatement();
+        // if ($scope.newDictionary.) {
+           DocumentModel.addTerm("scope", $scope.newCategory.subtype, $scope.newTermValue, $scope.newDictionary? "document" :"global");
+        // } else {
+        //     GlobalDictionary.addTerm("scope", $scope.newCategory.subtype, $scope.newTermValue);
+        // }
         statement.useScope = $scope.newTermValue;
         DocumentModel.clearCurrentStatement();
         $scope.clear();
     };
-    
-    $scope.cancel = function() {
+
+    $scope.cancel = function () {
         DocumentModel.clearCurrentStatement();
         $scope.clear();
     };

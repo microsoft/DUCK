@@ -92,7 +92,6 @@
     <div mass-autocomplete>
         <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" data-close-on-click="false" ng-controller="NewTermController as termController">
             <h4>New Term</h4>
-            {{currentStatement}}
             <form name="newTermForm">
                 <div class="row padding-top-1">
                     <input style="min-width: 400px" ng-model="newTermValue" required>
@@ -101,7 +100,7 @@
                     <label>Category</label>
                 </div>
                 <div class="row">
-                    <input class="expanded" style="min-width: 400px" ng-model="newCategory" mass-autocomplete-item="newCategoryCompletion" required>
+                    <input class="expanded" style="min-width: 400px" ng-model="newCategoryValue" mass-autocomplete-item="newCategoryCompletion" required>
                 </div>
                 <div class="row padding-top-1">
                     <fieldset>

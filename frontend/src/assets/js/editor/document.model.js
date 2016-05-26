@@ -15,7 +15,7 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
     this.dirty = false;
 
     this.currentStatement = null;
-    
+
     var context = this;
 
     /**
@@ -83,7 +83,7 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
         this.currentStatement = null;
     };
 
-    this.getCurrentStatement = function(){
+    this.getCurrentStatement = function () {
         return this.currentStatement;
     };
 
@@ -112,6 +112,22 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
         context.document.statements.push(statement);
         statement.trackingId = UUID.next();
         context.dirty = true;
+    };
+
+    /**
+     * Adds a new term to either the global or document dictionary.
+     * @param type the ISO type
+     * @param subtype the subtype category
+     * @param value the term value
+     * @param dictionaryType the type of dictionary, e.g. global or document
+     */
+    this.addTerm = function (type, subtype, value, dictionaryType) {
+        if (dictionaryType === "document") {
+            context.document.dictionary.put(value, {value: value, type: type, subtype: subtype, dictionaryType: "document"});
+        } else {
+            GlobalDictionary.addTerm("scope", $scope.newCategory.subtype, $scope.newTermValue);
+        }
+        TaxonomyService.addTerm(type, subtype, value, dictionaryType);
     };
 
     /**

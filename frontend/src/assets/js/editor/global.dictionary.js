@@ -7,11 +7,11 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
     this.dictionary = null;
     var context = this;
 
-    this.getDictionary = function() {
+    this.getDictionary = function () {
         context.initialize();
         return context.dictionary.values();
     };
-    
+
     this.getTerm = function (value) {
         context.initialize();
         return dictionary.get(value);
@@ -19,7 +19,8 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
 
     this.addTerm = function (type, subtype, value) {
         context.initialize();
-        context.dictionary.put(value, {value: value, type: type, subtype: subtype})
+        context.dictionary.put(value, {value: value, type: type, subtype: subtype, dictionaryType: "global"});
+        // FIXME update server
     };
 
     this.removeTerm = function (type, subtype, value) {

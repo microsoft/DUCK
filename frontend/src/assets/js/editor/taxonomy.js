@@ -82,7 +82,8 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
                 return {
                     value: entry.value,
                     label: label,
-                    dictionary: entry.dictionary
+                    dictionary: entry.dictionary,
+                    subtype: entry.subtype
                 };
             });
         if (categories) {
@@ -111,6 +112,22 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             return false;
         }
         return symbolTable.values.includes(term);
+    };
+
+    /**
+     * Adds a new term to the taxonomy.
+     * @param type the ISO type
+     * @param subtype the subtype category
+     * @param value the term value
+     * @param dictionaryType the type of dictionary, e.g. global or document
+     */
+    this.addTerm = function (type, subtype, value, dictionaryType) {
+        // deactivate all dictionaries, add the new term to the deactivated terms and reactivate the terms; this preserves sort order and may be faster 
+        // than iterating over all dictionaries to determine the insertion point
+        var entries = context.deactivateDictionaries();
+        entries.push({type: type, subtype: subtype, value: value, dictionaryType: dictionaryType, dictionary: true});
+        context.activate([entries]);
+
     };
 
     /**
@@ -144,6 +161,7 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
                     if (term.subtype === symbolTable.entries[i].subtype) {
                         symbolTable.entries.splice(i + 1, 0, {
                             value: term.value,
+                            type: term.type,
                             subtype: term.subtype,
                             dictionary: true,
                             dictionaryType: term.dictionaryType
@@ -167,12 +185,15 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
 
     /**
      * Deactivates previously registered dictionaries by iterating all symbol table entries and removing any marked as a dictionary type.
+     * @return the deactivated terms
      */
     this.deactivateDictionaries = function () {
+        var deactivatedEntries = [];
         context.cache.values().forEach(function (localeCache) {
             localeCache.values().forEach(function (symbolTable) {
                 for (var i = symbolTable.entries.length - 1; i >= 0; i--) {
                     if (symbolTable.entries[i].dictionary) {
+                        deactivatedEntries.push(symbolTable.entries[i]);
                         symbolTable.values.without(function (entry) {
                             //noinspection JSReferencingMutableVariableFromClosure
                             return entry === symbolTable.entries[i].value;
@@ -184,6 +205,7 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             });
         });
         context.reindex();
+        return deactivatedEntries;
     };
 
     /**
