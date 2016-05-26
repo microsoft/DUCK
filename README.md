@@ -20,7 +20,7 @@ The project build requires:
 
 ### Setup
 
-First clone the project repository:
+First clone the project repository (make sure it is under the GOPATH directory):
 
 ```bash
 git clone https://github.com/Metaform/duck duck
