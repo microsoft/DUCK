@@ -9,28 +9,28 @@
 			"revisionTime": "2016-04-13T00:36:00Z"
 		},
 		{
-			"checksumSHA1": "xJu2WUj7lg1qj3ajcJemBlnnX20=",
+			"checksumSHA1": "taXglffn9JFkWwv0NXvr7MVN1LY=",
 			"path": "github.com/labstack/echo",
-			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
-			"revisionTime": "2016-05-07T14:45:03Z"
+			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
+			"revisionTime": "2016-05-24T21:51:26Z"
 		},
 		{
-			"checksumSHA1": "+odlTzR1MmpwIVH2e0xEXGOa+XE=",
+			"checksumSHA1": "KM0fkl1GnJVJHD9Iz8n9Jzz9guY=",
 			"path": "github.com/labstack/echo/engine",
-			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
-			"revisionTime": "2016-05-07T14:45:03Z"
+			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
+			"revisionTime": "2016-05-24T21:51:26Z"
 		},
 		{
-			"checksumSHA1": "D7Pu+U7jOlag32AD4uUve8ahXKI=",
+			"checksumSHA1": "7crfTYKbzmfW6c9qZAA9WUn0rzA=",
 			"path": "github.com/labstack/echo/engine/standard",
-			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
-			"revisionTime": "2016-05-07T14:45:03Z"
+			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
+			"revisionTime": "2016-05-24T21:51:26Z"
 		},
 		{
-			"checksumSHA1": "flRb3gjVKfCOo55PCT7RTxcBls4=",
+			"checksumSHA1": "VLeskEf/Y3eMQFzRMINQXbhvCHE=",
 			"path": "github.com/labstack/echo/middleware",
-			"revision": "e943ed24be65c0716769b88318309c845b7b144c",
-			"revisionTime": "2016-05-07T14:45:03Z"
+			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
+			"revisionTime": "2016-05-24T21:51:26Z"
 		},
 		{
 			"checksumSHA1": "SnErH4s8HFFr39b7WLXO0K+6AMc=",
