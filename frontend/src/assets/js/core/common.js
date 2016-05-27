@@ -19,7 +19,7 @@ coreModule.service("ObjectUtils", function () {
     this.isEmptyString = function (value) {
         return this.isNull(value) || value.trim().length === 0;
     };
-    
+
     /**
      * Safely evaluates the expression on the object; if null or undefined, returns the default value.
      * @param root the object to evaluate on
@@ -48,6 +48,15 @@ coreModule.service("ObjectUtils", function () {
     };
 
 
+});
+
+/**
+ * Capitalizes the initial character of an expression.
+ */
+coreModule.filter("capitalizeInitial", function () {
+    return function (expression) {
+        return expression.charAt(0).toUpperCase() + expression.slice(1);
+    }
 });
 
 /**
