@@ -132,8 +132,7 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
 
     this.makePassive = function (statement) {
         if (ObjectUtils.notNull(statement)) {
-            statement.passive = false;
-            return;
+            statement.passive = true;
         } else {
             context.document.statements.forEach(function (statement) {
                 statement.passive = true
@@ -145,7 +144,6 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
     this.makeActive = function (statement) {
         if (ObjectUtils.notNull(statement)) {
             statement.passive = false;
-            return;
         } else {
             context.document.statements.forEach(function (statement) {
                 statement.passive = false;

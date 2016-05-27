@@ -86,12 +86,12 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         return DocumentModel.emptyStatement(statement);
     };
 
-    controller.makePassive = function () {
-        DocumentModel.makePassive();
+    controller.makePassive = function (statement) {
+        DocumentModel.makePassive(statement);
     };
 
-    controller.makeActive = function () {
-        DocumentModel.makeActive();
+    controller.makeActive = function (statement) {
+        DocumentModel.makeActive(statement);
     };
 
     DocumentModel.initialize(documentId).then(function () {
