@@ -18,7 +18,8 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             name: "Customer Document v1", id: "1",
             statements: [{
                 useScope: "this product", qualifier: "account", dataCategory: "data", sourceScope: "those cloud services",
-                action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next()
+                action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next(),
+                passive:false
             }]
         });
     }

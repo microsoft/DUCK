@@ -86,6 +86,14 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         return DocumentModel.emptyStatement(statement);
     };
 
+    controller.makePassive = function () {
+        DocumentModel.makePassive();
+    };
+
+    controller.makeActive = function () {
+        DocumentModel.makeActive();
+    };
+
     DocumentModel.initialize(documentId).then(function () {
         // ng-sortable requires the use of $scope
         $scope.document = DocumentModel.document;

@@ -130,6 +130,31 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
         TaxonomyService.addTerm(type, subtype, value, dictionaryType);
     };
 
+    this.makePassive = function (statement) {
+        if (ObjectUtils.notNull(statement)) {
+            statement.passive = false;
+            return;
+        } else {
+            context.document.statements.forEach(function (statement) {
+                statement.passive = true
+            });
+        }
+        context.markDirty();
+    };
+
+    this.makeActive = function (statement) {
+        if (ObjectUtils.notNull(statement)) {
+            statement.passive = false;
+            return;
+        } else {
+            context.document.statements.forEach(function (statement) {
+                statement.passive = false;
+            });
+        }
+        context.markDirty();
+    };
+
+
     /**
      * Saves the local model to the backend.
      */
