@@ -39,6 +39,14 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         return DocumentModel.editing(statement);
     };
 
+    controller.edit = function (statement) {
+        DocumentModel.edit(statement);
+    };
+
+    controller.close = function (statement) {
+        DocumentModel.close(statement);
+    };
+
     controller.editAll = function () {
         return DocumentModel.document.statements.forEach(function (statement) {
             DocumentModel.edit(statement);

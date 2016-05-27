@@ -52,17 +52,32 @@
                     <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
                         <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
                             <div data-as-sortable-item-handle>
-                                <div class="row noselect">
-                                    <div class="small-12 columns text-right">
-                                        <div class="button-group small float-right noselect">
-                                            <a class="button secondary" ng-class="{'hollow':statement.passive}"
-                                               ng-click="editorController.makeActive(statement)">Active</a>
-                                            <a class="button secondary" ng-class="{'hollow':!statement.passive}"
-                                               ng-click="editorController.makePassive(statement)">Passive</a>
-                                            <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)"><i
-                                                    class="fa fa-trash medium-gray"></i> </a>
-                                        </div>
+                                <div class="clearfix">
+                                    <div class="float-left button-group small noselect">
+                                        <a class="button secondary hollow" ng-click="editorController.edit(statement)" title="Edit all statements">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </a>
                                     </div>
+                                    <div class="button-group small float-right noselect">
+                                        <a class="button secondary" ng-class="{'hollow':statement.passive}"
+                                           ng-click="editorController.makeActive(statement)">Active</a>
+                                        <a class="button secondary" ng-class="{'hollow':!statement.passive}"
+                                           ng-click="editorController.makePassive(statement)">Passive</a>
+                                        <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)"><i
+                                                class="fa fa-trash medium-gray"></i> </a>
+                                    </div>
+                                </div>
+                                <div class="row noselect">
+                                    <!--<div class="small-12 columns text-right">-->
+                                    <!--<div class="button-group small float-right noselect">-->
+                                    <!--<a class="button secondary" ng-class="{'hollow':statement.passive}"-->
+                                    <!--ng-click="editorController.makeActive(statement)">Active</a>-->
+                                    <!--<a class="button secondary" ng-class="{'hollow':!statement.passive}"-->
+                                    <!--ng-click="editorController.makePassive(statement)">Passive</a>-->
+                                    <!--<a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)"><i-->
+                                    <!--class="fa fa-trash medium-gray"></i> </a>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
                                     <div class="small-12 columns" ng-dbxlclick="editorController.toggleEdit(statement)">
                                         <div class="section-fade" ng-if="editorController.editing(statement) && !statement.passive"
                                              ng-include="'editor/eng-edit.html'"></div>
