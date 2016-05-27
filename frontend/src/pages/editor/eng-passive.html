@@ -1,7 +1,6 @@
-Passive
 <div ng-show="!editorController.emptyStatement(statement)">
-    {{statement.useScope}} uses {{statement.qualifier}} {{statement.dataCategory}} from {{statement.sourceScope}} to
-    {{statement.action}} the {{statement.resultScope}}
+        {{statement.qualifier}} {{statement.dataCategory}} from {{statement.sourceScope}} is used by {{statement.useScope}} to
+        {{statement.action}} the {{statement.resultScope}}
 </div>
 
 <div ng-show="editorController.emptyStatement(statement)">
