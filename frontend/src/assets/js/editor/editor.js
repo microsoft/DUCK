@@ -64,8 +64,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     };
 
     controller.addStatement = function () {
-        // useScope: "cloud services defined in the services agreement", qualifier: "account", dataCategory: "data", sourceScope: "those cloud services",
-        //             action: "provide", resultScope: "cloud services defined in the service agreement"
         DocumentModel.addStatement({
             useScope: null,
             qualifier: null,
@@ -196,41 +194,45 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 });
 
 editorModule.controller("NewTermController", function (DocumentModel, TaxonomyService, GlobalDictionary, ObjectUtils, $scope) {
-    $scope.clear = function () {
-        $scope.newTermValue = "";
-        $scope.newCategory = "";
-        $scope.newCategoryValue = "";
-        $scope.newDictionary = "document";
+    var controller = this;
+    controller.newTerm = {
+        value: null,
+        category: null,
+        categoryValue: null,
+        dictionary: "document"
+    };
+
+    controller.clear = function () {
+        controller.newTerm.value = null;
+        controller.newTerm.category = null;
+        controller.newTerm.categoryValue = null;
+        controller.newTerm.dictionary = "document"
     };
 
     $scope.newCategoryCompletion = {
         suggest: function (term) {
+            console.log("suggest: " + term);
             return TaxonomyService.lookup("scope", "eng", term, true);
         },
         on_select: function (category) {
-            $scope.newCategory = category;
+            controller.newTerm.category = category;
         },
         auto_select_first: true
     };
 
-    $scope.addTerm = function () {
+    controller.addTerm = function () {
+        DocumentModel.addTerm("scope", controller.newTerm.category.subtype, controller.newTerm.value, controller.newTerm.dictionary ? "document" : "global");
         var statement = DocumentModel.getCurrentStatement();
-        // if ($scope.newDictionary.) {
-           DocumentModel.addTerm("scope", $scope.newCategory.subtype, $scope.newTermValue, $scope.newDictionary? "document" :"global");
-        // } else {
-        //     GlobalDictionary.addTerm("scope", $scope.newCategory.subtype, $scope.newTermValue);
-        // }
-        statement.useScope = $scope.newTermValue;
+        statement.useScope = controller.newTerm.value;
         DocumentModel.clearCurrentStatement();
-        $scope.clear();
+        controller.clear();
     };
 
-    $scope.cancel = function () {
+    controller.cancel = function () {
         DocumentModel.clearCurrentStatement();
-        $scope.clear();
+        controller.clear();
     };
 
-    $scope.clear();
 });
 
 

@@ -89,35 +89,39 @@
 
     <!-- Mass autocomplete div needs to wrap reveal div to workaround positioning problem described here:
          https://github.com/hakib/MassAutocomplete/issues/13 -->
-    <div mass-autocomplete>
-        <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" data-close-on-click="false" ng-controller="NewTermController as termController">
-            <h4>New Term</h4>
-            <form name="newTermForm">
-                <div class="row padding-top-1">
-                    <input style="min-width: 400px" ng-model="newTermValue" required>
-                </div>
-                <div class="row padding-top-1">
-                    <label>Category</label>
-                </div>
-                <div class="row">
-                    <input class="expanded" style="min-width: 400px" ng-model="newCategoryValue" mass-autocomplete-item="newCategoryCompletion" required>
-                </div>
-                <div class="row padding-top-1">
-                    <fieldset>
-                        <legend>Dictionary</legend>
-                        <input type="radio" name="dictionary" value="document" id="docDictionary" ng-model="newDictionary" checked="checked">
-                        <label for="docDictionary">Document</label>
-                        <input type="radio" name="dictionary" value="global" id="globalDictionary" ng-model="newDictionary" required>
-                        <label for="globalDictionary">Global</label>
-                    </fieldset>
-                </div>
-                <div class="float-right padding-top-2">
-                    <div class="column">
-                        <a class="button small secondary" ng-click="clear()" data-close>CANCEL</a>
-                        <a class="button small" data-close ng-disabled="newTermForm.$invalid" ng-click="addTerm()">ADD</a>
+    <div ng-controller="NewTermController as termController">
+        <div mass-autocomplete>
+            <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" data-close-on-click="false">
+                <h4>New Term</h4>
+                <form name="newTermForm">
+                    <div class="row padding-top-1">
+                        <input style="min-width: 350px" ng-model="termController.newTerm.value" required>
                     </div>
-                </div>
-            </form>
+                    <div class="row padding-top-1">
+                        <label>Category</label>
+                    </div>
+                    <div class="row">
+                        <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.categoryValue"
+                               mass-autocomplete-item="newCategoryCompletion" required>
+                    </div>
+                    <div class="row padding-top-1">
+                        <fieldset>
+                            <legend>Dictionary</legend>
+                            <input type="radio" name="dictionary" value="document" id="docDictionary" ng-model="termController.newTerm.dictionary"
+                                   checked="checked">
+                            <label for="docDictionary">Document</label>
+                            <input type="radio" name="dictionary" value="global" id="globalDictionary" ng-model="termController.newTerm.dictionary" required>
+                            <label for="globalDictionary">Global</label>
+                        </fieldset>
+                    </div>
+                    <div class="float-right padding-top-2">
+                        <div class="column">
+                            <a class="button small secondary" ng-click="termController.clear()" data-close>CANCEL</a>
+                            <a class="button small" data-close ng-disabled="newTermForm.$invalid" ng-click="termController.addTerm()">ADD</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

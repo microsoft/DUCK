@@ -70,8 +70,19 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             // return all options
             var vals = [];
             symbolTable.entries.forEach(function (entry) {
-                vals.push({value: entry.value, label: context.formatLabel(entry)});
+                vals.push({
+                    value: entry.value,
+                    label: context.formatLabel(entry),
+                    dictionary: entry.dictionary,
+                    subtype: entry.subtype
+                });
             });
+            if (categories) {
+                // filter terms that are not categories
+                vals = vals.filter(function (term) {
+                    return !term.dictionary
+                })
+            }
             return vals;
         }
         var ret = symbolTable.fuse
