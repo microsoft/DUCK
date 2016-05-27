@@ -161,7 +161,6 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             return entry2.value.localeCompare(entry1.value);
         });
 
-        //dictionaries.forEach(function (dictionary) {
         terms.forEach(function (term) {
             // put the term in each locale taxonomy
             var localeCache = context.cache.get(term.type);
@@ -189,7 +188,6 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
                 }
             })
         });
-        //});
         context.reindex();
 
     };

@@ -70,13 +70,8 @@
                                     </div>
                                 </div>
                                 <div class="row noselect">
-                                    <div class="small-12 columns" ng-dbxlclick="editorController.toggleEdit(statement)">
-                                        <div class="section-fade" ng-if="editorController.editing(statement) && !statement.passive"
-                                             ng-include="'editor/eng-edit.html'"></div>
-                                        <div class="section-fade" ng-if="editorController.editing(statement) && statement.passive"
-                                             ng-include="'editor/eng-edit-passive.html'"></div>
-                                        <div ng-if="!editorController.editing(statement) && !statement.passive" ng-include="'editor/eng.html'"></div>
-                                        <div ng-if="!editorController.editing(statement) && statement.passive" ng-include="'editor/eng-passive.html'"></div>
+                                    <div class="small-12 columns">
+                                        <div ng-include="'editor.statement.html'"></div>
                                     </div>
                                 </div>
                             </div>

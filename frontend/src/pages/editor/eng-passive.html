@@ -1,8 +1,0 @@
-<div ng-show="!editorController.emptyStatement(statement)">
-        {{statement.qualifier}} {{statement.dataCategory}} from {{statement.sourceScope}} is used by {{statement.useScope}} to
-        {{statement.action}} the {{statement.resultScope}}
-</div>
-
-<div ng-show="editorController.emptyStatement(statement)">
-    <h5 class="dark-gray clickable" ng-click="editorController.toggleEdit(statement)">Click to Edit New Statement</h5>
-</div>

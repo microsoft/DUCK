@@ -1,0 +1,47 @@
+<div class="row" ng-show="!editorController.emptyStatement(statement) || editorController.editing(statement)">
+    <form>
+        <div mass-autocomplete>
+            <div ng-if="editorController.editing(statement) && !statement.passive"
+                 ng-include="'editor/eng-edit.html'"></div>
+            <div ng-if="editorController.editing(statement) && statement.passive"
+                 ng-include="'editor/eng-edit-passive.html'"></div>
+            <div ng-if="!editorController.editing(statement) && !statement.passive" ng-include="'editor/eng-preview.html'"></div>
+            <div ng-if="!editorController.editing(statement) && statement.passive" ng-include="'editor/eng-preview-passive.html'"></div>
+        </div>
+    </form>
+</div>
+
+<div ng-show="editorController.emptyStatement(statement) && !editorController.editing(statement)">
+    <h5 class="dark-gray clickable" ng-click="editorController.toggleEdit(statement)">Click to Edit New Statement</h5>
+</div>
+
+<div ng-if="editorController.editing(statement)">
+    <div class="row padding-top-2">
+        <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
+            <div ng-show="statement.errors.useScope.active">
+                <error-label fragment="statement.errors.useScope"></error-label>
+                {{statement.errors.useScope.message}}
+            </div>
+            <div ng-show="statement.errors.action.active">
+                <error-label fragment="statement.errors.action"></error-label>
+                {{statement.errors.action.message}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="!editorController.emptyStatement(statement)">
+        <hr>
+    </div>
+    <div class="row" ng-show="!editorController.emptyStatement(statement)">
+        <h5>Preview</h5>
+        <div class="row column">
+            <div ng-if="!statement.passive"
+                 ng-include="'editor/eng-preview.html'"></div>
+            <div ng-if="statement.passive"
+                 ng-include="'editor/eng-preview-passive.html'"></div>
+        </div>
+    </div>
+</div>
+
+
+
