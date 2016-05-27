@@ -53,8 +53,11 @@ coreModule.service("ObjectUtils", function () {
 /**
  * Capitalizes the initial character of an expression.
  */
-coreModule.filter("capitalizeInitial", function () {
+coreModule.filter("capitalizeInitial", function (ObjectUtils) {
     return function (expression) {
+        if (ObjectUtils.isNull(expression)){
+            return expression;
+        }
         return expression.charAt(0).toUpperCase() + expression.slice(1);
     }
 });
