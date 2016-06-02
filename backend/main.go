@@ -5,11 +5,9 @@ import (
 
 	"github.com/labstack/echo/engine/standard"
 
-	//Database lugin, change this if you have another Plugin/database
-
-	_ "github.com/Metaform/duck/backend/plugins/couchbase"
-
 	"github.com/Metaform/duck/backend/ducklib"
+	//Database lugin, change this if you have another Plugin/database
+	_ "github.com/Metaform/duck/backend/plugins/couchbase"
 )
 
 var (

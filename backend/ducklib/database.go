@@ -16,16 +16,10 @@ type Database struct {
 	databasename string
 }
 
-var db = pluginregistry.DatabasePlugin
+var db pluginregistry.DBPlugin
 
 func NewDatabase() *Database {
 	return &Database{databasename: "duck", url: "http://127.0.0.1:5984"}
-}
-
-func TestDB() {
-
-	db.Print()
-	db.Save()
 }
 
 func FillTestdata(data []byte) error {
@@ -39,13 +33,21 @@ func FillTestdata(data []byte) error {
 
 		mp := l.(map[string]interface{})
 		id := mp["_id"].(string)
-
+		entryType := mp["type"].(string)
 		entry, err := json.Marshal(l)
 		if err != nil {
 			return err
 		}
-		if _, err := db.PutEntry(id, string(entry)); err != nil {
-			return err
+		switch entryType {
+		case "document":
+			if _, err := db.NewDocument(id, string(entry)); err != nil {
+				return err
+			}
+		case "user":
+			if _, err := db.NewUser(id, string(entry)); err != nil {
+				return err
+			}
+
 		}
 
 	}
@@ -55,6 +57,9 @@ func FillTestdata(data []byte) error {
 
 //Init initializes the database and checks for connection errors
 func (database *Database) Init() {
+
+	db = pluginregistry.DatabasePlugin
+
 	err := db.Init(database.url, database.databasename)
 	if err != nil {
 		fmt.Println(err)
@@ -68,7 +73,7 @@ func (database *Database) GetLogin(username string) (id string, pw string, err e
 
 func (database *Database) GetUser(userid string) (User, error) {
 	var u User
-	mp, err := db.GetEntry(userid)
+	mp, err := db.GetUser(userid)
 	if err != nil {
 		return u, err
 	}
@@ -80,7 +85,7 @@ func (database *Database) GetUser(userid string) (User, error) {
 
 func (database *Database) GetDocument(documentid string) (Document, error) {
 	var doc Document
-	mp, err := db.GetEntry(documentid)
+	mp, err := db.GetDocument(documentid)
 	if err != nil {
 		return doc, err
 	}
@@ -107,13 +112,13 @@ func (database *Database) GetDocumentSummariesForUser(userid string) ([]Document
 
 func (database *Database) Delete(id string) error {
 
-	doc, err := db.GetEntry(id)
+	doc, err := db.GetDocument(id)
 	if err != nil {
 
 		return err
 	}
 	if rev, prs := doc["_rev"]; prs {
-		err := db.DeleteEntry(id, rev.(string))
+		err := db.DeleteDocument(id, rev.(string))
 		if err != nil {
 			return err
 		}
@@ -124,17 +129,17 @@ func (database *Database) Delete(id string) error {
 
 }
 
-func (database *Database) PutEntry(id string, content []byte) (eid string, err error) {
+func (database *Database) PutDocument(id string, content []byte) (eid string, err error) {
 
-	eid, err = db.PutEntry(id, string(content))
+	eid, err = db.UpdateDocument(id, string(content))
 
 	return
 
 }
 
-func (database *Database) PostEntry(content []byte) (string, error) {
+func (database *Database) PostDocument(content []byte) (string, error) {
 	u := uuid.NewV4()
 
-	return database.PutEntry(uuid.Formatter(u, uuid.Clean), content)
+	return db.NewDocument(uuid.Formatter(u, uuid.Clean), string(content))
 
 }

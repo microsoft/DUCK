@@ -1,4 +1,8 @@
+package couchbase
+
 /*
+implement following functions:
+
 create DB
 
 
@@ -19,9 +23,9 @@ delete RuleSet
 
 
 */
-package couchbase
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -42,6 +46,7 @@ var designDoc = "{\"_id\":\"_design/app\",\"views\":{\"foo\":{\"map\":\"function
 	"\"documents_by_user\":{\"map\":\"function(doc) { if(doc.type =='document') {   emit([doc.owner, doc._id], doc.name);  }}\"}}," +
 	"\"language\":\"javascript\"}"
 
+//Couchbase implements the pluginregistry.DBPlugin interface for the Couchbase Dabase
 type Couchbase struct {
 	url      string
 	database string
@@ -80,16 +85,7 @@ func getRows(resp io.Reader) ([]interface{}, error) {
 	return rows, nil
 }
 
-//Print prints sth
-func (cb *Couchbase) Print() {
-	fmt.Println("Testextension Printed sth")
-}
-
-//Save saves sth
-func (cb *Couchbase) Save() {
-	fmt.Println("Testextension saved sth")
-}
-
+// GetLogin returns ID and Password for the matching username from the couchbase Database
 func (cb *Couchbase) GetLogin(username string) (id string, pw string, err error) {
 	url := fmt.Sprintf("%s/%s/_design/app/_view/user_login?key=\"%s\"", cb.url, cb.database, username)
 	//cb.url + "/" + cb.database + "/_design/app/_view/user?key='" + username + "'"
@@ -124,14 +120,21 @@ func (cb *Couchbase) GetLogin(username string) (id string, pw string, err error)
 
 }
 
-func (cb *Couchbase) GetEntry(id string) (document map[string]interface{}, err error) {
+//GetUser returns a User with the sppecified ID from the Couchbase Database
+func (cb *Couchbase) GetUser(id string) (user map[string]interface{}, err error) {
 
 	return cb.getCouchbaseDocument(id)
 }
 
-func (cb *Couchbase) getCouchbaseDocument(cbDocId string) (document map[string]interface{}, err error) {
+//GetDocument returns a Data use document with the sppecified ID from the Couchbase Database
+func (cb *Couchbase) GetDocument(id string) (document map[string]interface{}, err error) {
 
-	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, cbDocId)
+	return cb.getCouchbaseDocument(id)
+}
+
+func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]interface{}, err error) {
+
+	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, cbDocID)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -148,6 +151,7 @@ func (cb *Couchbase) getCouchbaseDocument(cbDocId string) (document map[string]i
 	return nil, errors.New("No Data")
 }
 
+//GetDocumentSummariesForUser returns a list all data use documents a user owns
 func (cb *Couchbase) GetDocumentSummariesForUser(userid string) (documents []map[string]string, err error) {
 	url := fmt.Sprintf("%s/%s/_design/app/_view/documents_by_user?startkey=[\"%s\",\"\"]&endkey=[\"%s\",{}]",
 		cb.url, cb.database, userid, userid)
@@ -180,7 +184,17 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) (documents []map
 
 }
 
-func (cb *Couchbase) DeleteEntry(id string, rev string) error {
+// DeleteDocument deletes a Data Use Document from the Couchbase Database
+func (cb *Couchbase) DeleteDocument(id string, rev string) error {
+	return cb.deleteCbDocument(id, rev)
+}
+
+// DeleteUser deletes a User from the Couchbase Database
+func (cb *Couchbase) DeleteUser(id string, rev string) error {
+	return cb.deleteCbDocument(id, rev)
+}
+
+func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 	url := fmt.Sprintf("%s/%s/%s?rev=%s", cb.url, cb.database, id, rev)
 
 	client := &http.Client{}
@@ -212,11 +226,47 @@ func (cb *Couchbase) DeleteEntry(id string, rev string) error {
 
 }
 
-func (cb *Couchbase) PutEntry(id string, entry string) (eid string, err error) {
+// NewUser creates a new user in the couchbase Databse
+func (cb *Couchbase) NewUser(id string, entry string) (eid string, err error) {
+	return cb.putEntry(id, entry, "user")
+}
+
+//NewDocument creates a new Data use document in the couchbase Database
+func (cb *Couchbase) NewDocument(id string, entry string) (eid string, err error) {
+	return cb.putEntry(id, entry, "document")
+}
+
+//UpdateDocument replaces an existing Data Use Document in the Couchbase database
+func (cb *Couchbase) UpdateDocument(id string, entry string) (eid string, err error) {
+	return cb.putEntry(id, entry, "document")
+}
+
+func (cb *Couchbase) putEntry(id, entry, entryType string) (eid string, err error) {
+	//check type of entry (document/user/ruleset)
+	eid = id
+	entryBytes := []byte(entry)
+	var entryMap map[string]interface{}
+	if err := json.Unmarshal(entryBytes, &entryMap); err != nil {
+		return id, err
+	}
+	fieldType, prs := entryMap["type"]
+	if !prs {
+		entryMap["type"] = entryType
+	}
+
+	if prs && fieldType != entryType {
+		err = fmt.Errorf("Couchbase Document type mismatch. Want %s, got %s", entryType, fieldType)
+		return
+	}
+
+	entryBytes, err = json.Marshal(entryMap)
+	if err != nil {
+		return
+	}
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, id)
 	eid = id
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodPut, url, strings.NewReader(entry))
+	request, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(entryBytes))
 	//request.SetBasicAuth("admin", "admin")
 	//request.ContentLength = 0
 	resp, err := client.Do(request)
@@ -278,7 +328,7 @@ func (cb *Couchbase) Init(url string, database string) error {
 	if !ok {
 		log.Println("Designfile does not exist. Creating now")
 
-		_, err := cb.PutEntry("_design/app", designDoc)
+		_, err := cb.putEntry("_design/app", designDoc, "design")
 		if err != nil {
 			log.Printf("ERROR: %#+v\n", err)
 		}
@@ -381,6 +431,7 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 }
 
 func init() {
+	
 	db := &Couchbase{}
 	pluginregistry.RegisterDatabase(db)
 }

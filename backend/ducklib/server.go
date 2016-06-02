@@ -75,7 +75,7 @@ func putHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	id, err := datab.PutEntry(c.Param("id"), resp)
+	id, err := datab.PutDocument(c.Param("id"), resp)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
@@ -97,7 +97,7 @@ func postHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	id, err := datab.PostEntry(req)
+	id, err := datab.PostDocument(req)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
@@ -110,6 +110,8 @@ func postHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, doc)
 }
+
+// loginHandler handles the login Process
 func loginHandler(c echo.Context) error {
 
 	u := new(Login)
@@ -191,7 +193,7 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 	documents.PUT("/:id", putHandler)                  //update document
 	documents.DELETE("/:id", deleteHandler)            //delete document
 	documents.GET("/:userid/summary", getDocSummaries) //return document summaries for the author
-	documents.GET("/:docid", getDocHandler)    //return document for the author ?
+	documents.GET("/:docid", getDocHandler)            //return document
 
 	//ruleset resources
 	rulesets := api.Group("/rulesets", middleware.JWT(jwtKey))  //base URI
