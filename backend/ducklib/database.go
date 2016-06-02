@@ -22,6 +22,7 @@ func NewDatabase() *Database {
 	return &Database{databasename: "duck", url: "http://127.0.0.1:5984"}
 }
 
+//Put this into plugin
 func FillTestdata(data []byte) error {
 
 	var listOfData []interface{}
