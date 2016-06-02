@@ -8,7 +8,7 @@ type DBPlugin interface {
 	GetLogin(username string) (id string, pw string, err error)
 	GetEntry(id string) (user map[string]interface{}, err error)
 	GetDocumentSummariesForUser(userid string) (documents []map[string]string, err error)
-	PutEntry(id string, entry string) error
+	PutEntry(id string, entry string) (eid string, err error)
 	DeleteEntry(id string, rev string) error
 }
 

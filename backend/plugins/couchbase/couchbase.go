@@ -212,9 +212,9 @@ func (cb *Couchbase) DeleteEntry(id string, rev string) error {
 
 }
 
-func (cb *Couchbase) PutEntry(id string, entry string) error {
+func (cb *Couchbase) PutEntry(id string, entry string) (eid string, err error) {
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, id)
-
+	eid = id
 	client := &http.Client{}
 	request, err := http.NewRequest(http.MethodPut, url, strings.NewReader(entry))
 	//request.SetBasicAuth("admin", "admin")
@@ -222,25 +222,25 @@ func (cb *Couchbase) PutEntry(id string, entry string) error {
 	resp, err := client.Do(request)
 
 	if err != nil {
-		return err
+		return
 	}
 	defer resp.Body.Close()
 
 	jsonbody, err := getMap(resp.Body)
 	if err != nil {
-		return err
+		return
 	}
 	if _, prs := jsonbody["ok"]; prs {
-		return nil
+		return
 	}
 
 	if _, prs := jsonbody["error"]; prs {
 		reason := jsonbody["reason"].(string)
 
-		return errors.New(reason)
+		return "", errors.New(reason)
 	}
 
-	return errors.New("Could not decrypt Couchbase response")
+	return "", errors.New("Could not decrypt Couchbase response")
 }
 
 //Init initializes the Couchbase DB & tests for connection errors
@@ -278,7 +278,7 @@ func (cb *Couchbase) Init(url string, database string) error {
 	if !ok {
 		log.Println("Designfile does not exist. Creating now")
 
-		err := cb.PutEntry("_design/app", designDoc)
+		_, err := cb.PutEntry("_design/app", designDoc)
 		if err != nil {
 			log.Printf("ERROR: %#+v\n", err)
 		}

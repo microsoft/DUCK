@@ -44,7 +44,7 @@ func FillTestdata(data []byte) error {
 		if err != nil {
 			return err
 		}
-		if err := db.PutEntry(id, string(entry)); err != nil {
+		if _, err := db.PutEntry(id, string(entry)); err != nil {
 			return err
 		}
 
@@ -124,18 +124,15 @@ func (database *Database) Delete(id string) error {
 
 }
 
-func (database *Database) PutEntry(id string, content []byte) error {
+func (database *Database) PutEntry(id string, content []byte) (eid string, err error) {
 
-	err := db.PutEntry(id, string(content))
-	if err != nil {
-		return err
-	}
+	eid, err = db.PutEntry(id, string(content))
 
-	return nil
+	return
 
 }
 
-func (database *Database) PostEntry(content []byte) error {
+func (database *Database) PostEntry(content []byte) (string, error) {
 	u := uuid.NewV4()
 
 	return database.PutEntry(uuid.Formatter(u, uuid.Clean), content)

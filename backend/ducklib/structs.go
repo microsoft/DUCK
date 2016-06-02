@@ -12,7 +12,8 @@ type User struct {
 
 type Response struct {
 	Ok     bool    `json:"ok"`
-	Reason *string `json:"reason"`
+	Reason *string `json:"reason,omitempty"`
+	ID     *string `json:"id,omitempty"`
 }
 
 type Login struct {

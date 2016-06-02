@@ -75,29 +75,40 @@ func putHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	err = datab.PutEntry(c.Param("id"), resp)
+	id, err := datab.PutEntry(c.Param("id"), resp)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, Response{Ok: true})
+	doc, err := datab.GetDocument(id)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, doc)
 }
 func postHandler(c echo.Context) error {
 
-	resp, err := ioutil.ReadAll(c.Request().Body())
+	req, err := ioutil.ReadAll(c.Request().Body())
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	err = datab.PostEntry(resp)
+	id, err := datab.PostEntry(req)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
+	doc, err := datab.GetDocument(id)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, Response{Ok: true})
+	return c.JSON(http.StatusOK, doc)
 }
 func loginHandler(c echo.Context) error {
 
@@ -175,7 +186,7 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 
 	//data use statement document resources
 	documents := api.Group("/documents") //base URI
-	//	documents := api.Group("/documents", middleware.JWT(jwtKey))                                          //base URI
+	//documents := api.Group("/documents", middleware.JWT(jwtKey)) //base URI
 	documents.POST("", postHandler)                    //create document
 	documents.PUT("/:id", putHandler)                  //update document
 	documents.DELETE("/:id", deleteHandler)            //delete document
