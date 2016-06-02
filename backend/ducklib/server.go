@@ -191,7 +191,7 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 	documents.PUT("/:id", putHandler)                  //update document
 	documents.DELETE("/:id", deleteHandler)            //delete document
 	documents.GET("/:userid/summary", getDocSummaries) //return document summaries for the author
-	documents.GET("/:userid/:docid", getDocHandler)    //return document for the author ?
+	documents.GET("/:docid", getDocHandler)    //return document for the author ?
 
 	//ruleset resources
 	rulesets := api.Group("/rulesets", middleware.JWT(jwtKey))  //base URI
