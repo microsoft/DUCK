@@ -17,9 +17,9 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
         return dictionary.get(value);
     };
 
-    this.addTerm = function (type, subtype, value) {
+    this.addTerm = function (type, subtype, category, value) {
         context.initialize();
-        context.dictionary.put(value, {value: value, type: type, subtype: subtype, dictionaryType: "global"});
+        context.dictionary.put(value, {value: value, type: type, subtype: subtype, category: category, dictionaryType: "global"});
         // FIXME update server
     };
 
@@ -35,8 +35,7 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
             return;
         }
         context.dictionary = new Hashtable();
-        context.dictionary.put("Office 360", {value: "Office 360", type: "scope", subtype: "service", dictionaryType: "global"});
-        context.dictionary.put("Microsoft Azure", {value: "Microsoft Azure", type: "scope", subtype: "service", dictionaryType: "global"})
+        context.dictionary.put("Microsoft Azure", {value: "Microsoft Azure", type: "scope", subtype: "service", category: "2", dictionaryType: "global"})
     }
 
 });

@@ -52,7 +52,7 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
      * @param type the value type, e.g. use scope or qualifier
      * @param locale the language, e.g. "eng"
      * @param term the term to match
-     * @param categories if true, include only terms that are categories
+     * @param categories if true, include only terms that are categories and are not fixed
      * @return {Array} containing matching values in the form {value, label}
      */
     this.lookup = function (type, locale, term, categories) {
@@ -78,13 +78,15 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
                     value: entry.value,
                     label: context.formatLabel(entry),
                     dictionary: entry.dictionary,
-                    subtype: entry.subtype
+                    subtype: entry.subtype,
+                    category: entry.category,
+                    fixed: entry.fixed
                 });
             });
             if (categories) {
                 // filter terms that are not categories
                 vals = vals.filter(function (term) {
-                    return !term.dictionary
+                    return !term.dictionary && !term.fixed;
                 })
             }
             return vals;
@@ -98,7 +100,9 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
                     value: entry.value,
                     label: label,
                     dictionary: entry.dictionary,
-                    subtype: entry.subtype
+                    subtype: entry.subtype,
+                    category: entry.category,
+                    fixed: entry.fixed
                 };
             });
         if (categories) {
@@ -133,14 +137,15 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
      * Adds a new term to the taxonomy.
      * @param type the ISO type
      * @param subtype the subtype category
+     * @param category category
      * @param value the term value
      * @param dictionaryType the type of dictionary, e.g. global or document
      */
-    this.addTerm = function (type, subtype, value, dictionaryType) {
+    this.addTerm = function (type, subtype, category, value, dictionaryType) {
         // deactivate all dictionaries, add the new term to the deactivated terms and reactivate the terms; this preserves sort order and may be faster 
         // than iterating over all dictionaries to determine the insertion point
         var entries = context.deactivateDictionaries();
-        entries.push({type: type, subtype: subtype, value: value, dictionaryType: dictionaryType, dictionary: true});
+        entries.push({type: type, subtype: subtype, category: category, value: value, dictionaryType: dictionaryType, dictionary: true});
         context.activate([entries]);
 
     };
@@ -177,6 +182,7 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
                             value: term.value,
                             type: term.type,
                             subtype: term.subtype,
+                            category: term.category,
                             dictionary: true,
                             dictionaryType: term.dictionaryType
                         });
@@ -241,13 +247,19 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
     };
 
     this.formatLabel = function (entry) {
+        var offset = entry.category.split('.').length * 5;
+        var offsetString = "";
+        for (var i = 0; i < offset; i++) {
+            offsetString = offsetString + "&nbsp;";
+        }
         if (!entry.dictionary) {
-            return $sce.trustAsHtml("<div class='clearfix'><div class='float-left'><strong>" + entry.value + "</strong></div>" +
+
+            return $sce.trustAsHtml("<div class='clearfix'><div class='float-left'><strong>" + offsetString + entry.value + "</strong></div>" +
                 "<div class='dark-gray float-right'  style='z-index:10000'</div>" +
                 "<div class='dark-gray float-right'>ISO</div>" +
                 "</div>");
         } else {
-            return $sce.trustAsHtml("&nbsp;&nbsp;&nbsp;&nbsp;" + entry.value);
+            return $sce.trustAsHtml(offsetString + "&nbsp;&nbsp;&nbsp;&nbsp;" +  entry.value);
 
         }
     };

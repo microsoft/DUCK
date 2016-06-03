@@ -121,11 +121,12 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                 return terms
             },
             on_attach: function (value) {
+                $scope.currentField = "useScope";
+                $scope.currentFieldType = "scope";
                 DocumentModel.document.statements.forEach(function (statement) {
                     if (!DocumentModel.editing(statement)) {
                         return;
                     }
-
                     // Register a watch all all use scopes of statements being edited. The watches monitor for the new term option selected by the user.
                     // If this occurs, an event to open the new term dialog is fired
                     var unregister = $scope.$watch(function () {
@@ -142,6 +143,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                         // unregister a previous watch setup for the statement
                         other();
                     }
+
                 });
 
             },
@@ -164,7 +166,34 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.dataCategoryCompletion = {
             suggest: function (term) {
-                return TaxonomyService.lookup("dataCategory", "eng", term)
+                var terms = TaxonomyService.lookup("dataCategory", "eng", term);
+                terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
+                return terms
+            },
+            on_attach: function (value) {
+                $scope.currentField = "dataCategory";
+                $scope.currentFieldType = "dataCategory";
+                DocumentModel.document.statements.forEach(function (statement) {
+                    if (!DocumentModel.editing(statement)) {
+                        return;
+                    }
+                    var unregister = $scope.$watch(function () {
+                        return statement.dataCategory
+                    }, function (newValue) {
+                        if (newValue === "_new") {   // new term entered
+                            statement.dataCategory = "";
+                            DocumentModel.setCurrentStatement(statement);
+                            EventBus.publish("ui.newTerm");
+                        }
+                    });
+                    var other = controller.watches.put(statement.trackingId, unregister);
+                    if (other !== null) {
+                        // unregister a previous watch setup for the statement
+                        other();
+                    }
+
+
+                });
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -172,6 +201,9 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         };
 
         $scope.sourceScopeCompletion = {
+            on_attach: function (value) {
+                $scope.currentFieldType = "scope";
+            },
             suggest: function (term) {
                 return TaxonomyService.lookup("scope", "eng", term)
             },
@@ -181,6 +213,9 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         };
 
         $scope.actionCompletion = {
+            on_attach: function (value) {
+                $scope.currentFieldType = "action";
+            },
             suggest: function (term) {
                 return TaxonomyService.lookup("action", "eng", term)
             },
@@ -190,6 +225,9 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         };
 
         $scope.resultScopeCompletion = {
+            on_attach: function (value) {
+                $scope.currentFieldType = "scope";
+            },
             suggest: function (term) {
                 return TaxonomyService.lookup("scope", "eng", term)
             },
@@ -219,8 +257,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     $scope.newCategoryCompletion = {
         suggest: function (term) {
-            console.log("suggest: " + term);
-            return TaxonomyService.lookup("scope", "eng", term, true);
+            return TaxonomyService.lookup($scope.currentFieldType, "eng", term, true);
         },
         on_select: function (category) {
             controller.newTerm.category = category;
@@ -229,9 +266,10 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
     };
 
     controller.addTerm = function () {
-        DocumentModel.addTerm("scope", controller.newTerm.category.subtype, controller.newTerm.value, controller.newTerm.dictionary ? "document" : "global");
+        var dictionaryType = controller.newTerm.dictionary ? "document" : "global";
+        DocumentModel.addTerm($scope.currentFieldType, controller.newTerm.category.subtype, controller.newTerm.category.category, controller.newTerm.value, dictionaryType);
         var statement = DocumentModel.getCurrentStatement();
-        statement.useScope = controller.newTerm.value;
+        statement[$scope.currentField] = controller.newTerm.value;
         DocumentModel.clearCurrentStatement();
         controller.clear();
     };

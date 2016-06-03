@@ -38,7 +38,7 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
 
                 // FIXME create a fake document dictionary for testing
                 document.dictionary = new Hashtable();
-                document.dictionary.put("Foo Service", {value: "Foo Service", type: "scope", subtype: "service", dictionaryType: "document"});
+                document.dictionary.put("Foo Service", {value: "Foo Service", type: "scope", subtype: "service", category: "2", dictionaryType: "document"});
 
                 context.document = document;
                 context.dirty = false;
@@ -118,16 +118,17 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
      * Adds a new term to either the global or document dictionary.
      * @param type the ISO type
      * @param subtype the subtype category
+     * @param category category
      * @param value the term value
      * @param dictionaryType the type of dictionary, e.g. global or document
      */
-    this.addTerm = function (type, subtype, value, dictionaryType) {
+    this.addTerm = function (type, subtype, category, value, dictionaryType) {
         if (dictionaryType === "document") {
-            context.document.dictionary.put(value, {value: value, type: type, subtype: subtype, dictionaryType: "document"});
+            context.document.dictionary.put(value, {value: value, type: type, subtype: subtype, category: category, dictionaryType: "document"});
         } else {
-            GlobalDictionary.addTerm("scope", $scope.newCategory.subtype, $scope.newTermValue);
+            GlobalDictionary.addTerm(type, $scope.newCategory.subtype, $scope.newTermValue);
         }
-        TaxonomyService.addTerm(type, subtype, value, dictionaryType);
+        TaxonomyService.addTerm(type, subtype, category, value, dictionaryType);
     };
 
     this.makePassive = function (statement) {
