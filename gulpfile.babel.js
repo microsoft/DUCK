@@ -36,10 +36,10 @@ function loadConfig() {
 
 // Build the "dist" folder by running all of the below tasks
 gulp.task("build",
-    gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, partials, fonts, copy)));
+    gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy)));
 
 gulp.task("test",
-    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, partials, fonts, copy)));
+    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy)));
 
 // Build the site, run the server, and watch for file changes
 gulp.task("default",
@@ -128,6 +128,11 @@ function partials() {
         .pipe(gulp.dest(PATHS.dist + "/partials"));
 }
 
+function config() {
+    return gulp.src("frontend/src/assets/config/**/*")
+        .pipe(gulp.dest(PATHS.dist + "/assets/config"));
+}
+
 function fonts() {
     return gulp.src(PATHS.fonts)
         .pipe(gulp.dest(PATHS.dist + "/assets/fonts"));
@@ -178,6 +183,7 @@ function watch() {
     gulp.watch("frontend/src/assets/scss/**/*.scss", sass);
     gulp.watch("frontend/src/assets/js/**/*.js", gulp.series(javascript, reloadBrowser));
     gulp.watch("frontend/src/assets/img/**/*", gulp.series(images, reloadBrowser));
+    gulp.watch("frontend/src/assets/img/**/*", gulp.series(config, reloadBrowser));
     gulp.watch(["backend/**/*.go"]).on("change", function () {
         go.restart();
     });

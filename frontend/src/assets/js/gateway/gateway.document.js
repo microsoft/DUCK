@@ -6,7 +6,7 @@ var gatewayModule = angular.module("duck.gateway");
 gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $http, $q) {
 
     var context = this;
-    context.runServer = true;
+    context.runServer = false;
 
     // FIXME - remove when server is enabled
     if (!context.runServer) {

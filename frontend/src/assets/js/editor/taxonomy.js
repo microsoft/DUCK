@@ -7,12 +7,29 @@ var editorModule = angular.module("duck.editor");
  * dictionary and the dictionary associated with the document. This allows end-users to create their own terms as subtypes of standard ISO terms, for example,
  * a product name that is specific to the organization hosting the DUCK application.
  */
-editorModule.service("TaxonomyService", function ($sce, $log) {
+editorModule.service("TaxonomyService", function ($http, $sce, $log) {
     var context = this;
 
     context.cache = new Hashtable();  // key: symbol type, value: Hashtable [key: locale, value: list of symbol values]
 
-    this.populate = function (type, entries) {
+    /**
+     * Loads taxonomy from the server
+     */
+    this.initialize = function () {
+        $http.get("assets/config/taxonomy-eng.json").success(function (data) {
+            var taxonomy = angular.fromJson(data);
+            context.populate("eng", "scope", taxonomy["scope"]);
+            context.populate("eng", "qualifier", taxonomy["qualifier"]);
+            context.populate("eng", "dataCategory", taxonomy["dataCategory"]);
+            context.populate("eng", "action", taxonomy["action"]);
+        }).error(function (data, status) {
+            // FIXME error handling
+            reject(status);
+        });
+
+    };
+
+    this.populate = function (locale, type, entries) {
         var values = [];
         entries.forEach(function (entry) {
             values.push(entry.value);
@@ -24,23 +41,10 @@ editorModule.service("TaxonomyService", function ($sce, $log) {
             keys: ["value", "category"]
         });
         var localeCache = new Hashtable();
-        localeCache.put("eng", {entries: entries, values: values, fuse: fuse});
+        localeCache.put(locale, {entries: entries, values: values, fuse: fuse});
         context.cache.put(type, localeCache);
     };
 
-    // TODO the cache will be populated from a backend request
-    this.populate("scope", [
-        {value: "this capability", subtype: "capability", category: "1"},
-        {value: "this application or this service", subtype: "service", category: "2"},
-        {value: "services listed in the service agreement", subtype: "services-agreement", category: "3"},
-        {value: "the CSP Services", subtype: "csp-services", category: "4"},
-        {value: "all the CSP Products and services", subtype: "csp-products", category: "5"},
-        {value: "third-party product and services", subtype: "third-party", category: "6"}]);
-
-    this.populate("qualifier", [{value: "unlinked pseudonymized"}, {value: "all"}]);
-    this.populate("dataCategory", [{value: "email addresses"}, {value: "telemetry data"}, {value: "surfing habits"}]);
-    this.populate("action", [{value: "provide"}, {value: "inform"}]);
-    // TODO end cache population
 
     /**
      * Performs a fuzzy lookup of a set of values matching the given term.

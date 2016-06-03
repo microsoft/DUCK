@@ -4,6 +4,8 @@
 .ac-container {
   // TODO width should be set as a media query
   width: 600px !important;
+  max-height: 600px!important;
+  overflow: scroll;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;

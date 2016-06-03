@@ -89,11 +89,12 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
     }]);
 
 
-app.controller("AppController", function (CurrentUser, AppInfo, $log) {
+app.controller("AppController", function (CurrentUser, TaxonomyService, AppInfo, $log) {
     $log.info("Initializing version " + AppInfo.version);
 
     CurrentUser.initialize();
-
+    TaxonomyService.initialize();
+    
     $log.info("Application initialized");
 });
 
