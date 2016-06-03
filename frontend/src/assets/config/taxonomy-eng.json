@@ -39,27 +39,33 @@
   ],
   "qualifier": [
     {
-      "value": "identified data",
+      "value": "identified",
       "subtype": "identified-data",
       "category": "1",
       "fixed": true
     },
     {
-      "value": "linked or pseudonymized data",
+      "value": "linked or pseudonymized",
       "subtype": "linked-data",
       "category": "2",
       "fixed": true
     },
     {
-      "value": "unlinked or securely pseudonymized data",
+      "value": "unlinked or securely pseudonymized",
       "subtype": "unlinked-data",
       "category": "3",
       "fixed": true
     },
     {
-      "value": "anonymized data",
+      "value": "anonymized",
       "subtype": "anonymized-data",
       "category": "4",
+      "fixed": true
+    },
+    {
+      "value": "aggregated data",
+      "subtype": "aggregated-data",
+      "category": "5",
       "fixed": true
     }
   ],

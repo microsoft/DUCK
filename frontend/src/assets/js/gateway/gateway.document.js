@@ -17,7 +17,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         context.documents.put("1", {
             name: "Customer Document v1", id: "1",
             statements: [{
-                useScope: "this product", qualifier: "account", dataCategory: "data", sourceScope: "those cloud services",
+                useScope: "the CSP Services", qualifier: "identified", dataCategory: "credentials", sourceScope: "this capability",
                 action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next(),
                 passive:false
             }]
