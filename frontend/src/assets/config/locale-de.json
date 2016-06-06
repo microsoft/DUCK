@@ -2,5 +2,14 @@
   "no": "NEIN",
   "yes": "JA",
   "abandon_changes": "Änderungen verwerfen",
-  "abandon_changes_description": "Sind Sie sicher, dass Sie alle Änderungen rückgängig machen wollen?"
+  "abandon_changes_description": "Sind Sie sicher, dass Sie alle Änderungen rückgängig machen wollen?",
+
+  "email_label": "Email",
+  "email_placeholder": "Email",
+  "password_label": "Password",
+  "password_placeholder": "somebody@example.com",
+
+  "signin_label": "Bitte melden Sie sich an",
+  "signin_button": "Anmelden",
+  "forgot_password": "Passwort vergessen?"
 }

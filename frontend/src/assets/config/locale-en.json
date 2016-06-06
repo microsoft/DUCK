@@ -2,6 +2,14 @@
   "no": "NO",
   "yes": "YES",
   "abandon_changes": "Abandon Changes",
-  "abandon_changes_description": "Are you sure you want to abandon all changes?"
+  "abandon_changes_description": "Are you sure you want to abandon all changes?",
 
+  "email_label":"Email",
+  "email_placeholder":"Email",
+  "password_label":"Password",
+  "password_placeholder":"somebody@example.com",
+
+  "signin_label": "Please Sign In",
+  "signin_button": "Sign In",
+  "forgot_password": "Forgot your password?"
 }
