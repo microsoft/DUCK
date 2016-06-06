@@ -18,7 +18,7 @@ type ComplianceChecker interface {
 	             to construct a Carneades argument graph
 		   * Evaluates the argument graph to label the statements in the graph in, out or undecided.
 		   * Exports the argument graph to SVG, by writing the SVG to the given io.Writer
-		  If there are not errors, nil is returned.  Otherwise an error is returned
+		  If there are no errors, nil is returned.  Otherwise an error is returned
 		  describing the error.
 	*/
 	Check(ruleBase io.Reader, dataUseDocument io.Reader, w io.Writer) error
