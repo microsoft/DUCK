@@ -111,48 +111,97 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         }
     };
 
+    /**
+     * Sets up Mass autocomplete input fields.
+     */
     function initializeCompletions() {
+
+        /**
+         * Suggestion function used by Mass autocomplete for ISO scope fields. Since these fields may be extended with end-user defined values, a new term
+         * option is added.
+         *
+         * @param term the input text typed by the user; may be a partial term
+         * @return {Array} suggestions matching the input text
+         */
+        var scopeSuggest = function (term) {
+            var terms = TaxonomyService.lookup("scope", "eng", term);
+            terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
+            return terms
+        };
+
+        /**
+         * Mass autocomplete callback for ISO scope fields. Called when a field is activated by the end user for editing.
+         *
+         * This function sets up a watch for the new term option selected by a user. If triggered, the new term event is published which will result in a
+         * modal being activated.
+         *
+         * @param fieldName the specific scope field name being activated, e.g. useScope.
+         */
+        var scopeAttach = function (fieldName) {
+            $scope.currentField = fieldName;
+            $scope.currentFieldType = "scope";
+            DocumentModel.document.statements.forEach(function (statement) {
+                if (!DocumentModel.editing(statement)) {
+                    return;
+                }
+                // Register a watch all all use scopes of statements being edited. The watches monitor for the new term option selected by the user.
+                // If this occurs, an event to open the new term dialog is fired
+                var unregister = $scope.$watch(function () {
+                    return statement[fieldName]
+                }, function (newValue) {
+                    if (newValue === "_new") {   // new term entered
+                        statement[fieldName] = "";
+                        DocumentModel.setCurrentStatement(statement);
+                        EventBus.publish("ui.newTerm");
+                    }
+                });
+                var other = controller.watches.put(statement.trackingId, unregister);
+                if (other !== null) {
+                    // unregister a previous watch setup for the statement
+                    other();
+                }
+
+            });
+        };
+
+        /**
+         * Mass autocomplete callback for ISO scope fields. Called when a field is deactivated.
+         *
+         * This function de-registers watches setup by the scopAttach function.
+         *
+         * @param value the value passed from Mass autocomplete.
+         */
+        var scopeDetach = function (value) {
+            DocumentModel.validateSyntax();
+            controller.watches.values().forEach(function (unregister) {
+                unregister();     // deregister watches
+            });
+
+        };
 
         // setup autocompletes - requires $scope
         $scope.useScopeCompletion = {
-            suggest: function (term) {
-                var terms = TaxonomyService.lookup("scope", "eng", term);
-                terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
-                return terms
-            },
+            suggest: scopeSuggest,
             on_attach: function (value) {
-                $scope.currentField = "useScope";
-                $scope.currentFieldType = "scope";
-                DocumentModel.document.statements.forEach(function (statement) {
-                    if (!DocumentModel.editing(statement)) {
-                        return;
-                    }
-                    // Register a watch all all use scopes of statements being edited. The watches monitor for the new term option selected by the user.
-                    // If this occurs, an event to open the new term dialog is fired
-                    var unregister = $scope.$watch(function () {
-                        return statement.useScope
-                    }, function (newValue) {
-                        if (newValue === "_new") {   // new term entered
-                            statement.useScope = "";
-                            DocumentModel.setCurrentStatement(statement);
-                            EventBus.publish("ui.newTerm");
-                        }
-                    });
-                    var other = controller.watches.put(statement.trackingId, unregister);
-                    if (other !== null) {
-                        // unregister a previous watch setup for the statement
-                        other();
-                    }
-
-                });
-
+                scopeAttach("useScope");
             },
-            on_detach: function (value) {
-                DocumentModel.validateSyntax();
-                controller.watches.values().forEach(function (unregister) {
-                    unregister();     // deregister watches
-                });
-            }
+            on_detach: scopeDetach
+        };
+
+        $scope.sourceScopeCompletion = {
+            suggest: scopeSuggest,
+            on_attach: function (value) {
+                scopeAttach("sourceScope");
+            },
+            on_detach: scopeDetach
+        };
+
+        $scope.resultScopeCompletion = {
+            suggest: scopeSuggest,
+            on_attach: function (value) {
+                scopeAttach("resultScope");
+            },
+            on_detach: scopeDetach
         };
 
         $scope.qualifierCompletion = {
@@ -200,18 +249,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             }
         };
 
-        $scope.sourceScopeCompletion = {
-            on_attach: function (value) {
-                $scope.currentFieldType = "scope";
-            },
-            suggest: function (term) {
-                return TaxonomyService.lookup("scope", "eng", term)
-            },
-            on_detach: function (value) {
-                DocumentModel.validateSyntax();
-            }
-        };
-
         $scope.actionCompletion = {
             on_attach: function (value) {
                 $scope.currentFieldType = "action";
@@ -224,17 +261,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             }
         };
 
-        $scope.resultScopeCompletion = {
-            on_attach: function (value) {
-                $scope.currentFieldType = "scope";
-            },
-            suggest: function (term) {
-                return TaxonomyService.lookup("scope", "eng", term)
-            },
-            on_detach: function (value) {
-                DocumentModel.validateSyntax();
-            }
-        };
     }
 
 });
