@@ -12,7 +12,7 @@ app.factory("AppInfo", function () {
     };
 });
 
-app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide", "$qProvider",
+app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide", "$translateProvider",
     function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide, $translateProvider) {
 
         // suppress warning when a rejected promise is not handled
@@ -84,7 +84,10 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
                 templateUrl: "../../editor.html",
                 reloadOnSearch: false,
                 requireSignin: true
-            })
+            });
+
+        // i18n
+        $translateProvider.preferredLanguage('en');
 
     }]);
 
