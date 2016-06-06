@@ -16,7 +16,7 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
      * Loads taxonomy from the server
      */
     this.initialize = function () {
-        $http.get("assets/config/taxonomy-eng.json").success(function (data) {
+        $http.get("assets/config/taxonomy-en.json").success(function (data) {
             var taxonomy = angular.fromJson(data);
             context.populate("eng", "scope", taxonomy["scope"]);
             context.populate("eng", "qualifier", taxonomy["qualifier"]);
