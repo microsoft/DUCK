@@ -70,6 +70,7 @@ PATHS:
     - "bower_components/angular-mass-autocomplete/massautocomplete.js"
     - "bower_components/fuse.js/src/fuse.js"
     - "bower_components/angular-elastic-input/dist/angular-elastic-input.js"
+    - "bower_components/angular-translate/angular-translate.js"
   javascript:
     - "frontend/src/assets/js/!(app).js"
     - "frontend/src/assets/js/**"
