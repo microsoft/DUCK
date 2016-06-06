@@ -1,7 +1,7 @@
 package ducklib
 
 type User struct {
-	Id        string   `json:"id"`
+	ID        string   `json:"id"`
 	Email     string   `json:"email"`
 	Password  string   `json:"password"`
 	Firstname string   `json:"firstname"`
@@ -23,7 +23,7 @@ type Login struct {
 
 func (u *User) fromValueMap(mp map[string]interface{}) {
 
-	u.Id = mp["_id"].(string)
+	u.ID = mp["_id"].(string)
 	u.Revision = mp["_rev"].(string)
 
 	u.Firstname = mp["firstname"].(string)
@@ -44,6 +44,7 @@ type Document struct {
 	ID         string      `json:"id"`
 	Name       string      `json:"name"`
 	Revision   string      `json:"_rev"`
+	Owner      string      `json:"owner"`
 	Statements []Statement `json:"statements"`
 }
 
@@ -59,9 +60,18 @@ type Statement struct {
 
 func (d *Document) fromValueMap(mp map[string]interface{}) {
 
-	d.ID = mp["_id"].(string)
-	d.Revision = mp["_rev"].(string)
-	d.Name = mp["name"].(string)
+	if id, ok := mp["_id"]; ok {
+		d.ID = id.(string)
+	}
+	if rev, ok := mp["_rev"]; ok {
+		d.Revision = rev.(string)
+	}
+	if name, ok := mp["name"]; ok {
+		d.Name = name.(string)
+	}
+	if owner, ok := mp["owner"]; ok {
+		d.Owner = owner.(string)
+	}
 
 	if stmts, prs := mp["statements"].([]interface{}); prs {
 		d.Statements = make([]Statement, len(stmts))

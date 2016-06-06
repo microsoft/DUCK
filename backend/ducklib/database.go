@@ -41,11 +41,11 @@ func FillTestdata(data []byte) error {
 		}
 		switch entryType {
 		case "document":
-			if _, err := db.NewDocument(id, string(entry)); err != nil {
+			if err := db.NewDocument(id, string(entry)); err != nil {
 				return err
 			}
 		case "user":
-			if _, err := db.NewUser(id, string(entry)); err != nil {
+			if err := db.NewUser(id, string(entry)); err != nil {
 				return err
 			}
 
@@ -67,6 +67,10 @@ func (database *Database) Init() {
 	}
 }
 
+/*
+User DB operations
+*/
+
 //GetLogin returns id and password for username
 func (database *Database) GetLogin(username string) (id string, pw string, err error) {
 	return db.GetLogin(username)
@@ -84,6 +88,43 @@ func (database *Database) GetUser(userid string) (User, error) {
 	return u, err
 }
 
+func (database *Database) DeleteUser(id string) error {
+
+	doc, err := db.GetDocument(id)
+	if err != nil {
+
+		return err
+	}
+	if rev, prs := doc["_rev"]; prs {
+		err := db.DeleteDocument(id, rev.(string))
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return errors.New("Could not delete Entry")
+
+}
+
+func (database *Database) PutUser(id string, content []byte) error {
+
+	return db.UpdateDocument(id, string(content))
+
+}
+
+func (database *Database) PostUser(content []byte) (string, error) {
+	u := uuid.NewV4()
+	uuid := uuid.Formatter(u, uuid.Clean)
+
+	return uuid, db.NewDocument(uuid, string(content))
+
+}
+
+/*
+Document DB operations
+
+*/
 func (database *Database) GetDocument(documentid string) (Document, error) {
 	var doc Document
 	mp, err := db.GetDocument(documentid)
@@ -111,7 +152,7 @@ func (database *Database) GetDocumentSummariesForUser(userid string) ([]Document
 
 }
 
-func (database *Database) Delete(id string) error {
+func (database *Database) DeleteDocument(id string) error {
 
 	doc, err := db.GetDocument(id)
 	if err != nil {
@@ -130,17 +171,65 @@ func (database *Database) Delete(id string) error {
 
 }
 
-func (database *Database) PutDocument(id string, content []byte) (eid string, err error) {
+func (database *Database) PutDocument(id string, content []byte) error {
 
-	eid, err = db.UpdateDocument(id, string(content))
-
-	return
+	return db.UpdateDocument(id, string(content))
 
 }
 
 func (database *Database) PostDocument(content []byte) (string, error) {
 	u := uuid.NewV4()
+	uuid := uuid.Formatter(u, uuid.Clean)
 
-	return db.NewDocument(uuid.Formatter(u, uuid.Clean), string(content))
+	return uuid, db.NewDocument(uuid, string(content))
+
+}
+
+/*
+Ruleset DB operations
+*/
+
+func (database *Database) GetRuleset(id string) (User, error) {
+	var u User
+	mp, err := db.GetRuleset(id)
+	if err != nil {
+		return u, err
+	}
+
+	u.fromValueMap(mp)
+
+	return u, err
+}
+
+func (database *Database) DeleteRuleset(id string) error {
+
+	doc, err := db.GetRuleset(id)
+	if err != nil {
+
+		return err
+	}
+	if rev, prs := doc["_rev"]; prs {
+		err := db.DeleteRuleset(id, rev.(string))
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return errors.New("Could not delete Entry")
+
+}
+
+func (database *Database) PutRuleset(id string, content []byte) error {
+
+	return db.UpdateRuleset(id, string(content))
+
+}
+
+func (database *Database) PostRuleset(content []byte) (string, error) {
+	u := uuid.NewV4()
+	uuid := uuid.Formatter(u, uuid.Clean)
+
+	return uuid, db.NewRuleset(uuid, string(content))
 
 }

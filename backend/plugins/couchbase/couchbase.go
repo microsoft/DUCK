@@ -6,20 +6,21 @@ implement following functions:
 create DB
 
 
-create User
-get user
-update user
-delete user
+create User 		✓
+get user 			✓
+update user			✓
+delete user			✓
 
-create document
-get document
-update document
-delete document
+create document		✓
+get document		✓
+update document		✓
+delete document		✓
+Document overview	✓
 
-create RuleSet
-get RuleSet
-update RuleSet
-delete RuleSet
+create RuleSet		✓
+get RuleSet			✓
+update RuleSet		✓
+delete RuleSet		✓
 
 
 */
@@ -132,6 +133,12 @@ func (cb *Couchbase) GetDocument(id string) (document map[string]interface{}, er
 	return cb.getCouchbaseDocument(id)
 }
 
+//GetRuleset returns a ruleset with the sppecified ID from the Couchbase Database
+func (cb *Couchbase) GetRuleset(id string) (document map[string]interface{}, err error) {
+
+	return cb.getCouchbaseDocument(id)
+}
+
 func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]interface{}, err error) {
 
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, cbDocID)
@@ -194,6 +201,11 @@ func (cb *Couchbase) DeleteUser(id string, rev string) error {
 	return cb.deleteCbDocument(id, rev)
 }
 
+// DeleteRuleset deletes a User from the Couchbase Database
+func (cb *Couchbase) DeleteRuleset(id string, rev string) error {
+	return cb.deleteCbDocument(id, rev)
+}
+
 func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 	url := fmt.Sprintf("%s/%s/%s?rev=%s", cb.url, cb.database, id, rev)
 
@@ -227,27 +239,42 @@ func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 }
 
 // NewUser creates a new user in the couchbase Databse
-func (cb *Couchbase) NewUser(id string, entry string) (eid string, err error) {
+func (cb *Couchbase) NewUser(id string, entry string) error {
 	return cb.putEntry(id, entry, "user")
 }
 
 //NewDocument creates a new Data use document in the couchbase Database
-func (cb *Couchbase) NewDocument(id string, entry string) (eid string, err error) {
+func (cb *Couchbase) NewDocument(id string, entry string) error {
 	return cb.putEntry(id, entry, "document")
+}
+
+//NewRuleset creates a new Ruleset in the couchbase Database
+func (cb *Couchbase) NewRuleset(id string, entry string) error {
+	return cb.putEntry(id, entry, "ruleset")
+}
+
+//UpdateUser replaces an existing User in the Couchbase database
+func (cb *Couchbase) UpdateUser(id string, entry string) error {
+	return cb.putEntry(id, entry, "user")
 }
 
 //UpdateDocument replaces an existing Data Use Document in the Couchbase database
-func (cb *Couchbase) UpdateDocument(id string, entry string) (eid string, err error) {
+func (cb *Couchbase) UpdateDocument(id string, entry string) error {
 	return cb.putEntry(id, entry, "document")
 }
 
-func (cb *Couchbase) putEntry(id, entry, entryType string) (eid string, err error) {
+//UpdateRuleset replaces an existing Ruleset in the Couchbase database
+func (cb *Couchbase) UpdateRuleset(id string, entry string) error {
+	return cb.putEntry(id, entry, "ruleset")
+}
+
+func (cb *Couchbase) putEntry(id, entry, entryType string) error {
 	//check type of entry (document/user/ruleset)
-	eid = id
+
 	entryBytes := []byte(entry)
 	var entryMap map[string]interface{}
 	if err := json.Unmarshal(entryBytes, &entryMap); err != nil {
-		return id, err
+		return err
 	}
 	fieldType, prs := entryMap["type"]
 	if !prs {
@@ -255,16 +282,16 @@ func (cb *Couchbase) putEntry(id, entry, entryType string) (eid string, err erro
 	}
 
 	if prs && fieldType != entryType {
-		err = fmt.Errorf("Couchbase Document type mismatch. Want %s, got %s", entryType, fieldType)
-		return
+		err := fmt.Errorf("Couchbase Document type mismatch. Want %s, got %s", entryType, fieldType)
+		return err
 	}
 
-	entryBytes, err = json.Marshal(entryMap)
+	entryBytes, err := json.Marshal(entryMap)
 	if err != nil {
-		return
+		return err
 	}
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, id)
-	eid = id
+
 	client := &http.Client{}
 	request, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(entryBytes))
 	//request.SetBasicAuth("admin", "admin")
@@ -272,25 +299,25 @@ func (cb *Couchbase) putEntry(id, entry, entryType string) (eid string, err erro
 	resp, err := client.Do(request)
 
 	if err != nil {
-		return
+		return err
 	}
 	defer resp.Body.Close()
 
 	jsonbody, err := getMap(resp.Body)
 	if err != nil {
-		return
+		return err
 	}
 	if _, prs := jsonbody["ok"]; prs {
-		return
+		return nil
 	}
 
 	if _, prs := jsonbody["error"]; prs {
 		reason := jsonbody["reason"].(string)
 
-		return "", errors.New(reason)
+		return errors.New(reason)
 	}
 
-	return "", errors.New("Could not decrypt Couchbase response")
+	return errors.New("Could not undeerstand Couchbase response")
 }
 
 //Init initializes the Couchbase DB & tests for connection errors
@@ -328,7 +355,7 @@ func (cb *Couchbase) Init(url string, database string) error {
 	if !ok {
 		log.Println("Designfile does not exist. Creating now")
 
-		_, err := cb.putEntry("_design/app", designDoc, "design")
+		err := cb.putEntry("_design/app", designDoc, "design")
 		if err != nil {
 			log.Printf("ERROR: %#+v\n", err)
 		}
@@ -431,7 +458,7 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 }
 
 func init() {
-	
+
 	db := &Couchbase{}
 	pluginregistry.RegisterDatabase(db)
 }
