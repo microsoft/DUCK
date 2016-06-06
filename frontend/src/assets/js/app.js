@@ -87,6 +87,10 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
             });
 
         // i18n
+        // $translateProvider.useStaticFilesLoader({
+        //     prefix: 'assets/config/locale-',
+        //     suffix: '.json'
+        // });
         $translateProvider.preferredLanguage('en');
 
     }]);
@@ -97,7 +101,7 @@ app.controller("AppController", function (CurrentUser, TaxonomyService, AppInfo,
 
     CurrentUser.initialize();
     TaxonomyService.initialize();
-    
+
     $log.info("Application initialized");
 });
 

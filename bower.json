@@ -28,7 +28,8 @@
     "angular-mass-autocomplete": "~0.2.3",
     "fuse.js": "~2.2.0",
     "angular-elastic-input": "~2.2.0",
-    "angular-translate": "~2.11.0"
+    "angular-translate": "~2.11.0",
+    "angular-translate-loader-static-files": "~2.11.0"
   },
   "private": true
 }

@@ -71,6 +71,7 @@ PATHS:
     - "bower_components/fuse.js/src/fuse.js"
     - "bower_components/angular-elastic-input/dist/angular-elastic-input.js"
     - "bower_components/angular-translate/angular-translate.js"
+    - "bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"
   javascript:
     - "frontend/src/assets/js/!(app).js"
     - "frontend/src/assets/js/**"
