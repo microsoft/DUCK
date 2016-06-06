@@ -1,5 +1,3 @@
-% DUCK Compliance Checking Requirements
-% Tom Gordon
 
 # Overview
 
@@ -22,17 +20,13 @@ This document specifies requirements of the DUCK compliance checker, with user s
 
 As per Jim's email from 2016-05-03.
 
-Author
-  : Creates and manages data use documents
+**Author**. Creates and manages data use documents
 
-Modeler
-  : Creates and manages rule bases
+**Modeler**. Creates and manages rule bases
 
-Administrator
-  : Deploys and maintains the DUCK system
+**Administrator**. Deploys and maintains the DUCK system
 
-Developer
-  : Customizes and extends the DUCK system
+**Developer**. Customizes and extends the DUCK system
 
 # Glossary
 
