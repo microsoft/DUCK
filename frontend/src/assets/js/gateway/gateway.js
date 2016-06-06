@@ -30,6 +30,14 @@ gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $transl
         });
     }
 });
+gatewayModule.service('UserService', function (CurrentUser, $http, $q) {
+    this.update = function () {
+        return $q(function (resolve, reject) {
+            // FIXME implement
+            resolve();
+        });
+    }
+});
 
 /**
  * Interceptor that adds an authorization token to the outbound request and handles errors reported from the server.

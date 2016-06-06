@@ -13,8 +13,15 @@
                     <li><a href="" ui-sref="account">{{main.CurrentUser.firstName}} {{main.CurrentUser.lastName}}</a></li>
                     <li class="padding-right-1">
                         <a href="#"><i class="fa fa-globe"></i> </a>
-                        <ul class="top-bar-menu vertical" >
-                            <li ng-repeat="locale in main.locales"><a href="#">{{locale}}</a></li>
+                        <ul class="top-bar-menu vertical">
+                            <li ng-repeat="locale in main.locales">
+
+                                <a ng-click="main.setLocale(locale.id)" href="#">
+                                    <span class="fa fa-check padding-right-1" ng-show="locale.id === main.CurrentUser.locale"></span>
+                                    <span class="fa fa-check padding-right-1" style="color: #0A0A0A" ng-show="locale.id !== main.CurrentUser.locale"></span>
+                                    {{locale.description}}
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -40,7 +47,6 @@
             </div>
         </div>
     </div>
-
 
 
 </div>
