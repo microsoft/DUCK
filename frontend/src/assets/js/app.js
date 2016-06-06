@@ -2,7 +2,7 @@
  * This module bootstraps the application, including defining URLs and pages.
  */
 var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.component", "duck.i18n", "duck.signin",
-    "duck.gateway", "ui.router", "ngAnimate", "as.sortable"]);
+    "duck.gateway", "ui.router", "ngAnimate", "as.sortable", "pascalprecht.translate"]);
 
 app.factory("AppInfo", function () {
 
@@ -13,7 +13,7 @@ app.factory("AppInfo", function () {
 });
 
 app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide", "$qProvider",
-    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide, $qProvider) {
+    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide, $translateProvider) {
 
         // suppress warning when a rejected promise is not handled
         //$qProvider.errorOnUnhandledRejections(false);
