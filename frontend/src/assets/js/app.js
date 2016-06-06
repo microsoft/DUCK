@@ -87,10 +87,10 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
             });
 
         // i18n
-        // $translateProvider.useStaticFilesLoader({
-        //     prefix: 'assets/config/locale-',
-        //     suffix: '.json'
-        // });
+        $translateProvider.useStaticFilesLoader({
+            prefix: 'assets/config/locale-',
+            suffix: '.json'
+        });
         $translateProvider.preferredLanguage('en');
 
     }]);
