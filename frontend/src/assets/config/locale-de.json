@@ -1,3 +1,6 @@
 {
-  "TRANSLATION_ID": "Dies ist eine konkrete Umsetzung für eine bestimmte Sprache."
+  "no": "NEIN",
+  "yes": "JA",
+  "abandon_changes": "Änderungen verwerfen",
+  "abandon_changes_description": "Sind Sie sicher, dass Sie alle Änderungen rückgängig machen wollen?"
 }

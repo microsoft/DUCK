@@ -1,3 +1,7 @@
 {
-  "TRANSLATION_ID": "This is a concrete translation for a specific language."
+  "no": "NO",
+  "yes": "YES",
+  "abandon_changes": "Abandon Changes",
+  "abandon_changes_description": "Are you sure you want to abandon all changes?"
+
 }

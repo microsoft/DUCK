@@ -1,12 +1,12 @@
 <div class="reveal tiny" id="abandonChanges" data-reveal data-overlay="false" ng-controller="AbandonController as abandon">
-    <h4>Abandon Changes</h4>
+    <h4>{{"abandon_changes" | translate}}</h4>
     <div class="row">
-        Are you sure you want to abandon all changes?
+        {{"abandon_changes_description" | translate}}
     </div>
     <div class="row float-right padding-top-2">
         <div class="column ">
-            <a class="button small secondary" data-close>NO</a>
-            <a class="button small" data-close ng-click="abandon.confirm()">YES</a>
+            <a class="button small secondary" data-close>{{"no" | translate}}</a>
+            <a class="button small" data-close ng-click="abandon.confirm()">{{"yes" | translate}}</a>
         </div>
     </div>
 </div>
