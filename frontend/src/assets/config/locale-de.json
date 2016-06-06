@@ -1,15 +1,28 @@
 {
   "no": "NEIN",
   "yes": "JA",
+  "delete": "LÖSCHEN",
+  "create": "CREATE",
+  "cancel": "Abbrechen",
   "abandon_changes": "Änderungen verwerfen",
   "abandon_changes_description": "Sind Sie sicher, dass Sie alle Änderungen rückgängig machen wollen?",
-
   "email_label": "Email",
   "email_placeholder": "Email",
   "password_label": "Password",
   "password_placeholder": "somebody@example.com",
-
   "signin_label": "Bitte melden Sie sich an",
   "signin_button": "Anmelden",
-  "forgot_password": "Passwort vergessen?"
+  "forgot_password": "Passwort vergessen?",
+  "my_documents_heading": "Meine Dokumente",
+  "no_documents_heading": "Es wurden keine Dokumente über Datei",
+  "search_docs_placeholder": "Suchen von Dokumenten",
+  "upload_file": "Datei hochladen",
+  "create_mixedcase": "Create",
+  "download_title": "Herunterladen",
+  "delete_title": "Löschen",
+  "edit_label": "Bearbeiten" ,
+  "delete_description": "Sind Sie sicher, dass Sie löschen möchten {{home.toDelete.name}}?",
+  "create_document": "Dokument erstellen",
+  "document_name_placeholder": "Dokumentname"
+
 }

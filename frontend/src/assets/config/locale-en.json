@@ -1,15 +1,29 @@
 {
   "no": "NO",
   "yes": "YES",
+  "delete": "DELETE",
+  "create": "CREATE",
+  "cancel": "CANCEL",
   "abandon_changes": "Abandon Changes",
   "abandon_changes_description": "Are you sure you want to abandon all changes?",
-
-  "email_label":"Email",
-  "email_placeholder":"Email",
-  "password_label":"Password",
-  "password_placeholder":"somebody@example.com",
-
+  "email_label": "Email",
+  "email_placeholder": "Email",
+  "password_label": "Password",
+  "password_placeholder": "somebody@example.com",
   "signin_label": "Please Sign In",
   "signin_button": "Sign In",
-  "forgot_password": "Forgot your password?"
+  "forgot_password": "Forgot your password?",
+  "my_documents_heading": "My Documents",
+  "no_documents_heading": "No documents on file",
+  "search_docs_placeholder": "Search documents",
+  "upload_file": "Upload File",
+  "create_mixedcase": "Create",
+  "download_title": "Download",
+  "delete_title": "Delete",
+  "edit_label": "Edit",
+  "delete_description": "Are you sure you want to delete {{home.toDelete.name}}?",
+  "create_document": "Create Document",
+  "document_name_placeholder": "Document name"
+
+
 }

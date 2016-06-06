@@ -1,23 +1,23 @@
 <div class="row padding-top-2 padding-left-1" ng-controller="HomeController as home">
     <div class="row column">
-        <h4>My Documents</h4>
+        <h4>{{"my_documents_heading" |translate}}</h4>
     </div>
     <div class="row">
         <div class="small-1 columns middle icon-label-wrapper">
             <label for="search-box" class="search-label middle"><i class="fa fa-search"></i></label>
         </div>
         <div class="small-4 columns">
-            <input id="search-box" class="search-box" ng-model="home.summaryFilter" type="text" placeholder="Search documents">
+            <input id="search-box" class="search-box" ng-model="home.summaryFilter" type="text" ng-attr-placeholder="{{'search_docs_placeholder'|translate}}">
         </div>
         <div class="small-4 columns text-right">
-            <label for="exampleFileUpload" class="button"><i class="fa fa-cloud-upload"></i> Upload File</label>
+            <label for="exampleFileUpload" class="button"><i class="fa fa-cloud-upload"></i> {{"upload_file"|translate}}</label>
             <input type="file" id="exampleFileUpload" class="show-for-sr">
-            <a data-open="createModal" href="" class="button">Create</a>
+            <a data-open="createModal" href="" class="button">{{"create_mixedcase"|translate}}</a>
         </div>
 
     </div>
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
-        <h5>No documents on file</h5>
+        <h5>{{"no_documents_heading"|translate}}</h5>
     </div>
     <div class="row small-up-4" ng-if="home.summaries.length > 0">
         <div class="columns text-center" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
@@ -25,11 +25,14 @@
                 <img class="" src="http://placehold.it/300x350">
                 <div class="image-overlay-content">
                     <div class="text-right padding-right-1 padding-top-0-5">
-                        <a class="padding-right-1" href="" title="Download"><i class="fa fa-cloud-download white"></i> </a>
-                        <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" title="Delete"><i class="fa fa-trash white"></i> </a>
+                        <a class="padding-right-1" href="" ng-attr-title="{{'download_title'|translate}}">
+                            <i class="fa fa-cloud-download white"></i> </a>
+                        <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete_title'|translate}}">
+                            <i class="fa fa-trash white"></i>
+                        </a>
                     </div>
                     <div class="padding-top-2">
-                        <a href="" class="button" ng-click="home.editDocument(summary.id)">Edit</a>
+                        <a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit_label'|translate}}</a>
                     </div>
 
                 </div>
@@ -39,26 +42,26 @@
     </div>
 
     <div class="reveal tiny" id="deleteModal" data-reveal data-overlay="false">
-        <h4>Delete</h4>
+        <h4>{{'delete_title'|translate}}</h4>
         <div class="row">
-            Are you sure you want to delete {{home.toDelete.name}}?
+            {{"delete_description" |translate}}
         </div>
         <div class="row float-right">
             <div class="columns">
-                <a class="button small secondary" data-close>NO</a>
-                <a class="button small" data-close ng-click="">DELETE</a>
+                <a class="button small secondary" data-close>{{"no" |translate}}</a>
+                <a class="button small" data-close ng-click="">{{"delete" |translate}}</a>
             </div>
         </div>
     </div>
     <div class="reveal tiny" id="createModal" data-reveal data-overlay="false">
-        <h4>Create Document</h4>
+        <h4> {{"create_document" |translate}}</h4>
         <div class="row padding-top-2">
-            <input ng-model="home.newName" type="text" placeholder="Document name">
+            <input ng-model="home.newName" type="text" ng-attr-placeholder="'document_name_placeholder' | translate">
         </div>
         <div class="row float-right padding-top-2">
             <div class="columns ">
-                <a class="button small secondary" data-close>CANCEL</a>
-                <a class="button small" data-close ng-click="">CREATE</a>
+                <a class="button small secondary" data-close> {{"cancel" |translate}}</a>
+                <a class="button small" data-close ng-click=""> {{"create" |translate}}</a>
             </div>
         </div>
     </div>
