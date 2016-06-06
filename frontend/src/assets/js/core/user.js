@@ -3,7 +3,7 @@
  */
 var coreModule = angular.module("duck.core");
 
-coreModule.service("CurrentUser", function ($log) {
+coreModule.service("CurrentUser", function ($log, UiConstants, ObjectUtils) {
     this.loggedIn = false;
     this.firstName = "anonymous";
     this.lastName = "anonymous";
@@ -22,6 +22,12 @@ coreModule.service("CurrentUser", function ($log) {
         this.lastName = localStorage.getItem("duck.lastName");
         this.id = localStorage.getItem("duck.id");
         this.token = localStorage.getItem("duck.token");
+        var locale = this.locale = localStorage.getItem("duck.locale");
+        if (ObjectUtils.isNull(locale)) {
+            this.locale = UiConstants.defaultLocale;
+        } else {
+            this.locale = locale;
+        }
         this.loggedIn = true;
         $log.debug("Current user initialized");
     };
@@ -36,6 +42,12 @@ coreModule.service("CurrentUser", function ($log) {
         this.id = data.id;
         this.token = data.token;
 
+        if (data.locale) {
+            this.locale = data.locale;
+        } else {
+            this.locale = UiConstants.defaultLocale;
+        }
+
         this.loggedIn = true;
         this.save();
     };
@@ -48,6 +60,7 @@ coreModule.service("CurrentUser", function ($log) {
         localStorage.setItem("duck.lastName", this.lastName);
         localStorage.setItem("duck.token", this.token);
         localStorage.setItem("duck.id", this.id);
+        localStorage.setItem("duck.locale", this.locale);
     };
 
     /**
