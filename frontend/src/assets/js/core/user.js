@@ -3,7 +3,7 @@
  */
 var coreModule = angular.module("duck.core");
 
-coreModule.service("CurrentUser", function ($log, UiConstants, ObjectUtils) {
+coreModule.service("CurrentUser", function ($log, LocaleService, ObjectUtils) {
     this.loggedIn = false;
     this.firstName = "anonymous";
     this.lastName = "anonymous";
@@ -24,7 +24,7 @@ coreModule.service("CurrentUser", function ($log, UiConstants, ObjectUtils) {
         this.token = localStorage.getItem("duck.token");
         var locale = this.locale = localStorage.getItem("duck.locale");
         if (ObjectUtils.isNull(locale)) {
-            this.locale = UiConstants.defaultLocale;
+            this.locale = LocaleService.defaultLocale;
         } else {
             this.locale = locale;
         }
@@ -45,7 +45,7 @@ coreModule.service("CurrentUser", function ($log, UiConstants, ObjectUtils) {
         if (data.locale) {
             this.locale = data.locale;
         } else {
-            this.locale = UiConstants.defaultLocale;
+            this.locale = LocaleService.defaultLocale;
         }
 
         this.loggedIn = true;

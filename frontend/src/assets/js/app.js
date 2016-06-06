@@ -12,8 +12,8 @@ app.factory("AppInfo", function () {
     };
 });
 
-app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide", "$translateProvider", "UiConstants",
-    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide, $translateProvider, UiConstants) {
+app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logProvider", "$provide", "$translateProvider", "DEFAULT_LOCALE",
+    function ($urlRouterProvider, $locationProvider, $stateProvider, $logProvider, $provide, $translateProvider, DEFAULT_LOCALE) {
 
         // suppress warning when a rejected promise is not handled
         //$qProvider.errorOnUnhandledRejections(false);
@@ -91,7 +91,7 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
             prefix: 'assets/config/locale-',
             suffix: '.json'
         });
-        $translateProvider.preferredLanguage(UiConstants.defaultLocale);
+        $translateProvider.preferredLanguage(DEFAULT_LOCALE);
         $translateProvider.useSanitizeValueStrategy("escape");
 
     }]);
