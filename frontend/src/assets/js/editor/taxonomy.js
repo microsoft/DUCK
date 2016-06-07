@@ -7,7 +7,7 @@ var editorModule = angular.module("duck.editor");
  * dictionary and the dictionary associated with the document. This allows end-users to create their own terms as subtypes of standard ISO terms, for example,
  * a product name that is specific to the organization hosting the DUCK application.
  */
-editorModule.service("TaxonomyService", function ($http, $sce, $log) {
+editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $log) {
     var context = this;
 
     context.cache = new Hashtable();  // key: symbol type, value: Hashtable [key: locale, value: list of symbol values]
@@ -16,15 +16,19 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
      * Loads taxonomy from the server
      */
     this.initialize = function () {
-        $http.get("assets/config/taxonomy-en.json").success(function (data) {
-            var taxonomy = angular.fromJson(data);
-            context.populate("eng", "scope", taxonomy["scope"]);
-            context.populate("eng", "qualifier", taxonomy["qualifier"]);
-            context.populate("eng", "dataCategory", taxonomy["dataCategory"]);
-            context.populate("eng", "action", taxonomy["action"]);
-        }).error(function (data, status) {
-            // FIXME error handling
-            reject(status);
+        var locales = LocaleService.getLocales();
+        locales.forEach(function (entry) {
+            var locale = entry.id;
+            $log.info("Attempting to load taxonomy for locale: " + locale);
+            $http.get("assets/config/taxonomy-" + locale + ".json").success(function (data) {
+                var taxonomy = angular.fromJson(data);
+                context.populate(locale, "scope", taxonomy["scope"]);
+                context.populate(locale, "qualifier", taxonomy["qualifier"]);
+                context.populate(locale, "dataCategory", taxonomy["dataCategory"]);
+                context.populate(locale, "action", taxonomy["action"]);
+            }).error(function (data, status) {
+                $log.error("Taxonomy for locale not found: " + locale);
+            });
         });
 
     };
@@ -40,9 +44,13 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
             threshold: 0.4,
             keys: ["value", "category"]
         });
-        var localeCache = new Hashtable();
-        localeCache.put(locale, {entries: entries, values: values, fuse: fuse});
-        context.cache.put(type, localeCache);
+
+        var typeCache = context.cache.get(type);
+        if (typeCache === null) {
+            typeCache = new Hashtable();
+            context.cache.put(type, typeCache);
+        }
+        typeCache.put(locale, {entries: entries, values: values, fuse: fuse});
     };
 
 
@@ -50,7 +58,7 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
      * Performs a fuzzy lookup of a set of values matching the given term.
      *
      * @param type the value type, e.g. use scope or qualifier
-     * @param locale the language, e.g. "eng"
+     * @param locale the language, e.g. "en"
      * @param term the term to match
      * @param categories if true, include only terms that are categories and are not fixed
      * @return {Array} containing matching values in the form {value, label}
@@ -259,7 +267,7 @@ editorModule.service("TaxonomyService", function ($http, $sce, $log) {
                 "<div class='dark-gray float-right'>ISO</div>" +
                 "</div>");
         } else {
-            return $sce.trustAsHtml(offsetString + "&nbsp;&nbsp;&nbsp;&nbsp;" +  entry.value);
+            return $sce.trustAsHtml(offsetString + "&nbsp;&nbsp;&nbsp;&nbsp;" + entry.value);
 
         }
     };

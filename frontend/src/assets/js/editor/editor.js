@@ -124,7 +124,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
          * @return {Array} suggestions matching the input text
          */
         var scopeSuggest = function (term) {
-            var terms = TaxonomyService.lookup("scope", "eng", term);
+            var terms = TaxonomyService.lookup("scope", DocumentModel.document.locale, term);
             terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
             return terms
         };
@@ -206,7 +206,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.qualifierCompletion = {
             suggest: function (term) {
-                return TaxonomyService.lookup("qualifier", "eng", term)
+                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -215,7 +215,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.dataCategoryCompletion = {
             suggest: function (term) {
-                var terms = TaxonomyService.lookup("dataCategory", "eng", term);
+                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term);
                 terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
                 return terms
             },
@@ -254,7 +254,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                 $scope.currentFieldType = "action";
             },
             suggest: function (term) {
-                return TaxonomyService.lookup("action", "eng", term)
+                return TaxonomyService.lookup("action", DocumentModel.document.locale, term)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -283,7 +283,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     $scope.newCategoryCompletion = {
         suggest: function (term) {
-            return TaxonomyService.lookup($scope.currentFieldType, "eng", term, true);
+            return TaxonomyService.lookup($scope.currentFieldType, DocumentModel.document.locale, term, true);
         },
         on_select: function (category) {
             controller.newTerm.category = category;

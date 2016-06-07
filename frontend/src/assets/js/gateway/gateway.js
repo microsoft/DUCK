@@ -12,7 +12,10 @@ gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $transl
         return $q(function (resolve, reject) {
             // FIXME workaround until backend fixed
             if (true) {
-                CurrentUser.initializeWith({firstName: "Andy", lastName: "Author", id: "123", token: "124", locale: "en"});
+                this.initialize();
+                if (!CurrentUser.loggedIn) {
+                    CurrentUser.initializeWith({firstName: "Andy", lastName: "Author", id: "123", token: "124", locale: "en"});
+                }
                 $translate.use(CurrentUser.locale).then(function () {
                     resolve();
                 });
@@ -32,6 +35,7 @@ gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $transl
 });
 gatewayModule.service('UserService', function (CurrentUser, $http, $q) {
     this.update = function () {
+        CurrentUser.save();
         return $q(function (resolve, reject) {
             // FIXME implement
             resolve();
