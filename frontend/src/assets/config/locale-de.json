@@ -49,5 +49,6 @@
   "new_term": "Neuer Begriff",
   "category": "Kategorie",
   "dictionary": "Wörterbuch",
-  "global":"Weltweit"
+  "global":"Weltweit",
+  "click_to_edit_new_statement": "Klicken Sie auf Neues Statement zu bearbeiten"
 }

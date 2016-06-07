@@ -12,7 +12,7 @@
 </div>
 
 <div ng-show="editorController.emptyStatement(statement) && !editorController.editing(statement)">
-    <h5 class="dark-gray clickable" ng-click="editorController.toggleEdit(statement)">Click to Edit New Statement</h5>
+    <h5 class="dark-gray clickable" ng-click="editorController.toggleEdit(statement)">{{"click_to_edit_new_statement"|translate}}</h5>
 </div>
 
 <div ng-if="editorController.editing(statement)">
