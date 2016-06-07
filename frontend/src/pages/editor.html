@@ -129,8 +129,9 @@
                     </div>
                     <div class="float-right padding-top-2">
                         <div class="column">
-                            <a class="button small secondary" ng-click="termController.clear()" data-close>CANCEL</a>
-                            <a class="button small" data-close ng-disabled="newTermForm.$invalid" ng-click="termController.addTerm()">ADD</a>
+                            <a class="button small secondary" ng-click="termController.clear()" data-close>{{"cancel_action"|translate}}</a>
+                            <a class="button small" data-close ng-disabled="newTermForm.$invalid"
+                               ng-click="termController.addTerm()">{{"add_action"|translate}}</a>
                         </div>
                     </div>
                 </form>

@@ -1,9 +1,10 @@
 {
-  "no": "NO",
-  "yes": "YES",
-  "delete": "DELETE",
-  "create": "CREATE",
-  "cancel": "CANCEL",
+  "no_action": "NO",
+  "yes_action": "YES",
+  "delete_action": "DELETE",
+  "create_action": "CREATE",
+  "cancel_action": "CANCEL",
+  "add_action": "ADD",
   "abandon_changes": "Abandon Changes",
   "abandon_changes_description": "Are you sure you want to abandon all changes?",
   "email_label": "Email",
@@ -23,7 +24,8 @@
   "edit_label": "Edit",
   "delete_description": "Are you sure you want to delete {{home.toDelete.name}}?",
   "create_document": "Create Document",
-  "document_name_placeholder": "Document name"
-
-
+  "document_name_placeholder": "Document name",
+  "sign_out_button": "Sign Out",
+  "sign_out_heading": "Sign Out",
+  "sign_out_description": "Are you sure you want to sign out?"
 }

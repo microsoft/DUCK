@@ -1,9 +1,10 @@
 {
-  "no": "NEIN",
-  "yes": "JA",
-  "delete": "LÖSCHEN",
-  "create": "CREATE",
-  "cancel": "Abbrechen",
+  "no_action": "NEIN",
+  "yes_action": "JA",
+  "delete_action": "LÖSCHEN",
+  "create_action": "CREATE",
+  "cancel_action": "Abbrechen",
+  "add_action": "HINZUFÜGEN",
   "abandon_changes": "Änderungen verwerfen",
   "abandon_changes_description": "Sind Sie sicher, dass Sie alle Änderungen rückgängig machen wollen?",
   "email_label": "Email",
@@ -20,9 +21,11 @@
   "create_mixedcase": "Create",
   "download_title": "Herunterladen",
   "delete_title": "Löschen",
-  "edit_label": "Bearbeiten" ,
+  "edit_label": "Bearbeiten",
   "delete_description": "Sind Sie sicher, dass Sie löschen möchten {{home.toDelete.name}}?",
   "create_document": "Dokument erstellen",
-  "document_name_placeholder": "Dokumentname"
-
+  "document_name_placeholder": "Dokumentname",
+  "sign_out_button": "Ausloggen",
+  "sign_out_heading": "Ausloggen",
+  "sign_out_description": "Sind Sie sicher, dass Sie sich abmelden wollen?"
 }
