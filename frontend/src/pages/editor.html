@@ -1,16 +1,16 @@
 <div ng-controller="EditorController as editorController">
     <div class="sidebar">
         <ul class="menu vertical icon-top padding-top-2">
-            <li><a ui-sref="main.home" href=""><i class="fa fa-1-5x fa-chevron-left"></i> Documents</a></li>
+            <li><a ui-sref="main.home" href=""><i class="fa fa-1-5x fa-chevron-left"></i> {{"documents"|translate}}</a></li>
             <li class="padding-top-2"></li>
-            <li><a href="" ng-click="editorController.addStatement()"><i class="fa fa-1-5x fa-plus"></i> New Statement</a></li>
+            <li><a href="" ng-click="editorController.addStatement()"><i class="fa fa-1-5x fa-plus"></i> {{"new_statement"|translate}}</a></li>
             <li>
                 <a data-open="revertModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href="">
-                    <i class="fa fa-1-5x fa-undo"></i> Revert
+                    <i class="fa fa-1-5x fa-undo"></i> {{"revert"|translate}}
                 </a></li>
-            <li><a ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href=""><i class="fa fa-1-5x fa-save"></i> Save</a></li>
-            <li><a href=""><i class="fa fa-1-5x fa-check-circle-o"></i> Validate</a></li>
-            <li><a href=""><i class="fa fa-1-5x fa-cloud-download"></i> Download</a></li>
+            <li><a ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href=""><i class="fa fa-1-5x fa-save"></i> {{"save"|translate}}</a></li>
+            <li><a href=""><i class="fa fa-1-5x fa-check-circle-o"></i> {{"validate"|translate}}</a></li>
+            <li><a href=""><i class="fa fa-1-5x fa-cloud-download"></i> {{"download"|translate}}</a></li>
         </ul>
     </div>
     <div class="row columns editor-canvas" style=" padding-left: 200px !important;">
@@ -19,11 +19,10 @@
                 <h4>{{document.name}}</h4>
             </div>
             <div class="middle fixed-label-right">
-                <!--<div class="label alert"><i class="fa fa-warning"></i> Invalid</div>-->
-                <div class="label warning"><i class="fa fa-warning"></i> Non-Compliant</div>
-                <!--<div class="label alert"><i class="fa fa-warning"></i> Conflicts</div>-->
-                <!--<div class="validation-label"><i class="fa fa-check"></i> Validated</div>-->
-                <!--<div class="label secondary"><i class="fa fa-question"></i> Not Validated</div>-->
+                <!--<div class="label alert"><i class="fa fa-warning"></i> {{"invalid"|translate}}</div>-->
+                <!--<div class="label warning"><i class="fa fa-warning"></i> {{"non_compliant"|translate}}</div>-->
+                <div class="validation-label"><i class="fa fa-check"></i> {{"compliant"|translate}}</div>
+                <!--<div class="label secondary"><i class="fa fa-question"></i> {{"not_validated"|translate}}</div>-->
             </div>
             <hr>
         </div>
@@ -32,20 +31,20 @@
             <div class="row" ng-if="document">
                 <div class="clearfix">
                     <div class="button-group small float-left noselect">
-                        <a class="button hollow" ng-click="editorController.editAll()" title="Edit all statements">
+                        <a class="button hollow" ng-click="editorController.editAll()" ng-attr-title="{{'edit_all_statements'|translate}}">
                             <i class="fa fa-pencil-square-o"></i>
                         </a>
-                        <a class="button hollow" ng-click="editorController.closeAll()" title="Close all statement editors">
+                        <a class="button hollow" ng-click="editorController.closeAll()" ng-attr-title="{{'close_all_statement_editors'|translate}}">
                             <i class="fa fa-times"></i>
                         </a>
-                        <a class="button hollow" ng-click="editorController.validateSyntax()" title="Toggle validation messages">
+                        <a class="button hollow" ng-click="editorController.validateSyntax()" ng-attr-title="{{'toggle_validation_messages'|translate}}">
                             <i class="fa fa-eye"></i>
                             <!--<i class="fa fa-eye-slash"></i>-->
                         </a>
                     </div>
                     <div class="button-group small float-right noselect">
-                        <a class="button hollow" ng-click="editorController.makeActive()">Active</a>
-                        <a class="button hollow" ng-click="editorController.makePassive()">Passive</a>
+                        <a class="button hollow" ng-click="editorController.makeActive()">{{"active"|translate}}</a>
+                        <a class="button hollow" ng-click="editorController.makePassive()">{{"passive"|translate}}</a>
                     </div>
                 </div>
                 <div class="row column">
@@ -55,16 +54,16 @@
                                 <div class="clearfix">
                                     <div class="float-left button-group small noselect">
                                         <a class="button secondary hollow" ng-click="editorController.toggleEdit(statement)"
-                                           title="Toggle edit statement">
+                                           ng-attr-title="{{'toggle_edit_statement'|translate}}">
                                             <i ng-if="!editorController.editing(statement)" class="fa fa-pencil-square-o"></i>
                                             <i ng-if="editorController.editing(statement)" class="fa fa-times"></i>
                                         </a>
                                     </div>
                                     <div class="button-group small float-right noselect">
                                         <a class="button secondary" ng-class="{'hollow':statement.passive}"
-                                           ng-click="editorController.makeActive(statement)">Active</a>
+                                           ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
                                         <a class="button secondary" ng-class="{'hollow':!statement.passive}"
-                                           ng-click="editorController.makePassive(statement)">Passive</a>
+                                           ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
                                         <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)"><i
                                                 class="fa fa-trash medium-gray"></i> </a>
                                     </div>
@@ -83,19 +82,19 @@
     </div>
     <div class="row columns text-center padding-top-6" ng-if="editorController.noDocument">
         <i class="fa fa-4x fa-exclamation-triangle medium-gray" aria-hidden="true"></i>
-        <h5>No document found</h5>
+        <h5>{{"no_document_found"|no_document_found}}</h5>
     </div>
 
     <div class="reveal tiny" id="revertModal" data-reveal data-overlay="false">
         <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
-        <h4>Revert Changes</h4>
+        <h4>{{"revert_changes" |translate}}</h4>
         <div class="row">
-            Are you sure you want to revert all changes?
+            {{"revert_changes_question"|translate}}
         </div>
         <div class="row float-right padding-top-2">
             <div class="column ">
-                <a class="button small secondary" data-close>NO</a>
-                <a class="button small" data-close ng-click="editorController.revert()">YES</a>
+                <a class="button small secondary" data-close>{{"no_action"}}</a>
+                <a class="button small" data-close ng-click="editorController.revert()">{{"yes_action"}}</a>
             </div>
         </div>
     </div>
@@ -105,13 +104,13 @@
     <div ng-controller="NewTermController as termController">
         <div mass-autocomplete>
             <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" data-close-on-click="false">
-                <h4>New Term</h4>
+                <h4{{"new_term"|translate}}</h4>
                 <form name="newTermForm">
                     <div class="row padding-top-1">
                         <input style="min-width: 350px" ng-model="termController.newTerm.value" required>
                     </div>
                     <div class="row padding-top-1">
-                        <label>Category</label>
+                        <label>{{"category"|translate}}</label>
                     </div>
                     <div class="row">
                         <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.categoryValue"
@@ -119,12 +118,12 @@
                     </div>
                     <div class="row padding-top-1">
                         <fieldset>
-                            <legend>Dictionary</legend>
+                            <legend>{{"dictionary"|translate}}</legend>
                             <input type="radio" name="dictionary" value="document" id="docDictionary" ng-model="termController.newTerm.dictionary"
                                    checked="checked">
-                            <label for="docDictionary">Document</label>
+                            <label for="docDictionary">{{"document"|translate}}</label>
                             <input type="radio" name="dictionary" value="global" id="globalDictionary" ng-model="termController.newTerm.dictionary" required>
-                            <label for="globalDictionary">Global</label>
+                            <label for="globalDictionary">{{"global"|translate}}</label>
                         </fieldset>
                     </div>
                     <div class="float-right padding-top-2">
