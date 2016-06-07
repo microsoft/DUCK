@@ -26,13 +26,14 @@ type ComplianceChecker interface {
 	GetTheory(db *Database, ruleBaseId string, revision string) (caes.Theory, error)
 
 	/* Check does the following:
-		* Reads the data use document from its given io.Reader
-		* Translates the data use statements in the document into Carneades assumptions (terms)
-	    * Applies the theory to the assumptions, using the Carneades inference engine,
-	      to construct a Carneades argument graph
-		* Evaluates the argument graph to label the statements in the graph in, out or undecided.
-		* Returns the evaluated argument graph
-		If there are not errors, nil is returned.  Otherwise an error is returned
+	   * Reads the data use document from its given io.Reader
+	   * Translates the data use statements in the document into Carneades assumptions (terms)
+	   * Applies the theory to the assumptions, using the Carneades inference engine,
+	     to construct a Carneades argument graph
+           * Evaluates the argument graph to label the statements in the graph in, out or undecided.
+	   * Returns the evaluated argument graph
+	   
+	   If there are not errors, nil is returned.  Otherwise an error is returned
 		describing the error.
 	*/
 	Check(ruleBase *caes.Theory, document *Document) (*caes.ArgGraph, error)
