@@ -12,7 +12,7 @@ gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $transl
         return $q(function (resolve, reject) {
             // FIXME workaround until backend fixed
             if (true) {
-                this.initialize();
+                CurrentUser.initialize();
                 if (!CurrentUser.loggedIn) {
                     CurrentUser.initializeWith({firstName: "Andy", lastName: "Author", id: "123", token: "124", locale: "en"});
                 }
