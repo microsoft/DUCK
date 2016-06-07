@@ -23,7 +23,7 @@ type ComplianceChecker interface {
 	// the theory is first updated, by downloading the given revision from
 	// the document database and compiling the rulebase into a theory.
 	// If there are no errors, the returned error will be nil.
-	GetTheory(db Database, ruleBaseId string, revision string) (caes.Theory, error)
+	GetTheory(db *Database, ruleBaseId string, revision string) (caes.Theory, error)
 
 	/* Check does the following:
 		* Reads the data use document from its given io.Reader
