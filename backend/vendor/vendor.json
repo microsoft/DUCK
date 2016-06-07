@@ -3,6 +3,18 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "CqzlzLU0gOWcLognKKpa9jSslas=",
+			"path": "github.com/carneades/carneades-4/src/engine/caes",
+			"revision": "50c849b6d4e0595a0d1ad7e7a419669f21205274",
+			"revisionTime": "2016-03-30T21:29:41Z"
+		},
+		{
+			"checksumSHA1": "e1vrCddsenUF5IsJPqgcgAbDg4s=",
+			"path": "github.com/carneades/carneades-4/src/engine/terms",
+			"revision": "50c849b6d4e0595a0d1ad7e7a419669f21205274",
+			"revisionTime": "2016-03-30T21:29:41Z"
+		},
+		{
 			"checksumSHA1": "XYxZEScqPha5TmAkwWZzLVNMp7I=",
 			"path": "github.com/dgrijalva/jwt-go",
 			"revision": "a2c85815a77d0f951e33ba4db5ae93629a1530af",
