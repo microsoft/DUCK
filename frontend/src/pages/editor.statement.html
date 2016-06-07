@@ -2,11 +2,12 @@
     <form>
         <div mass-autocomplete>
             <div ng-if="editorController.editing(statement) && !statement.passive"
-                 ng-include="'editor/eng-edit.html'"></div>
+                 ng-include="editorController.getLocalePrefix()+'-edit.html'"></div>
             <div ng-if="editorController.editing(statement) && statement.passive"
-                 ng-include="'editor/eng-edit-passive.html'"></div>
-            <div ng-if="!editorController.editing(statement) && !statement.passive" ng-include="'editor/eng-preview.html'"></div>
-            <div ng-if="!editorController.editing(statement) && statement.passive" ng-include="'editor/eng-preview-passive.html'"></div>
+                 ng-include="editorController.getLocalePrefix()+'-edit-passive.html'"></div>
+            <div ng-if="!editorController.editing(statement) && !statement.passive" ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
+            <div ng-if="!editorController.editing(statement) && statement.passive"
+                 ng-include="editorController.getLocalePrefix()+'-preview-passive.html'"></div>
         </div>
     </form>
 </div>
@@ -36,9 +37,9 @@
         <h5>Preview</h5>
         <div class="row column">
             <div ng-if="!statement.passive"
-                 ng-include="'editor/eng-preview.html'"></div>
+                 ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
             <div ng-if="statement.passive"
-                 ng-include="'editor/eng-preview-passive.html'"></div>
+                 ng-include="editorController.getLocalePrefix()+'-preview-passive.html'"></div>
         </div>
     </div>
 </div>

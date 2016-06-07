@@ -63,6 +63,10 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         DocumentModel.deleteStatement(statement);
     };
 
+    controller.getLocalePrefix = function () {
+        return "editor/" + DocumentModel.document.locale + "/" + DocumentModel.document.locale;
+    };
+
     controller.addStatement = function () {
         DocumentModel.addStatement({
             useScope: null,

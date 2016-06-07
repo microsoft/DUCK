@@ -1,0 +1,32 @@
+<input placeholder="qualifier"
+       ng-model="statement.qualifier"
+       mass-autocomplete-item="qualifierCompletion"
+       pu-elastic-input style="min-width: 10px; max-width: 1000px;">
+<input placeholder="data category"
+       ng-model="statement.dataCategory"
+       mass-autocomplete-item="dataCategoryCompletion"
+       pu-elastic-input style="min-width: 10px; max-width: 1000px;">
+from
+<input placeholder="source scope"
+       ng-model="statement.sourceScope"
+       mass-autocomplete-item="sourceScopeCompletion"
+       pu-elastic-input style="min-width: 10px; max-width: 1000px;">
+is used by
+<error-label fragment="statement.errors.useScope"></error-label>
+<input error-marker="statement.errors.useScope"
+       placeholder="use scope"
+       ng-model="statement.useScope"
+       mass-autocomplete-item="useScopeCompletion"
+       pu-elastic-input style="min-width: 10px; max-width: 1000px;">
+to
+<error-label fragment="statement.errors.action"></error-label>
+<input error-marker="statement.errors.action"
+       placeholder="action"
+       ng-model="statement.action"
+       mass-autocomplete-item="actionCompletion"
+       pu-elastic-input style="min-width: 10px; max-width: 1000px;">
+the
+<input placeholder="result scope"
+       ng-model="statement.resultScope"
+       mass-autocomplete-item="resultScopeCompletion"
+       pu-elastic-input style="min-width: 10px; max-width: 1000px;">
