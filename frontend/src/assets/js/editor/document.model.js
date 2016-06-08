@@ -3,7 +3,7 @@ var editorModule = angular.module("duck.editor");
 /**
  * Manages the current document being edited.
  */
-editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionary, DataUseDocumentService, $q, UUID, ObjectUtils) {
+editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, GlobalDictionary, DataUseDocumentService, $q, UUID, ObjectUtils) {
     /**
      * A local copy of the document.
      */
@@ -33,8 +33,8 @@ editorModule.service("DocumentModel", function (TaxonomyService, GlobalDictionar
                         action: {active: false, level: null, action: false}
                     };
                 });
-                // FIXME: hardcode locale for now
-                document.locale = "eng";
+
+                document.locale = CurrentUser.locale;
 
                 // FIXME create a fake document dictionary for testing
                 document.dictionary = new Hashtable();

@@ -16,7 +16,7 @@
                         <ul class="top-bar-menu vertical">
                             <li ng-repeat="locale in main.locales">
 
-                                <a ng-click="main.setLocale(locale.id)" href="#">
+                                <a ng-click="main.setLocale(locale.id)" href="">
                                     <span class="fa fa-check padding-right-1" ng-show="locale.id === main.CurrentUser.locale"></span>
                                     <span class="fa fa-check padding-right-1" style="color: #0A0A0A" ng-show="locale.id !== main.CurrentUser.locale"></span>
                                     {{locale.description}}
@@ -25,7 +25,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a data-open="signoutModal" class="button secondary hollow">Sign Out</a>
+                        <a data-open="signoutModal" class="button secondary hollow">{{"sign_out" | translate}}</a>
                     </li>
                 </ul>
             </div>
@@ -36,14 +36,14 @@
 
     <div class="reveal tiny" id="signoutModal" data-reveal ng-controller="SignoutController as signout" data-overlay="false">
         <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
-        <h4>Sign Out</h4>
+        <h4>{{"sign_out"|translate}}</h4>
         <div class="row">
-            Are you sure you want to sign out?
+            {{"sign_out_description" | translate}}
         </div>
         <div class="row float-right padding-top-2">
             <div class="column ">
-                <a class="button small secondary" data-close>NO</a>
-                <a class="button small" data-close ng-click="signout.signout()">YES</a>
+                <a class="button small secondary" data-close>{{"no_action"|translate}}</a>
+                <a class="button small" data-close ng-click="signout.signout()">{{"yes_action"|translate}}</a>
             </div>
         </div>
     </div>

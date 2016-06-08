@@ -6,9 +6,9 @@ var gatewayModule = angular.module("duck.gateway");
 gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $http, $q) {
 
     var context = this;
-    context.runServer = false;
+    context.runServer = true;
 
-    // FIXME - remove when server is enabled
+    // local testing 
     if (!context.runServer) {
         context.summaries = new Hashtable();
         context.summaries.put("1", {name: "Customer Document v1", id: "1"});
@@ -19,11 +19,11 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             statements: [{
                 useScope: "the CSP Services", qualifier: "identified", dataCategory: "credentials", sourceScope: "this capability",
                 action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next(),
-                passive:false
+                passive: false
             }]
         });
     }
-    // FIXME end remove
+
 
     /**
      * Retrieves summaries for data use statement documents authored by the current user.
@@ -38,17 +38,22 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             }
             var url = "/v1/documents/" + CurrentUser.id + "/summary";
 
-            // FIXME disable server call until implemented
-            if (!context.runServer) {
-                resolve(context.summaries.values());
-                return;
-            }
+            // local testing
+            // if (!context.runServer) {
+            //     resolve(context.summaries.values());
+            //     return;
+            // }
 
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {
                 var documents = angular.fromJson(data);
                 resolve(documents);
             }).error(function (data, status, headers, config) {
+                if (404 === status) {
+                    // no doc summaries available, resolve an empty array
+                    resolve([]);
+                    return;
+                }
                 reject(status);
             });
         });
@@ -67,13 +72,13 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             if (!CurrentUser.loggedIn) {
                 $state.go('signin');
             }
-            var url = "/v1/documents/"  + documentId;
+            var url = "/v1/documents/" + documentId;
 
-            // disable server call until implemented
-            if (!context.runServer) {
-                resolve(context.documents.get(documentId));
-                return;
-            }
+            // local testing
+            // if (!context.runServer) {
+            //     resolve(context.documents.get(documentId));
+            //     return;
+            // }
 
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {

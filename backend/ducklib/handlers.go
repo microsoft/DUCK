@@ -261,6 +261,7 @@ func loginHandler(c echo.Context) error {
 			"firstName": user.Firstname,
 			"lastName":  user.Lastname,
 			"id":        user.ID,
+			"locale": 	 user.Locale,
 		})
 	}
 	return echo.ErrUnauthorized

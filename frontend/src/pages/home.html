@@ -12,7 +12,7 @@
         <div class="small-4 columns text-right">
             <label for="exampleFileUpload" class="button"><i class="fa fa-cloud-upload"></i> {{"upload_file"|translate}}</label>
             <input type="file" id="exampleFileUpload" class="show-for-sr">
-            <a data-open="createModal" href="" class="button">{{"create_mixedcase"|translate}}</a>
+            <a data-open="createModal" href="" class="button">{{"create"|translate}}</a>
         </div>
 
     </div>
@@ -25,14 +25,14 @@
                 <img class="" src="http://placehold.it/300x350">
                 <div class="image-overlay-content">
                     <div class="text-right padding-right-1 padding-top-0-5">
-                        <a class="padding-right-1" href="" ng-attr-title="{{'download_title'|translate}}">
+                        <a class="padding-right-1" href="" ng-attr-title="{{'download'|translate}}">
                             <i class="fa fa-cloud-download white"></i> </a>
-                        <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete_title'|translate}}">
+                        <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
                             <i class="fa fa-trash white"></i>
                         </a>
                     </div>
                     <div class="padding-top-2">
-                        <a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit_label'|translate}}</a>
+                        <a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>
                     </div>
 
                 </div>
@@ -42,14 +42,14 @@
     </div>
 
     <div class="reveal tiny" id="deleteModal" data-reveal data-overlay="false">
-        <h4>{{'delete_title'|translate}}</h4>
+        <h4>{{'delete'|translate}}</h4>
         <div class="row">
             {{"delete_description" |translate}}
         </div>
         <div class="row float-right">
             <div class="columns">
-                <a class="button small secondary" data-close>{{"no" |translate}}</a>
-                <a class="button small" data-close ng-click="">{{"delete" |translate}}</a>
+                <a class="button small secondary" data-close>{{"no_action" |translate}}</a>
+                <a class="button small" data-close ng-click="">{{"delete_action" |translate}}</a>
             </div>
         </div>
     </div>
@@ -60,8 +60,8 @@
         </div>
         <div class="row float-right padding-top-2">
             <div class="columns ">
-                <a class="button small secondary" data-close> {{"cancel" |translate}}</a>
-                <a class="button small" data-close ng-click=""> {{"create" |translate}}</a>
+                <a class="button small secondary" data-close> {{"cancel_action" |translate}}</a>
+                <a class="button small" data-close ng-click=""> {{"create_action" |translate}}</a>
             </div>
         </div>
     </div>
