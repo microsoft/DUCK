@@ -7,6 +7,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"encoding/json"
 )
 
 //route Handlers
@@ -72,14 +73,17 @@ func putDocHandler(c echo.Context) error {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
-	id := c.Param("id")
-	err = datab.PutDocument(id, resp)
+
+	data := Document{};
+	json.Unmarshal(resp, &data)
+
+	err = datab.PutDocument(data.ID, resp)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	doc, err := datab.GetDocument(id)
+	doc, err := datab.GetDocument(data.ID)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
@@ -261,7 +265,7 @@ func loginHandler(c echo.Context) error {
 			"firstName": user.Firstname,
 			"lastName":  user.Lastname,
 			"id":        user.ID,
-			"locale": 	 user.Locale,
+			"locale":     user.Locale,
 		})
 	}
 	return echo.ErrUnauthorized

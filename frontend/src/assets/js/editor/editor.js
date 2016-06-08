@@ -31,6 +31,10 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     initializeCompletions();
 
+    controller.save = function () {
+        DocumentModel.save();
+    };
+    
     controller.toggleEdit = function (statement) {
         DocumentModel.toggleEdit(statement);
     };

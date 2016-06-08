@@ -8,7 +8,11 @@
                 <a data-open="revertModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href="">
                     <i class="fa fa-1-5x fa-undo"></i> {{"revert"|translate}}
                 </a></li>
-            <li><a ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href=""><i class="fa fa-1-5x fa-save"></i> {{"save"|translate}}</a></li>
+            <li>
+                <a ng-click="editorController.save()" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href="">
+                    <i class="fa fa-1-5x fa-save"></i> {{"save"|translate}}
+                </a>
+            </li>
             <li><a href=""><i class="fa fa-1-5x fa-check-circle-o"></i> {{"validate"|translate}}</a></li>
             <li><a href=""><i class="fa fa-1-5x fa-cloud-download"></i> {{"download"|translate}}</a></li>
         </ul>

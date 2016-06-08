@@ -9,20 +9,20 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
     context.runServer = true;
 
     // local testing 
-    if (!context.runServer) {
-        context.summaries = new Hashtable();
-        context.summaries.put("1", {name: "Customer Document v1", id: "1"});
-
-        context.documents = new Hashtable();
-        context.documents.put("1", {
-            name: "Customer Document v1", id: "1",
-            statements: [{
-                useScope: "the CSP Services", qualifier: "identified", dataCategory: "credentials", sourceScope: "this capability",
-                action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next(),
-                passive: false
-            }]
-        });
-    }
+    // if (!context.runServer) {
+    //     context.summaries = new Hashtable();
+    //     context.summaries.put("1", {name: "Customer Document v1", id: "1"});
+    //
+    //     context.documents = new Hashtable();
+    //     context.documents.put("1", {
+    //         name: "Customer Document v1", id: "1",
+    //         statements: [{
+    //             useScope: "the CSP Services", qualifier: "identified", dataCategory: "credentials", sourceScope: "this capability",
+    //             action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next(),
+    //             passive: false
+    //         }]
+    //     });
+    // }
 
 
     /**
@@ -89,4 +89,49 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             });
         });
     };
+
+    /**
+     * Retrieves a data use statement document authored by the current user.
+     *
+     * @param document the document id
+     * @return the document
+     */
+    this.saveDocument = function (document) {
+        return $q(function (resolve, reject) {
+            var url = "/v1/documents";
+            var documentData = context.createDocumentData(document);
+            //noinspection JSUnusedLocalSymbols
+            $http.put(url, documentData).success(function (data, status, headers, config) {
+                var newDocument = angular.fromJson(data);
+                // update the document revision
+                document._rev = newDocument._rev;
+                resolve(document);
+            }).error(function (data, status, headers, config) {
+                reject(status);
+            });
+        });
+    };
+
+    this.createDocumentData = function(document){
+        var data = {};
+        data.id = document.id;
+        data.locale = document.locale;
+        data.name = document.name;
+        data.owner = document.owner;
+        data.statements = [];
+        document.statements.forEach(function(statement){
+            data.statements.push({
+                trackingId: statement.trackingId,
+                action: statement.action,
+                dataCategory: statement.dataCategory,
+                qualifier: statement.qualifier,
+                resultScope: statement.resultScope,
+                sourceScope: statement.sourceScope,
+                useScope: statement.useScope
+            })
+        });
+        data._rev = document._rev;
+        return data;
+    }
+
 });
