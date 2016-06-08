@@ -21,6 +21,16 @@ homeModule.controller("HomeController", function (DataUseDocumentService, $state
         home.summaries.without(function (summary) {
             return summary.id === documentId;
         });
+    };
+
+    home.createDocument = function (name) {
+        DataUseDocumentService.createDocument(name).then(function (document) {
+            $state.go('main.editor', {documentId: document.id});
+        }, function (error) {
+            //FIXME
+        });
+
+
     }
 
 });

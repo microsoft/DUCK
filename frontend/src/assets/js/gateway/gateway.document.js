@@ -90,6 +90,23 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         });
     };
 
+    this.createDocument = function (name) {
+        return $q(function (resolve, reject) {
+            var url = "/v1/documents";
+            var data = {};
+            data.locale = CurrentUser.locale;
+            data.name = name;
+            data.owner = CurrentUser.id;
+            data.statements = [];
+            $http.post(url, data).success(function (data) {
+                var newDocument = angular.fromJson(data);
+                resolve(newDocument);
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+    };
+
     /**
      * Retrieves a data use statement document authored by the current user.
      *
