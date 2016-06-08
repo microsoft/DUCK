@@ -6,9 +6,9 @@ var gatewayModule = angular.module("duck.gateway");
 gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $http, $q) {
 
     var context = this;
-    context.runServer = false;
+    context.runServer = true;
 
-    // FIXME - remove when server is enabled
+    // local testing 
     if (!context.runServer) {
         context.summaries = new Hashtable();
         context.summaries.put("1", {name: "Customer Document v1", id: "1"});
@@ -23,7 +23,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             }]
         });
     }
-    // FIXME end remove
+    
 
     /**
      * Retrieves summaries for data use statement documents authored by the current user.
@@ -38,7 +38,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             }
             var url = "/v1/documents/" + CurrentUser.id + "/summary";
 
-            // FIXME disable server call until implemented
+            // local testing
             if (!context.runServer) {
                 resolve(context.summaries.values());
                 return;

@@ -140,20 +140,20 @@ function fonts() {
 
 
 // proxy the backend server to support browser reloading
-// function server(done) {
-//     browser.init({
-//         proxy: "localhost:3000",
-//         port: PORT
-//     });
-//     done();
-// }
-
 function server(done) {
     browser.init({
-        server: PATHS.dist, port: PORT
+        proxy: "localhost:3000",
+        port: PORT
     });
     done();
 }
+
+// function server(done) {
+//     browser.init({
+//         server: PATHS.dist, port: PORT
+//     });
+//     done();
+// }
 
 var go;
 

@@ -1,50 +1,46 @@
-[{
-	"_id": "086ad881e3f71ec73fa3fe10e2005398",
-	"owner": "086ad881e3f71ec73fa3fe10e2003f99",
-	"type": "document",
-	"name": "Customer Doc v1",
-	"statements": [{
-		"useScope": "cloud services defined in the services agreement",
-		"qualifier": "account",
-		"dataCategory": "data",
-		"sourceScope": "those cloud services",
-		"action": "provide",
-		"resultScope": "cloud services defined in the service agreement"
-	}, {
-		"useScope": "cloud services defined in the services agreement",
-		"qualifier": "account",
-		"dataCategory": "data",
-		"sourceScope": "those cloud services",
-		"action": "provide",
-		"resultScope": "cloud services defined in the service agreement"
-	}]
-}, 
-{
-	"_id": "086ad881e3f71ec73fa3fe10e2005399",
-	"owner": "086ad881e3f71ec73fa3fe10e2003f99",
-	"type": "document",
-	"name": "Customer Doc v2",
-	"statements": [{
-		"useScope": "cloud services defined in the services agreement",
-		"qualifier": "account",
-		"dataCategory": "data",
-		"sourceScope": "those cloud services",
-		"action": "provide",
-		"resultScope": "cloud services defined in the service agreement"
-	}, {
-		"useScope": "cloud services defined in the services agreement",
-		"qualifier": "account",
-		"dataCategory": "data",
-		"sourceScope": "those cloud services",
-		"action": "provide",
-		"resultScope": "cloud services defined in the service agreement"
-	}]
-},
-{
-   "_id": "086ad881e3f71ec73fa3fe10e2003f99",
-   "type": "user",
-   "email": "duck@example.com",
-   "password": "duck",
-   "firstname": "Dudley",
-   "lastname": "Duck"
-}]
+[
+  {
+    "_id": "086ad881e3f71ec73fa3fe10e2005398",
+    "owner": "086ad881e3f71ec73fa3fe10e2003f99",
+    "type": "document",
+    "name": "Customer Doc v1",
+    "statements": [
+      {
+        "useScope": "the CSP Services",
+        "qualifier": "identified",
+        "dataCategory": "credentials",
+        "sourceScope": "this capability",
+        "action": "provide",
+        "resultScope": "cloud services defined in the service agreement",
+        "trackingId": "111-111-111",
+        "passive": false
+      }
+    ]
+  },
+  {
+    "_id": "086ad881e3f71ec73fa3fe10e2005399",
+    "owner": "086ad881e3f71ec73fa3fe10e2003f99",
+    "type": "document",
+    "name": "Customer Doc v2",
+    "statements": [
+      {
+        "useScope": "the CSP Services",
+        "qualifier": "identified",
+        "dataCategory": "credentials",
+        "sourceScope": "this capability",
+        "action": "provide",
+        "resultScope": "cloud services defined in the service agreement",
+        "trackingId": "222-222-222",
+        "passive": false
+      }
+    ]
+  },
+  {
+    "_id": "086ad881e3f71ec73fa3fe10e2003f99",
+    "type": "user",
+    "email": "duck@example.com",
+    "password": "duck",
+    "firstname": "Dudley",
+    "lastname": "Duck"
+  }
+]

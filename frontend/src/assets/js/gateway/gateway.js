@@ -10,19 +10,19 @@ gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $transl
 
     this.signin = function (username, password) {
         return $q(function (resolve, reject) {
-            // FIXME workaround until backend fixed
-            if (true) {
-                CurrentUser.initialize();
-                if (!CurrentUser.loggedIn) {
-                    CurrentUser.initializeWith({firstName: "Andy", lastName: "Author", id: "123", token: "124", locale: "en"});
-                }
-                $translate.use(CurrentUser.locale).then(function () {
-                    resolve();
-                });
-                return;
-            }
+            // test code
+            // if (false) {
+            //     CurrentUser.initialize();
+            //     if (!CurrentUser.loggedIn) {
+            //         CurrentUser.initializeWith({firstName: "Andy", lastName: "Author", id: "123", token: "124", locale: "en"});
+            //     }
+            //     $translate.use(CurrentUser.locale).then(function () {
+            //         resolve();
+            //     });
+            //     return;
+            // }
 
-            $http.post('/login', {username, password: password}).success(function (data) {
+            $http.post('login', {username, password: password}).success(function (data) {
                 CurrentUser.initializeWith(data);
                 $translate.use(CurrentUser.locale).then(function () {
                     resolve();
