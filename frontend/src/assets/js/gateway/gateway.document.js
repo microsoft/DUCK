@@ -19,11 +19,11 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             statements: [{
                 useScope: "the CSP Services", qualifier: "identified", dataCategory: "credentials", sourceScope: "this capability",
                 action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next(),
-                passive:false
+                passive: false
             }]
         });
     }
-    
+
 
     /**
      * Retrieves summaries for data use statement documents authored by the current user.
@@ -49,6 +49,11 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 var documents = angular.fromJson(data);
                 resolve(documents);
             }).error(function (data, status, headers, config) {
+                if (404 === status) {
+                    // no doc summaries available, resolve an empty array
+                    resolve([]);
+                    return;
+                }
                 reject(status);
             });
         });
@@ -67,7 +72,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             if (!CurrentUser.loggedIn) {
                 $state.go('signin');
             }
-            var url = "/v1/documents/"  + documentId;
+            var url = "/v1/documents/" + documentId;
 
             // disable server call until implemented
             if (!context.runServer) {
