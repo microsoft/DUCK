@@ -22,7 +22,7 @@
   "download": "Herunterladen",
   "delete": "Löschen",
   "edit": "Bearbeiten",
-  "delete_description": "Sind Sie sicher, dass Sie löschen möchten {{home.toDelete.name}}?",
+  "delete_description": "Sind Sie sicher, dass Sie löschen möchten?",
   "create_document": "Dokument erstellen",
   "document_name_placeholder": "Dokumentname",
   "sign_out": "Ausloggen",

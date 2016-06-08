@@ -47,7 +47,7 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 	//documents := api.Group("/documents", middleware.JWT(jwtKey)) //base URI
 	documents.POST("", postDocHandler)                 //create document
 	documents.PUT("", putDocHandler)               //update document
-	documents.DELETE("/:id", deleteDocHandler)         //delete document
+	documents.DELETE("/:docid", deleteDocHandler)         //delete document
 	documents.GET("/:userid/summary", getDocSummaries) //return document summaries for the author
 	documents.GET("/:docid", getDocHandler)            //return document
 

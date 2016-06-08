@@ -43,13 +43,13 @@
 
     <div class="reveal tiny" id="deleteModal" data-reveal data-overlay="false">
         <h4>{{'delete'|translate}}</h4>
-        <div class="row">
+        <div class="row padding-bottom-2">
             {{"delete_description" |translate}}
         </div>
         <div class="row float-right">
             <div class="columns">
                 <a class="button small secondary" data-close>{{"no_action" |translate}}</a>
-                <a class="button small" data-close ng-click="">{{"delete_action" |translate}}</a>
+                <a class="button small" data-close ng-click="home.deleteDocument(home.toDelete.id)">{{"delete_action" |translate}}</a>
             </div>
         </div>
     </div>

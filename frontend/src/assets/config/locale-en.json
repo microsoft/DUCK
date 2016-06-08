@@ -22,7 +22,7 @@
   "download": "Download",
   "delete": "Delete",
   "edit": "Edit",
-  "delete_description": "Are you sure you want to delete {{home.toDelete.name}}?",
+  "delete_description": "Are you sure you want to delete the document?",
   "create_document": "Create Document",
   "document_name_placeholder": "Document name",
   "sign_out": "Sign Out",

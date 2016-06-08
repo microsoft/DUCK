@@ -57,7 +57,7 @@ func getDocHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, doc)
 }
 func deleteDocHandler(c echo.Context) error {
-	err := datab.DeleteDocument(c.Param("id"))
+	err := datab.DeleteDocument(c.Param("docid"))
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})

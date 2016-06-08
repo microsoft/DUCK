@@ -94,7 +94,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
      * Retrieves a data use statement document authored by the current user.
      *
      * @param document the document id
-     * @return the document
+     * @return the request promise
      */
     this.saveDocument = function (document) {
         return $q(function (resolve, reject) {
@@ -112,14 +112,33 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         });
     };
 
-    this.createDocumentData = function(document){
+    /**
+     * Deletes a document.
+     *
+     * @param id the document id
+     * @return the request promise
+     */
+    this.deleteDocument = function (id) {
+        return $q(function (resolve, reject) {
+            var url = "/v1/documents/" + id;
+            $http.delete(url).success(function () {
+                resolve();
+                // FIXME handle errors
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+    };
+
+
+    this.createDocumentData = function (document) {
         var data = {};
         data.id = document.id;
         data.locale = document.locale;
         data.name = document.name;
         data.owner = document.owner;
         data.statements = [];
-        document.statements.forEach(function(statement){
+        document.statements.forEach(function (statement) {
             data.statements.push({
                 trackingId: statement.trackingId,
                 action: statement.action,
