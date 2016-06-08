@@ -39,10 +39,10 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var url = "/v1/documents/" + CurrentUser.id + "/summary";
 
             // local testing
-            if (!context.runServer) {
-                resolve(context.summaries.values());
-                return;
-            }
+            // if (!context.runServer) {
+            //     resolve(context.summaries.values());
+            //     return;
+            // }
 
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {
@@ -74,11 +74,11 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             }
             var url = "/v1/documents/" + documentId;
 
-            // disable server call until implemented
-            if (!context.runServer) {
-                resolve(context.documents.get(documentId));
-                return;
-            }
+            // local testing
+            // if (!context.runServer) {
+            //     resolve(context.documents.get(documentId));
+            //     return;
+            // }
 
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {
