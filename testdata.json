@@ -41,6 +41,16 @@
     "email": "duck@example.com",
     "password": "duck",
     "firstname": "Dudley",
-    "lastname": "Duck"
+    "lastname": "Duck",
+    "locale": "en"
+  },
+  {
+    "_id": "086ad881e3f71ec73fa3fe10e2003a99",
+    "type": "user",
+    "email": "dieter@example.com",
+    "password": "duck",
+    "firstname": "Dieter",
+    "lastname": "Duck",
+    "locale": "de"
   }
 ]

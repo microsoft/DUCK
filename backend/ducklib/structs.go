@@ -6,6 +6,7 @@ type User struct {
 	Password  string   `json:"password"`
 	Firstname string   `json:"firstname"`
 	Lastname  string   `json:"lastname"`
+	Locale	  string   `json:"locale"`
 	Revision  string   `json:"_rev"`
 	Documents []string `json:"documents"`
 }
@@ -30,6 +31,7 @@ func (u *User) fromValueMap(mp map[string]interface{}) {
 	u.Lastname = mp["lastname"].(string)
 	u.Password = mp["password"].(string)
 	u.Email = mp["email"].(string)
+	u.Locale = mp["locale"].(string)
 
 	if docs, prs := mp["documents"].([]interface{}); prs {
 		u.Documents = make([]string, len(docs))
