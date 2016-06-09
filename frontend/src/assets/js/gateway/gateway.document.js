@@ -163,7 +163,8 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 qualifier: statement.qualifier,
                 resultScope: statement.resultScope,
                 sourceScope: statement.sourceScope,
-                useScope: statement.useScope
+                useScope: statement.useScope,
+                passive: statement.passive
             })
         });
         data._rev = document._rev;

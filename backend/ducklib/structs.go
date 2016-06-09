@@ -47,6 +47,7 @@ type Document struct {
 	Name       string      `json:"name"`
 	Revision   string      `json:"_rev"`
 	Owner      string      `json:"owner"`
+	Locale     string      `json:"locale"`
 	Statements []Statement `json:"statements"`
 }
 
@@ -58,6 +59,7 @@ type Statement struct {
 	Action       string `json:"action"`
 	ResultScope  string `json:"resultScope"`
 	TrackingID   string `json:"trackingId"`
+	Passive      bool   `json:"passive"`
 }
 
 func (d *Document) fromValueMap(mp map[string]interface{}) {
@@ -73,6 +75,9 @@ func (d *Document) fromValueMap(mp map[string]interface{}) {
 	}
 	if owner, ok := mp["owner"]; ok {
 		d.Owner = owner.(string)
+	}
+	if locale, ok := mp["locale"]; ok {
+		d.Locale = locale.(string)
 	}
 
 	if stmts, prs := mp["statements"].([]interface{}); prs {
@@ -95,6 +100,7 @@ func (s *Statement) fromInterfaceMap(mp map[string]interface{}) {
 	s.Action = getFieldValue(mp, "action")
 	s.ResultScope = getFieldValue(mp, "resultScope")
 	s.TrackingID = getFieldValue(mp, "trackingId")
+	s.Passive = getFieldBooleanValue(mp, "passive")
 
 }
 func getFieldValue(mp map[string]interface{}, field string) string {
@@ -105,4 +111,14 @@ func getFieldValue(mp map[string]interface{}, field string) string {
 		}
 	}
 	return ""
+}
+
+func getFieldBooleanValue(mp map[string]interface{}, field string) bool {
+
+	if interf, ok := mp[field]; ok {
+		if value, ok := interf.(bool); ok {
+			return value
+		}
+	}
+	return false
 }

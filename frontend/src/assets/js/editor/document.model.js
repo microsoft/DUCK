@@ -34,8 +34,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                     };
                 });
 
-                document.locale = CurrentUser.locale;
-
                 // FIXME create a fake document dictionary for testing
                 document.dictionary = new Hashtable();
                 document.dictionary.put("Foo Service", {value: "Foo Service", type: "scope", subtype: "service", category: "2", dictionaryType: "document"});
