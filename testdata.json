@@ -3,6 +3,7 @@
     "_id": "086ad881e3f71ec73fa3fe10e2005398",
     "owner": "086ad881e3f71ec73fa3fe10e2003f99",
     "type": "document",
+   "locale": "en",
     "name": "Customer Doc v1",
     "statements": [
       {
@@ -21,6 +22,7 @@
     "_id": "086ad881e3f71ec73fa3fe10e2005399",
     "owner": "086ad881e3f71ec73fa3fe10e2003f99",
     "type": "document",
+   "locale": "en",
     "name": "Customer Doc v2",
     "statements": [
       {

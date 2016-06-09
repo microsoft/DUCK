@@ -1,15 +1,12 @@
 package ducklib
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"time"
-
-	"encoding/json"
-
 	"os"
-
 	"path/filepath"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
