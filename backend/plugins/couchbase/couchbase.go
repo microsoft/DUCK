@@ -36,16 +36,18 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Metaform/duck/backend/ducklib"
 	"github.com/Metaform/duck/backend/pluginregistry"
 )
 
-var designDoc = "{\"_id\":\"_design/app\",\"views\":{\"foo\":{\"map\":\"function(doc){ emit(doc._id, doc._rev)}\"}," +
-	"\"by_date\":{\"map\":\"function(doc) { if(doc.date && doc.title) {   emit(doc.date, doc.title);  }}\"}," +
-	"\"user_login\":{\"map\":\"function(doc) { if(doc.type =='user') {   emit(doc.email,  doc.password);  }}\"}," +
-	"\"user\":{\"map\":\"function(doc) { if(doc.type =='user') {   emit(doc._id, doc);  }}\"}," +
-	"\"documents\":{\"map\":\"function(doc) { if(doc.type =='document') {   emit(doc._id, doc);  }}\"}," +
-	"\"documents_by_user\":{\"map\":\"function(doc) { if(doc.type =='document') {   emit([doc.owner, doc._id], doc.name);  }}\"}}," +
-	"\"language\":\"javascript\"}"
+var designDoc = `{"_id":"_design/app","views":{"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
+	`"by_date":{"map":"function(doc) { if(doc.date && doc.title) {   emit(doc.date, doc.title);  }}"},` +
+	`"user_login":{"map":"function(doc) { if(doc.type =='user') {   emit(doc.email,  doc.password);  }}"},` +
+	`"user":{"map":"function(doc) { if(doc.type =='user') {   emit(doc._id, doc);  }}"},` +
+	`"documents":{"map":"function(doc) { if(doc.type =='document') {   emit(doc._id, doc);  }}"},` +
+	`"rulebases":{"map":"function(doc) { if(doc.type =='rulebase') {   emit(doc._id, doc._rev);  }}"},` +
+	`"documents_by_user":{"map":"function(doc) { if(doc.type =='document') {   emit([doc.owner, doc._id], doc.name);  }}"}},` +
+	`"language":"javascript"}`
 
 //Couchbase implements the pluginregistry.DBPlugin interface for the Couchbase Dabase
 type Couchbase struct {
@@ -191,6 +193,38 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) (documents []map
 
 }
 
+//GetRulebases returns a list of all rulebases in the DB
+func (cb *Couchbase) GetRulebases() ([]ducklib.Rulebase, error) {
+	url := fmt.Sprintf("%s/%s/_design/app/_view/rulebases", cb.url, cb.database)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	rows, err := getRows(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	documents := make([]ducklib.Rulebase, len(rows))
+
+	for row, intf := range rows {
+
+		doc := intf.(map[string]interface{})
+		var document ducklib.Rulebase
+
+		document.Name = doc["value"].(string)
+		document.ID = doc["id"].(string)
+		documents[row] = document
+
+	}
+
+	return documents, nil
+
+}
+
 // DeleteDocument deletes a Data Use Document from the Couchbase Database
 func (cb *Couchbase) DeleteDocument(id string, rev string) error {
 	return cb.deleteCbDocument(id, rev)
@@ -283,6 +317,7 @@ func (cb *Couchbase) putEntry(id, entry, entryType string) error {
 
 	if prs && fieldType != entryType {
 		err := fmt.Errorf("Couchbase Document type mismatch. Want %s, got %s", entryType, fieldType)
+		
 		return err
 	}
 

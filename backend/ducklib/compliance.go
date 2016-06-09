@@ -36,9 +36,10 @@ type ComplianceChecker interface {
 		   If there are no errors, nil is returned.  Otherwise an error is returned
 			describing the error.
 	*/
+
 	Check(ruleBase *caes.Theory, document *Document) (*caes.ArgGraph, error)
 
-	isCompliant(ag *caes.ArgGraph) bool
-	nonCompliantDataUseStatements(ag *caes.ArgGraph) []Statement
+	IsCompliant(ag *caes.ArgGraph) bool
+	NonCompliantDataUseStatements(ag *caes.ArgGraph) []Statement
 	Render(ag *caes.ArgGraph, format ArgMapFormat, w io.Writer) error
 }

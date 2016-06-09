@@ -39,10 +39,10 @@
 			"revisionTime": "2016-05-24T21:51:26Z"
 		},
 		{
-			"checksumSHA1": "VLeskEf/Y3eMQFzRMINQXbhvCHE=",
+			"checksumSHA1": "yV+JeF2SkdLNkP0JZ2kSGwx2rHU=",
 			"path": "github.com/labstack/echo/middleware",
-			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
-			"revisionTime": "2016-05-24T21:51:26Z"
+			"revision": "f4088cf59417809ed6292c4dcdcd14cd1a34f738",
+			"revisionTime": "2016-06-09T00:16:03Z"
 		},
 		{
 			"checksumSHA1": "SnErH4s8HFFr39b7WLXO0K+6AMc=",
