@@ -5,10 +5,19 @@ import (
 	"net/http"
 	"time"
 
+	"encoding/json"
+
+	"os"
+
+	"path/filepath"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
-	"encoding/json"
 )
+
+var goPath = os.Getenv("GOPATH")
+
+var testData = filepath.Join(goPath, "/src/github.com/Metaform/duck/testdata.json")
 
 //route Handlers
 
@@ -29,7 +38,7 @@ func getDocSummaries(c echo.Context) error {
 
 func testdataHandler(c echo.Context) error {
 
-	dat, err := ioutil.ReadFile("./testdata.json")
+	dat, err := ioutil.ReadFile(testData)
 
 	var e string
 	if err != nil {
@@ -74,7 +83,7 @@ func putDocHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	data := Document{};
+	data := Document{}
 	json.Unmarshal(resp, &data)
 
 	err = datab.PutDocument(data.ID, resp)
@@ -265,7 +274,7 @@ func loginHandler(c echo.Context) error {
 			"firstName": user.Firstname,
 			"lastName":  user.Lastname,
 			"id":        user.ID,
-			"locale":     user.Locale,
+			"locale":    user.Locale,
 		})
 	}
 	return echo.ErrUnauthorized
