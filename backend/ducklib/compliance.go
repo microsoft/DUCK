@@ -1,7 +1,7 @@
 package ducklib
 
 import (
-	"io"
+	// "io"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
 )
@@ -25,21 +25,31 @@ type ComplianceChecker interface {
 	// If there are no errors, the returned error will be nil.
 	GetTheory(db *Database, ruleBaseId string, revision string) (*caes.Theory, error)
 
-	/* Check does the following:
-		   * Reads the data use document from its given io.Reader
-		   * Translates the data use statements in the document into Carneades assumptions (terms)
-		   * Applies the theory to the assumptions, using the Carneades inference engine,
-		     to construct a Carneades argument graph
-	       * Evaluates the argument graph to label the statements in the graph in, out or undecided.
-		   * Returns the evaluated argument graph
-
-		   If there are no errors, nil is returned.  Otherwise an error is returned
-			describing the error.
+	/*
+		IsCompliant does the following:
+			* Translates the data use statements in the document into Carneades assumptions (terms)
+			* Applies the theory to the assumptions, using the Carneades inference engine,
+			    to construct a Carneades argument graph
+		    * Evaluates the argument graph to label the statements in the graph in, out or undecided.
+			* Returns true if and only if the statement in the argument representing
+			    the proposition that the document is compliant is in.
+		The error returned will be nil if and only if no errors occur this process.
 	*/
+	IsCompliant(ruleBase *caes.Theory, document *Document) (bool, error)
 
-	Check(ruleBase *caes.Theory, document *Document) (*caes.ArgGraph, error)
-
-	IsCompliant(ag *caes.ArgGraph) bool
-	NonCompliantDataUseStatements(ag *caes.ArgGraph) []Statement
-	Render(ag *caes.ArgGraph, format ArgMapFormat, w io.Writer) error
+	/*
+		CompliantDocuments does the following:
+			* Translates the data use statements in the document into Carneades assumptions (terms)
+			* Applies the theory to the assumptions, using the Carneades inference engine,
+			  to construct a Carneades argument graph
+		    * Evaluates the argument graph to label the statements in the graph in, out or undecided.
+			* Returns a channel of pointers to compliant data use documents based on the
+			  input document.  If the input document is compliant, a pointer to it will be returned,
+			  and it will be the only document returned in the channel. If the input document is not
+			  compliant, the documents returned in the channel are based on the input document, with
+			  minimal changes sufficient to achieve compliance. the input document is not modified.
+			  If nil is read from the channel, it is empty and contains no further references to documents.
+		The error returned will be nil if and only if no errors occur this process.
+	*/
+	CompliantDocuments(ruleBase *caes.Theory, document *Document) (chan *Document, error)
 }
