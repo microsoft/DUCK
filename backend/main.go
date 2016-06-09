@@ -12,21 +12,22 @@ import (
 
 var (
 	webDir string
-	jwtKey = []byte("secret")
+	jwtKey string
 )
 
-//loads config & checks if db has to be setup
-func init() {
-	flag.StringVar(&webDir, "webdir", "frontend/dist", "The root directory for serving web content")
 
-}
 
 func main() {
+
+
+	flag.StringVar(&webDir, "webdir", "frontend/dist", "The root directory for serving web content")
+	flag.StringVar(&jwtKey, "JWTSecret", "secret", "The secret used to sign the JWT")
+
 	flag.Parse()
 	//fmt.Println("Web root: " + webDir)
 
 	//set routes
-	e := ducklib.GetServer(webDir, jwtKey)
+	e := ducklib.GetServer(webDir, []byte(jwtKey))
 
 	//start server
 	e.Run(standard.New(":3000"))

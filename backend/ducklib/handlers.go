@@ -29,7 +29,7 @@ func getDocSummaries(c echo.Context) error {
 
 func testdataHandler(c echo.Context) error {
 
-	dat, err := ioutil.ReadFile("testdata.json")
+	dat, err := ioutil.ReadFile("./testdata.json")
 
 	var e string
 	if err != nil {
@@ -256,7 +256,7 @@ func loginHandler(c echo.Context) error {
 		token.Claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
 
 		// Generate encoded token and send it as response.
-		t, err := token.SignedString([]byte("secret"))
+		t, err := token.SignedString([]byte(JWT))
 		if err != nil {
 			return err
 		}

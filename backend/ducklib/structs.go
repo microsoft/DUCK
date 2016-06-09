@@ -6,7 +6,7 @@ type User struct {
 	Password  string   `json:"password"`
 	Firstname string   `json:"firstname"`
 	Lastname  string   `json:"lastname"`
-	Locale	  string   `json:"locale"`
+	Locale    string   `json:"locale"`
 	Revision  string   `json:"_rev"`
 	Documents []string `json:"documents"`
 }
@@ -24,14 +24,27 @@ type Login struct {
 
 func (u *User) fromValueMap(mp map[string]interface{}) {
 
-	u.ID = mp["_id"].(string)
-	u.Revision = mp["_rev"].(string)
-
-	u.Firstname = mp["firstname"].(string)
-	u.Lastname = mp["lastname"].(string)
-	u.Password = mp["password"].(string)
-	u.Email = mp["email"].(string)
-	u.Locale = mp["locale"].(string)
+	if id, ok := mp["_id"]; ok {
+		u.ID = id.(string)
+	}
+	if rev, ok := mp["_rev"]; ok {
+		u.Revision = rev.(string)
+	}
+	if name, ok := mp["firstname"]; ok {
+		u.Firstname = name.(string)
+	}
+	if owner, ok := mp["lastname"]; ok {
+		u.Lastname = owner.(string)
+	}
+	if owner, ok := mp["password"]; ok {
+		u.Password = owner.(string)
+	}
+	if owner, ok := mp["email"]; ok {
+		u.Email = owner.(string)
+	}
+	if locale, ok := mp["locale"]; ok {
+		u.Locale = locale.(string)
+	}
 
 	if docs, prs := mp["documents"].([]interface{}); prs {
 		u.Documents = make([]string, len(docs))
@@ -40,6 +53,12 @@ func (u *User) fromValueMap(mp map[string]interface{}) {
 		}
 	}
 
+}
+
+type Rulebase struct {
+	Name     string `json:"name"`
+	ID       string `json:"id"`
+	Revision string `json:"_rev"`
 }
 
 type Document struct {
