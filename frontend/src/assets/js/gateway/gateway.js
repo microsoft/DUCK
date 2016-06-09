@@ -56,7 +56,7 @@ gatewayModule.config(["$httpProvider", function ($httpProvider, $injector) {
                 }
                 var CurrentUser = $injector.get("CurrentUser");
                 if (CurrentUser.token != null) {
-                    config.headers["X-Authorization"] = CurrentUser.token;
+                    config.headers["Authorization"] = "Bearer " + CurrentUser.token;
                 }
                 return config;
             },
