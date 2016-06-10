@@ -16,7 +16,7 @@ const (
 
 type Canceller chan struct{}
 
-func makeCanceller() Canceller {
+func MakeCanceller() Canceller {
 	return make(chan struct{})
 }
 
@@ -61,7 +61,7 @@ type ComplianceChecker interface {
 			  The coroutine closes the channel when it has finished the search for compliant documents.
 		An error will be returned only if was not possible to check the compliance of the input document,
 		before starting the coroutine to search for compliant alternatives.
-		The caller must bind c to a newly constructed Canceller, with makeCanceller().
+		The caller must bind c to a newly constructed Canceller, with MakeCanceller().
 		If no error is returned (i.e. error is nil) the caller should call c.Cancel() when no further
 		documents are needed, to cause the coroutine to be terminated.
 
