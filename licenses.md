@@ -9,4 +9,5 @@ This document tracks third-party software distributed by this project:
 - Fuse.js [http://kiro.me/projects/fuse.html]
 - Mass AutoComplete [http://hakib.github.io/MassAutocomplete/]
 - Elastic Input [http://jacek-pulit.github.io/angular-elastic-input/]
+- CouchDB [https://www.apache.org/licenses/LICENSE-2.0]
 
