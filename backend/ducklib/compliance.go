@@ -14,6 +14,16 @@ const (
 	GraphML
 )
 
+type Canceller chan struct{}
+
+func makeCanceller() Canceller {
+	return make(chan struct{})
+}
+
+func (c Canceller) Cancel() {
+	close(c)
+}
+
 // A ComplianceChecker manages communication between the DUCK Web Server and
 // the Carneades Argumentation System
 
@@ -43,13 +53,18 @@ type ComplianceChecker interface {
 			* Applies the theory to the assumptions, using the Carneades inference engine,
 			  to construct a Carneades argument graph
 		    * Evaluates the argument graph to label the statements in the graph in, out or undecided.
-			* Returns a channel of pointers to compliant data use documents based on the
-			  input document.  If the input document is compliant, a pointer to it will be returned,
+			* Starts a coroutine to search for compliant data use documents and returns a channel of pointers
+			  to the compliant documents found. If the input document is compliant, a pointer to it will be returned,
 			  and it will be the only document returned in the channel. If the input document is not
 			  compliant, the documents returned in the channel are based on the input document, with
-			  minimal changes sufficient to achieve compliance. the input document is not modified.
-			  If nil is read from the channel, it is empty and contains no further references to documents.
-		The error returned will be nil if and only if no errors occur this process.
+			  minimal changes sufficient to achieve compliance. The input document is not modified.
+			  The coroutine closes the channel when it has finished the search for compliant documents.
+		An error will be returned only if was not possible to check the compliance of the input document,
+		before starting the coroutine to search for compliant alternatives.
+		The caller must bind c to newly constructed Canceller, with makeCanceller().
+		If no error is returned (i.e. error is nil) the caller should call c.Cancel() when no further
+		documents are needed, to cause the coroutine to be terminated.
+
 	*/
-	CompliantDocuments(ruleBase *caes.Theory, document *Document) (chan *Document, error)
+	CompliantDocuments(ruleBase *caes.Theory, document *Document, c Canceller) (<-chan *Document, error)
 }
