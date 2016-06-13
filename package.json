@@ -47,10 +47,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Metaform/duck.git"
+    "url": "https://github.com/Microsoft/DUCK.git"
   },
   "bugs": {
-    "url": "https://github.com/Metaform/duck/issues",
+    "url": "https://github.com/Microsoft/DUCK/issues",
     "email": "jmarino@metaformsystems.com"
   },
   "private": true

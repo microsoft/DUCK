@@ -33,7 +33,7 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 	e.Use(middleware.LoggerWithConfig(LoggerConfig))
 	e.Use(middleware.Recover())
 
-	//username: duck  password:duck
+	
 	e.POST("/login", loginHandler)
 	e.GET("/loadtestdata", testdataHandler)
 	//create sub-router for api functions
@@ -56,12 +56,12 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 	documents.GET("/:docid", getDocHandler)                      //return document
 
 	//ruleset resources
-	rulesets := api.Group("/rulesets", middleware.JWT(jwtKey))  //base URI
-	rulesets.POST("/", postRsHandler)                           //create a ruleset
-	rulesets.DELETE("/:id", deleteRsHandler)                    //delete a ruleset
-	rulesets.PUT("/:setid", putRsHandler)                       //update a ruleset
-	rulesets.PUT("/:setid/documents", helloHandler)             //process provided document against ruleset
-	rulesets.PUT("/:setid/documents/:documentid", helloHandler) //process document against ruleset
+	rulesets := api.Group("/rulesets", middleware.JWT(jwtKey))       //base URI
+	rulesets.POST("/", postRsHandler)                                //create a ruleset
+	rulesets.DELETE("/:id", deleteRsHandler)                         //delete a ruleset
+	rulesets.PUT("/:setid", putRsHandler)                            //update a ruleset
+	rulesets.PUT("/:setid/documents", checkDocHandler)               //process provided document against ruleset
+	rulesets.PUT("/:setid/documents/:documentid", checkDocIDHandler) //process document against ruleset
 
 	// serves the static files
 	e.Static("/", webDir)

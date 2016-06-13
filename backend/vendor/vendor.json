@@ -3,7 +3,7 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "CqzlzLU0gOWcLognKKpa9jSslas=",
+			"checksumSHA1": "0Qa6wqFgYj03I5zu5U8OoNPuJlE=",
 			"path": "github.com/carneades/carneades-4/src/engine/caes",
 			"revision": "50c849b6d4e0595a0d1ad7e7a419669f21205274",
 			"revisionTime": "2016-03-30T21:29:41Z"
@@ -15,52 +15,58 @@
 			"revisionTime": "2016-03-30T21:29:41Z"
 		},
 		{
-			"checksumSHA1": "XYxZEScqPha5TmAkwWZzLVNMp7I=",
+			"checksumSHA1": "QuS/tkVlwzYDM+muHnFamN9BpOY=",
 			"path": "github.com/dgrijalva/jwt-go",
-			"revision": "a2c85815a77d0f951e33ba4db5ae93629a1530af",
-			"revisionTime": "2016-04-13T00:36:00Z"
+			"revision": "c04502f106d7c5b3fae17c5da49a1bbdd3006b3c",
+			"revisionTime": "2016-06-07T00:56:07Z"
 		},
 		{
-			"checksumSHA1": "taXglffn9JFkWwv0NXvr7MVN1LY=",
+			"checksumSHA1": "zOJWEvu3RnEhBtRzpJHbvdzgTAs=",
 			"path": "github.com/labstack/echo",
-			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
-			"revisionTime": "2016-05-24T21:51:26Z"
+			"revision": "6e183fd3d8063a14da04fa4439c52fb6b84d1cdb",
+			"revisionTime": "2016-06-12T17:49:03Z"
 		},
 		{
-			"checksumSHA1": "KM0fkl1GnJVJHD9Iz8n9Jzz9guY=",
+			"checksumSHA1": "Fe5zLgBs4mqIDpMtl28nwOBd7ts=",
 			"path": "github.com/labstack/echo/engine",
-			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
-			"revisionTime": "2016-05-24T21:51:26Z"
+			"revision": "6e183fd3d8063a14da04fa4439c52fb6b84d1cdb",
+			"revisionTime": "2016-06-12T17:49:03Z"
 		},
 		{
-			"checksumSHA1": "7crfTYKbzmfW6c9qZAA9WUn0rzA=",
+			"checksumSHA1": "61cNE4a3S0ML3EVkr0ziskAy4+g=",
 			"path": "github.com/labstack/echo/engine/standard",
-			"revision": "7a66f226f2651f03dda0aaad9f3486bdf08247f6",
-			"revisionTime": "2016-05-24T21:51:26Z"
+			"revision": "6e183fd3d8063a14da04fa4439c52fb6b84d1cdb",
+			"revisionTime": "2016-06-12T17:49:03Z"
+		},
+		{
+			"checksumSHA1": "iDCjk9XfJyeiobpsw3E1UXXde/0=",
+			"path": "github.com/labstack/echo/log",
+			"revision": "6e183fd3d8063a14da04fa4439c52fb6b84d1cdb",
+			"revisionTime": "2016-06-12T17:49:03Z"
 		},
 		{
 			"checksumSHA1": "yV+JeF2SkdLNkP0JZ2kSGwx2rHU=",
 			"path": "github.com/labstack/echo/middleware",
-			"revision": "f4088cf59417809ed6292c4dcdcd14cd1a34f738",
-			"revisionTime": "2016-06-09T00:16:03Z"
+			"revision": "6e183fd3d8063a14da04fa4439c52fb6b84d1cdb",
+			"revisionTime": "2016-06-12T17:49:03Z"
 		},
 		{
-			"checksumSHA1": "SnErH4s8HFFr39b7WLXO0K+6AMc=",
+			"checksumSHA1": "8ulgQ4ebz69LsRQlpokdyTzByWE=",
 			"path": "github.com/labstack/gommon/bytes",
-			"revision": "2e62be24dbb1ceb226554aaccfe5a89ec71043b3",
-			"revisionTime": "2016-04-30T23:27:34Z"
+			"revision": "722aa12d41c236ce78ff48eac1cafe0107ecdc9d",
+			"revisionTime": "2016-06-09T00:12:06Z"
 		},
 		{
 			"checksumSHA1": "LnzDopuGp/VMkmtInf+Mka8yPz8=",
 			"path": "github.com/labstack/gommon/color",
-			"revision": "2e62be24dbb1ceb226554aaccfe5a89ec71043b3",
-			"revisionTime": "2016-04-30T23:27:34Z"
+			"revision": "722aa12d41c236ce78ff48eac1cafe0107ecdc9d",
+			"revisionTime": "2016-06-09T00:12:06Z"
 		},
 		{
-			"checksumSHA1": "8btg474B4jCYrXe2/ss8CXJVr5g=",
+			"checksumSHA1": "r4J4id71l7oDhFHaphKiE6y1dFk=",
 			"path": "github.com/labstack/gommon/log",
-			"revision": "2e62be24dbb1ceb226554aaccfe5a89ec71043b3",
-			"revisionTime": "2016-04-30T23:27:34Z"
+			"revision": "722aa12d41c236ce78ff48eac1cafe0107ecdc9d",
+			"revisionTime": "2016-06-09T00:12:06Z"
 		},
 		{
 			"checksumSHA1": "eCAikaJ4Ygh1/jMDyxSbOmYse1Y=",
@@ -75,10 +81,10 @@
 			"revisionTime": "2015-12-11T00:06:21Z"
 		},
 		{
-			"checksumSHA1": "D2IsfkXQxAC6p640ryuaPwyCxTs=",
+			"checksumSHA1": "fgyDM9Odw6A4Bfp+nWBNj41tLRQ=",
 			"path": "github.com/twinj/uuid",
-			"revision": "89173bcdda19db0eb88aef1e1cb1cb2505561d31",
-			"revisionTime": "2015-10-29T04:44:42Z"
+			"revision": "efdcd76832e734957d69572853134c530ed3eacb",
+			"revisionTime": "2016-06-05T07:55:34Z"
 		},
 		{
 			"checksumSHA1": "kLYNAx9DYk4W/OuC6dl6W1yLaSk=",
@@ -93,5 +99,5 @@
 			"revisionTime": "2016-04-28T06:05:50Z"
 		}
 	],
-	"rootPath": "github.com/Metaform/duck/backend"
+	"rootPath": "github.com/Microsoft/DUCK/backend"
 }

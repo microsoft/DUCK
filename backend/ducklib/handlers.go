@@ -13,8 +13,7 @@ import (
 )
 
 var goPath = os.Getenv("GOPATH")
-
-var testData = filepath.Join(goPath, "/src/github.com/Metaform/duck/testdata.json")
+var testData = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/testdata.json")
 
 //route Handlers
 
@@ -51,7 +50,6 @@ func testdataHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, Response{Ok: true})
 }
-
 
 /*
 Document handlers
@@ -233,6 +231,23 @@ func postRsHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
+	return c.JSON(http.StatusOK, doc)
+}
+func checkDocHandler(c echo.Context) error {
+	//id := c.Param("setid")
+
+	return c.JSON(http.StatusOK, Response{Ok: true})
+}
+
+func checkDocIDHandler(c echo.Context) error {
+	//id := c.Param("setid")
+	docid := c.Param("documentid")
+
+	doc, err := datab.GetDocument(docid)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
 	return c.JSON(http.StatusOK, doc)
 }
 

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Metaform/duck/backend/pluginregistry"
+	"github.com/Microsoft/DUCK/backend/pluginregistry"
 	"github.com/twinj/uuid"
 )
 

@@ -36,8 +36,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Metaform/duck/backend/ducklib"
-	"github.com/Metaform/duck/backend/pluginregistry"
+	"github.com/Microsoft/DUCK/backend/ducklib"
+	"github.com/Microsoft/DUCK/backend/pluginregistry"
 )
 
 var designDoc = `{"_id":"_design/app","views":{"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +

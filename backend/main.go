@@ -5,9 +5,9 @@ import (
 
 	"github.com/labstack/echo/engine/standard"
 
-	"github.com/Metaform/duck/backend/ducklib"
+	"github.com/Microsoft/DUCK/backend/ducklib"
 	//Database lugin, change this if you have another Plugin/database
-	_ "github.com/Metaform/duck/backend/plugins/couchbase"
+	_ "github.com/Microsoft/DUCK/backend/plugins/couchbase"
 )
 
 var (
@@ -15,10 +15,7 @@ var (
 	jwtKey string
 )
 
-
-
 func main() {
-
 
 	flag.StringVar(&webDir, "webdir", "frontend/dist", "The root directory for serving web content")
 	flag.StringVar(&jwtKey, "JWTSecret", "secret", "The secret used to sign the JWT")

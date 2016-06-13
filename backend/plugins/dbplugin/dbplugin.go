@@ -1,19 +1,16 @@
 package dbplugin
 
-import (
-	"fmt"
-
-	"github.com/Metaform/duck/backend/pluginregistry"
-)
+import "fmt"
 
 type MyDatabase struct {
 }
 
 func (mdb *MyDatabase) Init(url string) error {
 	fmt.Println("Testextension initialized")
+	return nil
 }
 
 func init() {
-	db := &MyDatabase{}
-	pluginregistry.RegisterDatabase(db)
+	//db := &MyDatabase{}
+	//pluginregistry.RegisterDatabase(db)
 }
