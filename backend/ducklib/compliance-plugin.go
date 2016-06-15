@@ -2,6 +2,7 @@ package ducklib
 
 import (
 	"fmt"
+	"io"
 	"os"
 	// "path/filepath"
 )
@@ -53,11 +54,22 @@ func (c ComplianceCheckerPlugin) Shutdown() {
 	// Nothing to do
 }
 
+// ruleBaseReader: returns a reader for reading the JSON source file of the
+// rulebase with the given id
+func ruleBaseReader(ruleBaseId string) io.Reader {
+	// ToDo
+	return nil
+}
+
 // IsCompliant: returns true iff the document complies with the rules in the given
 // rulebase.  An error is returned if document has syntax errors and cannot be parsed.
 func (c ComplianceCheckerPlugin) IsCompliant(ruleBaseId string, document *Document) (bool, error) {
-	// ToDo
-	return true, nil
+	r := ruleBaseReader(ruleBaseId)
+	theory, err := c.checker.GetTheory(ruleBaseId, "irrelevant", r)
+	if err != nil {
+		return false, err
+	}
+	return c.checker.IsCompliant(theory, document)
 }
 
 // CompliantDocuments: returns true iff the document complies with the rules in the given
