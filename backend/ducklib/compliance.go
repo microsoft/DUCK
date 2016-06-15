@@ -8,14 +8,6 @@ import (
 	cjson "github.com/carneades/carneades-4/src/engine/caes/encoding/json"
 )
 
-type ArgMapFormat int
-
-const (
-	SVG ArgMapFormat = iota
-	PNG
-	GraphML
-)
-
 type Canceller chan struct{}
 
 func MakeCanceller() Canceller {
