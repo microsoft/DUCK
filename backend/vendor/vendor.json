@@ -97,6 +97,12 @@
 			"path": "golang.org/x/net/context",
 			"revision": "35ec611a141ee705590b9eb64d673f9e6dfeb1ac",
 			"revisionTime": "2016-04-28T06:05:50Z"
+		},
+		{
+			"checksumSHA1": "rO5YE+IAvD4J9Las822E4YND1vc=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "a83829b6f1293c91addabc89d0571c246397bbf4",
+			"revisionTime": "2016-03-01T20:40:22Z"
 		}
 	],
 	"rootPath": "github.com/Microsoft/DUCK/backend"
