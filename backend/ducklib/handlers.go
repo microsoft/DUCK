@@ -180,6 +180,8 @@ func postUserHandler(c echo.Context) error {
 Ruleset handlers
 */
 
+//DB rulesethandlers are not used 
+/*
 func deleteRsHandler(c echo.Context) error {
 	err := datab.DeleteRuleset(c.Param("id"))
 	if err != nil {
@@ -212,6 +214,7 @@ func putRsHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, doc)
 }
+
 func postRsHandler(c echo.Context) error {
 
 	req, err := ioutil.ReadAll(c.Request().Body())
@@ -233,6 +236,7 @@ func postRsHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, doc)
 }
+*/
 func checkDocHandler(c echo.Context) error {
 	//id := c.Param("setid")
 
