@@ -1,4 +1,4 @@
-package couchbase
+package couchdb
 
 /*
 implement following functions:
@@ -317,7 +317,7 @@ func (cb *Couchbase) putEntry(id, entry, entryType string) error {
 
 	if prs && fieldType != entryType {
 		err := fmt.Errorf("Couchbase Document type mismatch. Want %s, got %s", entryType, fieldType)
-		
+
 		return err
 	}
 

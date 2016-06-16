@@ -7,7 +7,7 @@ import (
 
 	"github.com/Microsoft/DUCK/backend/ducklib"
 	//Database lugin, change this if you have another Plugin/database
-	_ "github.com/Microsoft/DUCK/backend/plugins/couchbase"
+	_ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
 )
 
 var (
@@ -21,7 +21,6 @@ func main() {
 	flag.StringVar(&jwtKey, "JWTSecret", "secret", "The secret used to sign the JWT")
 
 	flag.Parse()
-	//fmt.Println("Web root: " + webDir)
 
 	//set routes
 	e := ducklib.GetServer(webDir, []byte(jwtKey))
