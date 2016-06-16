@@ -17,12 +17,12 @@ type DBPlugin interface {
 	UpdateDocument(id string, entry string) error
 	DeleteDocument(id string, rev string) error
 
-	//GetRuleset(id string) (document map[string]interface{}, err error)
-	//NewRuleset(id string, entry string) error
-	//UpdateRuleset(id string, entry string) error
-	//DeleteRuleset(id string, rev string) error
+	GetRuleset(id string) (document map[string]interface{}, err error)
+	NewRuleset(id string, entry string) error
+	UpdateRuleset(id string, entry string) error
+	DeleteRuleset(id string, rev string) error
 
-	//GetStatement(id string) (document map[string]interface{}, err error)
+	GetStatement(id string) (document map[string]interface{}, err error)
 }
 
 // DatabasePlugin is the Plugin

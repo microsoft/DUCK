@@ -81,16 +81,16 @@ func (c ComplianceCheckerPlugin) IsCompliant(ruleBaseId string, document *Docume
 // for compliant documents is restarted each time CompliantDocuments is called, no matter
 // what the offset is.
 func (c ComplianceCheckerPlugin) CompliantDocuments(ruleBaseId string, document *Document, maxResults int, offset int) (bool, []*Document, error) {
-	r := ruleBaseReader(ruleBaseId)
-	theory, err := c.checker.GetTheory(ruleBaseId, "irrelevant", r)
-	if err != nil {
-		return false, nil, err
-	}
-	cncl := MakeCanceller()
-	compliant, docs, err := c.checker.CompliantDocuments(theory, document, cncl)
-	if compliant {
-		return true, nil, nil
-	}
+	//r := ruleBaseReader(ruleBaseId)
+	//theory, err := c.checker.GetTheory(ruleBaseId, "irrelevant", r)
+	//if err != nil {
+	//	return false, nil, err
+	//}
+	//cncl := MakeCanceller()
+	//compliant, docs, err := c.checker.CompliantDocuments(theory, document, cncl)
+	//if compliant {
+	//	return true, nil, nil
+	//}
 	// ToDo
 	// Get at most maxResults from the docs channel, skippint the offset amount and then
 	// call c.Cancel() to cancel the search for other compliant documents and
