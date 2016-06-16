@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
-	cjson "github.com/carneades/carneades-4/src/engine/caes/encoding/json"
+	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
 
 type Canceller chan struct{}
@@ -43,7 +43,7 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 	if notFound || revision != vt.revision {
 		// Compile the rulebase, update the theory cache and return the
 		// theory.  Or return an error if the rulebase cannot be compiled.
-		ag, err := cjson.Import(rbSrc)
+		ag, err := y.Import(rbSrc)
 		if err != nil {
 			return nil, err
 		}
@@ -96,9 +96,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Document) 
 		} else {
 			passive = false
 		}
-		stmtId := fmt.Sprintf("dataUseStatement(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-			s.UseScope,
-			s.Qualifier,
+		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s))",
 			s.UseScope,
 			s.Qualifier,
 			s.DataCategory,
