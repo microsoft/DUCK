@@ -188,7 +188,7 @@ func (database *Database) PostDocument(content []byte) (string, error) {
 /*
 Ruleset DB operations
 */
-
+/*
 func (database *Database) GetRuleset(id string) (User, error) {
 	var u User
 	mp, err := db.GetRuleset(id)
@@ -233,3 +233,4 @@ func (database *Database) PostRuleset(content []byte) (string, error) {
 	return uuid, db.NewRuleset(uuid, string(content))
 
 }
+*/

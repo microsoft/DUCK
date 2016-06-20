@@ -492,12 +492,6 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 	return true, nil
 }
 
-
-
-func (cb *Couchbase) GetStatement(id string) (document map[string]interface{}, err error)  {
-	return nil, nil;
-}
-
 func init() {
 
 	db := &Couchbase{}
