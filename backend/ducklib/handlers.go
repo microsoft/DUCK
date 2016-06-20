@@ -264,7 +264,7 @@ func checkDocIDHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	ok, err := Checker.IsCompliant(id, doc)
+	ok, err := Checker.IsCompliant(id, &doc)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
