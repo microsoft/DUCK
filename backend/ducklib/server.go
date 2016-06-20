@@ -1,6 +1,7 @@
 package ducklib
 
 import (
+	"github.com/Microsoft/DUCK/backend/ducklib"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -12,13 +13,25 @@ var datab *Database
 //JWT contains the JWT secret
 var JWT []byte
 
+// Checker is a ComplianceCheckerPlugin
+var Checker ComplianceCheckerPlugin
+
 //GetServer returns Echo instance with predefined routes
-func GetServer(webDir string, jwtKey []byte) *echo.Echo {
+func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 
 	datab = NewDatabase()
 	datab.Init()
 
 	JWT = jwtKey
+
+	Checker, err := ducklib.MakeComplianceCheckerPlugin(ruleBaseDir)
+	if err != nil {
+		return err
+	}
+	err = Checker.Intialize()
+	if err != nil {
+		return err
+	}
 	//New echo instance
 	e := echo.New()
 
@@ -59,8 +72,8 @@ func GetServer(webDir string, jwtKey []byte) *echo.Echo {
 	//rulesets.POST("/", postRsHandler)                                //create a ruleset
 	//rulesets.DELETE("/:id", deleteRsHandler)                         //delete a ruleset
 	//rulesets.PUT("/:setid", putRsHandler)                            //update a ruleset
-	rulesets.PUT("/:setid/documents", checkDocHandler)               //process provided document against ruleset
-	rulesets.PUT("/:setid/documents/:documentid", checkDocIDHandler) //process document against ruleset
+	rulesets.PUT("/:baseid/documents", checkDocHandler)               //process provided document against ruleset
+	rulesets.PUT("/:baseid/documents/:documentid", checkDocIDHandler) //process document against ruleset
 
 	// serves the static files
 	e.Static("/", webDir)

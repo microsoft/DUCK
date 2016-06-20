@@ -180,7 +180,7 @@ func postUserHandler(c echo.Context) error {
 Ruleset handlers
 */
 
-//DB rulesethandlers are not used 
+//DB rulesethandlers are not used
 /*
 func deleteRsHandler(c echo.Context) error {
 	err := datab.DeleteRuleset(c.Param("id"))
@@ -238,13 +238,24 @@ func postRsHandler(c echo.Context) error {
 }
 */
 func checkDocHandler(c echo.Context) error {
-	//id := c.Param("setid")
+	id := c.Param("baseid")
 
-	return c.JSON(http.StatusOK, Response{Ok: true})
+	doc := new(Document)
+	if err := c.Bind(doc); err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
+	ok, err := Checker.IsCompliant(id, doc)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, Response{Ok: ok})
 }
 
 func checkDocIDHandler(c echo.Context) error {
-	//id := c.Param("setid")
+	id := c.Param("baseid")
 	docid := c.Param("documentid")
 
 	doc, err := datab.GetDocument(docid)
@@ -252,7 +263,15 @@ func checkDocIDHandler(c echo.Context) error {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
-	return c.JSON(http.StatusOK, doc)
+
+	ok, err := Checker.IsCompliant(id, doc)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, Response{Ok: ok})
+
 }
 
 // loginHandler handles the login Process
