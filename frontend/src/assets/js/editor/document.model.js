@@ -26,23 +26,24 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.initialize = function (documentId) {
         return $q(function (resolve) {
-            DataUseDocumentService.getDocument(documentId).then(function (document) {
-                document.statements.forEach(function (statement) {
-                    statement.errors = {
-                        useScope: {active: false, level: null, action: false},
-                        action: {active: false, level: null, action: false}
-                    };
-                });
-
+            DataUseDocumentService.getDocument(documentId).then(function (useDocument) {
                 // FIXME create a fake document dictionary for testing
-                document.dictionary = new Hashtable();
-                document.dictionary.put("Foo Service", {value: "Foo Service", type: "scope", subtype: "service", category: "2", dictionaryType: "document"});
+                context.document = useDocument;
+                context.document.dictionary = new Hashtable();
+                context.document.dictionary.put("Foo Service", {value: "Foo Service", type: "scope", code: "service", category: "2", dictionaryType: "document"});
 
-                context.document = document;
                 context.dirty = false;
 
                 // configure the taxonomy service with the global and document dictionaries as the document will be edited.
                 TaxonomyService.activate([GlobalDictionary.getDictionary(), context.document.dictionary.values()]);
+
+                context.document.statements.forEach(function (statement) {
+                    statement.errors = {
+                        useScope: {active: false, level: null, action: false},
+                        action: {active: false, level: null, action: false}
+                    };
+                    console.log(TaxonomyService.findCode("scope", statement.useScope, context.document.locale));
+                });
 
                 // callback
                 resolve();
@@ -115,18 +116,18 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     /**
      * Adds a new term to either the global or document dictionary.
      * @param type the ISO type
-     * @param subtype the subtype category
+     * @param code the code
      * @param category category
      * @param value the term value
      * @param dictionaryType the type of dictionary, e.g. global or document
      */
-    this.addTerm = function (type, subtype, category, value, dictionaryType) {
+    this.addTerm = function (type, code, category, value, dictionaryType) {
         if (dictionaryType === "document") {
-            context.document.dictionary.put(value, {value: value, type: type, subtype: subtype, category: category, dictionaryType: "document"});
+            context.document.dictionary.put(value, {value: value, type: type, code: code, category: category, dictionaryType: "document"});
         } else {
-            GlobalDictionary.addTerm(type, $scope.newCategory.subtype, $scope.newTermValue);
+            GlobalDictionary.addTerm(type, $scope.newCategory.code, $scope.newTermValue);
         }
-        TaxonomyService.addTerm(type, subtype, category, value, dictionaryType);
+        TaxonomyService.addTerm(type, code, category, value, dictionaryType);
     };
 
     this.makePassive = function (statement) {

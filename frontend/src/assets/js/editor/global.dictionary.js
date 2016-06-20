@@ -17,13 +17,13 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
         return dictionary.get(value);
     };
 
-    this.addTerm = function (type, subtype, category, value) {
+    this.addTerm = function (type, code, category, value) {
         context.initialize();
-        context.dictionary.put(value, {value: value, type: type, subtype: subtype, category: category, dictionaryType: "global"});
+        context.dictionary.put(value, {value: value, type: type, code: code, category: category, dictionaryType: "global"});
         // FIXME update server
     };
 
-    this.removeTerm = function (type, subtype, value) {
+    this.removeTerm = function (type, code, value) {
         context.initialize();
         context.dictionary.remove(value);
         // FIXME implement server delete
@@ -35,7 +35,7 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
             return;
         }
         context.dictionary = new Hashtable();
-        context.dictionary.put("Microsoft Azure", {value: "Microsoft Azure", type: "scope", subtype: "service", category: "2", dictionaryType: "global"})
+        context.dictionary.put("Microsoft Azure", {value: "Microsoft Azure", type: "scope", code: "service", category: "2", dictionaryType: "global"})
     }
 
 });

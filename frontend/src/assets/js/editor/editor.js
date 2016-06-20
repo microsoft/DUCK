@@ -301,7 +301,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     controller.addTerm = function () {
         var dictionaryType = controller.newTerm.dictionary ? "document" : "global";
-        DocumentModel.addTerm($scope.currentFieldType, controller.newTerm.category.subtype, controller.newTerm.category.category, controller.newTerm.value, dictionaryType);
+        DocumentModel.addTerm($scope.currentFieldType, controller.newTerm.category.code, controller.newTerm.category.category, controller.newTerm.value, dictionaryType);
         var statement = DocumentModel.getCurrentStatement();
         statement[$scope.currentField] = controller.newTerm.value;
         DocumentModel.clearCurrentStatement();

@@ -53,7 +53,32 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
         typeCache.put(locale, {entries: entries, values: values, fuse: fuse});
     };
 
+    this.findTerm = function (type, code, locale) {
+        var symbolTable = context.getSymbolTable(type, locale);
+        if (symbolTable === null) {
+            return null;
+        }
+        for (var i = 0; i < symbolTable.entries.length; i++) {
+            if (symbolTable.entries[i].code  === code) {
+                return symbolTable.entries[i].value;
+            }
+        }
+        return null;
+    };
 
+    this.findCode = function (type, term, locale) {
+        var symbolTable = context.getSymbolTable(type, locale);
+        if (symbolTable === null) {
+            return null;
+        }
+        for (var i = 0; i < symbolTable.entries.length; i++) {
+            if (symbolTable.entries[i].value  === term) {
+                return symbolTable.entries[i].code;
+            }
+        }
+        return null;
+    };
+    
     /**
      * Performs a fuzzy lookup of a set of values matching the given term.
      *
@@ -67,13 +92,10 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
         if (!term) {
             return [];
         }
-        var typeCache = context.cache.get(type);
-        if (typeCache == null) {
-            $log.error("Unknown symbol type: " + type);
-            return;
+        var symbolTable = context.getSymbolTable(type, locale);
+        if (symbolTable === null) {
+            return null;
         }
-
-        var symbolTable = typeCache.get(locale);
         if (symbolTable == null) {
             $log.error("Unknown locale when looking up symbol type '" + type + "': " + locale);
             return;
@@ -86,7 +108,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                     value: entry.value,
                     label: context.formatLabel(entry),
                     dictionary: entry.dictionary,
-                    subtype: entry.subtype,
+                    code: entry.code,
                     category: entry.category,
                     fixed: entry.fixed
                 });
@@ -108,7 +130,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                     value: entry.value,
                     label: label,
                     dictionary: entry.dictionary,
-                    subtype: entry.subtype,
+                    code: entry.code,
                     category: entry.category,
                     fixed: entry.fixed
                 };
@@ -144,23 +166,23 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
     /**
      * Adds a new term to the taxonomy.
      * @param type the ISO type
-     * @param subtype the subtype category
+     * @param code the code category
      * @param category category
      * @param value the term value
      * @param dictionaryType the type of dictionary, e.g. global or document
      */
-    this.addTerm = function (type, subtype, category, value, dictionaryType) {
+    this.addTerm = function (type, code, category, value, dictionaryType) {
         // deactivate all dictionaries, add the new term to the deactivated terms and reactivate the terms; this preserves sort order and may be faster 
         // than iterating over all dictionaries to determine the insertion point
         var entries = context.deactivateDictionaries();
-        entries.push({type: type, subtype: subtype, category: category, value: value, dictionaryType: dictionaryType, dictionary: true});
+        entries.push({type: type, code: code, category: category, value: value, dictionaryType: dictionaryType, dictionary: true});
         context.activate([entries]);
 
     };
 
     /**
      * Activates a set of dictionaries. Dictionaries are activated when a document is edited, including the global user dictionary and the document dictionary.
-     * @param dictionaries an array of dictionaries containing term objects in the form {value, type, subtype, dictionaryType}.
+     * @param dictionaries an array of dictionaries containing term objects in the form {value, type, code, dictionaryType}.
      */
     this.activate = function (dictionaries) {
         // Sort all entries in reverse alphabetical order. This is because they must be inserted under their respective categories and the insertion
@@ -185,11 +207,11 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                 var inserted = false;
                 // items must be inserted under their category type; iterate until the category is found and splice the entry in
                 for (var i = 0; i < symbolTable.entries.length; i++) {
-                    if (term.subtype === symbolTable.entries[i].subtype) {
+                    if (term.category === symbolTable.entries[i].category) {
                         symbolTable.entries.splice(i + 1, 0, {
                             value: term.value,
                             type: term.type,
-                            subtype: term.subtype,
+                            code: term.code,
                             category: term.category,
                             dictionary: true,
                             dictionaryType: term.dictionaryType
@@ -201,7 +223,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                 }
                 if (!inserted) {
                     // no category, add at the end
-                    symbolTable.entries.push({value: term.value, subtype: term.subtype, dictionary: true, dictionaryType: term.dictionaryType});
+                    symbolTable.entries.push({value: term.value, code: term.code, dictionary: true, dictionaryType: term.dictionaryType});
                     symbolTable.values.push(term.value);
                 }
             })
@@ -272,5 +294,18 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
         }
     };
 
+    this.getSymbolTable = function (type, locale) {
+        var typeCache = context.cache.get(type);
+        if (typeCache == null) {
+            $log.error("Unknown symbol type: " + type);
+            return null;
+        }
+        var symbolTable = typeCache.get(locale);
+        if (symbolTable == null) {
+            $log.error("Unknown locale when looking up symbol type '" + type + "': " + locale);
+            return null;
+        }
+        return symbolTable;
+    };
 
 });

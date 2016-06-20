@@ -2,37 +2,37 @@
   "scope": [
     {
       "value": "this capabilityDE",
-      "subtype": "capability",
+      "code": "capability",
       "category": "1",
       "fixed": false
     },
     {
       "value": "this application or this service",
-      "subtype": "service",
+      "code": "service",
       "category": "2",
       "fixed": false
     },
     {
       "value": "services listed in the service agreement",
-      "subtype": "services-agreement",
+      "code": "services-agreement",
       "category": "3",
       "fixed": false
     },
     {
       "value": "the CSP Services",
-      "subtype": "csp-services",
+      "code": "csp-services",
       "category": "4",
       "fixed": false
     },
     {
       "value": "all the CSP Products and services",
-      "subtype": "csp-products",
+      "code": "csp-products",
       "category": "5",
       "fixed": false
     },
     {
       "value": "third-party product and services",
-      "subtype": "third-party",
+      "code": "third-party",
       "category": "6",
       "fixed": false
     }
@@ -40,31 +40,31 @@
   "qualifier": [
     {
       "value": "identified",
-      "subtype": "identified-data",
+      "code": "identified-data",
       "category": "1",
       "fixed": true
     },
     {
       "value": "linked or pseudonymized",
-      "subtype": "linked-data",
+      "code": "linked-data",
       "category": "2",
       "fixed": true
     },
     {
       "value": "unlinked or securely pseudonymized",
-      "subtype": "unlinked-data",
+      "code": "unlinked-data",
       "category": "3",
       "fixed": true
     },
     {
       "value": "anonymized",
-      "subtype": "anonymized-data",
+      "code": "anonymized-data",
       "category": "4",
       "fixed": true
     },
     {
       "value": "aggregated data",
-      "subtype": "aggregated-data",
+      "code": "aggregated-data",
       "category": "5",
       "fixed": true
     }
@@ -72,139 +72,139 @@
   "dataCategory": [
     {
       "value": "customer content",
-      "subtype": "customer-content",
+      "code": "customer-content",
       "category": "1",
       "fixed": true
     },
     {
       "value": "credentials",
-      "subtype": "customer-content-credentials",
+      "code": "customer-content-credentials",
       "category": "1.1",
       "fixed": false
     },
     {
       "value": "customer address lists",
-      "subtype": "customer-content-address",
+      "code": "customer-content-address",
       "category": "1.2",
       "fixed": false
     },
     {
       "value": "derived data",
-      "subtype": "derived-data",
+      "code": "derived-data",
       "category": "2",
       "fixed": true
     },
     {
       "value": "end user identifiable information",
-      "subtype": "derived-data-user",
+      "code": "derived-data-user",
       "category": "2.1",
       "fixed": false
     },
     {
       "value": "telemetry",
-      "subtype": "derived-data-user-telemetry",
+      "code": "derived-data-user-telemetry",
       "category": "2.1.1",
       "fixed": false
     },
     {
       "value": "connectivity",
-      "subtype": "derived-data-user-connectivity",
+      "code": "derived-data-user-connectivity",
       "category": "2.1.2",
       "fixed": false
     },
     {
       "value": "usage",
-      "subtype": "derived-data-user-usage",
+      "code": "derived-data-user-usage",
       "category": "2.1.3",
       "fixed": false
     },
     {
       "value": "demographic information",
-      "subtype": "derived-data-user-demographic",
+      "code": "derived-data-user-demographic",
       "category": "2.1.4",
       "fixed": false
     },
     {
       "value": "interests and favorites",
-      "subtype": "derived-data-user-interests",
+      "code": "derived-data-user-interests",
       "category": "2.1.5",
       "fixed": false
     },
     {
       "value": "content consumption",
-      "subtype": "derived-data-user-content",
+      "code": "derived-data-user-content",
       "category": "2.1.6",
       "fixed": false
     },
     {
       "value": "client side browsing history",
-      "subtype": "derived-data-user-browsing",
+      "code": "derived-data-user-browsing",
       "category": "2.1.7",
       "fixed": false
     },
     {
       "value": "search commands and queries",
-      "subtype": "derived-data-user-search",
+      "code": "derived-data-user-search",
       "category": "2.1.8",
       "fixed": false
     },
     {
       "value": "precise customer location",
-      "subtype": "derived-data-user-location",
+      "code": "derived-data-user-location",
       "category": "2.1.9",
       "fixed": false
     },
     {
       "value": "social data",
-      "subtype": "derived-data-user-social",
+      "code": "derived-data-user-social",
       "category": "2.1.10",
       "fixed": false
     },
     {
       "value": "biometric and health data",
-      "subtype": "derived-data-user-biometric",
+      "code": "derived-data-user-biometric",
       "category": "2.1.11",
       "fixed": false
     },
     {
       "value": "end-user contact data",
-      "subtype": "derived-data-user-contact",
+      "code": "derived-data-user-contact",
       "category": "2.1.12",
       "fixed": false
     },
     {
       "value": "environmental sensor data",
-      "subtype": "derived-data-user-environmental",
+      "code": "derived-data-user-environmental",
       "category": "2.1.13",
       "fixed": false
     },
     {
       "value": "organization identifiable information",
-      "subtype": "derived-data-organization",
+      "code": "derived-data-organization",
       "category": "2.2",
       "fixed": false
     },
     {
       "value": "cloud service provider data",
-      "subtype": "provider-data",
+      "code": "provider-data",
       "category": "3",
       "fixed": true
     },
     {
       "value": "account data",
-      "subtype": "account-data",
+      "code": "account-data",
       "category": "4",
       "fixed": true
     },
     {
       "value": "customer contact information",
-      "subtype": "account-data-customer",
+      "code": "account-data-customer",
       "category": "4.1",
       "fixed": false
     },
     {
       "value": "payment instrument data",
-      "subtype": "account-data=payment",
+      "code": "account-data=payment",
       "category": "4.2",
       "fixed": true
     }
@@ -212,97 +212,97 @@
   "action": [
     {
       "value": "provide",
-      "subtype": "provide",
+      "code": "provide",
       "category": "1",
       "fixed": true
     },
     {
       "value": "improve",
-      "subtype": "improve",
+      "code": "improve",
       "category": "2",
       "fixed": true
     },
     {
       "value": "personalize",
-      "subtype": "personalize",
+      "code": "personalize",
       "category": "3",
       "fixed": true
     },
     {
       "value": "offer upgrades or upsell",
-      "subtype": "upgrades",
+      "code": "upgrades",
       "category": "4",
       "fixed": true
     },
     {
       "value": "market",
-      "subtype": "market",
+      "code": "market",
       "category": "5",
       "fixed": true
     },
     {
       "value": "market based on contextual information",
-      "subtype": "market-contextual",
+      "code": "market-contextual",
       "category": "5.1",
       "fixed": true
     },
     {
       "value": "market based on personalization",
-      "subtype": "market-personalization",
+      "code": "market-personalization",
       "category": "5.2",
       "fixed": true
     },
     {
       "value": "advertise",
-      "subtype": "advertise",
+      "code": "advertise",
       "category": "6",
       "fixed": true
     },
     {
       "value": "advertise based on contextual information",
-      "subtype": "advertise-contextual",
+      "code": "advertise-contextual",
       "category": "6.1",
       "fixed": true
     },
     {
       "value": "advertise based on personalization",
-      "subtype": "advertise-personalization",
+      "code": "advertise-personalization",
       "category": "6.2",
       "fixed": true
     },
     {
       "value": "promote",
-      "subtype": "promote",
+      "code": "promote",
       "category": "7",
       "fixed": true
     },
     {
       "value": "promote based on contextual information",
-      "subtype": "promote-contextual",
+      "code": "promote-contextual",
       "category": "7.1",
       "fixed": true
     },
     {
       "value": "promote based on personalization",
-      "subtype": "promote-personalization",
+      "code": "promote-personalization",
       "category": "7.2",
       "fixed": true
     },
     {
       "value": "share",
-      "subtype": "share",
+      "code": "share",
       "category": "8",
       "fixed": true
     },
     {
       "value": "share with partners and data processors",
-      "subtype": "share-partners",
+      "code": "share-partners",
       "category": "8.1",
       "fixed": true
     },
     {
       "value": "share to provide the service",
-      "subtype": "share-provide",
+      "code": "share-provide",
       "category": "8.2",
       "fixed": true
     }
