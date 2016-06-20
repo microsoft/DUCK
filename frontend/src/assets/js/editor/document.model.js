@@ -30,7 +30,13 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                 // FIXME create a fake document dictionary for testing
                 context.document = useDocument;
                 context.document.dictionary = new Hashtable();
-                context.document.dictionary.put("Foo Service", {value: "Foo Service", type: "scope", code: "service", category: "2", dictionaryType: "document"});
+                context.document.dictionary.put("Foo Service", {
+                    value: "Foo Service",
+                    type: "scope",
+                    code: "foo-service",
+                    category: "2",
+                    dictionaryType: "document"
+                });
 
                 context.dirty = false;
 
@@ -42,7 +48,10 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                         useScope: {active: false, level: null, action: false},
                         action: {active: false, level: null, action: false}
                     };
-                    console.log(TaxonomyService.findCode("scope", statement.useScope, context.document.locale));
+                    // temporarily attach codes
+                    context.reCalculateCodes();
+
+                    context.lookupAndSetTerms();
                 });
 
                 // callback
@@ -53,6 +62,38 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     this.release = function () {
         TaxonomyService.deactivateDictionaries();
+    };
+
+    /**
+     * Resets the statement field codes as when an ISO field value is edited.
+     */
+    this.reCalculateCodes = function () {
+        context.document.statements.forEach(function (statement) {
+            statement.useScopeCode = TaxonomyService.findCode("scope", statement.useScope, context.document.locale, statement.useScope);
+            statement.qualifierCode = TaxonomyService.findCode("qualifier", statement.qualifier, context.document.locale, statement.qualifier);
+            statement.dataCategoryCode = TaxonomyService.findCode("dataCategory", statement.dataCategory, context.document.locale, statement.dataCategory);
+            statement.sourceScopeCode = TaxonomyService.findCode("scope", statement.sourceScope, context.document.locale, statement.sourceScope);
+            statement.actionCode = TaxonomyService.findCode("action", statement.action, context.document.locale, statement.action);
+            statement.resultScopeCode = TaxonomyService.findCode("scope", statement.resultScope, context.document.locale, statement.resultScope);
+            // console.log(statement.useScopeCode + ", " + statement.qualifierCode + ", " + statement.dataCategoryCode + ", " + statement.sourceScopeCode
+            //     + ", " + statement.actionCode + ", " + statement.resultScopeCode);
+        });
+    };
+
+    /**
+     * Sets the statement field terms based on their corresponding code.
+     */
+    this.lookupAndSetTerms = function () {
+        context.document.statements.forEach(function (statement) {
+            statement.useScope = TaxonomyService.findTerm("scope", statement.useScopeCode, context.document.locale, statement.useScopeCode);
+            statement.qualifier = TaxonomyService.findTerm("qualifier", statement.qualifierCode, context.document.locale, statement.qualifierCode);
+            statement.dataCategory = TaxonomyService.findTerm("dataCategory", statement.dataCategoryCode, context.document.locale, statement.dataCategoryCode);
+            statement.sourceScope = TaxonomyService.findTerm("scope", statement.sourceScopeCode, context.document.locale, statement.sourceScopeCode);
+            statement.action = TaxonomyService.findTerm("action", statement.actionCode, context.document.locale, statement.actionCode);
+            statement.resultScope = TaxonomyService.findTerm("scope", statement.resultScopeCode, context.document.locale, statement.resultScopeCode);
+            // console.log(statement.useScope + ", " + statement.qualifier + ", " + statement.dataCategory + ", " + statement.sourceScope
+            //     + ", " + statement.action + ", " + statement.resultScope);
+        });
     };
 
     /**

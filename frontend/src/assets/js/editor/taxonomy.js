@@ -53,32 +53,32 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
         typeCache.put(locale, {entries: entries, values: values, fuse: fuse});
     };
 
-    this.findTerm = function (type, code, locale) {
+    this.findTerm = function (type, code, locale, defaultValue) {
         var symbolTable = context.getSymbolTable(type, locale);
         if (symbolTable === null) {
-            return null;
+            return (defaultValue) ? defaultValue : null;
         }
         for (var i = 0; i < symbolTable.entries.length; i++) {
-            if (symbolTable.entries[i].code  === code) {
+            if (symbolTable.entries[i].code === code) {
                 return symbolTable.entries[i].value;
             }
         }
-        return null;
+        return (defaultValue) ? defaultValue : null;
     };
 
-    this.findCode = function (type, term, locale) {
+    this.findCode = function (type, term, locale, defaultValue) {
         var symbolTable = context.getSymbolTable(type, locale);
         if (symbolTable === null) {
-            return null;
+            return (defaultValue) ? defaultValue : null;
         }
         for (var i = 0; i < symbolTable.entries.length; i++) {
-            if (symbolTable.entries[i].value  === term) {
+            if (symbolTable.entries[i].value === term) {
                 return symbolTable.entries[i].code;
             }
         }
-        return null;
+        return (defaultValue) ? defaultValue : null;
     };
-    
+
     /**
      * Performs a fuzzy lookup of a set of values matching the given term.
      *

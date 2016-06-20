@@ -34,7 +34,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     controller.save = function () {
         DocumentModel.save();
     };
-    
+
     controller.toggleEdit = function (statement) {
         DocumentModel.toggleEdit(statement);
     };
@@ -103,8 +103,13 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     };
 
     DocumentModel.initialize(documentId).then(function () {
-        // ng-sortable requires the use of $scope
+        // ng-sortable and watch requires the use of $scope
         $scope.document = DocumentModel.document;
+
+        // deep watch the collection of statements
+        $scope.$watch("document.statements", function () {
+            DocumentModel.reCalculateCodes();
+        }, true)
     }, function (status) {
         // FIXME display error
         alert("Failed: " + status);
@@ -301,7 +306,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     controller.addTerm = function () {
         var dictionaryType = controller.newTerm.dictionary ? "document" : "global";
-        DocumentModel.addTerm($scope.currentFieldType, controller.newTerm.category.code, controller.newTerm.category.category, controller.newTerm.value, dictionaryType);
+        DocumentModel.addTerm($scope.currentFieldType, controller.newTerm.value, controller.newTerm.category.category, controller.newTerm.value, dictionaryType);
         var statement = DocumentModel.getCurrentStatement();
         statement[$scope.currentField] = controller.newTerm.value;
         DocumentModel.clearCurrentStatement();
