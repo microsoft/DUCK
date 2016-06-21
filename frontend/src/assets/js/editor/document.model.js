@@ -233,7 +233,9 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     };
 
     this.complianceCheckWithAlternatives = function () {
-        // FIXME ruleset id 
+        context.selectOriginal(); // make sure the original is selected and clear existing alternatives
+        context.alternativeVersions.length = 0;
+        // FIXME ruleset id
         DataUseDocumentService.complianceCheckWithAlternatives(context.document, "123").then(function (complianceResult) {
             context.state = complianceResult.compliant;
             context.alternativeVersions.length = 0; // clear array
