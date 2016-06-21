@@ -58,7 +58,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                     };
                     context.lookupAndSetTerms();
                 });
-
+                context.alternativeVersions.length = 0; // clear the array
                 context.alternativeVersions.push({id: context.document.id, name: context.document.name, locale: context.document.locale, statements: []});
 
                 // callback
