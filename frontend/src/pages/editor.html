@@ -3,7 +3,11 @@
         <ul class="menu vertical icon-top padding-top-2">
             <li><a ui-sref="main.home" href=""><i class="fa fa-1-5x fa-chevron-left"></i> {{"documents"|translate}}</a></li>
             <li class="padding-top-2"></li>
-            <li><a href="" ng-click="editorController.addStatement()"><i class="fa fa-1-5x fa-plus"></i> {{"new_statement"|translate}}</a></li>
+            <li>
+                <a href="" ng-click="editorController.addStatement()" ng-class="{'sidebar-icon-disabled': !editorController.isEditable()}">
+                    <i class="fa fa-1-5x fa-plus"></i> {{"new_statement"|translate}}
+                </a>
+            </li>
             <li>
                 <a data-open="revertModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href="">
                     <i class="fa fa-1-5x fa-undo"></i> {{"revert"|translate}}
