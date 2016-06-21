@@ -27,16 +27,16 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     this.initialize = function (documentId) {
         return $q(function (resolve) {
             DataUseDocumentService.getDocument(documentId).then(function (useDocument) {
-                // FIXME create a fake document dictionary for testing
                 context.document = useDocument;
                 context.document.dictionary = new Hashtable();
-                context.document.dictionary.put("Foo Service", {
-                    value: "Foo Service",
-                    type: "scope",
-                    code: "foo-service",
-                    category: "2",
-                    dictionaryType: "document"
-                });
+                // Create a fake term dictionary for testing
+                // context.document.dictionary.put("Foo Service", {
+                //     value: "Foo Service",
+                //     type: "scope",
+                //     code: "foo-service",
+                //     category: "2",
+                //     dictionaryType: "document"
+                // });
 
                 context.dirty = false;
 
@@ -48,9 +48,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                         useScope: {active: false, level: null, action: false},
                         action: {active: false, level: null, action: false}
                     };
-                    // temporarily attach codes
-                    // context.reCalculateCodes();
-
                     context.lookupAndSetTerms();
                 });
 

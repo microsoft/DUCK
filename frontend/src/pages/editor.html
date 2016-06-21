@@ -31,8 +31,8 @@
             <hr>
         </div>
 
-        <div ng-if="document">
-            <div class="row" ng-if="document">
+        <div ng-show="document">
+            <div class="row" ng-show="document">
                 <div class="clearfix">
                     <div class="button-group small float-left noselect">
                         <a class="button hollow" ng-click="editorController.editAll()" ng-attr-title="{{'edit_all_statements'|translate}}">
@@ -47,6 +47,21 @@
                         </a>
                     </div>
                     <div class="button-group small float-right noselect">
+                        <button class="button hollow" type="button" data-toggle="example-dropdown">Language</button>
+                        <div class="dropdown-pane row column" id="example-dropdown" data-dropdown data-auto-focus="false">
+                            <ul class="menu vertical">
+                                <li ng-repeat="locale in editorController.locales">
+
+                                    <a ng-click="editorController.setDocumentLocale(locale.id)" href="">
+                                        <span class="fa fa-check padding-right-1" ng-show="locale.id === editorController.getLocale()"></span>
+                                        <span class="fa fa-check padding-right-1" style="color: #fff" ng-show="locale.id !== editorController.getLocale()"></span>
+                                        {{locale.description}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+
                         <a class="button hollow" ng-click="editorController.makeActive()">{{"active"|translate}}</a>
                         <a class="button hollow" ng-click="editorController.makePassive()">{{"passive"|translate}}</a>
                     </div>

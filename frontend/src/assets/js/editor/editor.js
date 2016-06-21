@@ -1,9 +1,11 @@
 var editorModule = angular.module("duck.editor");
 
-editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus,
+editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService,
                                                       $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
+
+    controller.locales = LocaleService.getLocales();
 
     var documentId = ObjectUtils.notNull($stateParams.documentId) ? $stateParams.documentId : null;
     controller.noDocument = documentId === null;
@@ -30,6 +32,18 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     });
 
     initializeCompletions();
+
+    controller.setDocumentLocale = function (locale) {
+        if (DocumentModel.document) {
+            DocumentModel.document.locale = locale;
+            DocumentModel.markDirty();
+        }
+
+    };
+
+    controller.getLocale = function () {
+        return DocumentModel.document ? DocumentModel.document.locale : null;
+    };
 
     controller.save = function () {
         DocumentModel.save();
