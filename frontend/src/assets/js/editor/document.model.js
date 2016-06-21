@@ -252,6 +252,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.save = function () {
         DataUseDocumentService.saveDocument(context.document);
+        context.originalDocument = context.document;
         context.dirty = false;
     };
 
