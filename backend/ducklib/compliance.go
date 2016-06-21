@@ -126,6 +126,23 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Document) 
 	return l[compliant] == caes.In, nil
 }
 
+func removeStatement(d *Document, i int) (*Document, error) {
+	if i < 0 || i > len(d.Statements)-1 {
+		return nil, fmt.Errorf("Statements index out of bounds: %v", i)
+	}
+	// copy the document struct
+	d2 := *d
+	// replace the statements with a copy, but with the selected
+	// statement removed.
+	d2.Statements = []Statement{}
+	for j, _ := range d.Statements {
+		if i != j {
+			d2.Statements = append(d2.Statements, d.Statements[j])
+		}
+	}
+	return &d2, nil
+}
+
 /*
 	CompliantDocuments does the following:
 		* Translates the data use statements in the document into Carneades assumptions (terms)
@@ -146,7 +163,64 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Document) 
 	documents are needed, to cause the coroutine to be terminated.
 
 */
-func (c ComplianceChecker) CompliantDocuments(ruleBase *caes.Theory, document *Document, cncl Canceller) (bool, <-chan *Document, error) {
-	// ToDo
-	return true, nil, nil
+func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *Document, cncl Canceller) (bool, <-chan *Document, error) {
+	compliant, err := c.IsCompliant(theory, doc)
+	if err != nil {
+		return false, nil, err
+	}
+	if compliant {
+		return true, nil, nil
+	}
+
+	// Traverse the space of documents, breadth-first, with subsets of the data use
+	// statements of doc, and push each alternative documents down the
+	// variants channel.
+
+	variants := make(chan *Document)
+
+	// generate documents with subsets of the data use documents
+	// and push them down the varients channel
+	var subsets func(int, *Document)
+	subsets = func(i int, d *Document) {
+		if i < 0 {
+			return
+		}
+		select {
+		case <-cncl:
+			return // cancelled
+		default: // continue
+		}
+		// ToDo: check that the statement order below
+		// performs breadth-first search, not depth-first
+		d2, err := removeStatement(d, i)
+		if err != nil {
+			return
+		} // indexing error should not happen
+		variants <- d2
+		subsets(i-1, d)
+		subsets(i-1, d2)
+	}
+	go subsets(len(doc.Statements)-1, doc)
+
+	// Filter out the noncompliant documents
+	compliantVariants := make(chan *Document)
+	go func() {
+		for {
+			select {
+			case <-cncl:
+				return // cancelled
+			case d3, ok := <-variants:
+				if !ok { // no more variants available
+					return
+				}
+				compliant, err := c.IsCompliant(theory, d3)
+				if err != nil && compliant {
+					compliantVariants <- d3
+				}
+			default: // do nothing, to avoid blocking
+			}
+		}
+	}()
+
+	return false, compliantVariants, nil
 }
