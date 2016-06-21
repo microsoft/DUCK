@@ -49,19 +49,23 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         return DocumentModel.document ? DocumentModel.document.locale : null;
     };
 
-    controller.isSelected = function(document) {
+    controller.isSelected = function (document) {
         return DocumentModel.document === document;
     };
-    
+
     controller.save = DocumentModel.save;
 
     controller.isEditable = DocumentModel.isEditable;
 
-    controller.selectOriginal = DocumentModel.selectOriginal;
+    controller.selectOriginal = function () {
+        DocumentModel.selectOriginal();
+        $scope.document = DocumentModel.document;
+    };
 
-    controller.selectAlternateVersion = function(alternative) {
+    controller.selectAlternateVersion = function (alternative) {
         controller.closeAll();
         DocumentModel.selectAlternateVersion(alternative);
+        $scope.document = alternative;
     };
 
     controller.revert = DocumentModel.revert;
@@ -78,10 +82,10 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         DocumentModel.toggleEdit(statement);
     };
 
-    controller.getAlternativeVersions = function() {
+    controller.getAlternativeVersions = function () {
         return DocumentModel.alternativeVersions;
     };
-    
+
     controller.editing = function (statement) {
         return DocumentModel.editing(statement);
     };

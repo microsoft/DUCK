@@ -59,7 +59,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                     context.lookupAndSetTerms();
                 });
 
-                context.alternativeVersions.push({id: document.id, name: document.name, locale: document.locale, statements: []});
+                context.alternativeVersions.push({id: context.document.id, name: context.document.name, locale: context.document.locale, statements: []});
 
                 // callback
                 resolve();
@@ -95,6 +95,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.selectAlternateVersion = function (document) {
         context.document = document;
+        context.clearCurrentStatement();
     };
 
     /**
