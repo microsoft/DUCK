@@ -49,7 +49,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                         action: {active: false, level: null, action: false}
                     };
                     // temporarily attach codes
-                    context.reCalculateCodes();
+                    // context.reCalculateCodes();
 
                     context.lookupAndSetTerms();
                 });

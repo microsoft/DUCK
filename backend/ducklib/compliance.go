@@ -97,12 +97,12 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Document) 
 			passive = false
 		}
 		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s))",
-			s.UseScope,
-			s.Qualifier,
-			s.DataCategory,
-			s.SourceScope,
-			s.Action,
-			s.ResultScope,
+			s.UseScopeCode,
+			s.QualifierCode,
+			s.DataCategoryCode,
+			s.SourceScopeCode,
+			s.ActionCode,
+			s.ResultScopeCode,
 			s.TrackingID,
 			passive)
 		stmt := &caes.Statement{

@@ -8,23 +8,6 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
     var context = this;
     context.runServer = true;
 
-    // local testing 
-    // if (!context.runServer) {
-    //     context.summaries = new Hashtable();
-    //     context.summaries.put("1", {name: "Customer Document v1", id: "1"});
-    //
-    //     context.documents = new Hashtable();
-    //     context.documents.put("1", {
-    //         name: "Customer Document v1", id: "1",
-    //         statements: [{
-    //             useScope: "the CSP Services", qualifier: "identified", dataCategory: "credentials", sourceScope: "this capability",
-    //             action: "provide", resultScope: "cloud services defined in the service agreement", trackingId: UUID.next(),
-    //             passive: false
-    //         }]
-    //     });
-    // }
-
-
     /**
      * Retrieves summaries for data use statement documents authored by the current user.
      *
@@ -37,12 +20,6 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 $state.go('signin');
             }
             var url = "/v1/documents/" + CurrentUser.id + "/summary";
-
-            // local testing
-            // if (!context.runServer) {
-            //     resolve(context.summaries.values());
-            //     return;
-            // }
 
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {
@@ -73,12 +50,6 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 $state.go('signin');
             }
             var url = "/v1/documents/" + documentId;
-
-            // local testing
-            // if (!context.runServer) {
-            //     resolve(context.documents.get(documentId));
-            //     return;
-            // }
 
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {
@@ -158,12 +129,12 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         document.statements.forEach(function (statement) {
             data.statements.push({
                 trackingId: statement.trackingId,
-                action: statement.action,
-                dataCategory: statement.dataCategory,
-                qualifier: statement.qualifier,
-                resultScope: statement.resultScope,
-                sourceScope: statement.sourceScope,
-                useScope: statement.useScope,
+                actionCode: statement.actionCode,
+                dataCategoryCode: statement.dataCategoryCode,
+                qualifierCode: statement.qualifierCode,
+                resultScopeCode: statement.resultScopeCode,
+                sourceScopeCode: statement.sourceScopeCode,
+                useScopeCode: statement.useScopeCode,
                 passive: statement.passive
             })
         });

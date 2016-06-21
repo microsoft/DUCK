@@ -71,12 +71,12 @@ type Document struct {
 }
 
 type Statement struct {
-	UseScope     string `json:"useScope"`
-	Qualifier    string `json:"qualifier"`
-	DataCategory string `json:"dataCategory"`
-	SourceScope  string `json:"sourceScope"`
-	Action       string `json:"action"`
-	ResultScope  string `json:"resultScope"`
+	UseScopeCode     string `json:"useScopeCode"`
+	QualifierCode    string `json:"qualifierCode"`
+	DataCategoryCode string `json:"dataCategoryCode"`
+	SourceScopeCode  string `json:"sourceScopeCode"`
+	ActionCode       string `json:"actionCode"`
+	ResultScopeCode  string `json:"resultScopeCode"`
 	TrackingID   string `json:"trackingId"`
 	Passive      bool   `json:"passive"`
 }
@@ -112,12 +112,12 @@ func (d *Document) fromValueMap(mp map[string]interface{}) {
 
 func (s *Statement) fromInterfaceMap(mp map[string]interface{}) {
 
-	s.UseScope = getFieldValue(mp, "useScope")
-	s.Qualifier = getFieldValue(mp, "qualifier")
-	s.DataCategory = getFieldValue(mp, "dataCategory")
-	s.SourceScope = getFieldValue(mp, "sourceScope")
-	s.Action = getFieldValue(mp, "action")
-	s.ResultScope = getFieldValue(mp, "resultScope")
+	s.UseScopeCode = getFieldValue(mp, "useScopeCode")
+	s.QualifierCode = getFieldValue(mp, "qualifierCode")
+	s.DataCategoryCode = getFieldValue(mp, "dataCategoryCode")
+	s.SourceScopeCode = getFieldValue(mp, "sourceScopeCode")
+	s.ActionCode = getFieldValue(mp, "actionCode")
+	s.ResultScopeCode = getFieldValue(mp, "resultScopeCode")
 	s.TrackingID = getFieldValue(mp, "trackingId")
 	s.Passive = getFieldBooleanValue(mp, "passive")
 
