@@ -10,6 +10,13 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     this.document = null;
 
     /**
+     * The original document being edited
+     */
+    this.originalDocument = null;
+
+    this.alternativeVersions = [];
+
+    /**
      * Tracks the local edit state of the document.
      */
     this.dirty = false;
@@ -27,6 +34,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     this.initialize = function (documentId) {
         return $q(function (resolve) {
             DataUseDocumentService.getDocument(documentId).then(function (useDocument) {
+                context.originalDocument = useDocument;
                 context.document = useDocument;
                 context.document.dictionary = new Hashtable();
                 // Create a fake term dictionary for testing
@@ -51,6 +59,8 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                     context.lookupAndSetTerms();
                 });
 
+                context.alternativeVersions.push({id: document.id, name: document.name, locale: document.locale, statements: []});
+
                 // callback
                 resolve();
             });
@@ -59,6 +69,32 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     this.release = function () {
         TaxonomyService.deactivateDictionaries();
+    };
+
+    /**
+     * Returns true if the current selected document can be edited. Only the original document can be edited, so if an alternative version is selected, this
+     * method will return false.
+     *
+     * @return {boolean}
+     */
+    this.isEditable = function () {
+        return context.document === context.originalDocument;
+    };
+
+    /**
+     * Selects the original document.
+     */
+    this.selectOriginal = function () {
+        context.document = context.originalDocument;
+    };
+
+    /**
+     * Selects an alternative version of the document.
+     *
+     * @param document the document to select
+     */
+    this.selectAlternateVersion = function (document) {
+        context.document = document;
     };
 
     /**
@@ -94,7 +130,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     };
 
     /**
-     * Deletes the statement in the local model (i.e. it is not synchronized to the backend.
+     * Deletes the statement in the local model (i.e. it is not synchronized to the backend).
      *
      * @param statement the statement
      */

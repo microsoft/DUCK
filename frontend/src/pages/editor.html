@@ -34,19 +34,24 @@
         <div class="row" ng-show="document">
             <div class="clearfix">
                 <div class="button-group small float-left noselect">
-                    <a class="button hollow" ng-click="editorController.editAll()" ng-attr-title="{{'edit_all_statements'|translate}}">
+                    <a class="button hollow" ng-click="editorController.editAll()" ng-class="{'disabled': !editorController.isEditable()}"
+                       ng-attr-title="{{'edit_all_statements'|translate}}">
                         <i class="fa fa-pencil-square-o"></i>
                     </a>
-                    <a class="button hollow" ng-click="editorController.closeAll()" ng-attr-title="{{'close_all_statement_editors'|translate}}">
+                    <a class="button hollow" ng-click="editorController.closeAll()" ng-class="{'disabled': !editorController.isEditable()}"
+                       ng-attr-title="{{'close_all_statement_editors'|translate}}">
                         <i class="fa fa-times"></i>
                     </a>
-                    <a class="button hollow" ng-click="editorController.validateSyntax()" ng-attr-title="{{'toggle_validation_messages'|translate}}">
+                    <a class="button hollow" ng-click="editorController.validateSyntax()" ng-class="{'disabled': !editorController.isEditable()}"
+                       ng-attr-title="{{'toggle_validation_messages'|translate}}">
                         <i class="fa fa-eye"></i>
                         <!--<i class="fa fa-eye-slash"></i>-->
                     </a>
                 </div>
                 <div class="button-group small float-right noselect">
-                    <button class="button hollow" type="button" data-toggle="example-dropdown">{{'language_label'|translate}}</button>
+                    <button class="button hollow" type="button" data-toggle="example-dropdown" ng-class="{'disabled': !editorController.isEditable()}">
+                        {{'language_label'|translate}}
+                    </button>
                     <div class="dropdown-pane row column" id="example-dropdown" data-dropdown data-auto-focus="false">
                         <ul class="menu vertical">
                             <li ng-repeat="locale in editorController.locales">
@@ -59,26 +64,47 @@
                             </li>
                         </ul>
                     </div>
-                    <a class="button hollow" ng-click="editorController.makeActive()">{{"active"|translate}}</a>
-                    <a class="button hollow" ng-click="editorController.makePassive()">{{"passive"|translate}}</a>
+                    <a class="button hollow" ng-click="editorController.makeActive()" ng-class="{'disabled': !editorController.isEditable()}">
+                        {{"active"|translate}}
+                    </a>
+                    <a class="button hollow" ng-click="editorController.makePassive()" ng-class="{'disabled': !editorController.isEditable()}">
+                        {{"passive"|translate}}
+                    </a>
                 </div>
             </div>
             <div class="clearfix">
                 <div class="float-left noselect">
                     {{'alternative_versions_available_heading'|translate}}
                 </div>
-                <div class="float-right noselect">
+                <div class="float-right noselect" ng-show="!editorController.isEditable()">
                     <ul class="pagination" role="navigation" aria-label="Pagination">
                         <li>
                             <a class="button hollow padding-top-0-5 padding-bottom-0-5" ng-click="editorController.adoptAlternativeVersion()">
                                 {{"adopt_label"|translate}}
                             </a>
                         </li>
-                        <li class="current"><span>{{'original_label'|translate}}</span> <span class="show-for-sr">original</span></li>
-                        <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-                        <li><a href="#" aria-label="Page 2">2</a></li>
-                        <li><a href="#" aria-label="Page 3">3</a></li>
-                        <li><a href="#" aria-label="Page 4">4</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix">
+                <div class="float-right noselect">
+                    <ul class="pagination" role="navigation" aria-label="Pagination">
+                        <li class="current" ng-if="editorController.isEditable()">
+                            <span>{{'original_label'|translate}}</span>
+                        </li>
+                        <li ng-if="!editorController.isEditable()">
+                            <a href="" ng-click="editorController.selectOriginal()">{{'original_label'|translate}}</a>
+                        </li>
+                        <li ng-repeat-start="alternative in editorController.getAlternativeVersions()">
+                            <span class="current padding-top-0-5 padding-bottom-0-5" ng-if="editorController.isSelected(alternative)">
+                                {{'version_label'|translate}} {{$index +1}}
+                            </span>
+
+                            <a ng-if="!editorController.isSelected(alternative)" href=""
+                               ng-click="editorController.selectAlternateVersion(alternative)">{{'version_label'|translate}} {{$index +1}}
+                            </a>
+                        </li>
+                        <li ng-repeat-end></li>
                     </ul>
                 </div>
             </div>
@@ -86,7 +112,7 @@
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
                     <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
                         <div data-as-sortable-item-handle>
-                            <div class="clearfix">
+                            <div class="clearfix" ng-if="editorController.isEditable()">
                                 <div class="float-left button-group small noselect">
                                     <a class="button secondary hollow" ng-click="editorController.toggleEdit(statement)"
                                        ng-attr-title="{{'toggle_edit_statement'|translate}}">

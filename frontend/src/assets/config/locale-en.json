@@ -56,6 +56,7 @@
   "previous_label":"Previous",
   "next_label":"Next",
   "original_label":"Original",
+  "version_label":"Version",
   "alternative_versions_available_heading": "Alternative compliant versions of this document are available"
 }
 

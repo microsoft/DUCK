@@ -41,7 +41,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     };
 
-    controller.adoptAlternativeVersion = function() {
+    controller.adoptAlternativeVersion = function () {
 
     };
 
@@ -49,14 +49,39 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         return DocumentModel.document ? DocumentModel.document.locale : null;
     };
 
-    controller.save = function () {
-        DocumentModel.save();
+    controller.isSelected = function(document) {
+        return DocumentModel.document === document;
     };
+    
+    controller.save = DocumentModel.save;
+
+    controller.isEditable = DocumentModel.isEditable;
+
+    controller.selectOriginal = DocumentModel.selectOriginal;
+
+    controller.selectAlternateVersion = function(alternative) {
+        controller.closeAll();
+        DocumentModel.selectAlternateVersion(alternative);
+    };
+
+    controller.revert = DocumentModel.revert;
+
+    controller.deleteStatement = DocumentModel.deleteStatement;
+
+    controller.emptyStatement = DocumentModel.emptyStatement;
+
+    controller.makePassive = DocumentModel.makePassive;
+
+    controller.makeActive = DocumentModel.makeActive;
 
     controller.toggleEdit = function (statement) {
         DocumentModel.toggleEdit(statement);
     };
 
+    controller.getAlternativeVersions = function() {
+        return DocumentModel.alternativeVersions;
+    };
+    
     controller.editing = function (statement) {
         return DocumentModel.editing(statement);
     };
@@ -75,14 +100,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.dirty = function () {
         return DocumentModel.dirty;
-    };
-
-    controller.revert = function () {
-        return DocumentModel.revert();
-    };
-
-    controller.deleteStatement = function (statement) {
-        DocumentModel.deleteStatement(statement);
     };
 
     controller.getLocalePrefix = function () {
@@ -106,18 +123,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             return false;
         }
         return errors.useScope.active || errors.action.active;
-    };
-
-    controller.emptyStatement = function (statement) {
-        return DocumentModel.emptyStatement(statement);
-    };
-
-    controller.makePassive = function (statement) {
-        DocumentModel.makePassive(statement);
-    };
-
-    controller.makeActive = function (statement) {
-        DocumentModel.makeActive(statement);
     };
 
     DocumentModel.initialize(documentId).then(function () {
