@@ -118,6 +118,54 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         });
     };
 
+    /**
+     * Performs a compliance check on a document and returns possible alternatives.
+     *
+     * @param document the document
+     * @param rulebaseId the rulebase id
+     * @return the request promise
+     */
+    this.complianceCheckWithAlternatives = function (document, rulebaseId) {
+        return $q(function (resolve, reject) {
+            var url = "/v1/rulebases/" + rulebaseId;
+            // stub for testing
+            // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
+            var complianceResult = {
+                compliant: "NON_COMPLIANT", 
+                documents: [{
+                    id: document.id,
+                    locale: document.locale,
+                    name: document.name,
+                    owner: document.owner,
+                    statements: []
+                }]
+            };
+            document.statements.forEach(function (statement) {
+                complianceResult.documents[0].statements.push({
+                    trackingId: statement.trackingId,
+                    actionCode: statement.actionCode,
+                    dataCategoryCode: statement.dataCategoryCode,
+                    qualifierCode: statement.qualifierCode,
+                    resultScopeCode: statement.resultScopeCode,
+                    sourceScopeCode: statement.sourceScopeCode,
+                    useScopeCode: statement.useScopeCode,
+                    passive: statement.passive
+                });
+            });
+            resolve(complianceResult);
+            // end stub 
+
+            // var documentData = context.createDocumentData(document);
+            // $http.put(url, documentData).success(function () {
+            //     var complianceResult = angular.fromJson(data);
+            //     resolve(complianceResult);
+            //     // FIXME handle errors
+            // }).error(function (data, status) {
+            //     reject(status);
+            // });
+        });
+    };
+
 
     this.createDocumentData = function (document) {
         var data = {};

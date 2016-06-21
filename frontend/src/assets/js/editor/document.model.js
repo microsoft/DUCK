@@ -21,6 +21,11 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.dirty = false;
 
+    /**
+     * The state of the current document: NOT_VALIDATED; NON_COMPLIANT; UNKNOWN; or COMPLIANT
+     */
+    this.state = "NOT_VALIDATED";
+
     this.currentStatement = null;
 
     var context = this;
@@ -56,10 +61,10 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                         useScope: {active: false, level: null, action: false},
                         action: {active: false, level: null, action: false}
                     };
-                    context.lookupAndSetTerms();
+                    context.lookupAndSetTerms(context.document);
                 });
                 context.alternativeVersions.length = 0; // clear the array
-                context.alternativeVersions.push({id: context.document.id, name: context.document.name, locale: context.document.locale, statements: []});
+                // context.alternativeVersions.push({id: context.document.id, name: context.document.name, locale: context.document.locale, statements: []});
 
                 // callback
                 resolve();
@@ -117,14 +122,14 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     /**
      * Sets the statement field terms based on their corresponding code.
      */
-    this.lookupAndSetTerms = function () {
-        context.document.statements.forEach(function (statement) {
-            statement.useScope = TaxonomyService.findTerm("scope", statement.useScopeCode, context.document.locale, statement.useScopeCode);
-            statement.qualifier = TaxonomyService.findTerm("qualifier", statement.qualifierCode, context.document.locale, statement.qualifierCode);
-            statement.dataCategory = TaxonomyService.findTerm("dataCategory", statement.dataCategoryCode, context.document.locale, statement.dataCategoryCode);
-            statement.sourceScope = TaxonomyService.findTerm("scope", statement.sourceScopeCode, context.document.locale, statement.sourceScopeCode);
-            statement.action = TaxonomyService.findTerm("action", statement.actionCode, context.document.locale, statement.actionCode);
-            statement.resultScope = TaxonomyService.findTerm("scope", statement.resultScopeCode, context.document.locale, statement.resultScopeCode);
+    this.lookupAndSetTerms = function (document) {
+        document.statements.forEach(function (statement) {
+            statement.useScope = TaxonomyService.findTerm("scope", statement.useScopeCode, document.locale, statement.useScopeCode);
+            statement.qualifier = TaxonomyService.findTerm("qualifier", statement.qualifierCode, document.locale, statement.qualifierCode);
+            statement.dataCategory = TaxonomyService.findTerm("dataCategory", statement.dataCategoryCode, document.locale, statement.dataCategoryCode);
+            statement.sourceScope = TaxonomyService.findTerm("scope", statement.sourceScopeCode, document.locale, statement.sourceScopeCode);
+            statement.action = TaxonomyService.findTerm("action", statement.actionCode, document.locale, statement.actionCode);
+            statement.resultScope = TaxonomyService.findTerm("scope", statement.resultScopeCode, document.locale, statement.resultScopeCode);
             // console.log(statement.useScope + ", " + statement.qualifier + ", " + statement.dataCategory + ", " + statement.sourceScope
             //     + ", " + statement.action + ", " + statement.resultScope);
         });
@@ -227,6 +232,18 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         context.markDirty();
     };
 
+    this.complianceCheckWithAlternatives = function () {
+        // FIXME ruleset id 
+        DataUseDocumentService.complianceCheckWithAlternatives(context.document, "123").then(function (complianceResult) {
+            context.state = complianceResult.compliant;
+            context.alternativeVersions.length = 0; // clear array
+            complianceResult.documents.forEach(function (alternative) {
+                context.lookupAndSetTerms(alternative);
+                context.alternativeVersions.push(alternative);
+
+            });
+        });
+    };
 
     /**
      * Saves the local model to the backend.

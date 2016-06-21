@@ -77,6 +77,12 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     controller.makePassive = DocumentModel.makePassive;
 
     controller.makeActive = DocumentModel.makeActive;
+    
+    controller.complianceCheckWithAlternatives = DocumentModel.complianceCheckWithAlternatives;
+
+    controller.getState = function () {
+        return DocumentModel.state;
+    };
 
     controller.toggleEdit = function (statement) {
         DocumentModel.toggleEdit(statement);
