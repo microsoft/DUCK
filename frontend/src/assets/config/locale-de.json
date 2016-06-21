@@ -50,5 +50,13 @@
   "category": "Kategorie",
   "dictionary": "Wörterbuch",
   "global":"Weltweit",
-  "click_to_edit_new_statement": "Klicken Sie auf Neues Statement zu bearbeiten"
+  "click_to_edit_new_statement": "Klicken Sie auf Neues Statement zu bearbeiten",
+  "language_label":"Sprache",
+  "previous_label":"Früher",
+  "next_label":"Nächster",
+  "alternative_versions_available_heading": "Alternative kompatible Versionen dieses Dokuments sind verfügbar"
 }
+
+
+
+

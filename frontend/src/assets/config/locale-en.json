@@ -50,6 +50,10 @@
   "category": "Category",
   "dictionary": "Dictionary",
   "global": "Global",
-  "click_to_edit_new_statement": "Click to Edit New Statement"
+  "click_to_edit_new_statement": "Click to Edit New Statement",
+  "language_label":"Language",
+  "previous_label":"Previous",
+  "next_label":"Next",
+  "alternative_versions_available_heading": "Alternative compliant versions of this document are available"
 }
 

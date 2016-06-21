@@ -31,71 +31,85 @@
             <hr>
         </div>
 
-        <div ng-show="document">
-            <div class="row" ng-show="document">
-                <div class="clearfix">
-                    <div class="button-group small float-left noselect">
-                        <a class="button hollow" ng-click="editorController.editAll()" ng-attr-title="{{'edit_all_statements'|translate}}">
-                            <i class="fa fa-pencil-square-o"></i>
-                        </a>
-                        <a class="button hollow" ng-click="editorController.closeAll()" ng-attr-title="{{'close_all_statement_editors'|translate}}">
-                            <i class="fa fa-times"></i>
-                        </a>
-                        <a class="button hollow" ng-click="editorController.validateSyntax()" ng-attr-title="{{'toggle_validation_messages'|translate}}">
-                            <i class="fa fa-eye"></i>
-                            <!--<i class="fa fa-eye-slash"></i>-->
-                        </a>
-                    </div>
-                    <div class="button-group small float-right noselect">
-                        <button class="button hollow" type="button" data-toggle="example-dropdown">Language</button>
-                        <div class="dropdown-pane row column" id="example-dropdown" data-dropdown data-auto-focus="false">
-                            <ul class="menu vertical">
-                                <li ng-repeat="locale in editorController.locales">
-
-                                    <a ng-click="editorController.setDocumentLocale(locale.id)" href="">
-                                        <span class="fa fa-check padding-right-1" ng-show="locale.id === editorController.getLocale()"></span>
-                                        <span class="fa fa-check padding-right-1" style="color: #fff" ng-show="locale.id !== editorController.getLocale()"></span>
-                                        {{locale.description}}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-
-                        <a class="button hollow" ng-click="editorController.makeActive()">{{"active"|translate}}</a>
-                        <a class="button hollow" ng-click="editorController.makePassive()">{{"passive"|translate}}</a>
-                    </div>
+        <div class="row" ng-show="document">
+            <div class="clearfix">
+                <div class="button-group small float-left noselect">
+                    <a class="button hollow" ng-click="editorController.editAll()" ng-attr-title="{{'edit_all_statements'|translate}}">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                    <a class="button hollow" ng-click="editorController.closeAll()" ng-attr-title="{{'close_all_statement_editors'|translate}}">
+                        <i class="fa fa-times"></i>
+                    </a>
+                    <a class="button hollow" ng-click="editorController.validateSyntax()" ng-attr-title="{{'toggle_validation_messages'|translate}}">
+                        <i class="fa fa-eye"></i>
+                        <!--<i class="fa fa-eye-slash"></i>-->
+                    </a>
                 </div>
-                <div class="row column">
-                    <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
-                        <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
-                            <div data-as-sortable-item-handle>
-                                <div class="clearfix">
-                                    <div class="float-left button-group small noselect">
-                                        <a class="button secondary hollow" ng-click="editorController.toggleEdit(statement)"
-                                           ng-attr-title="{{'toggle_edit_statement'|translate}}">
-                                            <i ng-if="!editorController.editing(statement)" class="fa fa-pencil-square-o"></i>
-                                            <i ng-if="editorController.editing(statement)" class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                    <div class="button-group small float-right noselect">
-                                        <a class="button secondary" ng-class="{'hollow':statement.passive}"
-                                           ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
-                                        <a class="button secondary" ng-class="{'hollow':!statement.passive}"
-                                           ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
-                                        <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)"><i
-                                                class="fa fa-trash medium-gray"></i> </a>
-                                    </div>
-                                </div>
-                                <div class="row noselect">
-                                    <div class="small-12 columns">
-                                        <div ng-include="'editor.statement.html'"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                <div class="button-group small float-right noselect">
+                    <button class="button hollow" type="button" data-toggle="example-dropdown">{{'language_label'|translate}}</button>
+                    <div class="dropdown-pane row column" id="example-dropdown" data-dropdown data-auto-focus="false">
+                        <ul class="menu vertical">
+                            <li ng-repeat="locale in editorController.locales">
+
+                                <a ng-click="editorController.setDocumentLocale(locale.id)" href="">
+                                    <span class="fa fa-check padding-right-1" ng-show="locale.id === editorController.getLocale()"></span>
+                                    <span class="fa fa-check padding-right-1" style="color: #fff" ng-show="locale.id !== editorController.getLocale()"></span>
+                                    {{locale.description}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <a class="button hollow" ng-click="editorController.makeActive()">{{"active"|translate}}</a>
+                    <a class="button hollow" ng-click="editorController.makePassive()">{{"passive"|translate}}</a>
+                </div>
+            </div>
+            <div class="clearfix">
+                <div class="float-left noselect">
+                    {{'alternative_versions_available_heading'|translate}}
+                </div>
+                <div class="float-right noselect">
+                    <ul class="pagination" role="navigation" aria-label="Pagination">
+                        <li class="pagination-previous disabled">{{'previous_label'|translate}} <span class="show-for-sr">page</span></li>
+                        <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
+                        <li><a href="#" aria-label="Page 2">2</a></li>
+                        <li><a href="#" aria-label="Page 3">3</a></li>
+                        <li><a href="#" aria-label="Page 4">4</a></li>
+                        <!--<li class="ellipsis" aria-hidden="true"></li>-->
+                        <li class="pagination-next"><a href="#" aria-label="Next page">{{'next_label'|translate}} <span class="show-for-sr">page</span></a></li>
                     </ul>
                 </div>
+            </div>
+            <div class="row column">
+                <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
+                    <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
+                        <div data-as-sortable-item-handle>
+                            <div class="clearfix">
+                                <div class="float-left button-group small noselect">
+                                    <a class="button secondary hollow" ng-click="editorController.toggleEdit(statement)"
+                                       ng-attr-title="{{'toggle_edit_statement'|translate}}">
+                                        <i ng-if="!editorController.editing(statement)" class="fa fa-pencil-square-o"></i>
+                                        <i ng-if="editorController.editing(statement)" class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="button-group small float-right noselect">
+                                    <a class="button secondary" ng-class="{'hollow':statement.passive}"
+                                       ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
+                                    <a class="button secondary" ng-class="{'hollow':!statement.passive}"
+                                       ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
+                                    <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)"><i
+                                            class="fa fa-trash medium-gray"></i> </a>
+                                </div>
+                            </div>
+                            <div class="row noselect">
+                                <div class="small-12 columns">
+                                    <div ng-include="'editor.statement.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
