@@ -51,9 +51,11 @@
   "dictionary": "Dictionary",
   "global": "Global",
   "click_to_edit_new_statement": "Click to Edit New Statement",
+  "adopt_label":"Adopt Selected Version",
   "language_label":"Language",
   "previous_label":"Previous",
   "next_label":"Next",
+  "original_label":"Original",
   "alternative_versions_available_heading": "Alternative compliant versions of this document are available"
 }
 

@@ -41,6 +41,10 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     };
 
+    controller.adoptAlternativeVersion = function() {
+
+    };
+
     controller.getLocale = function () {
         return DocumentModel.document ? DocumentModel.document.locale : null;
     };
