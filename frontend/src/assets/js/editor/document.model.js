@@ -103,6 +103,19 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         context.clearCurrentStatement();
     };
 
+    this.setDocumentLocale = function (locale) {
+        if (context.document) {
+            context.document.locale = locale;
+            context.lookupAndSetTerms(context.document);
+            context.alternativeVersions.forEach(function (alternative) {
+                alternative.locale = locale;
+                context.lookupAndSetTerms(alternative);
+            });
+            context.markDirty();
+        }
+
+    };
+
     /**
      * Resets the statement field codes as when an ISO field value is edited.
      */

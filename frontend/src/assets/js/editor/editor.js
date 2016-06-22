@@ -33,13 +33,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     initializeCompletions();
 
-    controller.setDocumentLocale = function (locale) {
-        if (DocumentModel.document) {
-            DocumentModel.document.locale = locale;
-            DocumentModel.markDirty();
-        }
-
-    };
+    controller.setDocumentLocale = DocumentModel.setDocumentLocale;
 
     controller.adoptAlternativeVersion = function () {
 
