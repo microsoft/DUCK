@@ -286,6 +286,14 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         context.dirty = true;
     };
 
+    this.adoptAlternativeVersion = function () {
+        context.clearCurrentStatement();
+        context.originalDocument = context.document;
+        context.markDirty();
+        context.state = "COMPLIANT";
+        context.alternativeVersions.length = 0; // clear alternatives
+    };
+
     this.validateSyntax = function () {
         var errorNumber = 1;
         context.document.statements.forEach(function (statement) {

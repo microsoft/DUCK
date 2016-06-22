@@ -35,10 +35,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.setDocumentLocale = DocumentModel.setDocumentLocale;
 
-    controller.adoptAlternativeVersion = function () {
-
-    };
-
     controller.getLocale = function () {
         return DocumentModel.document ? DocumentModel.document.locale : null;
     };
@@ -61,6 +57,8 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         DocumentModel.selectAlternateVersion(alternative);
         $scope.document = alternative;
     };
+
+    controller.adoptAlternativeVersion = DocumentModel.adoptAlternativeVersion;
 
     controller.revert = DocumentModel.revert;
 
