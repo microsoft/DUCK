@@ -39,25 +39,30 @@
             <hr>
         </div>
 
+        <div class="row">
+            <div class="callout primary" ng-if="editorController.getAlternativeVersions().length > 0">
+                {{'alternative_versions_available_heading'|translate}}
+            </div>
+        </div>
         <div class="row" ng-show="document">
             <div class="clearfix">
-                <div class="button-group small float-left noselect">
-                    <a class="button hollow" ng-click="editorController.editAll()" ng-class="{'disabled': !editorController.isEditable()}"
+                <div class="button-group small float-left noselect"  ng-show="editorController.isEditable()" >
+                    <a class="button hollow" ng-click="editorController.editAll()"
                        ng-attr-title="{{'edit_all_statements'|translate}}">
                         <i class="fa fa-pencil-square-o"></i>
                     </a>
-                    <a class="button hollow" ng-click="editorController.closeAll()" ng-class="{'disabled': !editorController.isEditable()}"
+                    <a class="button hollow" ng-click="editorController.closeAll()"
                        ng-attr-title="{{'close_all_statement_editors'|translate}}">
                         <i class="fa fa-times"></i>
                     </a>
-                    <a class="button hollow" ng-click="editorController.validateSyntax()" ng-class="{'disabled': !editorController.isEditable()}"
+                    <a class="button hollow" ng-click="editorController.validateSyntax()"
                        ng-attr-title="{{'toggle_validation_messages'|translate}}">
                         <i class="fa fa-eye"></i>
                         <!--<i class="fa fa-eye-slash"></i>-->
                     </a>
                 </div>
-                <div class="button-group small float-right noselect">
-                    <button class="button hollow" type="button" data-toggle="example-dropdown" ng-class="{'disabled': !editorController.isEditable()}">
+                <div class="button-group small float-right noselect"  ng-show="editorController.isEditable()" >
+                    <button class="button hollow" type="button" data-toggle="example-dropdown">
                         {{'language_label'|translate}}
                     </button>
                     <div class="dropdown-pane row column" id="example-dropdown" data-dropdown data-auto-focus="false">
@@ -72,26 +77,17 @@
                             </li>
                         </ul>
                     </div>
-                    <a class="button hollow" ng-click="editorController.makeActive()" ng-class="{'disabled': !editorController.isEditable()}">
+                    <a class="button hollow" ng-click="editorController.makeActive()">
                         {{"active"|translate}}
                     </a>
-                    <a class="button hollow" ng-click="editorController.makePassive()" ng-class="{'disabled': !editorController.isEditable()}">
+                    <a class="button hollow" ng-click="editorController.makePassive()">
                         {{"passive"|translate}}
                     </a>
-                </div>
-            </div>
-            <div class="clearfix">
-                <div class="float-left noselect" ng-if="editorController.getAlternativeVersions().length > 0">
-                    {{'alternative_versions_available_heading'|translate}}
-                </div>
-                <div class="float-right noselect" ng-show="!editorController.isEditable()">
-                    <ul class="pagination" role="navigation" aria-label="Pagination">
-                        <li>
-                            <a class="button hollow padding-top-0-5 padding-bottom-0-5" ng-click="editorController.adoptAlternativeVersion()">
-                                {{"adopt_label"|translate}}
-                            </a>
-                        </li>
-                    </ul>
+                    </div>
+                <div class="button-group small float-right noselect"  ng-if="!editorController.isEditable()" >
+                    <a class="button hollow" ng-click="editorController.adoptAlternativeVersion()">
+                        {{"adopt_label"|translate}}
+                    </a>
                 </div>
             </div>
             <div class="clearfix" ng-if="editorController.getAlternativeVersions().length > 0">
