@@ -36,7 +36,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Microsoft/DUCK/backend/ducklib"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
 )
 
@@ -135,11 +134,12 @@ func (cb *Couchbase) GetDocument(id string) (document map[string]interface{}, er
 	return cb.getCouchbaseDocument(id)
 }
 
+/*
 //GetRuleset returns a ruleset with the sppecified ID from the Couchbase Database
 func (cb *Couchbase) GetRuleset(id string) (document map[string]interface{}, err error) {
 
 	return cb.getCouchbaseDocument(id)
-}
+}*/
 
 func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]interface{}, err error) {
 
@@ -193,6 +193,7 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) (documents []map
 
 }
 
+/*
 //GetRulebases returns a list of all rulebases in the DB
 func (cb *Couchbase) GetRulebases() ([]ducklib.Rulebase, error) {
 	url := fmt.Sprintf("%s/%s/_design/app/_view/rulebases", cb.url, cb.database)
@@ -224,7 +225,7 @@ func (cb *Couchbase) GetRulebases() ([]ducklib.Rulebase, error) {
 	return documents, nil
 
 }
-
+*/
 // DeleteDocument deletes a Data Use Document from the Couchbase Database
 func (cb *Couchbase) DeleteDocument(id string, rev string) error {
 	return cb.deleteCbDocument(id, rev)
@@ -235,10 +236,11 @@ func (cb *Couchbase) DeleteUser(id string, rev string) error {
 	return cb.deleteCbDocument(id, rev)
 }
 
+/*
 // DeleteRuleset deletes a User from the Couchbase Database
 func (cb *Couchbase) DeleteRuleset(id string, rev string) error {
 	return cb.deleteCbDocument(id, rev)
-}
+}*/
 
 func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 	url := fmt.Sprintf("%s/%s/%s?rev=%s", cb.url, cb.database, id, rev)
@@ -282,10 +284,11 @@ func (cb *Couchbase) NewDocument(id string, entry string) error {
 	return cb.putEntry(id, entry, "document")
 }
 
+/*
 //NewRuleset creates a new Ruleset in the couchbase Database
 func (cb *Couchbase) NewRuleset(id string, entry string) error {
 	return cb.putEntry(id, entry, "ruleset")
-}
+}*/
 
 //UpdateUser replaces an existing User in the Couchbase database
 func (cb *Couchbase) UpdateUser(id string, entry string) error {
@@ -297,10 +300,11 @@ func (cb *Couchbase) UpdateDocument(id string, entry string) error {
 	return cb.putEntry(id, entry, "document")
 }
 
+/*
 //UpdateRuleset replaces an existing Ruleset in the Couchbase database
 func (cb *Couchbase) UpdateRuleset(id string, entry string) error {
 	return cb.putEntry(id, entry, "ruleset")
-}
+}*/
 
 func (cb *Couchbase) putEntry(id, entry, entryType string) error {
 	//check type of entry (document/user/ruleset)
