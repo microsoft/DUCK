@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 )
@@ -39,16 +40,16 @@ func testdataHandler(c echo.Context) error {
 	var e string
 	if err != nil {
 		e = err.Error()
-		return c.JSON(http.StatusExpectationFailed, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusExpectationFailed, structs.Response{Ok: false, Reason: &e})
 
 	}
 	if err := FillTestdata(dat); err != nil {
 		e = err.Error()
-		return c.JSON(http.StatusConflict, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
 
 	}
 
-	return c.JSON(http.StatusOK, Response{Ok: true})
+	return c.JSON(http.StatusOK, structs.Response{Ok: true})
 }
 
 /*
@@ -65,10 +66,10 @@ func deleteDocHandler(c echo.Context) error {
 	err := datab.DeleteDocument(c.Param("docid"))
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, Response{Ok: true})
+	return c.JSON(http.StatusOK, structs.Response{Ok: true})
 }
 
 func putDocHandler(c echo.Context) error {
@@ -76,22 +77,22 @@ func putDocHandler(c echo.Context) error {
 	resp, err := ioutil.ReadAll(c.Request().Body())
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	data := Document{}
+	data := structs.Document{}
 	json.Unmarshal(resp, &data)
 
 	err = datab.PutDocument(data.ID, resp)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	doc, err := datab.GetDocument(data.ID)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	return c.JSON(http.StatusOK, doc)
@@ -101,18 +102,18 @@ func postDocHandler(c echo.Context) error {
 	req, err := ioutil.ReadAll(c.Request().Body())
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	id, err := datab.PostDocument(req)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	doc, err := datab.GetDocument(id)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	return c.JSON(http.StatusOK, doc)
@@ -126,10 +127,10 @@ func deleteUserHandler(c echo.Context) error {
 	err := datab.DeleteUser(c.Param("id"))
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, Response{Ok: true})
+	return c.JSON(http.StatusOK, structs.Response{Ok: true})
 }
 
 func putUserHandler(c echo.Context) error {
@@ -137,19 +138,19 @@ func putUserHandler(c echo.Context) error {
 	resp, err := ioutil.ReadAll(c.Request().Body())
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	id := c.Param("id")
 	err = datab.PutUser(id, resp)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	doc, err := datab.GetUser(id)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	return c.JSON(http.StatusOK, doc)
@@ -159,18 +160,18 @@ func postUserHandler(c echo.Context) error {
 	req, err := ioutil.ReadAll(c.Request().Body())
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	id, err := datab.PostUser(req)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	doc, err := datab.GetUser(id)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	return c.JSON(http.StatusOK, doc)
@@ -240,18 +241,22 @@ func postRsHandler(c echo.Context) error {
 func checkDocHandler(c echo.Context) error {
 	id := c.Param("baseid")
 
-	doc := new(Document)
+	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	ok, err := Checker.IsCompliant(id, doc)
+	ok, docs, err := Checker.CompliantDocuments(id, doc, 10, 0)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	if ok {
+		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
 	}
 
-	return c.JSON(http.StatusOK, Response{Ok: ok})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT", Documents: docs})
 }
 
 func checkDocIDHandler(c echo.Context) error {
@@ -261,23 +266,27 @@ func checkDocIDHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(docid)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	ok, err := Checker.IsCompliant(id, &doc)
+	ok, docs, err := Checker.CompliantDocuments(id, &doc, 10, 0)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, Response{Ok: ok})
+	if ok {
+		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
+	}
+
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT", Documents: docs})
 
 }
 
 // loginHandler handles the login Process
 func loginHandler(c echo.Context) error {
 
-	u := new(Login)
+	u := new(structs.Login)
 	if err := c.Bind(u); err != nil {
 		return err
 	}

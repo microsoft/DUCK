@@ -1,65 +1,4 @@
-package ducklib
-
-type User struct {
-	ID        string   `json:"id"`
-	Email     string   `json:"email"`
-	Password  string   `json:"password"`
-	Firstname string   `json:"firstname"`
-	Lastname  string   `json:"lastname"`
-	Locale    string   `json:"locale"`
-	Revision  string   `json:"_rev"`
-	Documents []string `json:"documents"`
-}
-
-type Response struct {
-	Ok     bool    `json:"ok"`
-	Reason *string `json:"reason,omitempty"`
-	ID     *string `json:"id,omitempty"`
-}
-
-type Login struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-func (u *User) fromValueMap(mp map[string]interface{}) {
-
-	if id, ok := mp["_id"]; ok {
-		u.ID = id.(string)
-	}
-	if rev, ok := mp["_rev"]; ok {
-		u.Revision = rev.(string)
-	}
-	if name, ok := mp["firstname"]; ok {
-		u.Firstname = name.(string)
-	}
-	if owner, ok := mp["lastname"]; ok {
-		u.Lastname = owner.(string)
-	}
-	if owner, ok := mp["password"]; ok {
-		u.Password = owner.(string)
-	}
-	if owner, ok := mp["email"]; ok {
-		u.Email = owner.(string)
-	}
-	if locale, ok := mp["locale"]; ok {
-		u.Locale = locale.(string)
-	}
-
-	if docs, prs := mp["documents"].([]interface{}); prs {
-		u.Documents = make([]string, len(docs))
-		for i, v := range docs {
-			u.Documents[i] = v.(string)
-		}
-	}
-
-}
-
-type Rulebase struct {
-	Name     string `json:"name"`
-	ID       string `json:"id"`
-	Revision string `json:"_rev"`
-}
+package structs
 
 type Document struct {
 	ID         string      `json:"id"`
@@ -77,11 +16,11 @@ type Statement struct {
 	SourceScopeCode  string `json:"sourceScopeCode"`
 	ActionCode       string `json:"actionCode"`
 	ResultScopeCode  string `json:"resultScopeCode"`
-	TrackingID   string `json:"trackingId"`
-	Passive      bool   `json:"passive"`
+	TrackingID       string `json:"trackingId"`
+	Passive          bool   `json:"passive"`
 }
 
-func (d *Document) fromValueMap(mp map[string]interface{}) {
+func (d *Document) FromValueMap(mp map[string]interface{}) {
 
 	if id, ok := mp["_id"]; ok {
 		d.ID = id.(string)
@@ -103,14 +42,14 @@ func (d *Document) fromValueMap(mp map[string]interface{}) {
 		d.Statements = make([]Statement, len(stmts))
 		for i, stmt := range stmts {
 			s := new(Statement)
-			s.fromInterfaceMap(stmt.(map[string]interface{}))
+			s.FromInterfaceMap(stmt.(map[string]interface{}))
 			d.Statements[i] = *s
 		}
 	}
 
 }
 
-func (s *Statement) fromInterfaceMap(mp map[string]interface{}) {
+func (s *Statement) FromInterfaceMap(mp map[string]interface{}) {
 
 	s.UseScopeCode = getFieldValue(mp, "useScopeCode")
 	s.QualifierCode = getFieldValue(mp, "qualifierCode")

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
 	"github.com/twinj/uuid"
 )
@@ -76,14 +77,14 @@ func (database *Database) GetLogin(username string) (id string, pw string, err e
 	return db.GetLogin(username)
 }
 
-func (database *Database) GetUser(userid string) (User, error) {
-	var u User
+func (database *Database) GetUser(userid string) (structs.User, error) {
+	var u structs.User
 	mp, err := db.GetUser(userid)
 	if err != nil {
 		return u, err
 	}
 
-	u.fromValueMap(mp)
+	u.FromValueMap(mp)
 
 	return u, err
 }
@@ -125,19 +126,19 @@ func (database *Database) PostUser(content []byte) (string, error) {
 Document DB operations
 
 */
-func (database *Database) GetDocument(documentid string) (Document, error) {
-	var doc Document
+func (database *Database) GetDocument(documentid string) (structs.Document, error) {
+	var doc structs.Document
 	mp, err := db.GetDocument(documentid)
 	if err != nil {
 		return doc, err
 	}
 
-	doc.fromValueMap(mp)
+	doc.FromValueMap(mp)
 
 	return doc, err
 }
-func (database *Database) GetDocumentSummariesForUser(userid string) ([]Document, error) {
-	var docs []Document
+func (database *Database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
+	var docs []structs.Document
 	list, err := db.GetDocumentSummariesForUser(userid)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -145,7 +146,7 @@ func (database *Database) GetDocumentSummariesForUser(userid string) ([]Document
 	}
 
 	for _, item := range list {
-		docs = append(docs, Document{Name: item["name"], ID: item["id"]})
+		docs = append(docs, structs.Document{Name: item["name"], ID: item["id"]})
 	}
 
 	return docs, nil

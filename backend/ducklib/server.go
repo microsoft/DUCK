@@ -16,21 +16,22 @@ var JWT []byte
 var Checker ComplianceCheckerPlugin
 
 //GetServer returns Echo instance with predefined routes
-func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) (*echo.Echo) {
+func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 
 	datab = NewDatabase()
 	datab.Init()
 
 	JWT = jwtKey
 
-	//Checker, err := MakeComplianceCheckerPlugin(ruleBaseDir)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//err = Checker.Intialize()
-	//if err != nil {
-	//	panic(err)
-	//}
+	Checker, err := MakeComplianceCheckerPlugin(ruleBaseDir)
+	if err != nil {
+		panic(err)
+	}
+	err = Checker.Intialize()
+	if err != nil {
+		panic(err)
+	}
+
 	//New echo instance
 	e := echo.New()
 
@@ -38,9 +39,9 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) (*echo.Echo) {
 	e.Pre(middleware.RemoveTrailingSlash())
 	//Logger Config
 	LoggerConfig := middleware.LoggerConfig{Format: `{"time":"${time_rfc3339}",` +
-	`"method":"${method}","uri":"${uri}","status":${status}, ` +
-	`"latency":"${latency_human}","Bytes received":${rx_bytes},` +
-	`"Bytes sent":${tx_bytes}}` + "\n",
+		`"method":"${method}","uri":"${uri}","status":${status}, ` +
+		`"latency":"${latency_human}","Bytes received":${rx_bytes},` +
+		`"Bytes sent":${tx_bytes}}` + "\n",
 	}
 	e.Use(middleware.LoggerWithConfig(LoggerConfig))
 	e.Use(middleware.Recover())
@@ -67,12 +68,12 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) (*echo.Echo) {
 	documents.GET("/:docid", getDocHandler)                      //return document
 
 	//ruleset resources
-	rulesets := api.Group("/rulesets", middleware.JWT(jwtKey)) //base URI
+	rulebases := api.Group("/rulebases", middleware.JWT(jwtKey)) //base URI
 	//rulesets.POST("/", postRsHandler)                                //create a ruleset
 	//rulesets.DELETE("/:id", deleteRsHandler)                         //delete a ruleset
 	//rulesets.PUT("/:setid", putRsHandler)                            //update a ruleset
-	rulesets.PUT("/:baseid/documents", checkDocHandler)               //process provided document against ruleset
-	rulesets.PUT("/:baseid/documents/:documentid", checkDocIDHandler) //process document against ruleset
+	rulebases.PUT("/:baseid/documents", checkDocHandler)               //process provided document against ruleset
+	rulebases.PUT("/:baseid/documents/:documentid", checkDocIDHandler) //process document against ruleset
 
 	// serves the static files
 	e.Static("/", webDir)

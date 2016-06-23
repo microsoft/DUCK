@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
+
 	"gopkg.in/yaml.v2"
 	// "path/filepath"
 )
@@ -113,7 +115,7 @@ func (c ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
 
 // IsCompliant returns true iff the document complies with the rules in the given
 // rulebase.  An error is returned if document has syntax errors and cannot be parsed.
-func (c ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *Document) (bool, error) {
+func (c ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *structs.Document) (bool, error) {
 	r := c.ruleBaseReader(ruleBaseID)
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
 	if err != nil {
@@ -130,7 +132,7 @@ func (c ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *Docume
 // called repeatedly to scroll through all compliant documents incrementally.  The search
 // for compliant documents is restarted each time CompliantDocuments is called, no matter
 // what the offset is.
-func (c ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *Document, maxResults int, offset int) (bool, []*Document, error) {
+func (c ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *structs.Document, maxResults int, offset int) (bool, []*structs.Document, error) {
 	r := c.ruleBaseReader(ruleBaseID)
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
 	if err != nil {
@@ -147,7 +149,7 @@ func (c ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document 
 	// call c.Cancel() to cancel the search for other compliant documents and
 	// free the resourcs of the coroutine.
 
-	var docs []*Document
+	var docs []*structs.Document
 	if offset > 0 {
 		for k := 0; k < offset; k++ {
 			<-docChan

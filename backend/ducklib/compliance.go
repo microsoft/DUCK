@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
@@ -49,9 +50,9 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 		}
 		c.Theories[ruleBaseId] = VersionedTheory{revision, ag.Theory}
 		return ag.Theory, nil
-	} else {
-		return vt.theory, nil
 	}
+	return vt.theory, nil
+
 }
 
 /*
@@ -64,7 +65,7 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 		    the proposition that the document is compliant is in.
 	The error returned will be nil if and only if no errors occur this process.
 */
-func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Document) (bool, error) {
+func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Document) (bool, error) {
 	// Construct the argument graph
 	compliant := &caes.Statement{Id: "compliant",
 		Metadata: make(map[string]interface{}),
@@ -126,7 +127,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Document) 
 	return l[compliant] == caes.In, nil
 }
 
-func removeStatement(d *Document, i int) (*Document, error) {
+func removeStatement(d *structs.Document, i int) (*structs.Document, error) {
 	if i < 0 || i > len(d.Statements)-1 {
 		return nil, fmt.Errorf("Statements index out of bounds: %v", i)
 	}
@@ -134,7 +135,7 @@ func removeStatement(d *Document, i int) (*Document, error) {
 	d2 := *d
 	// replace the statements with a copy, but with the selected
 	// statement removed.
-	d2.Statements = []Statement{}
+	d2.Statements = []structs.Statement{}
 	for j, _ := range d.Statements {
 		if i != j {
 			d2.Statements = append(d2.Statements, d.Statements[j])
@@ -163,7 +164,7 @@ func removeStatement(d *Document, i int) (*Document, error) {
 	documents are needed, to cause the coroutine to be terminated.
 
 */
-func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *Document, cncl Canceller) (bool, <-chan *Document, error) {
+func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.Document, cncl Canceller) (bool, <-chan *structs.Document, error) {
 	compliant, err := c.IsCompliant(theory, doc)
 	if err != nil {
 		return false, nil, err
@@ -176,12 +177,12 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *Document
 	// statements of doc, and push each alternative documents down the
 	// variants channel.
 
-	variants := make(chan *Document)
+	variants := make(chan *structs.Document)
 
 	// generate documents with subsets of the data use documents
 	// and push them down the varients channel
-	var subsets func(int, *Document)
-	subsets = func(i int, d *Document) {
+	var subsets func(int, *structs.Document)
+	subsets = func(i int, d *structs.Document) {
 		if i < 0 {
 			return
 		}
@@ -203,7 +204,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *Document
 	go subsets(len(doc.Statements)-1, doc)
 
 	// Filter out the noncompliant documents
-	compliantVariants := make(chan *Document)
+	compliantVariants := make(chan *structs.Document)
 	go func() {
 		for {
 			select {
