@@ -92,7 +92,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             $http.put(url, documentData).success(function (data, status, headers, config) {
                 var newDocument = angular.fromJson(data);
                 // update the document revision
-                document._rev = newDocument._rev;
+                document.revision = newDocument.revison;
                 resolve(document);
             }).error(function (data, status, headers, config) {
                 reject(status);
@@ -131,7 +131,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var complianceResult;
             // stub for testing
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
-
+/*
             if (document.statements.length > 2) {
                 complianceResult = {
                     compliant: "COMPLIANT",
@@ -165,15 +165,15 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             });
             resolve(complianceResult);
             // end stub 
-
-            // var documentData = context.createDocumentData(document);
-            // $http.put(url, documentData).success(function () {
-            //     var complianceResult = angular.fromJson(data);
-            //     resolve(complianceResult);
-            //     // FIXME handle errors
-            // }).error(function (data, status) {
-            //     reject(status);
-            // });
+*/
+             var documentData = context.createDocumentData(document);
+             $http.put(url, documentData).success(function () {
+                 var complianceResult = angular.fromJson(data);
+                 resolve(complianceResult);
+                 // FIXME handle errors
+             }).error(function (data, status) {
+                 reject(status);
+             });
         });
     };
 
@@ -197,7 +197,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 passive: statement.passive
             })
         });
-        data._rev = document._rev;
+        data.revision = document.revision;
         return data;
     }
 
