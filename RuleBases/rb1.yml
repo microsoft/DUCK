@@ -1,13 +1,16 @@
 meta:
   title: Test DUCK Rulebase
-  notes: >
+  description: >
     This is a trivial ulebase for testing the integration of DUCK with
-    Carneades. 
+    Carneades.
+  version: 1
+  id: 123
+
 
 language:
   compliant/0: The data use document is compliant.
   ¬compliant/0: The data use document is not compliant.
-  dataUseStatement/1: %s is a data use statement.
+  dataUseStatement/1: "%s is a data use statement."
   useScope/2: The use scope of %s is %s.
   qualifier/2: The qualifier of %s is %s.
   dataCategory/2: The data category of %s is %s.
@@ -15,7 +18,7 @@ language:
   resultScope/2: The result scope of %s is %s.
   id/2: The ID of %s is %s.
   passive/2: The passive attribute of %s is %s.
-  duplicate/2: %s and %s are equivalent data use statements
+  duplicate/2: "%s and %s are equivalent data use statements"
 
 issues:
   i1:
