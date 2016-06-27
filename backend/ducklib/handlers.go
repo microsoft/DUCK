@@ -1,7 +1,7 @@
 package ducklib
 
 import (
-	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -60,6 +60,7 @@ func getDocHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
+	fmt.Printf("%+v\n", doc)
 	return c.JSON(http.StatusOK, doc)
 }
 func deleteDocHandler(c echo.Context) error {
@@ -74,49 +75,58 @@ func deleteDocHandler(c echo.Context) error {
 
 func putDocHandler(c echo.Context) error {
 
-	resp, err := ioutil.ReadAll(c.Request().Body())
+	/*resp, err := ioutil.ReadAll(c.Request().Body())
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
-	data := structs.Document{}
-	json.Unmarshal(resp, &data)
-
-	err = datab.PutDocument(data.ID, resp)
+	fmt.Println(string(resp))
+	*/
+	doc := new(structs.Document)
+	if err := c.Bind(doc); err != nil {
+		e := err.Error()
+		fmt.Println("1")
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	err := datab.PutDocument(*doc)
 	if err != nil {
 		e := err.Error()
+		fmt.Printf("%+v", *doc)
+		fmt.Println(e)
+		fmt.Println("2")
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	doc, err := datab.GetDocument(data.ID)
+	docu, err := datab.GetDocument(doc.ID)
 	if err != nil {
 		e := err.Error()
+
+		fmt.Println("3")
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, doc)
+	return c.JSON(http.StatusOK, docu)
 }
 func postDocHandler(c echo.Context) error {
 
-	req, err := ioutil.ReadAll(c.Request().Body())
+	doc := new(structs.Document)
+	if err := c.Bind(doc); err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	id, err := datab.PostDocument(*doc)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	docu, err := datab.GetDocument(id)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	id, err := datab.PostDocument(req)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-	}
-	doc, err := datab.GetDocument(id)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-	}
-
-	return c.JSON(http.StatusOK, doc)
+	return c.JSON(http.StatusOK, docu)
 }
 
 /*
@@ -135,46 +145,47 @@ func deleteUserHandler(c echo.Context) error {
 
 func putUserHandler(c echo.Context) error {
 
-	resp, err := ioutil.ReadAll(c.Request().Body())
-	if err != nil {
+	u := new(structs.User)
+	if err := c.Bind(u); err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	id := c.Param("id")
-	err = datab.PutUser(id, resp)
+	u.ID = id
+	err := datab.PutUser(*u)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	doc, err := datab.GetUser(id)
+	us, err := datab.GetUser(id)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, doc)
+	return c.JSON(http.StatusOK, us)
 }
 func postUserHandler(c echo.Context) error {
 
-	req, err := ioutil.ReadAll(c.Request().Body())
+	var u structs.User
+	if err := c.Bind(u); err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	id, err := datab.PostUser(u)
+	if err != nil {
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	u, err = datab.GetUser(id)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	id, err := datab.PostUser(req)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-	}
-	doc, err := datab.GetUser(id)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-	}
-
-	return c.JSON(http.StatusOK, doc)
+	return c.JSON(http.StatusOK, u)
 }
 
 /*

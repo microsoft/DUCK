@@ -3,7 +3,7 @@ package structs
 type Document struct {
 	ID         string      `json:"id"`
 	Name       string      `json:"name"`
-	Revision   string      `json:"_rev"`
+	Revision   string      `json:"revision"`
 	Owner      string      `json:"owner"`
 	Locale     string      `json:"locale"`
 	Statements []Statement `json:"statements"`
@@ -38,12 +38,16 @@ func (d *Document) FromValueMap(mp map[string]interface{}) {
 		d.Locale = locale.(string)
 	}
 
+	d.Statements = make([]Statement, 0)
 	if stmts, prs := mp["statements"].([]interface{}); prs {
-		d.Statements = make([]Statement, len(stmts))
-		for i, stmt := range stmts {
+
+		for _, stmt := range stmts {
 			s := new(Statement)
-			s.FromInterfaceMap(stmt.(map[string]interface{}))
-			d.Statements[i] = *s
+			if stmt != nil {
+				s.FromInterfaceMap(stmt.(map[string]interface{}))
+				d.Statements = append(d.Statements, *s)
+			}
+
 		}
 	}
 

@@ -2,7 +2,6 @@ package ducklib
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
@@ -34,19 +33,21 @@ func FillTestdata(data []byte) error {
 	for _, l := range listOfData {
 
 		mp := l.(map[string]interface{})
-		id := mp["_id"].(string)
+
 		entryType := mp["type"].(string)
-		entry, err := json.Marshal(l)
-		if err != nil {
-			return err
-		}
+
 		switch entryType {
 		case "document":
-			if err := db.NewDocument(id, string(entry)); err != nil {
+			var d structs.Document
+			d.FromValueMap(mp)
+
+			if err := db.NewDocument(d); err != nil {
 				return err
 			}
 		case "user":
-			if err := db.NewUser(id, string(entry)); err != nil {
+			var u structs.User
+			u.FromValueMap(mp)
+			if err := db.NewUser(u); err != nil {
 				return err
 			}
 
@@ -78,47 +79,28 @@ func (database *Database) GetLogin(username string) (id string, pw string, err e
 }
 
 func (database *Database) GetUser(userid string) (structs.User, error) {
-	var u structs.User
-	mp, err := db.GetUser(userid)
-	if err != nil {
-		return u, err
-	}
 
-	u.FromValueMap(mp)
+	return db.GetUser(userid)
 
-	return u, err
 }
 
 func (database *Database) DeleteUser(id string) error {
 
-	doc, err := db.GetDocument(id)
-	if err != nil {
-
-		return err
-	}
-	if rev, prs := doc["_rev"]; prs {
-		err := db.DeleteDocument(id, rev.(string))
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	return errors.New("Could not delete Entry")
+	return db.DeleteUser(id)
 
 }
 
-func (database *Database) PutUser(id string, content []byte) error {
+func (database *Database) PutUser(user structs.User) error {
 
-	return db.UpdateDocument(id, string(content))
+	return db.UpdateUser(user)
 
 }
 
-func (database *Database) PostUser(content []byte) (string, error) {
+func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	u := uuid.NewV4()
 	uuid := uuid.Formatter(u, uuid.Clean)
-
-	return uuid, db.NewDocument(uuid, string(content))
+	user.ID = uuid
+	return uuid, db.NewUser(user)
 
 }
 
@@ -127,62 +109,33 @@ Document DB operations
 
 */
 func (database *Database) GetDocument(documentid string) (structs.Document, error) {
-	var doc structs.Document
-	mp, err := db.GetDocument(documentid)
-	if err != nil {
-		return doc, err
-	}
 
-	doc.FromValueMap(mp)
+	return db.GetDocument(documentid)
 
-	return doc, err
 }
 func (database *Database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
-	var docs []structs.Document
-	list, err := db.GetDocumentSummariesForUser(userid)
-	if err != nil {
-		fmt.Println(err.Error())
-		return docs, err
-	}
 
-	for _, item := range list {
-		docs = append(docs, structs.Document{Name: item["name"], ID: item["id"]})
-	}
-
-	return docs, nil
+	return db.GetDocumentSummariesForUser(userid)
 
 }
 
 func (database *Database) DeleteDocument(id string) error {
 
-	doc, err := db.GetDocument(id)
-	if err != nil {
-
-		return err
-	}
-	if rev, prs := doc["_rev"]; prs {
-		err := db.DeleteDocument(id, rev.(string))
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	return errors.New("Could not delete Entry")
+	return db.DeleteDocument(id)
 
 }
 
-func (database *Database) PutDocument(id string, content []byte) error {
+func (database *Database) PutDocument(doc structs.Document) error {
 
-	return db.UpdateDocument(id, string(content))
+	return db.UpdateDocument(doc)
 
 }
 
-func (database *Database) PostDocument(content []byte) (string, error) {
+func (database *Database) PostDocument(doc structs.Document) (ID string, err error) {
 	u := uuid.NewV4()
 	uuid := uuid.Formatter(u, uuid.Clean)
-
-	return uuid, db.NewDocument(uuid, string(content))
+	doc.ID = uuid
+	return uuid, db.NewDocument(doc)
 
 }
 

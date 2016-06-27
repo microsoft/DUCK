@@ -36,17 +36,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
 )
-
-var designDoc = `{"_id":"_design/app","views":{"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
-	`"by_date":{"map":"function(doc) { if(doc.date && doc.title) {   emit(doc.date, doc.title);  }}"},` +
-	`"user_login":{"map":"function(doc) { if(doc.type =='user') {   emit(doc.email,  doc.password);  }}"},` +
-	`"user":{"map":"function(doc) { if(doc.type =='user') {   emit(doc._id, doc);  }}"},` +
-	`"documents":{"map":"function(doc) { if(doc.type =='document') {   emit(doc._id, doc);  }}"},` +
-	`"rulebases":{"map":"function(doc) { if(doc.type =='rulebase') {   emit(doc._id, doc._rev);  }}"},` +
-	`"documents_by_user":{"map":"function(doc) { if(doc.type =='document') {   emit([doc.owner, doc._id], doc.name);  }}"}},` +
-	`"language":"javascript"}`
 
 //Couchbase implements the pluginregistry.DBPlugin interface for the Couchbase Dabase
 type Couchbase struct {
@@ -123,15 +115,32 @@ func (cb *Couchbase) GetLogin(username string) (id string, pw string, err error)
 }
 
 //GetUser returns a User with the sppecified ID from the Couchbase Database
-func (cb *Couchbase) GetUser(id string) (user map[string]interface{}, err error) {
+func (cb *Couchbase) GetUser(id string) (structs.User, error) {
 
-	return cb.getCouchbaseDocument(id)
+	var u structs.User
+	mp, err := cb.getCouchbaseDocument(id)
+	if err != nil {
+		return u, err
+	}
+
+	u.FromValueMap(mp)
+
+	return u, err
+
 }
 
 //GetDocument returns a Data use document with the sppecified ID from the Couchbase Database
-func (cb *Couchbase) GetDocument(id string) (document map[string]interface{}, err error) {
+func (cb *Couchbase) GetDocument(id string) (structs.Document, error) {
+	var doc structs.Document
+	mp, err := cb.getCouchbaseDocument(id)
+	if err != nil {
+		return doc, err
+	}
 
-	return cb.getCouchbaseDocument(id)
+	doc.FromValueMap(mp)
+
+	return doc, err
+
 }
 
 /*
@@ -161,7 +170,7 @@ func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]i
 }
 
 //GetDocumentSummariesForUser returns a list all data use documents a user owns
-func (cb *Couchbase) GetDocumentSummariesForUser(userid string) (documents []map[string]string, err error) {
+func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 	url := fmt.Sprintf("%s/%s/_design/app/_view/documents_by_user?startkey=[\"%s\",\"\"]&endkey=[\"%s\",{}]",
 		cb.url, cb.database, userid, userid)
 
@@ -176,20 +185,25 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) (documents []map
 		return nil, err
 	}
 
-	documents = make([]map[string]string, len(rows))
+	var documents []structs.Document
 
-	for row, intf := range rows {
+	for _, intf := range rows {
 
 		doc := intf.(map[string]interface{})
-		document := make(map[string]string)
+		var document structs.Document
+		if id, ok := doc["id"]; ok {
+			document.ID = id.(string)
+		}
 
-		document["name"] = doc["value"].(string)
-		document["id"] = doc["id"].(string)
-		documents[row] = document
+		if name, ok := doc["value"]; ok {
+			document.Name = name.(string)
+		}
+
+		documents = append(documents, document)
 
 	}
 
-	return
+	return documents, err
 
 }
 
@@ -227,13 +241,41 @@ func (cb *Couchbase) GetRulebases() ([]ducklib.Rulebase, error) {
 }
 */
 // DeleteDocument deletes a Data Use Document from the Couchbase Database
-func (cb *Couchbase) DeleteDocument(id string, rev string) error {
-	return cb.deleteCbDocument(id, rev)
+func (cb *Couchbase) DeleteDocument(id string) error {
+
+	doc, err := cb.getCouchbaseDocument(id)
+	if err != nil {
+
+		return err
+	}
+	if rev, prs := doc["_rev"]; prs {
+		err := cb.deleteCbDocument(id, rev.(string))
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return errors.New("Could not delete Entry")
+
 }
 
 // DeleteUser deletes a User from the Couchbase Database
-func (cb *Couchbase) DeleteUser(id string, rev string) error {
-	return cb.deleteCbDocument(id, rev)
+func (cb *Couchbase) DeleteUser(id string) error {
+	doc, err := cb.getCouchbaseDocument(id)
+	if err != nil {
+
+		return err
+	}
+	if rev, prs := doc["_rev"]; prs {
+		err := cb.deleteCbDocument(id, rev.(string))
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return errors.New("Could not delete Entry")
 }
 
 /*
@@ -275,13 +317,13 @@ func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 }
 
 // NewUser creates a new user in the couchbase Databse
-func (cb *Couchbase) NewUser(id string, entry string) error {
-	return cb.putEntry(id, entry, "user")
+func (cb *Couchbase) NewUser(user structs.User) error {
+	return cb.putUser(user)
 }
 
 //NewDocument creates a new Data use document in the couchbase Database
-func (cb *Couchbase) NewDocument(id string, entry string) error {
-	return cb.putEntry(id, entry, "document")
+func (cb *Couchbase) NewDocument(doc structs.Document) error {
+	return cb.putDocument(doc)
 }
 
 /*
@@ -291,45 +333,76 @@ func (cb *Couchbase) NewRuleset(id string, entry string) error {
 }*/
 
 //UpdateUser replaces an existing User in the Couchbase database
-func (cb *Couchbase) UpdateUser(id string, entry string) error {
-	return cb.putEntry(id, entry, "user")
+func (cb *Couchbase) UpdateUser(user structs.User) error {
+	return cb.putUser(user)
 }
 
 //UpdateDocument replaces an existing Data Use Document in the Couchbase database
-func (cb *Couchbase) UpdateDocument(id string, entry string) error {
-	return cb.putEntry(id, entry, "document")
+func (cb *Couchbase) UpdateDocument(doc structs.Document) error {
+	return cb.putDocument(doc)
 }
 
-/*
-//UpdateRuleset replaces an existing Ruleset in the Couchbase database
-func (cb *Couchbase) UpdateRuleset(id string, entry string) error {
-	return cb.putEntry(id, entry, "ruleset")
-}*/
+func (cb *Couchbase) putUser(u structs.User) error {
+	entryMap := make(map[string]interface{})
+	entryMap["type"] = "user"
+	entryMap["_id"] = u.ID
+	entryMap["email"] = u.Email
+	entryMap["password"] = u.Password
+	entryMap["firstname"] = u.Firstname
+	entryMap["lastname"] = u.Lastname
+	entryMap["locale"] = u.Locale
+	entryMap["_rev"] = u.Revision
 
-func (cb *Couchbase) putEntry(id, entry, entryType string) error {
+	return cb.putEntry(entryMap)
+
+}
+func (cb *Couchbase) putDocument(d structs.Document) error {
+	entryMap := make(map[string]interface{})
+	entryMap["type"] = "document"
+	entryMap["_id"] = d.ID
+	entryMap["name"] = d.Name
+	entryMap["owner"] = d.Owner
+	entryMap["locale"] = d.Locale
+	if d.Revision != "" {
+		entryMap["_rev"] = d.Revision
+	}
+	var stmts []map[string]string
+	for _, statement := range d.Statements {
+		stmt := make(map[string]string)
+		stmt["useScopeCode"] = statement.UseScopeCode
+		stmt["qualifierCode"] = statement.QualifierCode
+		stmt["dataCategoryCode"] = statement.DataCategoryCode
+		stmt["sourceScopeCode"] = statement.SourceScopeCode
+		stmt["actionCode"] = statement.ActionCode
+		stmt["resultScopeCode"] = statement.ResultScopeCode
+		stmt["trackingId"] = statement.TrackingID
+
+		if statement.Passive {
+			stmt["passive"] = "true"
+		} else {
+			stmt["passive"] = "false"
+		}
+
+		stmts = append(stmts, stmt)
+	}
+	if stmts != nil {
+		entryMap["statements"] = stmts
+	} 
+
+	return cb.putEntry(entryMap)
+}
+
+func (cb *Couchbase) putEntry(entry map[string]interface{}) error {
 	//check type of entry (document/user/ruleset)
 
-	entryBytes := []byte(entry)
-	var entryMap map[string]interface{}
-	if err := json.Unmarshal(entryBytes, &entryMap); err != nil {
-		return err
-	}
-	fieldType, prs := entryMap["type"]
-	if !prs {
-		entryMap["type"] = entryType
-	}
+	var entryBytes []byte
 
-	if prs && fieldType != entryType {
-		err := fmt.Errorf("Couchbase Document type mismatch. Want %s, got %s", entryType, fieldType)
-
-		return err
-	}
-
-	entryBytes, err := json.Marshal(entryMap)
+	entryBytes, err := json.Marshal(entry)
 	if err != nil {
 		return err
 	}
-	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, id)
+
+	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, entry["_id"])
 
 	client := &http.Client{}
 	request, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(entryBytes))
@@ -361,7 +434,20 @@ func (cb *Couchbase) putEntry(id, entry, entryType string) error {
 
 //Init initializes the Couchbase DB & tests for connection errors
 func (cb *Couchbase) Init(url string, database string) error {
-	log.Println("Couchase initialization")
+	log.Println("Couchbase initialization")
+
+	designDoc := make(map[string]interface{})
+	designDoc["id"] = "_design/app"
+	designDoc["views"] = ` {"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
+		`"by_date":{"map":"function(doc) { if(doc.date && doc.title) {   emit(doc.date, doc.title);  }}"},` +
+		`"user_login":{"map":"function(doc) { if(doc.type =='user') {   emit(doc.email,  doc.password);  }}"},` +
+		`"user":{"map":"function(doc) { if(doc.type =='user') {   emit(doc._id, doc);  }}"},` +
+		`"documents":{"map":"function(doc) { if(doc.type =='document') {   emit(doc._id, doc);  }}"},` +
+		`"rulebases":{"map":"function(doc) { if(doc.type =='rulebase') {   emit(doc._id, doc._rev);  }}"},` +
+		`"documents_by_user":{"map":"function(doc) { if(doc.type =='document') {   emit([doc.owner, doc._id], doc.name);  }}"}},`
+	designDoc["language"] = "javascript"
+	designDoc["type"] = "design"
+
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -394,7 +480,7 @@ func (cb *Couchbase) Init(url string, database string) error {
 	if !ok {
 		log.Println("Designfile does not exist. Creating now")
 
-		err := cb.putEntry("_design/app", designDoc, "design")
+		err := cb.putEntry(designDoc)
 		if err != nil {
 			log.Printf("ERROR: %#+v\n", err)
 		}

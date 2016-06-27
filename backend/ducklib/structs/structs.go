@@ -7,8 +7,8 @@ type User struct {
 	Firstname string   `json:"firstname"`
 	Lastname  string   `json:"lastname"`
 	Locale    string   `json:"locale"`
-	Revision  string   `json:"_rev"`
-	Documents []string `json:"documents"`
+	Revision  string   `json:"revision"`
+	//Documents []string `json:"documents"`
 }
 
 //Response represents a JSON response from the ducklib server
@@ -54,12 +54,12 @@ func (u *User) FromValueMap(mp map[string]interface{}) {
 		u.Locale = locale.(string)
 	}
 
-	if docs, prs := mp["documents"].([]interface{}); prs {
+/*	if docs, prs := mp["documents"].([]interface{}); prs {
 		u.Documents = make([]string, len(docs))
 		for i, v := range docs {
 			u.Documents[i] = v.(string)
 		}
-	}
+	}*/
 
 }
 
