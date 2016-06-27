@@ -1,0 +1,82 @@
+meta:
+  title: Test DUCK Rulebase
+  notes: >
+    This is a trivial ulebase for testing the integration of DUCK with
+    Carneades. 
+
+language:
+  compliant/0: The data use document is compliant.
+  ¬compliant/0: The data use document is not compliant.
+  dataUseStatement/1: %s is a data use statement.
+  useScope/2: The use scope of %s is %s.
+  qualifier/2: The qualifier of %s is %s.
+  dataCategory/2: The data category of %s is %s.
+  action/2: The action of %s is %s.
+  resultScope/2: The result scope of %s is %s.
+  id/2: The ID of %s is %s.
+  passive/2: The passive attribute of %s is %s.
+  duplicate/2: %s and %s are equivalent data use statements
+
+issues:
+  i1:
+    positions: [compliant, ¬compliant]
+
+argument_schemes:
+  default:
+      meta:
+        title: Default Data Use Document Compliance Rule
+        notes: >
+          A data use document is compliant, by default, unless it has
+          been proven to be compliant. The opposite of negation as failure!
+          Success by failure?
+      weight:
+        constant: 0.1   # low threshold to be overcome by rebuttals
+      conclusions:
+        - compliant
+
+  selectors:
+    premises:
+      - dataUseStatement(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive))
+    conclusions:
+      - useScope(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),UseScope)
+      - qualifier(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),Qualifier)
+      - dataCategory(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),DataCategory)
+      - action(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),Action)
+      - resultScope(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),ResultScope)
+      - id(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),ID)
+      - passive(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),Passive)
+
+  duplicateDataUseStatements:
+    premises:
+      - useScope(S1,US)
+      - useScope(S2,US)
+      - qualifier(S1,Q)
+      - qualifier(S2,Q)
+      - dataCategory(S1,DC)
+      - dataCategory(S2,DC)
+      - action(S1,A)
+      - action(S2,A)
+      - resultScope(S1,RS)
+      - resultScope(S2,RS)
+      - id(S1,ID1)
+      - id(S2,ID2)
+      - passive(S1,P1)
+      - passive(S2,P2)
+    guards:
+      - ID1 =\= ID2
+    conclusions:
+      - duplicate(S1,S2)
+
+  dummy:
+    meta:
+      title: Duplicate Data Use Statements Are Not Permitted
+      note: >
+        A data use document is not compliant if it contains duplicate data use statements. 
+        This is just a dummy rule for testing.  It may not
+        reflect any actual rule. Compliance can be restored by removing the duplicates.
+    premises:
+      - duplicate(S1,S2)
+    conclusions:
+      - ¬compliant
+    
+
