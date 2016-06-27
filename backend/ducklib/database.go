@@ -2,7 +2,6 @@ package ducklib
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
@@ -59,14 +58,15 @@ func FillTestdata(data []byte) error {
 }
 
 //Init initializes the database and checks for connection errors
-func (database *Database) Init() {
+func (database *Database) Init() error {
 
 	db = pluginregistry.DatabasePlugin
 
 	err := db.Init(database.url, database.databasename)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
+	return nil
 }
 
 /*

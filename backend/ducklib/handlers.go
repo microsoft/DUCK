@@ -1,7 +1,7 @@
 package ducklib
 
 import (
-	"fmt"
+	
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -60,7 +60,6 @@ func getDocHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
-	fmt.Printf("%+v\n", doc)
 	return c.JSON(http.StatusOK, doc)
 }
 func deleteDocHandler(c echo.Context) error {
@@ -85,23 +84,18 @@ func putDocHandler(c echo.Context) error {
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
 		e := err.Error()
-		fmt.Println("1")
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	err := datab.PutDocument(*doc)
 	if err != nil {
 		e := err.Error()
-		fmt.Printf("%+v", *doc)
-		fmt.Println(e)
-		fmt.Println("2")
+
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	docu, err := datab.GetDocument(doc.ID)
 	if err != nil {
 		e := err.Error()
-
-		fmt.Println("3")
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
@@ -255,12 +249,14 @@ func checkDocHandler(c echo.Context) error {
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
 		e := err.Error()
+
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	ok, docs, err := Checker.CompliantDocuments(id, doc, 10, 0)
+
+	ok, docs, err := checker.CompliantDocuments(id, doc, 10, 0)
 	if err != nil {
 		e := err.Error()
-
+		
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	if ok {
@@ -277,12 +273,14 @@ func checkDocIDHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(docid)
 	if err != nil {
 		e := err.Error()
+
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	ok, docs, err := Checker.CompliantDocuments(id, &doc, 10, 0)
+	ok, docs, err := checker.CompliantDocuments(id, &doc, 10, 0)
 	if err != nil {
 		e := err.Error()
+
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 

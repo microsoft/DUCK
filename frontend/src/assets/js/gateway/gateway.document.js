@@ -127,7 +127,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
      */
     this.complianceCheckWithAlternatives = function (document, rulebaseId) {
         return $q(function (resolve, reject) {
-            var url = "/v1/rulebases/" + rulebaseId;
+            var url = "/v1/rulebases/" + rulebaseId+"/documents";
             var complianceResult;
             // stub for testing
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT

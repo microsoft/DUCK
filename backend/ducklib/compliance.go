@@ -40,8 +40,9 @@ func MakeComplianceChecker() *ComplianceChecker {
 // ComplianceChecker.
 // If there are no errors, the returned error will be nil.
 func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc io.Reader) (*caes.Theory, error) {
-	vt, notFound := c.Theories[ruleBaseId]
-	if notFound || revision != vt.revision {
+	vt, found := c.Theories[ruleBaseId]
+	if !found || revision != vt.revision {
+
 		// Compile the rulebase, update the theory cache and return the
 		// theory.  Or return an error if the rulebase cannot be compiled.
 		ag, err := y.Import(rbSrc)
@@ -205,6 +206,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 
 	// Filter out the noncompliant documents
 	compliantVariants := make(chan *structs.Document)
+	fmt.Println("start compliantVariants")
 	go func() {
 		for {
 			select {
@@ -214,6 +216,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 				if !ok { // no more variants available
 					return
 				}
+
 				compliant, err := c.IsCompliant(theory, d3)
 				if err != nil && compliant {
 					compliantVariants <- d3
@@ -222,6 +225,6 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 			}
 		}
 	}()
-
+	fmt.Println("return")
 	return false, compliantVariants, nil
 }
