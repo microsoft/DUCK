@@ -114,8 +114,8 @@
             </div>
             <div class="row column">
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
-                    <li data-ng-repeat="statement in document.statements" data-as-sortable-item>
-                        <div data-as-sortable-item-handle>
+                    <li data-ng-repeat="statement in document.statements" data-as-sortable-item  ng-class="{'diff-remove': statement._diff}">
+                        <div data-as-sortable-item-handle >
                             <div class="clearfix" ng-if="editorController.isEditable()">
                                 <div class="float-left button-group small noselect">
                                     <a class="button secondary hollow" ng-click="editorController.toggleEdit(statement)"
@@ -129,13 +129,14 @@
                                        ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
                                     <a class="button secondary" ng-class="{'hollow':!statement.passive}"
                                        ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
-                                    <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)"><i
-                                            class="fa fa-trash medium-gray"></i> </a>
+                                    <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)">
+                                        <i class="fa fa-trash medium-gray"></i> </a>
                                 </div>
                             </div>
                             <div class="row noselect">
                                 <div class="small-12 columns">
-                                    <div ng-include="'editor.statement.html'"></div>
+                                   <del ng-if="statement._diff"> <div ng-include="'editor.statement.html'"></div></del>
+                                   <div ng-if="!statement._diff" ng-include="'editor.statement.html'"></div>
                                 </div>
                             </div>
                         </div>

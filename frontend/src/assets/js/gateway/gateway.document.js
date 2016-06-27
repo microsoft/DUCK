@@ -131,8 +131,8 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var complianceResult;
             // stub for testing
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
-/*
-            if (document.statements.length > 2) {
+
+            if (document.statements.length <= 2) {
                 complianceResult = {
                     compliant: "COMPLIANT",
                     documents: []
@@ -151,7 +151,13 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                     statements: []
                 }]
             };
-            document.statements.forEach(function (statement) {
+
+            // remove the second and the last statements for testing
+            for (var i = 0; i < document.statements.length; i++) {
+                if (i == 1 || i == document.statements.length -1) {
+                    continue;
+                }
+                var statement = document.statements[i];
                 complianceResult.documents[0].statements.push({
                     trackingId: statement.trackingId,
                     actionCode: statement.actionCode,
@@ -162,18 +168,19 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                     useScopeCode: statement.useScopeCode,
                     passive: statement.passive
                 });
-            });
+            }
+
             resolve(complianceResult);
             // end stub 
-*/
-             var documentData = context.createDocumentData(document);
-             $http.put(url, documentData).success(function () {
-                 var complianceResult = angular.fromJson(data);
-                 resolve(complianceResult);
-                 // FIXME handle errors
-             }).error(function (data, status) {
-                 reject(status);
-             });
+
+            // var documentData = context.createDocumentData(document);
+            // $http.put(url, documentData).success(function () {
+            //     var complianceResult = angular.fromJson(data);
+            //     resolve(complianceResult);
+            //     // FIXME handle errors
+            // }).error(function (data, status) {
+            //     reject(status);
+            // });
         });
     };
 

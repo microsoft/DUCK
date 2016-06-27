@@ -253,11 +253,40 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
             context.state = complianceResult.compliant;
             context.alternativeVersions.length = 0; // clear array
             complianceResult.documents.forEach(function (alternative) {
+
+                // decorate diff information
+                for (var i = 0; i < context.originalDocument.statements.length; i++) {
+                    var originalStatement = context.originalDocument.statements[i];
+                    var diffStatement;
+                    if (i >= alternative.statements.length) {
+                        // statement was deleted at the end of the array
+                        diffStatement = context.createDiffStatement(originalStatement);
+                        alternative.statements.push(diffStatement);
+
+                    } else if (originalStatement.trackingId !== alternative.statements[i].trackingId) {
+                        diffStatement = context.createDiffStatement(originalStatement);
+                        alternative.statements.splice(i, 0, diffStatement);
+                    }
+                }
                 context.lookupAndSetTerms(alternative);
                 context.alternativeVersions.push(alternative);
 
             });
         });
+    };
+
+    this.createDiffStatement = function (originalStatement) {
+        return {
+            _diff: true,
+            trackingId: originalStatement.trackingId,
+            actionCode: originalStatement.actionCode,
+            dataCategoryCode: originalStatement.dataCategoryCode,
+            qualifierCode: originalStatement.qualifierCode,
+            resultScopeCode: originalStatement.resultScopeCode,
+            sourceScopeCode: originalStatement.sourceScopeCode,
+            useScopeCode: originalStatement.useScopeCode,
+            passive: originalStatement.passive
+        };
     };
 
     /**
@@ -288,6 +317,9 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     this.adoptAlternativeVersion = function () {
         context.clearCurrentStatement();
+        context.document.statements.without(function (statement) {
+            return statement._diff;     // clear out diff statements
+        });
         context.originalDocument = context.document;
         context.markDirty();
         context.state = "COMPLIANT";
