@@ -53,7 +53,7 @@ func MakeComplianceCheckerPlugin(ruleBaseDir string) (*ComplianceCheckerPlugin, 
 //    3. Create a RuleBaseDescription and add it to the RuleBases map, indexed
 //       by its Id.
 //  Return an error if any rulebase cannot be compiled into a Theory
-func (c ComplianceCheckerPlugin) Intialize() error {
+func (c *ComplianceCheckerPlugin) Intialize() error {
 	files, err := ioutil.ReadDir(c.RuleBaseDir)
 	if err != nil {
 		return err
@@ -85,10 +85,11 @@ func (c ComplianceCheckerPlugin) Intialize() error {
 			desc.Filename = file.Name()
 			// compile theory, we dont use it here, it will be cached
 
-			_, err = c.checker.GetTheory(desc.ID, "irrelevant", fr) //change nil to reader to file
+			_, err = c.checker.GetTheory(desc.ID, "irrelevant", fr)
 			if err != nil {
 				return err
 			}
+
 			c.RuleBases[desc.ID] = desc
 
 		}
@@ -104,7 +105,7 @@ func (c ComplianceCheckerPlugin) Shutdown() {
 
 // ruleBaseReader returns a reader for reading the JSON source file of the
 // rulebase with the given id
-func (c ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
+func (c *ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
 	rb := c.RuleBases[ruleBaseID]
 	fr, err := os.Open(filepath.Join(c.RuleBaseDir, rb.Filename))
 	if err != nil {
@@ -115,7 +116,7 @@ func (c ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
 
 // IsCompliant returns true iff the document complies with the rules in the given
 // rulebase.  An error is returned if document has syntax errors and cannot be parsed.
-func (c ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *structs.Document) (bool, error) {
+func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *structs.Document) (bool, error) {
 	r := c.ruleBaseReader(ruleBaseID)
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
 	if err != nil {
@@ -132,22 +133,22 @@ func (c ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *struct
 // called repeatedly to scroll through all compliant documents incrementally.  The search
 // for compliant documents is restarted each time CompliantDocuments is called, no matter
 // what the offset is.
-func (c ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *structs.Document, maxResults int, offset int) (bool, []*structs.Document, error) {
+func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *structs.Document, maxResults int, offset int) (bool, []*structs.Document, error) {
 	r := c.ruleBaseReader(ruleBaseID)
+
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
 	if err != nil {
 		return false, nil, err
 	}
-
+	fmt.Println("Start CompliantDocuments")
 	cncl := MakeCanceller()
 	compliant, docChan, err := c.checker.CompliantDocuments(theory, document, cncl)
+	if err != nil {
+		return false, nil, err
+	}
 	if compliant {
 		return true, nil, nil
 	}
-	// ToDo
-	// Get at most maxResults from the docs channel, skippint the offset amount and then
-	// call c.Cancel() to cancel the search for other compliant documents and
-	// free the resourcs of the coroutine.
 
 	var docs []*structs.Document
 	if offset > 0 {
@@ -160,5 +161,6 @@ func (c ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document 
 		docs = append(docs, <-docChan)
 	}
 	cncl.Cancel()
+	fmt.Println("return")
 	return false, docs, nil
 }
