@@ -438,7 +438,7 @@ func (cb *Couchbase) Init(url string, database string) error {
 	log.Println("Couchbase initialization")
 
 	designDoc := make(map[string]interface{})
-	designDoc["id"] = "_design/app"
+	designDoc["_id"] = "_design/app"
 	designDoc["views"] = ` {"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
 		`"by_date":{"map":"function(doc) { if(doc.date && doc.title) {   emit(doc.date, doc.title);  }}"},` +
 		`"user_login":{"map":"function(doc) { if(doc.type =='user') {   emit(doc.email,  doc.password);  }}"},` +
