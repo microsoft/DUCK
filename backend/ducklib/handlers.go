@@ -308,6 +308,7 @@ func loginHandler(c echo.Context) error {
 
 		user, err := datab.GetUser(id)
 		if err != nil {
+			log.Println(err)
 			return echo.ErrUnauthorized
 		}
 
