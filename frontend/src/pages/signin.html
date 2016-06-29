@@ -1,25 +1,62 @@
 <div ng-controller="SigninController as signin">
     <div class="row">
         <div class="medium-6 medium-centered large-4 large-centered columns">
-            <form>
+            <form name="form">
                 <div class="row column log-in-form">
                     <label class="text-center padding-bottom-3">
                         <img src="assets/img/duck.128.png">
                     </label>
-                    <h4 class="text-center"> {{"signin_label"|translate}}</h4>
+                    <h4 ng-show="!signin.showRegister" class="text-center"> {{"signin_label"|translate}}</h4>
                     <label>
                         {{"email_label"|translate}}
-                        <input type="text" ng-attr-placeholder="{{'email_placeholder'|translate}}" ng-model="signin.username">
+                        <input type="text" name="username" ng-attr-placeholder="{{'email_placeholder'|translate}}" ng-model="signin.username" required>
+                        <span ng-show="signin.Validator.showEmailError(signin.username, form.username, form)"
+                              class="form-error is-visible">{{'valid_email' | translate}}.</span>
                     </label>
                     <label>
                         {{"password_label"|translate}}
-                        <input type="password" ng-attr-placeholder="{{'password_placeholder'|translate}}" ng-model="signin.password">
+                        <input type="password" name="password" ng-attr-placeholder="{{'password_placeholder'|translate}}" ng-model="signin.password">
+                        <span ng-show="signin.Validator.showPasswordError(signin.password, form.password, form)"
+                              class="form-error is-visible">{{'valid_password' | translate}}.</span>
                     </label>
-                    <p><a type="submit" ng-click="signin.signin()" class="button expanded"> {{"signin"|translate}}</a></p>
-                    <p class="text-center"><a href="#"> {{"forgot_password"|translate}}</a></p>
+                    <div ng-show="signin.showRegister">
+                        <label>
+                            {{"firstname_label"|translate}}
+                            <input type="text" name="firstname" ng-attr-placeholder="{{'firstname_placeholder'|translate}}" ng-model="signin.firstname">
+                        <span ng-show="signin.Validator.showRequiredError(signin.firstname, form.firstname, form)"
+                              class="form-error is-visible">{{'valid_required' | translate}}.</span>
+                        </label>
+                        <label>
+                            {{"lastname_label"|translate}}
+                            <input type="text" name="lastname" ng-attr-placeholder="{{'lastname_placeholder'|translate}}" ng-model="signin.lastname">
+                        <span ng-show="signin.Validator.showRequiredError(signin.lastname, form.lastname, form)"
+                              class="form-error is-visible">{{'valid_required' | translate}}.</span>
+                        </label>
+                        <label>
+                            {{"locale_label"|translate}}
+                            <input type="text" name="locale" ng-attr-placeholder="{{'locale_placeholder'|translate}}" ng-model="signin.locale">
+                        <span ng-show="signin.Validator.showRequiredError(signin.locale, form.locale, form)"
+                              class="form-error is-visible">{{'valid_required' | translate}}.</span>
+                        </label>
+                    </div>
+                    <p ng-show="!signin.showRegister">
+                        <a type="submit" href="" ng-click="signin.signin()" class="button expanded"> {{"signin"|translate}}</a>
+                    </p>
+                    <p ng-show="!signin.showRegister">
+                        <a href=""class="button hollow expanded" ng-click="signin.showRegisterForm(form)">{{"register"|translate}}</a>
+                    </p>
+                    <p ng-show="signin.showRegister">
+                        <a href="" class="button expanded" ng-click="signin.register()"> {{"register"|translate}}</a>
+                    </p>
+                    <p ng-show="signin.showRegister">
+                        <a type="submit" href="" ng-click="signin.showSigninForm(form)" class="button hollow expanded"> {{"signin"|translate}}</a>
+                    </p>
+                    <p class="text-center" ng-show="!signin.showRegister"><a href="#"> {{"forgot_password"|translate}}</a></p>
                 </div>
             </form>
-
         </div>
+
     </div>
+
+
 </div>

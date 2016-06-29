@@ -351,8 +351,9 @@ func (cb *Couchbase) putUser(u structs.User) error {
 	entryMap["firstname"] = u.Firstname
 	entryMap["lastname"] = u.Lastname
 	entryMap["locale"] = u.Locale
-	entryMap["_rev"] = u.Revision
-
+	if u.Revision != "" {
+		entryMap["_rev"] = u.Revision
+	}
 	return cb.putEntry(entryMap)
 
 }

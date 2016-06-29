@@ -11,6 +11,7 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"log"
 )
 
 var goPath = os.Getenv("GOPATH")
@@ -161,22 +162,24 @@ func putUserHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, us)
 }
 func postUserHandler(c echo.Context) error {
-
-	var u structs.User
-	if err := c.Bind(u); err != nil {
+	newUser := new(structs.User)
+	if err := c.Bind(newUser); err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		log.Println(e)
+		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
 	}
 
-	id, err := datab.PostUser(u)
+	id, err := datab.PostUser(*newUser)
 	if err != nil {
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		log.Println(e)
+		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
-	u, err = datab.GetUser(id)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	var u, err2 = datab.GetUser(id)
+	if err2 != nil {
+		e := err2.Error()
+		log.Println(e)
+		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 
 	return c.JSON(http.StatusOK, u)

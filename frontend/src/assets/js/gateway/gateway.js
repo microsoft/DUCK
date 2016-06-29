@@ -7,21 +7,9 @@ var gatewayModule = angular.module("duck.gateway");
  * Signs the user into the system by creating a login.
  */
 gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $translate) {
-
+    var context = this;
     this.signin = function (username, password) {
         return $q(function (resolve, reject) {
-            // test code
-            // if (false) {
-            //     CurrentUser.initialize();
-            //     if (!CurrentUser.loggedIn) {
-            //         CurrentUser.initializeWith({firstName: "Andy", lastName: "Author", id: "123", token: "124", locale: "en"});
-            //     }
-            //     $translate.use(CurrentUser.locale).then(function () {
-            //         resolve();
-            //     });
-            //     return;
-            // }
-
             $http.post('login', {username, password: password}).success(function (data) {
                 CurrentUser.initializeWith(data);
                 $translate.use(CurrentUser.locale).then(function () {
@@ -31,7 +19,26 @@ gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $transl
                 reject(status);
             });
         });
+    };
+
+    this.register = function (user) {
+        return $q(function (resolve, reject) {
+            // create the user and then log them in
+            $http.post('/v1/users', user).success(function (data) {
+                context.signin(user.email, user.password).then(function () {
+                        resolve();
+                    }, function (code) {
+                        // FIXME
+                        alert('Login Failed: ' + code);
+                    }
+                );
+
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
     }
+
 });
 gatewayModule.service('UserService', function (CurrentUser, $http, $q) {
     this.update = function () {
