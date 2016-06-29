@@ -335,6 +335,7 @@ func loginHandler(c echo.Context) error {
 			"locale":    user.Locale,
 		})
 	}
+	log.Println("Passwords do not match")
 	return echo.ErrUnauthorized
 
 }
