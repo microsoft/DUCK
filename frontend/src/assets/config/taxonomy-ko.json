@@ -1,0 +1,310 @@
+{
+  "scope": [
+    {
+      "value": "this capability",
+      "code": "capability",
+      "category": "1",
+      "fixed": false
+    },
+    {
+      "value": "this application or this service",
+      "code": "service",
+      "category": "2",
+      "fixed": false
+    },
+    {
+      "value": "services listed in the service agreement",
+      "code": "services_agreement",
+      "category": "3",
+      "fixed": false
+    },
+    {
+      "value": "the CSP Services",
+      "code": "csp_services",
+      "category": "4",
+      "fixed": false
+    },
+    {
+      "value": "all the CSP Products and services",
+      "code": "csp_products",
+      "category": "5",
+      "fixed": false
+    },
+    {
+      "value": "third-party product and services",
+      "code": "third_party",
+      "category": "6",
+      "fixed": false
+    }
+  ],
+  "qualifier": [
+    {
+      "value": "identified",
+      "code": "identified_data",
+      "category": "1",
+      "fixed": true
+    },
+    {
+      "value": "linked or pseudonymized",
+      "code": "linked_data",
+      "category": "2",
+      "fixed": true
+    },
+    {
+      "value": "unlinked or securely pseudonymized",
+      "code": "unlinked_data",
+      "category": "3",
+      "fixed": true
+    },
+    {
+      "value": "anonymized",
+      "code": "anonymized_data",
+      "category": "4",
+      "fixed": true
+    },
+    {
+      "value": "aggregated data",
+      "code": "aggregated_data",
+      "category": "5",
+      "fixed": true
+    }
+  ],
+  "dataCategory": [
+    {
+      "value": "customer content",
+      "code": "customer_content",
+      "category": "1",
+      "fixed": true
+    },
+    {
+      "value": "credentials",
+      "code": "customer_content_credentials",
+      "category": "1.1",
+      "fixed": false
+    },
+    {
+      "value": "customer address lists",
+      "code": "customer_content_address",
+      "category": "1.2",
+      "fixed": false
+    },
+    {
+      "value": "derived data",
+      "code": "derived_data",
+      "category": "2",
+      "fixed": true
+    },
+    {
+      "value": "end user identifiable information",
+      "code": "derived_data_user",
+      "category": "2.1",
+      "fixed": false
+    },
+    {
+      "value": "telemetry",
+      "code": "derived_data_user_telemetry",
+      "category": "2.1.1",
+      "fixed": false
+    },
+    {
+      "value": "connectivity",
+      "code": "derived_data_user_connectivity",
+      "category": "2.1.2",
+      "fixed": false
+    },
+    {
+      "value": "usage",
+      "code": "derived_data_user_usage",
+      "category": "2.1.3",
+      "fixed": false
+    },
+    {
+      "value": "demographic information",
+      "code": "derived_data_user_demographic",
+      "category": "2.1.4",
+      "fixed": false
+    },
+    {
+      "value": "interests and favorites",
+      "code": "derived_data_user_interests",
+      "category": "2.1.5",
+      "fixed": false
+    },
+    {
+      "value": "content consumption",
+      "code": "derived_data_user_content",
+      "category": "2.1.6",
+      "fixed": false
+    },
+    {
+      "value": "client side browsing history",
+      "code": "derived_data_user_browsing",
+      "category": "2.1.7",
+      "fixed": false
+    },
+    {
+      "value": "search commands and queries",
+      "code": "derived_data_user_search",
+      "category": "2.1.8",
+      "fixed": false
+    },
+    {
+      "value": "precise customer location",
+      "code": "derived_data_user_location",
+      "category": "2.1.9",
+      "fixed": false
+    },
+    {
+      "value": "social data",
+      "code": "derived_data_user_social",
+      "category": "2.1.10",
+      "fixed": false
+    },
+    {
+      "value": "biometric and health data",
+      "code": "derived_data_user_biometric",
+      "category": "2.1.11",
+      "fixed": false
+    },
+    {
+      "value": "end-user contact data",
+      "code": "derived_data_user_contact",
+      "category": "2.1.12",
+      "fixed": false
+    },
+    {
+      "value": "environmental sensor data",
+      "code": "derived_data_user_environmental",
+      "category": "2.1.13",
+      "fixed": false
+    },
+    {
+      "value": "organization identifiable information",
+      "code": "derived_data_organization",
+      "category": "2.2",
+      "fixed": false
+    },
+    {
+      "value": "cloud service provider data",
+      "code": "provider_data",
+      "category": "3",
+      "fixed": true
+    },
+    {
+      "value": "account data",
+      "code": "account_data",
+      "category": "4",
+      "fixed": true
+    },
+    {
+      "value": "customer contact information",
+      "code": "account_data_customer",
+      "category": "4.1",
+      "fixed": false
+    },
+    {
+      "value": "payment instrument data",
+      "code": "account_data=payment",
+      "category": "4.2",
+      "fixed": true
+    }
+  ],
+  "action": [
+    {
+      "value": "provide",
+      "code": "provide",
+      "category": "1",
+      "fixed": true
+    },
+    {
+      "value": "improve",
+      "code": "improve",
+      "category": "2",
+      "fixed": true
+    },
+    {
+      "value": "personalize",
+      "code": "personalize",
+      "category": "3",
+      "fixed": true
+    },
+    {
+      "value": "offer upgrades or upsell",
+      "code": "upgrades",
+      "category": "4",
+      "fixed": true
+    },
+    {
+      "value": "market",
+      "code": "market",
+      "category": "5",
+      "fixed": true
+    },
+    {
+      "value": "market based on contextual information",
+      "code": "market_contextual",
+      "category": "5.1",
+      "fixed": true
+    },
+    {
+      "value": "market based on personalization",
+      "code": "market_personalization",
+      "category": "5.2",
+      "fixed": true
+    },
+    {
+      "value": "advertise",
+      "code": "advertise",
+      "category": "6",
+      "fixed": true
+    },
+    {
+      "value": "advertise based on contextual information",
+      "code": "advertise_contextual",
+      "category": "6.1",
+      "fixed": true
+    },
+    {
+      "value": "advertise based on personalization",
+      "code": "advertise_personalization",
+      "category": "6.2",
+      "fixed": true
+    },
+    {
+      "value": "promote",
+      "code": "promote",
+      "category": "7",
+      "fixed": true
+    },
+    {
+      "value": "promote based on contextual information",
+      "code": "promote_contextual",
+      "category": "7.1",
+      "fixed": true
+    },
+    {
+      "value": "promote based on personalization",
+      "code": "promote_personalization",
+      "category": "7.2",
+      "fixed": true
+    },
+    {
+      "value": "share",
+      "code": "share",
+      "category": "8",
+      "fixed": true
+    },
+    {
+      "value": "share with partners and data processors",
+      "code": "share_partners",
+      "category": "8.1",
+      "fixed": true
+    },
+    {
+      "value": "share to provide the service",
+      "code": "share_provide",
+      "category": "8.2",
+      "fixed": true
+    }
+  ]
+}
