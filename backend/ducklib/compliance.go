@@ -72,7 +72,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 		Metadata: make(map[string]interface{}),
 		Text:     "The document is compliant.",
 		Args:     []*caes.Argument{}}
-	notCompliant := &caes.Statement{Id: "¬compliant",
+	notCompliant := &caes.Statement{Id: "not_compliant",
 		Metadata: make(map[string]interface{}),
 		Text:     "The document is not compliant.",
 		Args:     []*caes.Argument{}}
@@ -80,8 +80,8 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 		Theory:      theory,
 		Assumptions: make(map[string]bool),
 		Statements: map[string]*caes.Statement{
-			"compliant":  compliant,
-			"¬compliant": notCompliant,
+			"compliant":     compliant,
+			"not_compliant": notCompliant,
 		},
 		Issues: map[string]*caes.Issue{
 			"i1": &caes.Issue{
@@ -203,6 +203,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 			return
 		} // indexing error should not happen
 		variants <- d2
+		fmt.Printf(".") // debugging
 		subsets(i-1, d)
 		subsets(i-1, d2)
 	}
@@ -224,6 +225,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 				compliant, err := c.IsCompliant(theory, d3)
 				if err != nil && compliant {
 					compliantVariants <- d3
+					fmt.Printf("+")
 				}
 			default: // do nothing, to avoid blocking
 			}

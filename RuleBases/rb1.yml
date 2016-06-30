@@ -9,7 +9,7 @@ meta:
 
 language:
   compliant/0: The data use document is compliant.
-  ¬compliant/0: The data use document is not compliant.
+  not_compliant/0: The data use document is not compliant.
   dataUseStatement/1: "%s is a data use statement."
   useScope/2: The use scope of %s is %s.
   qualifier/2: The qualifier of %s is %s.
@@ -22,7 +22,7 @@ language:
 
 issues:
   i1:
-    positions: [compliant, ¬compliant]
+    positions: [compliant, not_compliant]
 
 argument_schemes:
   default:
@@ -80,6 +80,6 @@ argument_schemes:
     premises:
       - duplicate(S1,S2)
     conclusions:
-      - ¬compliant
+      - not_compliant
     
 
