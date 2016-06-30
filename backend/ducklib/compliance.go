@@ -3,7 +3,6 @@ package ducklib
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
@@ -41,11 +40,7 @@ func MakeComplianceChecker() *ComplianceChecker {
 // ComplianceChecker.
 // If there are no errors, the returned error will be nil.
 func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc io.Reader) (*caes.Theory, error) {
-	s, err := ioutil.ReadAll(rbSrc)
-	if err != nil {
-		fmt.Printf("could not read rbSrc")
-	}
-	fmt.Printf("rbSrc=%s\n", s)
+
 	vt, found := c.Theories[ruleBaseId]
 	if !found || revision != vt.revision {
 

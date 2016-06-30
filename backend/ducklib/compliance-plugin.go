@@ -77,6 +77,7 @@ func (c *ComplianceCheckerPlugin) Intialize() error {
 			if err != nil {
 				return err
 			}
+
 			err = yaml.Unmarshal(dat, &rby)
 			if err != nil {
 				return err
@@ -84,7 +85,11 @@ func (c *ComplianceCheckerPlugin) Intialize() error {
 			desc := rby.Meta
 			desc.Filename = file.Name()
 			// compile theory, we dont use it here, it will be cached
+			fr, err = os.Open(filepath.Join(c.RuleBaseDir, file.Name()))
 
+			if err != nil {
+				return err
+			}
 			_, err = c.checker.GetTheory(desc.ID, "irrelevant", fr)
 			if err != nil {
 				return err
