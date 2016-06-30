@@ -139,7 +139,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 };
                 resolve(complianceResult);
                 return;
-            }*/
+            }
 
             complianceResult = {
                 compliant: "NON_COMPLIANT",
@@ -150,7 +150,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                     owner: document.owner,
                     statements: []
                 }]
-            };/*
+            };
 
             // remove the second and the last statements for testing
             for (var i = 0; i < document.statements.length; i++) {

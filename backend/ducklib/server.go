@@ -40,8 +40,7 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 	//Logger Config
 	LoggerConfig := middleware.LoggerConfig{Format: `{"time":"${time_rfc3339}",` +
 		`"method":"${method}","uri":"${uri}","status":${status}, ` +
-		`"latency":"${latency_human}","Bytes received":${rx_bytes},` +
-		`"Bytes sent":${tx_bytes}}` + "\n",
+		`"Bytes received":${rx_bytes},"Bytes sent":${tx_bytes}}` + "\n",
 	}
 	e.Use(middleware.LoggerWithConfig(LoggerConfig))
 	e.Use(middleware.Recover())
