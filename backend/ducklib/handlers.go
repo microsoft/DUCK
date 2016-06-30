@@ -256,7 +256,7 @@ func checkDocHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
+	fmt.Println("CHECK")
 	ok, docs, err := checker.CompliantDocuments(id, doc, 10, 0)
 	if err != nil {
 		e := err.Error()
@@ -289,7 +289,7 @@ func checkDocIDHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
+	fmt.Printf("Compliant: %t", ok)
 	if ok {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
 	}

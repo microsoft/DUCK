@@ -146,6 +146,7 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 	if err != nil {
 		return false, nil, err
 	}
+	fmt.Printf("Compliant: %t\n", compliant)
 	if compliant {
 		return true, nil, nil
 	}
@@ -157,10 +158,11 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 		}
 	}
 	for i := 0; i < maxResults; i++ {
-
-		docs = append(docs, <-docChan)
+		temp := <-docChan
+		fmt.Println("Documents: %+v \n", temp)
+		docs = append(docs, temp)
 	}
 	cncl.Cancel()
-
+	fmt.Println("Cancelled")
 	return false, docs, nil
 }
