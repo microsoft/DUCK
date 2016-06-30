@@ -39,9 +39,9 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 	e.Pre(middleware.RemoveTrailingSlash())
 	//Logger Config
 	LoggerConfig := middleware.LoggerConfig{Format: `{"time":"${time_rfc3339}",` +
-	`"method":"${method}","uri":"${uri}","status":${status}, ` +
-	`"latency":"${latency_human}","Bytes received":${rx_bytes},` +
-	`"Bytes sent":${tx_bytes}}` + "\n",
+		`"method":"${method}","uri":"${uri}","status":${status}, ` +
+		`"latency":"${latency_human}","Bytes received":${rx_bytes},` +
+		`"Bytes sent":${tx_bytes}}` + "\n",
 	}
 	e.Use(middleware.LoggerWithConfig(LoggerConfig))
 	e.Use(middleware.Recover())
@@ -58,16 +58,16 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 	//create a new user - JWT must not be required since during registration (when the user account is created) the user is not authenticated
 	users.POST("", postUserHandler)
 	users.DELETE("/:id", deleteUserHandler, jwtMiddleware) //delete a user
-	users.PUT("/:id", helloHandler, jwtMiddleware)         //update a user
+	users.PUT("/:id", putUserHandler, jwtMiddleware)       //update a user
 
 	//data use statement document resources
 	//documents := api.Group("/documents") //base URI
 	documents := api.Group("/documents", jwtMiddleware) //base URI
-	documents.POST("", postDocHandler)                           //create document
-	documents.PUT("", putDocHandler)                             //update document
-	documents.DELETE("/:docid", deleteDocHandler)                //delete document
-	documents.GET("/:userid/summary", getDocSummaries)           //return document summaries for the author
-	documents.GET("/:docid", getDocHandler)                      //return document
+	documents.POST("", postDocHandler)                  //create document
+	documents.PUT("", putDocHandler)                    //update document
+	documents.DELETE("/:docid", deleteDocHandler)       //delete document
+	documents.GET("/:userid/summary", getDocSummaries)  //return document summaries for the author
+	documents.GET("/:docid", getDocHandler)             //return document
 
 	//ruleset resources
 	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI

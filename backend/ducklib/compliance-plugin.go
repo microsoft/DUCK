@@ -140,7 +140,7 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 	if err != nil {
 		return false, nil, err
 	}
-	fmt.Println("Start CompliantDocuments")
+
 	cncl := MakeCanceller()
 	compliant, docChan, err := c.checker.CompliantDocuments(theory, document, cncl)
 	if err != nil {
@@ -161,6 +161,6 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 		docs = append(docs, <-docChan)
 	}
 	cncl.Cancel()
-	fmt.Println("return")
+
 	return false, docs, nil
 }

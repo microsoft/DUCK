@@ -131,7 +131,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var complianceResult;
             // stub for testing
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
-
+/*
             if (document.statements.length <= 2) {
                 complianceResult = {
                     compliant: "COMPLIANT",
@@ -139,7 +139,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 };
                 resolve(complianceResult);
                 return;
-            }
+            }*/
 
             complianceResult = {
                 compliant: "NON_COMPLIANT",
@@ -150,7 +150,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                     owner: document.owner,
                     statements: []
                 }]
-            };
+            };/*
 
             // remove the second and the last statements for testing
             for (var i = 0; i < document.statements.length; i++) {
@@ -171,16 +171,16 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             }
 
             resolve(complianceResult);
-            // end stub 
+            // end stub */
 
-            // var documentData = context.createDocumentData(document);
-            // $http.put(url, documentData).success(function () {
-            //     var complianceResult = angular.fromJson(data);
-            //     resolve(complianceResult);
-            //     // FIXME handle errors
-            // }).error(function (data, status) {
-            //     reject(status);
-            // });
+             var documentData = context.createDocumentData(document);
+             $http.put(url, documentData).success(function () {
+                 var complianceResult = angular.fromJson(data);
+                 resolve(complianceResult);
+                 // FIXME handle errors
+             }).error(function (data, status) {
+                 reject(status);
+             });
         });
     };
 

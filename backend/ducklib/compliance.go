@@ -98,7 +98,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 		} else {
 			passive = false
 		}
-		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s))",
+		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%t))",
 			s.UseScopeCode,
 			s.QualifierCode,
 			s.DataCategoryCode,
@@ -107,6 +107,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 			s.ResultScopeCode,
 			s.TrackingID,
 			passive)
+
 		stmt := &caes.Statement{
 			Id:       stmtId,
 			Metadata: make(map[string]interface{}),
@@ -117,6 +118,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 	}
 	// derive arguments by applying the theory of the argument graph to
 	// its assumptions
+
 	err := ag.Infer()
 	if err != nil {
 		return false, err
@@ -124,6 +126,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 
 	// evaluate the argument graph
 	l := ag.GroundedLabelling()
+
 	// return true iff the compliance statement is in
 	return l[compliant] == caes.In, nil
 }
@@ -170,6 +173,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 	if err != nil {
 		return false, nil, err
 	}
+
 	if compliant {
 		return true, nil, nil
 	}
@@ -206,7 +210,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 
 	// Filter out the noncompliant documents
 	compliantVariants := make(chan *structs.Document)
-	fmt.Println("start compliantVariants")
+
 	go func() {
 		for {
 			select {
@@ -225,6 +229,6 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 			}
 		}
 	}()
-	fmt.Println("return")
+
 	return false, compliantVariants, nil
 }

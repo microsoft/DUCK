@@ -1,17 +1,18 @@
 package ducklib
 
 import (
-	
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 
+	"log"
+
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
-	"log"
 )
 
 var goPath = os.Getenv("GOPATH")
@@ -259,10 +260,12 @@ func checkDocHandler(c echo.Context) error {
 	ok, docs, err := checker.CompliantDocuments(id, doc, 10, 0)
 	if err != nil {
 		e := err.Error()
-		
+
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
+	fmt.Printf("Compliant: %t\n", ok)
 	if ok {
+
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
 	}
 
