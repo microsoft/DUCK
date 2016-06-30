@@ -109,6 +109,7 @@ func (c *ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
 	rb := c.RuleBases[ruleBaseID]
 	fr, err := os.Open(filepath.Join(c.RuleBaseDir, rb.Filename))
 	if err != nil {
+		fmt.Printf("Could not open the rulebase file: %s\n", rb.Filename)
 		return nil
 	}
 	return fr
@@ -134,6 +135,7 @@ func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *struc
 // for compliant documents is restarted each time CompliantDocuments is called, no matter
 // what the offset is.
 func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *structs.Document, maxResults int, offset int) (bool, []*structs.Document, error) {
+	fmt.Println("Checking Compliance")
 	r := c.ruleBaseReader(ruleBaseID)
 
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
@@ -154,15 +156,25 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 	var docs []*structs.Document
 	if offset > 0 {
 		for k := 0; k < offset; k++ {
-			<-docChan
+			_, ok := <-docChan
+			if !ok {
+				// no further compliant documents available
+				return false, docs, nil
+			}
 		}
 	}
+
 	for i := 0; i < maxResults; i++ {
-		temp := <-docChan
-		fmt.Println("Documents: %+v \n", temp)
+		temp, ok := <-docChan
+		if !ok {
+			// no further compliant documents available
+			fmt.Println("No more compliant documents available\n")
+			return false, docs, nil
+		}
+		fmt.Println("Compliant Document Found: %+v \n", temp)
 		docs = append(docs, temp)
 	}
 	cncl.Cancel()
-	fmt.Println("Cancelled")
+	fmt.Println("Checking Cancelled")
 	return false, docs, nil
 }

@@ -3,6 +3,7 @@ package ducklib
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
@@ -40,6 +41,11 @@ func MakeComplianceChecker() *ComplianceChecker {
 // ComplianceChecker.
 // If there are no errors, the returned error will be nil.
 func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc io.Reader) (*caes.Theory, error) {
+	s, err := ioutil.ReadAll(rbSrc)
+	if err != nil {
+		fmt.Printf("could not read rbSrc")
+	}
+	fmt.Printf("rbSrc=%s\n", s)
 	vt, found := c.Theories[ruleBaseId]
 	if !found || revision != vt.revision {
 
@@ -47,13 +53,16 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 		// theory.  Or return an error if the rulebase cannot be compiled.
 		ag, err := y.Import(rbSrc)
 		if err != nil {
+			fmt.Printf("Could not parse the rulebase\n")
 			return nil, err
 		}
+		fmt.Printf("rulebase successfully imported, with %d schemes and %d predicates", len(ag.Theory.ArgSchemes), len(ag.Theory.Language))
+		fmt.Printf("title: %s\n", ag.Metadata["title"].(string))
 		c.Theories[ruleBaseId] = VersionedTheory{revision, ag.Theory}
 		return ag.Theory, nil
 	}
+	fmt.Printf("rulebase successfully imported\n")
 	return vt.theory, nil
-
 }
 
 /*
@@ -202,12 +211,15 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 		if err != nil {
 			return
 		} // indexing error should not happen
-		variants <- d2
 		fmt.Printf(".") // debugging
+		variants <- d2
 		subsets(i-1, d)
 		subsets(i-1, d2)
 	}
-	go subsets(len(doc.Statements)-1, doc)
+	go func() {
+		subsets(len(doc.Statements)-1, doc)
+		close(variants)
+	}()
 
 	// Filter out the noncompliant documents
 	compliantVariants := make(chan *structs.Document)
@@ -219,13 +231,16 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 				return // cancelled
 			case d3, ok := <-variants:
 				if !ok { // no more variants available
+					close(compliantVariants)
 					return
 				}
 
 				compliant, err := c.IsCompliant(theory, d3)
 				if err != nil && compliant {
 					compliantVariants <- d3
-					fmt.Printf("+")
+					fmt.Printf("+%d", len(d3.Statements))
+				} else {
+					fmt.Printf("-%d", len(d3.Statements))
 				}
 			default: // do nothing, to avoid blocking
 			}
