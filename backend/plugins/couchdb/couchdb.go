@@ -84,8 +84,12 @@ func (cb *Couchbase) GetLogin(username string) (id string, pw string, err error)
 	url := fmt.Sprintf("%s/%s/_design/app/_view/user_login?key=\"%s\"", cb.url, cb.database, username)
 	//cb.url + "/" + cb.database + "/_design/app/_view/user?key='" + username + "'"
 
+	log.Println("Login query: " + url)
+
 	resp, err := http.Get(url)
 	if err != nil {
+		log.Println(err)
+
 		return "", "", err
 	}
 	defer resp.Body.Close()
