@@ -15,6 +15,26 @@
         "resultScope": "cloud services defined in the service agreement",
         "trackingId": "111111111",
         "passive": false
+      },
+      {
+        "useScope": "the CSP Services",
+        "qualifier": "anonymized",
+        "dataCategory": "credentials",
+        "sourceScope": "this capability",
+        "action": "provide",
+        "resultScope": "cloud services defined in the service agreement",
+        "trackingId": "111111111",
+        "passive": false
+      },
+      {
+        "useScope": "the CSP Services",
+        "qualifier": "aggregated data",
+        "dataCategory": "account data",
+        "sourceScope": "this capability",
+        "action": "improve",
+        "resultScope": "cloud services defined in the service agreement",
+        "trackingId": "111111111",
+        "passive": false
       }
     ]
   },
