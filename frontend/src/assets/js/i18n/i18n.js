@@ -16,7 +16,7 @@ i18NModule.service("LocaleService", function (DEFAULT_LOCALE) {
     this.defaultLocale = DEFAULT_LOCALE;
 
     this.getLocales = function () {
-        return [{description: "English (US)", id: "en"}, {description: "German", id: "de"}];
+        return [{description: "English (US)", id: "en"}, {description: "German", id: "de"}, {description: "Korean", id: "ko"}];
     }
 
 });
