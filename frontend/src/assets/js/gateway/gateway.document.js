@@ -131,7 +131,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var complianceResult;
             // stub for testing
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
-
+/*
             if (document.statements.length <= 2) {
                 complianceResult = {
                     compliant: "COMPLIANT",
@@ -171,16 +171,16 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             }
 
             resolve(complianceResult);
-            // end stub 
+            // end stub */
 
-            // var documentData = context.createDocumentData(document);
-            // $http.put(url, documentData).success(function () {
-            //     var complianceResult = angular.fromJson(data);
-            //     resolve(complianceResult);
-            //     // FIXME handle errors
-            // }).error(function (data, status) {
-            //     reject(status);
-            // });
+             var documentData = context.createDocumentData(document);
+             $http.put(url, documentData).success(function () {
+                 var complianceResult = angular.fromJson(data);
+                 resolve(complianceResult);
+                 // FIXME handle errors
+             }).error(function (data, status) {
+                 reject(status);
+             });
         });
     };
 

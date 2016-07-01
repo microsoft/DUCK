@@ -1,6 +1,6 @@
 [
   {
-    "_id": "086ad881e3f71ec73fa3fe10e2005398",
+    "_id": "i086ad881e3f71ec73fa3fe10e2005398",
     "owner": "086ad881e3f71ec73fa3fe10e2003f99",
     "type": "document",
    "locale": "en",
@@ -13,13 +13,33 @@
         "sourceScope": "this capability",
         "action": "provide",
         "resultScope": "cloud services defined in the service agreement",
-        "trackingId": "111-111-111",
+        "trackingId": "i111111111",
+        "passive": false
+      },
+      {
+        "useScope": "the CSP Services",
+        "qualifier": "anonymized",
+        "dataCategory": "credentials",
+        "sourceScope": "this capability",
+        "action": "provide",
+        "resultScope": "cloud services defined in the service agreement",
+        "trackingId": "i111111112",
+        "passive": false
+      },
+      {
+        "useScope": "the CSP Services",
+        "qualifier": "aggregated data",
+        "dataCategory": "account data",
+        "sourceScope": "this capability",
+        "action": "improve",
+        "resultScope": "cloud services defined in the service agreement",
+        "trackingId": "i111111113",
         "passive": false
       }
     ]
   },
   {
-    "_id": "086ad881e3f71ec73fa3fe10e2005399",
+    "_id": "i086ad881e3f71ec73fa3fe10e2005399",
     "owner": "086ad881e3f71ec73fa3fe10e2003f99",
     "type": "document",
    "locale": "en",
@@ -32,13 +52,13 @@
         "sourceScope": "this capability",
         "action": "provide",
         "resultScope": "cloud services defined in the service agreement",
-        "trackingId": "222-222-222",
+        "trackingId": "i222222222",
         "passive": false
       }
     ]
   },
   {
-    "_id": "086ad881e3f71ec73fa3fe10e2003f99",
+    "_id": "i086ad881e3f71ec73fa3fe10e2003f99",
     "type": "user",
     "email": "duck@example.com",
     "password": "duck",
@@ -47,7 +67,7 @@
     "locale": "en"
   },
   {
-    "_id": "086ad881e3f71ec73fa3fe10e2003a99",
+    "_id": "i086ad881e3f71ec73fa3fe10e2003a99",
     "type": "user",
     "email": "dieter@example.com",
     "password": "duck",

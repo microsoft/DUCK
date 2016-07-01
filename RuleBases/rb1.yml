@@ -9,7 +9,7 @@ meta:
 
 language:
   compliant/0: The data use document is compliant.
-  ¬compliant/0: The data use document is not compliant.
+  not_compliant/0: The data use document is not compliant.
   dataUseStatement/1: "%s is a data use statement."
   useScope/2: The use scope of %s is %s.
   qualifier/2: The qualifier of %s is %s.
@@ -20,24 +20,25 @@ language:
   passive/2: The passive attribute of %s is %s.
   duplicate/2: "%s and %s are equivalent data use statements"
 
-issues:
-  i1:
-    positions: [compliant, ¬compliant]
+# issues:
+#   i1:
+#     positions: [compliant, not_compliant]
 
 argument_schemes:
   default:
-      meta:
-        title: Default Data Use Document Compliance Rule
-        notes: >
+    meta:
+      title: Default Data Use Document Compliance Rule
+      notes: >
           A data use document is compliant, by default, unless it has
-          been proven to be compliant. The opposite of negation as failure!
+          been proven to not be compliant. The opposite of negation as failure!
           Success by failure?
-      weight:
-        constant: 0.1   # low threshold to be overcome by rebuttals
-      conclusions:
-        - compliant
+    weight:
+      constant: 0.1   # low threshold to be overcome by rebuttals
+    conclusions:
+      - compliant
 
   selectors:
+    variables: [UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive]
     premises:
       - dataUseStatement(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive))
     conclusions:
@@ -50,6 +51,7 @@ argument_schemes:
       - passive(dus(UseScope,Qualifier,DataCategory,Action,ResultScope,ID,Passive),Passive)
 
   duplicateDataUseStatements:
+    variables: [S1,US,S2,Q,DC,A,RS,ID1,ID2,P1,P2]
     premises:
       - useScope(S1,US)
       - useScope(S2,US)
@@ -77,9 +79,10 @@ argument_schemes:
         A data use document is not compliant if it contains duplicate data use statements. 
         This is just a dummy rule for testing.  It may not
         reflect any actual rule. Compliance can be restored by removing the duplicates.
+    variables: [S1,S2]
     premises:
       - duplicate(S1,S2)
     conclusions:
-      - ¬compliant
+      - not_compliant
     
 

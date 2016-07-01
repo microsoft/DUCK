@@ -77,6 +77,7 @@ func (c *ComplianceCheckerPlugin) Intialize() error {
 			if err != nil {
 				return err
 			}
+
 			err = yaml.Unmarshal(dat, &rby)
 			if err != nil {
 				return err
@@ -84,7 +85,11 @@ func (c *ComplianceCheckerPlugin) Intialize() error {
 			desc := rby.Meta
 			desc.Filename = file.Name()
 			// compile theory, we dont use it here, it will be cached
+			fr, err = os.Open(filepath.Join(c.RuleBaseDir, file.Name()))
 
+			if err != nil {
+				return err
+			}
 			_, err = c.checker.GetTheory(desc.ID, "irrelevant", fr)
 			if err != nil {
 				return err
@@ -109,6 +114,7 @@ func (c *ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
 	rb := c.RuleBases[ruleBaseID]
 	fr, err := os.Open(filepath.Join(c.RuleBaseDir, rb.Filename))
 	if err != nil {
+		fmt.Printf("Could not open the rulebase file: %s\n", rb.Filename)
 		return nil
 	}
 	return fr
@@ -134,18 +140,20 @@ func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *struc
 // for compliant documents is restarted each time CompliantDocuments is called, no matter
 // what the offset is.
 func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *structs.Document, maxResults int, offset int) (bool, []*structs.Document, error) {
+	fmt.Println("Checking Compliance")
 	r := c.ruleBaseReader(ruleBaseID)
 
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
 	if err != nil {
 		return false, nil, err
 	}
-	fmt.Println("Start CompliantDocuments")
+
 	cncl := MakeCanceller()
 	compliant, docChan, err := c.checker.CompliantDocuments(theory, document, cncl)
 	if err != nil {
 		return false, nil, err
 	}
+	fmt.Printf("Compliant: %t\n", compliant)
 	if compliant {
 		return true, nil, nil
 	}
@@ -153,14 +161,25 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 	var docs []*structs.Document
 	if offset > 0 {
 		for k := 0; k < offset; k++ {
-			<-docChan
+			_, ok := <-docChan
+			if !ok {
+				// no further compliant documents available
+				return false, docs, nil
+			}
 		}
 	}
-	for i := 0; i < maxResults; i++ {
 
-		docs = append(docs, <-docChan)
+	for i := 0; i < maxResults; i++ {
+		temp, ok := <-docChan
+		if !ok {
+			// no further compliant documents available
+			fmt.Println("No more compliant documents available\n")
+			return false, docs, nil
+		}
+		fmt.Println("Compliant Document Found: %+v \n", temp)
+		docs = append(docs, temp)
 	}
 	cncl.Cancel()
-	fmt.Println("return")
+	fmt.Println("Checking Cancelled")
 	return false, docs, nil
 }

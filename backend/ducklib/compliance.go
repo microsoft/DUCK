@@ -40,6 +40,7 @@ func MakeComplianceChecker() *ComplianceChecker {
 // ComplianceChecker.
 // If there are no errors, the returned error will be nil.
 func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc io.Reader) (*caes.Theory, error) {
+
 	vt, found := c.Theories[ruleBaseId]
 	if !found || revision != vt.revision {
 
@@ -47,13 +48,16 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 		// theory.  Or return an error if the rulebase cannot be compiled.
 		ag, err := y.Import(rbSrc)
 		if err != nil {
+			fmt.Printf("Could not parse the rulebase\n")
 			return nil, err
 		}
+		fmt.Printf("rulebase successfully imported, with %d schemes and %d predicates", len(ag.Theory.ArgSchemes), len(ag.Theory.Language))
+		fmt.Printf("title: %s\n", ag.Metadata["title"].(string))
 		c.Theories[ruleBaseId] = VersionedTheory{revision, ag.Theory}
 		return ag.Theory, nil
 	}
+	fmt.Printf("rulebase successfully imported\n")
 	return vt.theory, nil
-
 }
 
 /*
@@ -72,7 +76,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 		Metadata: make(map[string]interface{}),
 		Text:     "The document is compliant.",
 		Args:     []*caes.Argument{}}
-	notCompliant := &caes.Statement{Id: "¬compliant",
+	notCompliant := &caes.Statement{Id: "not_compliant",
 		Metadata: make(map[string]interface{}),
 		Text:     "The document is not compliant.",
 		Args:     []*caes.Argument{}}
@@ -80,8 +84,8 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 		Theory:      theory,
 		Assumptions: make(map[string]bool),
 		Statements: map[string]*caes.Statement{
-			"compliant":  compliant,
-			"¬compliant": notCompliant,
+			"compliant":     compliant,
+			"not_compliant": notCompliant,
 		},
 		Issues: map[string]*caes.Issue{
 			"i1": &caes.Issue{
@@ -98,7 +102,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 		} else {
 			passive = false
 		}
-		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s))",
+		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%t))",
 			s.UseScopeCode,
 			s.QualifierCode,
 			s.DataCategoryCode,
@@ -107,6 +111,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 			s.ResultScopeCode,
 			s.TrackingID,
 			passive)
+
 		stmt := &caes.Statement{
 			Id:       stmtId,
 			Metadata: make(map[string]interface{}),
@@ -117,6 +122,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 	}
 	// derive arguments by applying the theory of the argument graph to
 	// its assumptions
+
 	err := ag.Infer()
 	if err != nil {
 		return false, err
@@ -124,6 +130,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 
 	// evaluate the argument graph
 	l := ag.GroundedLabelling()
+
 	// return true iff the compliance statement is in
 	return l[compliant] == caes.In, nil
 }
@@ -170,6 +177,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 	if err != nil {
 		return false, nil, err
 	}
+
 	if compliant {
 		return true, nil, nil
 	}
@@ -198,15 +206,19 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 		if err != nil {
 			return
 		} // indexing error should not happen
+		fmt.Printf(".") // debugging
 		variants <- d2
 		subsets(i-1, d)
 		subsets(i-1, d2)
 	}
-	go subsets(len(doc.Statements)-1, doc)
+	go func() {
+		subsets(len(doc.Statements)-1, doc)
+		close(variants)
+	}()
 
 	// Filter out the noncompliant documents
 	compliantVariants := make(chan *structs.Document)
-	fmt.Println("start compliantVariants")
+
 	go func() {
 		for {
 			select {
@@ -214,17 +226,21 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 				return // cancelled
 			case d3, ok := <-variants:
 				if !ok { // no more variants available
+					close(compliantVariants)
 					return
 				}
 
 				compliant, err := c.IsCompliant(theory, d3)
 				if err != nil && compliant {
 					compliantVariants <- d3
+					fmt.Printf("+%d", len(d3.Statements))
+				} else {
+					fmt.Printf("-%d", len(d3.Statements))
 				}
 			default: // do nothing, to avoid blocking
 			}
 		}
 	}()
-	fmt.Println("return")
+
 	return false, compliantVariants, nil
 }

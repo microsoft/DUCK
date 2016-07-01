@@ -26,7 +26,6 @@ delete RuleSet		✓
 */
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -244,6 +243,7 @@ func (cb *Couchbase) GetRulebases() ([]ducklib.Rulebase, error) {
 
 }
 */
+
 // DeleteDocument deletes a Data Use Document from the Couchbase Database
 func (cb *Couchbase) DeleteDocument(id string) error {
 
@@ -358,7 +358,7 @@ func (cb *Couchbase) putUser(u structs.User) error {
 	if u.Revision != "" {
 		entryMap["_rev"] = u.Revision
 	}
-	return cb.putEntry(entryMap)
+	return cb.putEntry(entryMap, false)
 
 }
 func (cb *Couchbase) putDocument(d structs.Document) error {
@@ -392,25 +392,39 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	}
 	if stmts != nil {
 		entryMap["statements"] = stmts
-	} 
-
-	return cb.putEntry(entryMap)
-}
-
-func (cb *Couchbase) putEntry(entry map[string]interface{}) error {
-	//check type of entry (document/user/ruleset)
-
-	var entryBytes []byte
-
-	entryBytes, err := json.Marshal(entry)
-	if err != nil {
-		return err
 	}
 
-	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, entry["_id"])
+	return cb.putEntry(entryMap, false)
+}
+
+func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) error {
+	//check type of entry (document/user/ruleset)
+	var entryReader *strings.Reader
+	var url string
+	if !designfile {
+		var entryBytes []byte
+
+		entryBytes, err := json.Marshal(entry)
+		if err != nil {
+			return err
+		}
+		entryReader = strings.NewReader(string(entryBytes))
+		url = fmt.Sprintf("%s/%s/%s", cb.url, cb.database, entry["_id"])
+	} else {
+
+		if _, ok := entry["entry"]; !ok {
+			return errors.New("Expected a map with one entry: \"entry\" but did not get it.")
+		}
+		entryReader = strings.NewReader(entry["entry"].(string))
+		url = fmt.Sprintf("%s/%s/_design/app", cb.url, cb.database)
+	}
 
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(entryBytes))
+
+	request, err := http.NewRequest(http.MethodPut, url, entryReader)
+	if err != nil {
+		panic(err)
+	}
 	//request.SetBasicAuth("admin", "admin")
 	//request.ContentLength = 0
 	resp, err := client.Do(request)
@@ -441,17 +455,16 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}) error {
 func (cb *Couchbase) Init(url string, database string) error {
 	log.Println("Couchbase initialization")
 
-	designDoc := make(map[string]interface{})
-	designDoc["_id"] = "_design/app"
-	designDoc["views"] = ` {"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
+	designDoc := `{"_id":"_design/app","views":{"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
 		`"by_date":{"map":"function(doc) { if(doc.date && doc.title) {   emit(doc.date, doc.title);  }}"},` +
 		`"user_login":{"map":"function(doc) { if(doc.type =='user') {   emit(doc.email,  doc.password);  }}"},` +
 		`"user":{"map":"function(doc) { if(doc.type =='user') {   emit(doc._id, doc);  }}"},` +
 		`"documents":{"map":"function(doc) { if(doc.type =='document') {   emit(doc._id, doc);  }}"},` +
 		`"rulebases":{"map":"function(doc) { if(doc.type =='rulebase') {   emit(doc._id, doc._rev);  }}"},` +
-		`"documents_by_user":{"map":"function(doc) { if(doc.type =='document') {   emit([doc.owner, doc._id], doc.name);  }}"}},`
-	designDoc["language"] = "javascript"
-	designDoc["type"] = "design"
+		`"documents_by_user":{"map":"function(doc) { if(doc.type =='document') {   emit([doc.owner, doc._id], doc.name);  }}"}},` +
+		`"language":"javascript"}`
+
+	designMap := map[string]interface{}{"entry": designDoc}
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -485,7 +498,7 @@ func (cb *Couchbase) Init(url string, database string) error {
 	if !ok {
 		log.Println("Designfile does not exist. Creating now")
 
-		err := cb.putEntry(designDoc)
+		err := cb.putEntry(designMap, true)
 		if err != nil {
 			log.Printf("ERROR: %#+v\n", err)
 		}
