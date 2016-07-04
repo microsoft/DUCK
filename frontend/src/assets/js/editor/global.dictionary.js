@@ -35,7 +35,7 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $q, ObjectUtils)
             return;
         }
         context.dictionary = new Hashtable();
-        context.dictionary.put("Microsoft Azure", {value: "Microsoft Azure", type: "scope", code: "microsoft-azure", category: "2", dictionaryType: "global"})
+        context.dictionary.put("Microsoft Azure", {value: "Microsoft Azure", type: "scope", code: "microsoft_azure", category: "2", dictionaryType: "global"})
     }
 
 });
