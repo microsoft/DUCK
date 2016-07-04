@@ -62,6 +62,7 @@ func getDocHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
+	fmt.Printf("GET revision: %s\n", doc.Revision)
 	return c.JSON(http.StatusOK, doc)
 }
 func deleteDocHandler(c echo.Context) error {
@@ -75,33 +76,42 @@ func deleteDocHandler(c echo.Context) error {
 }
 
 func putDocHandler(c echo.Context) error {
-
-	/*resp, err := ioutil.ReadAll(c.Request().Body())
+/*
+	resp, err := ioutil.ReadAll(c.Request().Body())
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	fmt.Println(string(resp))
+	return c.JSON(http.StatusNotFound, structs.Response{Ok: false})
 	*/
-	doc := new(structs.Document)
-	if err := c.Bind(doc); err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-	}
-	err := datab.PutDocument(*doc)
-	if err != nil {
-		e := err.Error()
+		doc := new(structs.Document)
+		if err := c.Bind(doc); err != nil {
+			e := err.Error()
+			fmt.Printf("Error at 1: %s\n", err)
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
+		fmt.Printf("PUT revision: %s\n", doc.Revision)
+		err := datab.PutDocument(*doc)
+		if err != nil {
+			e := err.Error()
+			fmt.Printf("Error at 2: %s\n", err)
+			if e == "Document update conflict." {
+				return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
+			}
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-	}
+		docu, err := datab.GetDocument(doc.ID)
+		fmt.Printf("PUT RETURN revision: %s\n", docu.Revision) // should be the same one we once got through the document GET
+		if err != nil {
+			e := err.Error()
+			fmt.Printf("Error at 3: %s\n", err)
 
-	docu, err := datab.GetDocument(doc.ID)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-	}
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 
-	return c.JSON(http.StatusOK, docu)
+		return c.JSON(http.StatusOK, docu)
 }
 func postDocHandler(c echo.Context) error {
 
@@ -248,6 +258,7 @@ func postRsHandler(c echo.Context) error {
 }
 */
 func checkDocHandler(c echo.Context) error {
+
 	id := c.Param("baseid")
 
 	doc := new(structs.Document)
