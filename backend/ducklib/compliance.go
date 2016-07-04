@@ -3,9 +3,12 @@ package ducklib
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
+	"os"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
+	"github.com/carneades/carneades-4/src/engine/caes/encoding/dot"
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
 
@@ -80,19 +83,14 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 		Metadata: make(map[string]interface{}),
 		Text:     "The document is not compliant.",
 		Args:     []*caes.Argument{}}
-	ag := caes.ArgGraph{
-		Theory:      theory,
-		Assumptions: make(map[string]bool),
-		Statements: map[string]*caes.Statement{
-			"compliant":     compliant,
-			"not_compliant": notCompliant,
-		},
-		Issues: map[string]*caes.Issue{
-			"i1": &caes.Issue{
-				Id:        "i1",
-				Metadata:  make(map[string]interface{}),
-				Positions: []*caes.Statement{compliant, notCompliant}},
-		}}
+	ag := caes.NewArgGraph()
+	ag.Theory = theory
+	ag.Statements["compliant"] = compliant
+	ag.Statements["not_compliant"] = notCompliant
+	ag.Issues["i1"] = &caes.Issue{
+		Id:        "i1",
+		Metadata:  make(map[string]interface{}),
+		Positions: []*caes.Statement{compliant, notCompliant}}
 	// add statements for the data use statements in the document
 	// to the argument graph, and assume them to be true.
 	for _, s := range document.Statements {
@@ -130,6 +128,14 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 
 	// evaluate the argument graph
 	l := ag.GroundedLabelling()
+
+	// write the argument graph in dot to a temporary file
+	// so that it can be visualized for debugging purposes
+	f, err := ioutil.TempFile(os.TempDir(), "duck")
+	if err == nil {
+		ag.ApplyLabelling(l)
+		dot.Export(f, *ag)
+	}
 
 	// return true iff the compliance statement is in
 	return l[compliant] == caes.In, nil
