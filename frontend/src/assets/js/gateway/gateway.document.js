@@ -174,7 +174,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             // end stub */
 
              var documentData = context.createDocumentData(document);
-             $http.put(url, documentData).success(function () {
+             $http.put(url, documentData).success(function (data) {
                  var complianceResult = angular.fromJson(data);
                  resolve(complianceResult);
                  // FIXME handle errors
