@@ -1,13 +1,14 @@
 package structs
 
 type User struct {
-	ID        string   `json:"id"`
-	Email     string   `json:"email"`
-	Password  string   `json:"password"`
-	Firstname string   `json:"firstname"`
-	Lastname  string   `json:"lastname"`
-	Locale    string   `json:"locale"`
-	Revision  string   `json:"revision"`
+	ID         string     `json:"id"`
+	Email      string     `json:"email"`
+	Password   string     `json:"password"`
+	Firstname  string     `json:"firstname"`
+	Lastname   string     `json:"lastname"`
+	Locale     string     `json:"locale"`
+	Revision   string     `json:"revision"`
+	Dictionary Dictionary `json:"dictionary"`
 	//Documents []string `json:"documents"`
 }
 
@@ -54,7 +55,7 @@ func (u *User) FromValueMap(mp map[string]interface{}) {
 		u.Locale = locale.(string)
 	}
 
-/*	if docs, prs := mp["documents"].([]interface{}); prs {
+	/*	if docs, prs := mp["documents"].([]interface{}); prs {
 		u.Documents = make([]string, len(docs))
 		for i, v := range docs {
 			u.Documents[i] = v.(string)
@@ -69,6 +70,7 @@ type Rulebase struct {
 	Revision string `json:"_rev"`
 }
 
+//can this be a map?
 type Taxonomy struct {
 	Scope []struct {
 		Value    string `json:"value"`
@@ -95,3 +97,13 @@ type Taxonomy struct {
 		Fixed    bool   `json:"fixed"`
 	} `json:"action"`
 }
+
+type DictionaryEntry struct {
+	Value          string
+	Type           string
+	Code           string
+	Category       string
+	DictionaryType string
+}
+
+type Dictionary []DictionaryEntry
