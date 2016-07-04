@@ -204,7 +204,7 @@
     },
     {
       "value": "지불관련 정보",
-      "code": "account_data=payment",
+      "code": "account_data_payment",
       "category": "4.2",
       "fixed": true
     }

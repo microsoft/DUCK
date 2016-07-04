@@ -204,7 +204,7 @@
     },
     {
       "value": "payment instrument data",
-      "code": "account_data=payment",
+      "code": "account_data_payment",
       "category": "4.2",
       "fixed": true
     }
