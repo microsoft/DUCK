@@ -1,59 +1,130 @@
 package mockdb
 
+import (
+	"errors"
+
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
+	"github.com/Microsoft/DUCK/backend/pluginregistry"
+)
+
 // Mock is a Mock database for testing purposes
 type Mock struct {
-	DataUseDocuments []map[string]string
-	User             []map[string]string
+	DataUseDocuments map[string]structs.Document
+	User             map[string]structs.User
 }
 
 //Init initializes the Mock
 func (m *Mock) Init(url string, databasename string) error {
-	return nil
+	var err error
+	if pluginregistry.DatabasePlugin != nil {
+
+		err = errors.New("Already a registered Database. Registered anyway.")
+	}
+	pluginregistry.RegisterDatabase(m)
+	err = errors.New("Registered first")
+	return err
 }
 
 //GetLogin returns ID and Password for the matching username
-func (m *Mock) GetLogin(username string) (id string, pw string, err error) {
+func (m *Mock) GetLogin(userMail string) (id string, pw string, err error) {
+	for _, u := range m.User {
+		if userMail == u.Email {
+			id = u.ID
+			pw = u.Password
+			return
+		}
+	}
+	err = errors.New("User not found.")
 	return
 }
 
 //GetUser returns a user map
-func (m *Mock) GetUser(id string) (user map[string]interface{}, err error) {
-	return
+func (m *Mock) GetUser(id string) (structs.User, error) {
+	if u, prs := m.User[id]; prs {
+		return u, nil
+	}
+	return structs.User{}, errors.New("User not found")
 }
 
 //DeleteUser deletes a user
-func (m *Mock) DeleteUser(id string, rev string) error {
-	return nil
+func (m *Mock) DeleteUser(id string) error {
+	if _, prs := m.User[id]; prs {
+		delete(m.User, id)
+		return nil
+	}
+	return errors.New("Cannot delete user: User not found")
 }
 
 // NewUser creates a new User
-func (m *Mock) NewUser(id string, entry string) (eid string, err error) {
-	return
+func (m *Mock) NewUser(user structs.User) error {
+
+	if _, prs := m.User[user.ID]; !prs {
+		m.User[user.ID] = user
+		return nil
+	}
+	return errors.New("Cannot create user: User already exists")
+}
+
+// UpdateUser updates an existing User
+func (m *Mock) UpdateUser(user structs.User) error {
+	if _, prs := m.User[user.ID]; prs {
+		m.User[user.ID] = user
+		return nil
+	}
+	return errors.New("Cannot delete user: User not found")
 }
 
 //GetDocumentSummariesForUser returns all documents for a user
-func (m *Mock) GetDocumentSummariesForUser(userid string) (documents []map[string]string, err error) {
-	return
+func (m *Mock) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
+	var l []structs.Document
+	if len(m.DataUseDocuments) == 0 {
+		return l, errors.New("No Documents found")
+	}
+
+	for id, doc := range m.DataUseDocuments {
+		if userid == id {
+			var d structs.Document
+			d.ID = doc.ID
+			d.Name = doc.Name
+			l = append(l, d)
+		}
+	}
+	return l, nil
 }
 
 //GetDocument returns a Document
-func (m *Mock) GetDocument(id string) (document map[string]interface{}, err error) {
-	return
+func (m *Mock) GetDocument(id string) (structs.Document, error) {
+	if d, prs := m.DataUseDocuments[id]; prs {
+		return d, nil
+	}
+	return structs.Document{}, errors.New("Document not found")
 }
 
 //NewDocument creates a new document
-func (m *Mock) NewDocument(id string, entry string) (eid string, err error) {
-	return
+func (m *Mock) NewDocument(doc structs.Document) error {
+	if _, prs := m.DataUseDocuments[doc.ID]; !prs {
+		m.DataUseDocuments[doc.ID] = doc
+		return nil
+	}
+	return errors.New("Cannot create Document: Document already exists")
 }
 
 //UpdateDocument updates a Document
-func (m *Mock) UpdateDocument(id string, entry string) (eid string, err error) {
-	return
+func (m *Mock) UpdateDocument(doc structs.Document) error {
+	if _, prs := m.DataUseDocuments[doc.ID]; prs {
+		m.DataUseDocuments[doc.ID] = doc
+		return nil
+	}
+	return errors.New("Cannot delete Document: Document not found")
 }
 
 //DeleteDocument deletes a document
-func (m *Mock) DeleteDocument(id string, rev string) error {
-	return nil
+func (m *Mock) DeleteDocument(id string) error {
+	if _, prs := m.DataUseDocuments[id]; prs {
+		delete(m.DataUseDocuments, id)
+		return nil
+	}
+	return errors.New("Cannot delete Document: Document not found")
 }
 
 /*
