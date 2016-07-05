@@ -32,6 +32,7 @@ Then, from the cloned directory, install the required dependencies:
 cd duck
 npm install
 npm install -g bower
+npm install -g gulp
 bower install
 ```
 
