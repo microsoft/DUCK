@@ -60,6 +60,9 @@
   "alternative_versions_available_heading": "Alternative compliant versions of this document are available",
   "register": "Register",
   "valid_email": "A valid email address is required",
-  "valid_password": "A password at least 4 characters in length is required"
+  "valid_password": "A password at least 4 characters in length is required",
+  "copy_document": "Copy Document",
+  "copy_action": "COPY"
+
 }
 

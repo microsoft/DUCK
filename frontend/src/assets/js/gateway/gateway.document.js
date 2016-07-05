@@ -78,6 +78,22 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         });
     };
 
+    this.copyDocument = function (name, documentId) {
+        return $q(function (resolve, reject) {
+            var url = "/v1/documents/copy/" + documentId;
+            var data = {};
+            data.locale = CurrentUser.locale;
+            data.name = name;
+            data.owner = CurrentUser.id;
+            $http.post(url, data).success(function (data) {
+                var newDocument = angular.fromJson(data);
+                resolve(newDocument);
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+    };
+
     /**
      * Retrieves a data use statement document authored by the current user.
      *
@@ -127,60 +143,60 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
      */
     this.complianceCheckWithAlternatives = function (document, rulebaseId) {
         return $q(function (resolve, reject) {
-            var url = "/v1/rulebases/" + rulebaseId+"/documents";
+            var url = "/v1/rulebases/" + rulebaseId + "/documents";
             var complianceResult;
             // stub for testing
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
-/*
-            if (document.statements.length <= 2) {
-                complianceResult = {
-                    compliant: "COMPLIANT",
-                    documents: []
-                };
-                resolve(complianceResult);
-                return;
-            }
+            /*
+             if (document.statements.length <= 2) {
+             complianceResult = {
+             compliant: "COMPLIANT",
+             documents: []
+             };
+             resolve(complianceResult);
+             return;
+             }
 
-            complianceResult = {
-                compliant: "NON_COMPLIANT",
-                documents: [{
-                    id: document.id,
-                    locale: document.locale,
-                    name: document.name,
-                    owner: document.owner,
-                    statements: []
-                }]
-            };
+             complianceResult = {
+             compliant: "NON_COMPLIANT",
+             documents: [{
+             id: document.id,
+             locale: document.locale,
+             name: document.name,
+             owner: document.owner,
+             statements: []
+             }]
+             };
 
-            // remove the second and the last statements for testing
-            for (var i = 0; i < document.statements.length; i++) {
-                if (i == 1 || i == document.statements.length -1) {
-                    continue;
-                }
-                var statement = document.statements[i];
-                complianceResult.documents[0].statements.push({
-                    trackingId: statement.trackingId,
-                    actionCode: statement.actionCode,
-                    dataCategoryCode: statement.dataCategoryCode,
-                    qualifierCode: statement.qualifierCode,
-                    resultScopeCode: statement.resultScopeCode,
-                    sourceScopeCode: statement.sourceScopeCode,
-                    useScopeCode: statement.useScopeCode,
-                    passive: statement.passive
-                });
-            }
-
-            resolve(complianceResult);
-            // end stub */
-
-             var documentData = context.createDocumentData(document);
-             $http.put(url, documentData).success(function (data) {
-                 var complianceResult = angular.fromJson(data);
-                 resolve(complianceResult);
-                 // FIXME handle errors
-             }).error(function (data, status) {
-                 reject(status);
+             // remove the second and the last statements for testing
+             for (var i = 0; i < document.statements.length; i++) {
+             if (i == 1 || i == document.statements.length -1) {
+             continue;
+             }
+             var statement = document.statements[i];
+             complianceResult.documents[0].statements.push({
+             trackingId: statement.trackingId,
+             actionCode: statement.actionCode,
+             dataCategoryCode: statement.dataCategoryCode,
+             qualifierCode: statement.qualifierCode,
+             resultScopeCode: statement.resultScopeCode,
+             sourceScopeCode: statement.sourceScopeCode,
+             useScopeCode: statement.useScopeCode,
+             passive: statement.passive
              });
+             }
+
+             resolve(complianceResult);
+             // end stub */
+
+            var documentData = context.createDocumentData(document);
+            $http.put(url, documentData).success(function (data) {
+                var complianceResult = angular.fromJson(data);
+                resolve(complianceResult);
+                // FIXME handle errors
+            }).error(function (data, status) {
+                reject(status);
+            });
         });
     };
 
@@ -192,6 +208,12 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         data.name = document.name;
         data.owner = document.owner;
         data.statements = [];
+        context.copyStatements(document, data);
+        data.revision = document.revision;
+        return data;
+    };
+
+    this.copyStatements = function (document, data) {
         document.statements.forEach(function (statement) {
             data.statements.push({
                 trackingId: statement.trackingId,
@@ -204,8 +226,6 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 passive: statement.passive
             })
         });
-        data.revision = document.revision;
-        return data;
     }
 
 });

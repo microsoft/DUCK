@@ -27,6 +27,9 @@
                     <div class="text-right padding-right-1 padding-top-0-5">
                         <a class="padding-right-1" href="" ng-attr-title="{{'download'|translate}}">
                             <i class="fa fa-cloud-download white"></i> </a>
+                        <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
+                            <i class="fa fa-clone white"></i>
+                        </a>
                         <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
                             <i class="fa fa-trash white"></i>
                         </a>
@@ -62,6 +65,18 @@
             <div class="columns ">
                 <a class="button small secondary" data-close> {{"cancel_action" |translate}}</a>
                 <a class="button small" data-close ng-click="home.createDocument(home.newName)"> {{"create_action" |translate}}</a>
+            </div>
+        </div>
+    </div>
+    <div class="reveal tiny" id="copyModal" data-reveal data-overlay="false">
+        <h4> {{"copy_document" |translate}}</h4>
+        <div class="row padding-top-2">
+            <input ng-model="home.copyName" type="text" ng-attr-placeholder="'document_name_placeholder' | translate">
+        </div>
+        <div class="row float-right padding-top-2">
+            <div class="columns ">
+                <a class="button small secondary" data-close> {{"cancel_action" |translate}}</a>
+                <a class="button small" data-close ng-click="home.copyDocument(home.copyName, home.toCopy.id)"> {{"copy_action" |translate}}</a>
             </div>
         </div>
     </div>

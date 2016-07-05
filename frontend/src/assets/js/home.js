@@ -31,6 +31,16 @@ homeModule.controller("HomeController", function (DataUseDocumentService, $state
         });
 
 
+    };
+    
+    home.copyDocument = function (name, documentId) {
+        DataUseDocumentService.copyDocument(name, documentId).then(function (document) {
+            $state.go('main.editor', {documentId: document.id});
+        }, function (error) {
+            //FIXME
+        });
+
+
     }
 
 });
