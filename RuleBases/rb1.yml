@@ -8,8 +8,8 @@ meta:
 
 
 language:
-  compliant/0: compliant
-  not_compliant/0: not compliant
+  compliant: compliant
+  not_compliant: not compliant
   dataUseStatement/1: dataUseStatement(%s)
   useScope/2: useScope(%s,%s)
   qualifier/2: qualifier(%s,%s)
@@ -21,9 +21,20 @@ language:
   passive/2: passive(%s,%t)
   duplicate/2: duplicate(%s,%s)
 
+# nullary predicates are not automatically statements
+# should they be?
+# statements:
+#   compliant: The document is compliant.
+#   not_compliant: The document is not compliant.
+
 # issues:
 #   i1:
 #     positions: [compliant, not_compliant]
+
+issue_schemes:
+  compliance:
+    - compliant
+    - not_compliant
 
 argument_schemes:
   default:
@@ -52,7 +63,7 @@ argument_schemes:
       - id(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),ID)
       - passive(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),Passive)
 
-  duplicateDataUseStatements:
+  duplicates:
     weight:
       constant: 0.5
     variables: [S1,US,S2,Q,DC,A,RS,ID1,ID2,P1,P2]
@@ -63,6 +74,8 @@ argument_schemes:
       - qualifier(S2,Q)
       - dataCategory(S1,DC)
       - dataCategory(S2,DC)
+      - sourceScope(S1,SS)
+      - sourceScope(S2,SS)
       - action(S1,A)
       - action(S2,A)
       - resultScope(S1,RS)
@@ -72,11 +85,16 @@ argument_schemes:
       - passive(S1,P1)
       - passive(S2,P2)
     guards:
-     # - ID1 =\= ID2
+      # - ID1 =\= ID2
+      # To do: this guard is not working.
+      # Uncommenting the guard causes the rule to fail
+      # Commenting it out seems to work for this example,
+      #   presumably because none of the properties
+      #   are matched twice for the same statement.
     conclusions:
       - duplicate(S1,S2)
 
-  dummy:
+  duplicatesNotCompliant:
     meta:
       title: Duplicate Data Use Statements Are Not Permitted
       note: >

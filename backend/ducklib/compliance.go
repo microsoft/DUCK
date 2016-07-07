@@ -3,12 +3,12 @@ package ducklib
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
-	"os"
+	// "io/ioutil"
+	// "os"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
-	"github.com/carneades/carneades-4/src/engine/caes/encoding/dot"
+	// "github.com/carneades/carneades-4/src/engine/caes/encoding/dot"
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
 
@@ -75,22 +75,8 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 */
 func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Document) (bool, error) {
 	// Construct the argument graph
-	compliant := &caes.Statement{Id: "compliant",
-		Metadata: make(map[string]interface{}),
-		Text:     "The document is compliant.",
-		Args:     []*caes.Argument{}}
-	notCompliant := &caes.Statement{Id: "not_compliant",
-		Metadata: make(map[string]interface{}),
-		Text:     "The document is not compliant.",
-		Args:     []*caes.Argument{}}
 	ag := caes.NewArgGraph()
 	ag.Theory = theory
-	ag.Statements["compliant"] = compliant
-	ag.Statements["not_compliant"] = notCompliant
-	ag.Issues["i1"] = &caes.Issue{
-		Id:        "i1",
-		Metadata:  make(map[string]interface{}),
-		Positions: []*caes.Statement{compliant, notCompliant}}
 	// add statements for the data use statements in the document
 	// to the argument graph, and assume them to be true.
 	for _, s := range document.Statements {
@@ -128,17 +114,20 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 
 	// evaluate the argument graph
 	l := ag.GroundedLabelling()
+	ag.ApplyLabelling(l)
 
+	// Begin Debugging
 	// write the argument graph in dot to a temporary file
 	// so that it can be visualized for debugging purposes
-	f, err := ioutil.TempFile(os.TempDir(), "duck")
-	if err == nil {
-		ag.ApplyLabelling(l)
-		dot.Export(f, *ag)
-	}
+	//	f, err := ioutil.TempFile(os.TempDir(), "duckDot")
+	//	if err == nil {
+	//		dot.Export(f, *ag)
+	//	}
+	// fmt.Printf("ag.Statements[\"compliant\"].Label = %v\n", ag.Statements["compliant"].Label)
+	// End Debugging
 
 	// return true iff the compliance statement is in
-	return l[compliant] == caes.In, nil
+	return ag.Statements["compliant"].Label == caes.In, nil
 }
 
 func removeStatement(d *structs.Document, i int) (*structs.Document, error) {
@@ -237,7 +226,9 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 				}
 
 				compliant, err := c.IsCompliant(theory, d3)
-				if err != nil && compliant {
+				if err != nil {
+					fmt.Printf("Compliance checking error: %v\n", err)
+				} else if compliant {
 					compliantVariants <- d3
 					fmt.Printf("+%d", len(d3.Statements))
 				} else {
