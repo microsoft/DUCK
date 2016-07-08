@@ -25,7 +25,7 @@ The project build requires:
 First clone the project repository (make sure it is under the GOPATH directory):
 
 ```bash
-git clone https://github.com/Microsoft/DUCK duck
+git clone https://github.com/Microsoft/DUCK DUCK
 ```
 
 Then, from the cloned directory, install the required dependencies:
