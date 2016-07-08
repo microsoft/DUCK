@@ -15,9 +15,9 @@ This is a Gulp-powered build system with the following features:
 
 The project build requires:
 
-- Go (1.6.2 or later)
-- [NodeJS](https://nodejs.org/en/) (0.12 or greater)
 - [Git](https://git-scm.com/)
+- [Go] (https://golang.org/)  (1.6.2 or later)
+- [NodeJS](https://nodejs.org/en/) (0.12 or greater)
 
 ### Setup
 
