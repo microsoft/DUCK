@@ -40,9 +40,9 @@ bower install
 ```
 Update go dependencies by executing 'go get' in the DUCK directory:
 
-'''bash
+```bash
 go get github.com/carneades/carneades-4
-'''
+```
 
 Finally, run `npm start` to execute the build. The application will be accessible at:
 
