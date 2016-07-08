@@ -42,6 +42,7 @@ Update go dependencies by executing 'go get' in the DUCK directory:
 
 ```bash
 go get github.com/carneades/carneades-4
+go get  gopkg.in/yaml.v2
 ```
 
 Finally, run `npm start` to execute the build. The application will be accessible at:
