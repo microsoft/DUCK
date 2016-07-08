@@ -19,7 +19,7 @@ The project build requires:
 - [Go] (https://golang.org/)  (1.6.2 or later)
 - [NodeJS](https://nodejs.org/en/) (0.12 or greater)
 - [CouchDB](http://couchdb.apache.org/) (1.6 or greater)
-- [SWI Prolog] (http://swiprolog.org) (Development Release 7.3)
+- [SWI Prolog] (http://swi-prolog.org) (Development Release 7.3)
 
 ### Setup
 
