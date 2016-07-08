@@ -31,7 +31,7 @@ git clone https://github.com/Microsoft/DUCK DUCK
 Then, from the cloned directory, install the required dependencies:
 
 ```bash
-cd duck
+cd DUCK
 npm install
 npm install -g bower
 npm install -g gulp
