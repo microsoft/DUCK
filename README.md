@@ -15,6 +15,7 @@ This is a Gulp-powered build system with the following features:
 
 The project build requires:
 
+- GO (1.6.2 or later)
 - [NodeJS](https://nodejs.org/en/) (0.12 or greater)
 - [Git](https://git-scm.com/)
 
@@ -23,7 +24,7 @@ The project build requires:
 First clone the project repository (make sure it is under the GOPATH directory):
 
 ```bash
-git clone https://github.com/Metaform/duck duck
+git clone https://github.com/Microsoft/DUCK duck
 ```
 
 Then, from the cloned directory, install the required dependencies:
