@@ -45,6 +45,8 @@ go get github.com/carneades/carneades-4
 go get  gopkg.in/yaml.v2
 ```
 
+Make sure Couch DB is running.
+
 Finally, run `npm start` to execute the build. The application will be accessible at:
 
 ```
