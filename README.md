@@ -18,6 +18,7 @@ The project build requires:
 - [Git](https://git-scm.com/)
 - [Go] (https://golang.org/)  (1.6.2 or later)
 - [NodeJS](https://nodejs.org/en/) (0.12 or greater)
+- [CouchDB](http://couchdb.apache.org/) (1.6 or greater)
 
 ### Setup
 
