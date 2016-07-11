@@ -162,9 +162,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             $scope.currentField = fieldName;
             $scope.currentFieldType = "scope";
             DocumentModel.document.statements.forEach(function (statement) {
-                if (!DocumentModel.editing(statement)) {
-                    return;
-                }
                 // Register a watch all all use scopes of statements being edited. The watches monitor for the new term option selected by the user.
                 // If this occurs, an event to open the new term dialog is fired
                 var unregister = $scope.$watch(function () {
@@ -244,10 +241,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                 $scope.currentField = "dataCategory";
                 $scope.currentFieldType = "dataCategory";
                 DocumentModel.document.statements.forEach(function (statement) {
-                    if (!DocumentModel.editing(statement)) {
-                        return;
-                    }
-                    var unregister = $scope.$watch(function () {
+                     var unregister = $scope.$watch(function () {
                         return statement.dataCategory
                     }, function (newValue) {
                         if (newValue === "_new") {   // new term entered
