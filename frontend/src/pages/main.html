@@ -3,6 +3,10 @@
         <div class="top-bar-title">
             <div style="padding-left: 5em">
                 <a ui-sref="main.home" href=""><img src="assets/img/duck.png"></a>
+                <a ui-sref="main.home" href="" ng-show="main.$state.includes('main.editor')">
+                    <i class="fa fa-chevron-left"></i>
+                    {{"documents"|translate}}
+                </a>
             </div>
         </div>
         <div id="responsive-menu">

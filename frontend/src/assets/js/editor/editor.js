@@ -53,7 +53,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     };
 
     controller.selectAlternateVersion = function (alternative) {
-        controller.closeAll();
         DocumentModel.selectAlternateVersion(alternative);
         $scope.document = alternative;
     };
@@ -82,22 +81,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.getAlternativeVersions = function () {
         return DocumentModel.alternativeVersions;
-    };
-
-    controller.editing = function (statement) {
-        return DocumentModel.editing(statement);
-    };
-
-    controller.editAll = function () {
-        return DocumentModel.document.statements.forEach(function (statement) {
-            DocumentModel.edit(statement);
-        });
-    };
-
-    controller.closeAll = function () {
-        return DocumentModel.document.statements.forEach(function (statement) {
-            DocumentModel.close(statement);
-        });
     };
 
     controller.dirty = function () {

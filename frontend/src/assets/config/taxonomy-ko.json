@@ -95,7 +95,7 @@
       "fixed": true
     },
     {
-      "value": "사용자 식별 가능 정보,
+      "value": "사용자 식별 가능 정보",
       "code": "derived_data_user",
       "category": "2.1",
       "fixed": false

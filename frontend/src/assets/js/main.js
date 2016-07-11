@@ -3,10 +3,11 @@
  */
 var mainModule = angular.module("duck.main");
 
-mainModule.controller("MainController", function ($scope, CurrentUser, LocaleService, UserService, $translate) {
+mainModule.controller("MainController", function ($scope, CurrentUser, LocaleService, UserService, $translate, $state) {
     var controller = this;
 
     controller.CurrentUser = CurrentUser;
+    controller.$state = $state;
 
     controller.locales = LocaleService.getLocales();
 

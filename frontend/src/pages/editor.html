@@ -1,27 +1,5 @@
 <div ng-controller="EditorController as editorController">
-    <div class="sidebar">
-        <ul class="menu vertical icon-top padding-top-2">
-            <li><a ui-sref="main.home" href=""><i class="fa fa-1-5x fa-chevron-left"></i> {{"documents"|translate}}</a></li>
-            <li class="padding-top-2"></li>
-            <li>
-                <a href="" ng-click="editorController.addStatement()" ng-class="{'sidebar-icon-disabled': !editorController.isEditable()}">
-                    <i class="fa fa-1-5x fa-plus"></i> {{"new_statement"|translate}}
-                </a>
-            </li>
-            <li>
-                <a data-open="revertModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href="">
-                    <i class="fa fa-1-5x fa-undo"></i> {{"revert"|translate}}
-                </a></li>
-            <li>
-                <a ng-click="editorController.save()" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}" href="">
-                    <i class="fa fa-1-5x fa-save"></i> {{"save"|translate}}
-                </a>
-            </li>
-            <li><a href="" ng-click="editorController.complianceCheckWithAlternatives()"><i class="fa fa-1-5x fa-check-circle-o"></i> {{"validate"|translate}}</a></li>
-            <li><a href=""><i class="fa fa-1-5x fa-cloud-download"></i> {{"download"|translate}}</a></li>
-        </ul>
-    </div>
-    <div class="row columns editor-canvas" style=" padding-left: 200px !important;">
+    <div class="row columns editor-canvas">
         <div class="row padding-top-2" ng-if="!editorController.noDocument">
             <div class="small-10 columns">
                 <h4>{{document.name}}</h4>
@@ -46,22 +24,33 @@
         </div>
         <div class="row" ng-show="document">
             <div class="clearfix">
-                <div class="button-group small float-left noselect"  ng-show="editorController.isEditable()" >
-                    <a class="button hollow" ng-click="editorController.editAll()"
-                       ng-attr-title="{{'edit_all_statements'|translate}}">
-                        <i class="fa fa-pencil-square-o"></i>
+                <div class="button-group small float-left noselect" ng-show="editorController.isEditable()">
+                    <a href="" class="button hollow" ng-click="editorController.addStatement()" ng-attr-title="{{'new_statement'|translate}}"
+                       ng-class="{'sidebar-icon-disabled': !editorController.isEditable()}">
+                        <i class="fa fa-plus"></i>
                     </a>
-                    <a class="button hollow" ng-click="editorController.closeAll()"
-                       ng-attr-title="{{'close_all_statement_editors'|translate}}">
-                        <i class="fa fa-times"></i>
+                    <a href="" class="button hollow" data-open="revertModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}"
+                       ng-attr-title="{{'revert'|translate}}">
+                        <i class="fa fa-undo"></i>
                     </a>
+                    <a href="" class="button hollow" ng-click="editorController.save()" ng-attr-title="{{'save'|translate}}"
+                       ng-class="{'sidebar-icon-disabled': !editorController.dirty()}">
+                        <i class="fa fa-save"></i>
+                    </a>
+                    <a href="" class="button hollow" ng-click="editorController.complianceCheckWithAlternatives()" ng-attr-title="{{'validate'|translate}}">
+                        <i class="fa fa-check-circle-o"></i>
+                    </a>
+
                     <a class="button hollow" ng-click="editorController.validateSyntax()"
                        ng-attr-title="{{'toggle_validation_messages'|translate}}">
                         <i class="fa fa-eye"></i>
-                        <!--<i class="fa fa-eye-slash"></i>-->
+                    </a>
+                    <a class="button hollow" ng-click=""
+                       ng-attr-title="{{'download'|translate}}">
+                        <i class="fa fa-download"></i>
                     </a>
                 </div>
-                <div class="button-group small float-right noselect"  ng-show="editorController.isEditable()" >
+                <div class="button-group small float-right noselect" ng-show="editorController.isEditable()">
                     <button class="button hollow" type="button" data-toggle="example-dropdown">
                         {{'language_label'|translate}}
                     </button>
@@ -83,8 +72,8 @@
                     <a class="button hollow" ng-click="editorController.makePassive()">
                         {{"passive"|translate}}
                     </a>
-                    </div>
-                <div class="button-group small float-right noselect"  ng-if="!editorController.isEditable()" >
+                </div>
+                <div class="button-group small float-right noselect" ng-if="!editorController.isEditable()">
                     <a class="button hollow" ng-click="editorController.adoptAlternativeVersion()">
                         {{"adopt_label"|translate}}
                     </a>
@@ -114,17 +103,10 @@
             </div>
             <div class="row column">
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
-                    <li data-ng-repeat="statement in document.statements" data-as-sortable-item  ng-class="{'diff-remove': statement._diff}">
-                        <div data-as-sortable-item-handle >
+                    <li data-ng-repeat="statement in document.statements" data-as-sortable-item ng-class="{'diff-remove': statement._diff}">
+                        <div data-as-sortable-item-handle>
                             <div class="clearfix" ng-if="editorController.isEditable()">
-                                <div class="float-left button-group small noselect">
-                                    <a class="button secondary hollow" ng-click="editorController.toggleEdit(statement)"
-                                       ng-attr-title="{{'toggle_edit_statement'|translate}}">
-                                        <i ng-if="!editorController.editing(statement)" class="fa fa-pencil-square-o"></i>
-                                        <i ng-if="editorController.editing(statement)" class="fa fa-times"></i>
-                                    </a>
-                                </div>
-                                <div class="button-group small float-right noselect">
+                                <div class="button-group small float-left noselect">
                                     <a class="button secondary" ng-class="{'hollow':statement.passive}"
                                        ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
                                     <a class="button secondary" ng-class="{'hollow':!statement.passive}"
@@ -135,8 +117,10 @@
                             </div>
                             <div class="row noselect">
                                 <div class="small-12 columns">
-                                   <del ng-if="statement._diff"> <div ng-include="'editor.statement.html'"></div></del>
-                                   <div ng-if="!statement._diff" ng-include="'editor.statement.html'"></div>
+                                    <del ng-if="statement._diff">
+                                        <div ng-include="'editor.statement.html'"></div>
+                                    </del>
+                                    <div ng-if="!statement._diff" ng-include="'editor.statement.html'"></div>
                                 </div>
                             </div>
                         </div>
