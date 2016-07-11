@@ -147,7 +147,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var complianceResult;
             // stub for testing
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
-            /*
+            // /*
              if (document.statements.length <= 2) {
              complianceResult = {
              compliant: "COMPLIANT",

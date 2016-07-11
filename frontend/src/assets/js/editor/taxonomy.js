@@ -286,7 +286,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
 
             return $sce.trustAsHtml("<div class='clearfix'><div class='float-left'><strong>" + offsetString + entry.value + "</strong></div>" +
                 "<div class='dark-gray float-right'  style='z-index:10000'</div>" +
-                "<div class='dark-gray float-right'>ISO</div>" +
+                "<div class='dark-gray float-right'>ISO/IEC</div>" +
                 "</div>");
         } else {
             return $sce.trustAsHtml(offsetString + "&nbsp;&nbsp;&nbsp;&nbsp;" + entry.value);
