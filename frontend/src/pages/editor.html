@@ -29,10 +29,6 @@
                        ng-class="{'sidebar-icon-disabled': !editorController.isEditable()}">
                         <i class="fa fa-plus"></i>
                     </a>
-                    <a href="" class="button hollow" data-open="revertModal" ng-class="{'sidebar-icon-disabled':!editorController.dirty()}"
-                       ng-attr-title="{{'revert'|translate}}">
-                        <i class="fa fa-undo"></i>
-                    </a>
                     <a href="" class="button hollow" ng-click="editorController.save()" ng-attr-title="{{'save'|translate}}"
                        ng-class="{'sidebar-icon-disabled': !editorController.dirty()}">
                         <i class="fa fa-save"></i>
@@ -41,10 +37,6 @@
                         <i class="fa fa-check-circle-o"></i>
                     </a>
 
-                    <a class="button hollow" ng-click="editorController.validateSyntax()"
-                       ng-attr-title="{{'toggle_validation_messages'|translate}}">
-                        <i class="fa fa-eye"></i>
-                    </a>
                     <a class="button hollow" ng-click=""
                        ng-attr-title="{{'download'|translate}}">
                         <i class="fa fa-download"></i>
@@ -105,8 +97,8 @@
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
                     <li data-ng-repeat="statement in document.statements" data-as-sortable-item ng-class="{'diff-remove': statement._diff}">
                         <div data-as-sortable-item-handle>
-                            <div class="clearfix" ng-if="editorController.isEditable()">
-                                <div class="button-group small float-left noselect">
+                            <div class="row" ng-if="editorController.isEditable()">
+                                <div class="button-group small noselect">
                                     <a class="button secondary" ng-class="{'hollow':statement.passive}"
                                        ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
                                     <a class="button secondary" ng-class="{'hollow':!statement.passive}"

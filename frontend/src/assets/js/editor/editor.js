@@ -201,6 +201,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         $scope.useScopeCompletion = {
             suggest: scopeSuggest,
             on_attach: function (value) {
+                console.log("attached:" +value);
                 scopeAttach("useScope");
             },
             on_detach: scopeDetach

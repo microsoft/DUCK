@@ -1,12 +1,13 @@
 <div class="row">
     <form>
         <div mass-autocomplete>
-            <div ng-if="editorController.isEditable() && !statement.passive"
+            <div ng-init="context={currentField: null}" ng-if="editorController.isEditable() && !statement.passive"
                  ng-include="editorController.getLocalePrefix()+'-edit.html'"></div>
-            <div ng-if="editorController.isEditable() && statement.passive"
+            <div ng-init="context={currentField: null}" ng-if="editorController.isEditable() && statement.passive"
                  ng-include="editorController.getLocalePrefix()+'-edit-passive.html'"></div>
-            <div ng-if="!editorController.isEditable() && !statement.passive" ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
-            <div ng-if="!editorController.isEditable() && statement.passive"
+            <div ng-init="context={currentField: null}" ng-if="!editorController.isEditable() && !statement.passive"
+                 ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
+            <div ng-init="context={currentField: null}" ng-if="!editorController.isEditable() && statement.passive"
                  ng-include="editorController.getLocalePrefix()+'-preview-passive.html'"></div>
         </div>
     </form>

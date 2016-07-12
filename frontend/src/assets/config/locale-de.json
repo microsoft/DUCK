@@ -62,7 +62,13 @@
   "valid_email":"A valid email address is required XXXX",
   "valid_password": "A password at least 4 characters in length is required",
   "copy_document": "Copy Document",
-  "copy_action": "COPY"
+  "copy_action": "COPY",
+  "use_scope": "Use Scope",
+  "data_category": "Data Category",
+  "qualifier": "Qualifier",
+  "source_scope": "Source Scope",
+  "action": "Action",
+  "result_scope": "Result Scope"
 
 
 }
