@@ -1,6 +1,6 @@
 var editorModule = angular.module("duck.editor");
 
-editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService,
+editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, DocumentExporter,
                                                       $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
@@ -68,7 +68,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     controller.makePassive = DocumentModel.makePassive;
 
     controller.makeActive = DocumentModel.makeActive;
-    
+
     controller.complianceCheckWithAlternatives = DocumentModel.complianceCheckWithAlternatives;
 
     controller.getState = function () {
@@ -108,6 +108,10 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             return false;
         }
         return errors.useScope.active || errors.action.active;
+    };
+
+    controller.downloadDocument = function () {
+       DocumentExporter.export("text/plain", DocumentModel.document);
     };
 
     DocumentModel.initialize(documentId).then(function () {
@@ -201,7 +205,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         $scope.useScopeCompletion = {
             suggest: scopeSuggest,
             on_attach: function (value) {
-                console.log("attached:" +value);
+                console.log("attached:" + value);
                 scopeAttach("useScope");
             },
             on_detach: scopeDetach
@@ -242,7 +246,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                 $scope.currentField = "dataCategory";
                 $scope.currentFieldType = "dataCategory";
                 DocumentModel.document.statements.forEach(function (statement) {
-                     var unregister = $scope.$watch(function () {
+                    var unregister = $scope.$watch(function () {
                         return statement.dataCategory
                     }, function (newValue) {
                         if (newValue === "_new") {   // new term entered
