@@ -3,6 +3,7 @@ package ducklib
 import (
 	"fmt"
 	"io"
+	"log"
 	// "io/ioutil"
 	// "os"
 
@@ -54,8 +55,8 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 			fmt.Printf("Could not parse the rulebase\n")
 			return nil, err
 		}
-		fmt.Printf("rulebase successfully imported, with %d schemes and %d predicates", len(ag.Theory.ArgSchemes), len(ag.Theory.Language))
-		fmt.Printf("title: %s\n", ag.Metadata["title"].(string))
+		log.Printf("rulebase successfully imported, with %d schemes and %d predicates\n", len(ag.Theory.ArgSchemes), len(ag.Theory.Language))
+		log.Printf("title: %s\n", ag.Metadata["title"].(string))
 		c.Theories[ruleBaseId] = VersionedTheory{revision, ag.Theory}
 		return ag.Theory, nil
 	}
