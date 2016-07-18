@@ -236,7 +236,7 @@ func postUserHandler(c echo.Context) error {
 		log.Printf("Error in postUserHandler while trying to bind new user to struct: %s", err)
 
 		e := err.Error()
-		log.Println(e)
+		
 		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
 	}
 
@@ -245,7 +245,7 @@ func postUserHandler(c echo.Context) error {
 		log.Printf("Error in postUserHandler while trying to create user in database: %s", err)
 
 		e := err.Error()
-		log.Println(e)
+		
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 	var u, err2 = datab.GetUser(id)
@@ -253,7 +253,7 @@ func postUserHandler(c echo.Context) error {
 		log.Printf("Error in postUserHandler while trying to get new user: %s", err)
 
 		e := err2.Error()
-		log.Println(e)
+		
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 
