@@ -29,6 +29,8 @@ func getDocSummaries(c echo.Context) error {
 	docs, err := datab.GetDocumentSummariesForUser(c.Param("userid"))
 
 	if err != nil {
+		log.Printf("Error in getDocSummaries: %s", err)
+		log.Println(err)
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 
@@ -41,11 +43,13 @@ func testdataHandler(c echo.Context) error {
 
 	var e string
 	if err != nil {
+		log.Printf("Error in testdataHandlerwhile trying to read from the file: %s", err)
 		e = err.Error()
 		return c.JSON(http.StatusExpectationFailed, structs.Response{Ok: false, Reason: &e})
 
 	}
 	if err := FillTestdata(dat); err != nil {
+		log.Printf("Error in testdataHandler while trying to fill the database: %s", err)
 		e = err.Error()
 		return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
 
@@ -60,6 +64,7 @@ Document handlers
 func getDocHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(c.Param("docid"))
 	if err != nil {
+		log.Printf("Error in getDocHandler: %s", err)
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 	fmt.Printf("GET revision: %s\n", doc.Revision)
@@ -69,23 +74,29 @@ func getDocHandler(c echo.Context) error {
 func copyDocHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(c.Param("docid"))
 	if err != nil {
+		log.Printf("Error in copyDocHandler trying to get old document from database: %s", err)
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 
 	newDoc := new(structs.Document)
 	if err := c.Bind(newDoc); err != nil {
 		e := err.Error()
-		fmt.Printf("Error at 1: %s\n", err)
+
+		log.Printf("Error in copyDocHandler trying to bind newDoc: %s", err)
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	newDoc.Statements = doc.Statements
 
 	id, err := datab.PostDocument(*newDoc)
 	if err != nil {
+		log.Printf("Error in copyDocHandler trying to post newDoc to database: %s", err)
+
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 	returnDoc, err := datab.GetDocument(id)
 	if err != nil {
+		log.Printf("Error in copyDocHandler, trying to get newDoc: %s", err)
+
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 	return c.JSON(http.StatusOK, returnDoc)
@@ -95,6 +106,8 @@ func deleteDocHandler(c echo.Context) error {
 	err := datab.DeleteDocument(c.Param("docid"))
 	if err != nil {
 		e := err.Error()
+		log.Printf("Error in deleteDocHandler: %s", err)
+
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
@@ -114,14 +127,18 @@ func putDocHandler(c echo.Context) error {
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
 		e := err.Error()
-		fmt.Printf("Error at 1: %s\n", err)
+
+		log.Printf("Error in putDocHandler while trying to bind new doc to struct: %s", err)
+
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	fmt.Printf("PUT revision: %s\n", doc.Revision)
 	err := datab.PutDocument(*doc)
 	if err != nil {
 		e := err.Error()
-		fmt.Printf("Error at 2: %s\n", err)
+
+		log.Printf("Error in putDocHandler while trying to update document in database: %s", err)
+
 		if e == "Document update conflict." {
 			return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
 		}
@@ -132,7 +149,8 @@ func putDocHandler(c echo.Context) error {
 	fmt.Printf("PUT RETURN revision: %s\n", docu.Revision) // should be the same one we once got through the document GET
 	if err != nil {
 		e := err.Error()
-		fmt.Printf("Error at 3: %s\n", err)
+
+		log.Printf("Error in putDocHandler while trying to get updated document: %s", err)
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -143,17 +161,23 @@ func postDocHandler(c echo.Context) error {
 
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
+		log.Printf("Error in postDocHandler while trying to bind new doc to struct: %s", err)
+
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	id, err := datab.PostDocument(*doc)
 	if err != nil {
+		log.Printf("Error in postDocHandler while trying to create document in database: %s", err)
+
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	docu, err := datab.GetDocument(id)
 	if err != nil {
+		log.Printf("Error in postDocHandler while trying to get new document: %s", err)
+
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -168,6 +192,8 @@ User handlers
 func deleteUserHandler(c echo.Context) error {
 	err := datab.DeleteUser(c.Param("id"))
 	if err != nil {
+		log.Printf("Error in deleteDocHandler: %s", err)
+
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -179,6 +205,8 @@ func putUserHandler(c echo.Context) error {
 
 	u := new(structs.User)
 	if err := c.Bind(u); err != nil {
+		log.Printf("Error in putUserHandler while trying to bind new user to struct: %s", err)
+
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -186,12 +214,16 @@ func putUserHandler(c echo.Context) error {
 	u.ID = id
 	err := datab.PutUser(*u)
 	if err != nil {
+		log.Printf("Error in putUserHandler while trying to update user in database: %s", err)
+
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	us, err := datab.GetUser(id)
 	if err != nil {
+		log.Printf("Error in putUserHandler while trying to get updated user: %s", err)
+
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -201,6 +233,8 @@ func putUserHandler(c echo.Context) error {
 func postUserHandler(c echo.Context) error {
 	newUser := new(structs.User)
 	if err := c.Bind(newUser); err != nil {
+		log.Printf("Error in postUserHandler while trying to bind new user to struct: %s", err)
+
 		e := err.Error()
 		log.Println(e)
 		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
@@ -208,12 +242,16 @@ func postUserHandler(c echo.Context) error {
 
 	id, err := datab.PostUser(*newUser)
 	if err != nil {
+		log.Printf("Error in postUserHandler while trying to create user in database: %s", err)
+
 		e := err.Error()
 		log.Println(e)
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 	var u, err2 = datab.GetUser(id)
 	if err2 != nil {
+		log.Printf("Error in postUserHandler while trying to get new user: %s", err)
+
 		e := err2.Error()
 		log.Println(e)
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
@@ -297,6 +335,8 @@ func checkDocHandler(c echo.Context) error {
 
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
+		log.Printf("Error in checkDocHandler while trying to bind document to struct: %s", err)
+
 		e := err.Error()
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
@@ -304,6 +344,8 @@ func checkDocHandler(c echo.Context) error {
 
 	ok, docs, err := checker.CompliantDocuments(id, doc, 10, 0)
 	if err != nil {
+		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
+
 		e := err.Error()
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
@@ -323,6 +365,8 @@ func checkDocIDHandler(c echo.Context) error {
 
 	doc, err := datab.GetDocument(docid)
 	if err != nil {
+		log.Printf("Error in checkDocIDHandler while trying to get document from database: %s", err)
+
 		e := err.Error()
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
@@ -330,6 +374,7 @@ func checkDocIDHandler(c echo.Context) error {
 
 	ok, docs, err := checker.CompliantDocuments(id, &doc, 10, 0)
 	if err != nil {
+		log.Printf("Error in checkDocIDHandler while checking for compliance: %s", err)
 		e := err.Error()
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
@@ -348,11 +393,13 @@ func loginHandler(c echo.Context) error {
 
 	u := new(structs.Login)
 	if err := c.Bind(u); err != nil {
+		log.Printf("Error in loginHandler trying to bind user to struct: %s", err)
 		return err
 	}
 	id, pw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
 	if err != nil {
-		log.Println(err)
+		log.Printf("Error in loginHandler trying to get login  info: %s", err)
+
 		e := err.Error()
 
 		return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
@@ -362,7 +409,8 @@ func loginHandler(c echo.Context) error {
 
 		user, err := datab.GetUser(id)
 		if err != nil {
-			log.Println(err)
+			log.Printf("Error in loginHandler trying to get user info: %s", err)
+
 			return echo.ErrUnauthorized
 		}
 
@@ -379,6 +427,7 @@ func loginHandler(c echo.Context) error {
 		// Generate encoded token and send it as response.
 		t, err := token.SignedString([]byte(JWT))
 		if err != nil {
+			log.Printf("Error in loginHandler: %s", err)
 			return err
 		}
 		return c.JSON(http.StatusOK, map[string]string{
