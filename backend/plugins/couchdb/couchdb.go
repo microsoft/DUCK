@@ -75,7 +75,7 @@ func getRows(resp io.Reader) ([]interface{}, error) {
 		return nil, err
 	}
 	rows, prs := jsonbody["rows"].([]interface{})
-
+	//fmt.Println(jsonbody)
 	if !prs || len(rows) < 1 {
 		return nil, errors.New("No Data returned")
 	}
@@ -83,8 +83,8 @@ func getRows(resp io.Reader) ([]interface{}, error) {
 }
 
 // GetLogin returns ID and Password for the matching username from the couchbase Database
-func (cb *Couchbase) GetLogin(username string) (id string, pw string, err error) {
-	url := fmt.Sprintf("%s/%s/_design/app/_view/user_login?key=\"%s\"", cb.url, cb.database, username)
+func (cb *Couchbase) GetLogin(email string) (id string, pw string, err error) {
+	url := fmt.Sprintf("%s/%s/_design/app/_view/user_login?key=\"%s\"", cb.url, cb.database, email)
 	//cb.url + "/" + cb.database + "/_design/app/_view/user?key='" + username + "'"
 
 	//log.Println("Login query: " + url)
