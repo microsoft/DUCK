@@ -5,19 +5,19 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/labstack/echo/engine/standard"
-
 	"github.com/Microsoft/DUCK/backend/ducklib"
-	//Database lugin, change this if you have another Plugin/database
-	_ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
+	"github.com/labstack/echo/engine/standard"
 )
+
+//Database lugin, change this if you have another Plugin/database
+import _ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
 
 var (
 	webDir      string
 	jwtKey      string
 	ruleBaseDir string
 	goPath      = os.Getenv("GOPATH")
-	startDir    = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/RuleBases")
+	startDir    = "/src/github.com/Microsoft/DUCK/RuleBases"
 )
 
 func main() {
@@ -26,12 +26,11 @@ func main() {
 	flag.StringVar(&jwtKey, "JWTSecret", "secret", "The secret used to sign the JWT")
 	flag.StringVar(&ruleBaseDir, "rulebasedir", startDir, "The Directory to the Rulebases")
 
-	flag.Parse()
-
-	//create ComplianceCheckerPlugin
+	conf := ducklib.NewConfiguration(filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json"))
 
 	//set routes
-	e := ducklib.GetServer(webDir, []byte(jwtKey), ruleBaseDir)
+	//	e := ducklib.GetServer(webDir, []byte(jwtKey), ruleBaseDir)
+	e := ducklib.GetServer(conf, goPath)
 
 	//start server
 	e.Run(standard.New(":3000"))

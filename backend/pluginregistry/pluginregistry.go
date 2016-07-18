@@ -4,7 +4,7 @@ import "github.com/Microsoft/DUCK/backend/ducklib/structs"
 
 // DBPlugin is the interface the Databse Plugin has to satisfy
 type DBPlugin interface {
-	Init(url string, databasename string) error
+	Init(config structs.DBConf) error
 	GetLogin(username string) (id string, pw string, err error)
 
 	GetUser(id string) (structs.User, error)

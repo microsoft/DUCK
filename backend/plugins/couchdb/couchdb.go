@@ -33,6 +33,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
@@ -43,6 +44,9 @@ import (
 type Couchbase struct {
 	url      string
 	database string
+	user     string
+	password string
+	auth     bool //Do we need submit auth info to cb?
 }
 
 // getMap returns a map[string]interface{} containing the unmarshaled JSON from the io.Reader
@@ -113,6 +117,7 @@ func (cb *Couchbase) GetLogin(username string) (id string, pw string, err error)
 		return "", "", errors.New("ID not found")
 	}
 
+	log.Printf("id: %s, pw: %s", id, pw)
 	return
 
 }
@@ -452,7 +457,7 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 }
 
 //Init initializes the Couchbase DB & tests for connection errors
-func (cb *Couchbase) Init(url string, database string) error {
+func (cb *Couchbase) Init(config structs.DBConf) error {
 	log.Println("Couchbase initialization")
 
 	designDoc := `{"_id":"_design/app","views":{"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
@@ -465,6 +470,15 @@ func (cb *Couchbase) Init(url string, database string) error {
 		`"language":"javascript"}`
 
 	designMap := map[string]interface{}{"entry": designDoc}
+	port := strconv.Itoa(config.Port)
+	if port == "" {
+		return errors.New("couchDB needs an port entry in config")
+	}
+	if config.Location == "" {
+		return errors.New("couchDB needs an url entry in config")
+	}
+
+	url := config.Location + ":" + port
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -474,15 +488,31 @@ func (cb *Couchbase) Init(url string, database string) error {
 
 	jsonbody, err := getMap(resp.Body)
 	if err != nil {
+
 		return err
 	}
 
 	cdb, prs := jsonbody["couchdb"].(string)
 	if !prs || cdb != "Welcome" {
-		return errors.New("Connection to couchdb not successfull.")
+		return errors.New("Connection to couchdb not successfull")
 	}
 	cb.url = url
-	cb.database = database
+
+	cb.auth = false
+	if config.Username != "" && config.Password != "" {
+		cb.user = config.Username
+		cb.password = config.Password
+	} else {
+		log.Println("Username or password missing in couchdb config. Assuming no auth needed")
+	}
+
+	if config.Name == "" {
+		return errors.New("Couchdb needs a database entry in the config file to know the name of the database.")
+
+	}
+	cb.database = config.Name
+
+	log.Printf("couchdb url is: %s; database name is: %s.", cb.url, cb.database)
 	ok, err := cb.testDBExists()
 	if err != nil {
 		return err

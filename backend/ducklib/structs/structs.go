@@ -1,5 +1,22 @@
 package structs
 
+type Configuration struct {
+	DBConfig       *DBConf `json:"database,omitempty"`
+	JwtKey         string  `json:"jwtkey,omitempty"`
+	WebDir         string  `json:"webdir,omitempty"`
+	RulebaseDir    string  `json:"rulebasedir,omitempty"`
+	Gopathrelative bool    `json:"gopathrelative,omitempty"`
+	Loadtestdata   bool    `json:"loadtestdata,omitempty"`
+}
+
+type DBConf struct {
+	Location string `json:"location"`
+	Port     int    `json:"port,omitempty"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
+	Name     string `json:"name,omitempty`
+}
+
 type User struct {
 	ID         string     `json:"id"`
 	Email      string     `json:"email"`

@@ -1,6 +1,9 @@
 package ducklib
 
 import (
+	"path/filepath"
+
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -16,14 +19,19 @@ var JWT []byte
 var checker *ComplianceCheckerPlugin
 
 //GetServer returns Echo instance with predefined routes
-func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
-
-	datab = NewDatabase()
+func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
+	//webDir string, jwtKey []byte, ruleBaseDir string
+	datab = NewDatabase(*conf.DBConfig)
 	err := datab.Init()
-
-	JWT = jwtKey
-
-	checker, err = MakeComplianceCheckerPlugin(ruleBaseDir)
+	if err != nil {
+		panic(err)
+	}
+	JWT = []byte(conf.JwtKey)
+	rbd := conf.RulebaseDir
+	if conf.Gopathrelative {
+		rbd = filepath.Join(goPath, conf.RulebaseDir)
+	}
+	checker, err = MakeComplianceCheckerPlugin(rbd)
 	if err != nil {
 		panic(err)
 	}
@@ -51,7 +59,7 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 	api := e.Group("/v1")
 
 	////User resources
-	jwtMiddleware := middleware.JWT(jwtKey)
+	jwtMiddleware := middleware.JWT(JWT)
 	users := api.Group("/users") //base URI
 
 	//create a new user - JWT must not be required since during registration (when the user account is created) the user is not authenticated
@@ -67,6 +75,7 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 	documents.DELETE("/:docid", deleteDocHandler)       //delete document
 	documents.GET("/:userid/summary", getDocSummaries)  //return document summaries for the author
 	documents.GET("/:docid", getDocHandler)             //return document
+	documents.POST("/copy/:docid", copyDocHandler)      //copy document
 
 	//ruleset resources
 	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI
@@ -77,7 +86,11 @@ func GetServer(webDir string, jwtKey []byte, ruleBaseDir string) *echo.Echo {
 	rulebases.PUT("/:baseid/documents/:documentid", checkDocIDHandler) //process document against ruleset
 
 	// serves the static files
-	e.Static("/", webDir)
+	wbd := conf.WebDir
+	if conf.Gopathrelative {
+		wbd = filepath.Join(goPath, conf.WebDir)
+	}
+	e.Static("/", wbd)
 
 	return e
 

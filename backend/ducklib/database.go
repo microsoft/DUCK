@@ -9,16 +9,13 @@ import (
 )
 
 type Database struct {
-	url          string
-	username     string
-	password     string
-	databasename string
+	Config structs.DBConf
 }
 
 var db pluginregistry.DBPlugin
 
-func NewDatabase() *Database {
-	return &Database{databasename: "duck", url: "http://127.0.0.1:5984"}
+func NewDatabase(config structs.DBConf) *Database {
+	return &Database{Config: config}
 }
 
 //Put this into plugin
@@ -62,7 +59,7 @@ func (database *Database) Init() error {
 
 	db = pluginregistry.DatabasePlugin
 
-	err := db.Init(database.url, database.databasename)
+	err := db.Init(database.Config)
 	if err != nil {
 		return err
 	}
