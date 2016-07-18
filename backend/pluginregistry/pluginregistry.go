@@ -19,10 +19,10 @@ type DBPlugin interface {
 	UpdateDocument(doc structs.Document) error
 	DeleteDocument(id string) error
 
-	//	GetRuleset(id string) (document map[string]interface{}, err error)
-	//	NewRuleset(id string, entry string) error
-	//	UpdateRuleset(id string, entry string) error
-	//	DeleteRuleset(id string, rev string) error
+	//	GetRulebase(id string) (document map[string]interface{}, err error)
+	//	NewRulebase(id string, entry string) error
+	//	UpdateRulebase(id string, entry string) error
+	//	DeleteRulebase(id string, rev string) error
 
 	//	GetStatement(id string) (document map[string]interface{}, err error)
 }

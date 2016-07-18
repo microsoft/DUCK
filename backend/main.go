@@ -17,7 +17,7 @@ var (
 	jwtKey      string
 	ruleBaseDir string
 	goPath      = os.Getenv("GOPATH")
-	startDir    = "/src/github.com/Microsoft/DUCK/RuleBases"
+	startDir    = "/src/github.com/Microsoft/DUCK/Rulebases"
 )
 
 func main() {

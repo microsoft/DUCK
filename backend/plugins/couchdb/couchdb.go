@@ -17,10 +17,10 @@ update document		✓
 delete document		✓
 Document overview	✓
 
-create RuleSet		✓
-get RuleSet			✓
-update RuleSet		✓
-delete RuleSet		✓
+create Rulebase		✓
+get Rulebase		✓
+update Rulebase		✓
+delete Rulebase		✓
 
 
 */
@@ -152,8 +152,8 @@ func (cb *Couchbase) GetDocument(id string) (structs.Document, error) {
 }
 
 /*
-//GetRuleset returns a ruleset with the sppecified ID from the Couchbase Database
-func (cb *Couchbase) GetRuleset(id string) (document map[string]interface{}, err error) {
+//GetRulebase returns a Rulebase with the sppecified ID from the Couchbase Database
+func (cb *Couchbase) GetRulebase(id string) (document map[string]interface{}, err error) {
 
 	return cb.getCouchbaseDocument(id)
 }*/
@@ -288,8 +288,8 @@ func (cb *Couchbase) DeleteUser(id string) error {
 }
 
 /*
-// DeleteRuleset deletes a User from the Couchbase Database
-func (cb *Couchbase) DeleteRuleset(id string, rev string) error {
+// DeleteRulebase deletes a User from the Couchbase Database
+func (cb *Couchbase) DeleteRulebase(id string, rev string) error {
 	return cb.deleteCbDocument(id, rev)
 }*/
 
@@ -336,9 +336,9 @@ func (cb *Couchbase) NewDocument(doc structs.Document) error {
 }
 
 /*
-//NewRuleset creates a new Ruleset in the couchbase Database
-func (cb *Couchbase) NewRuleset(id string, entry string) error {
-	return cb.putEntry(id, entry, "ruleset")
+//NewRulebase creates a new Rulebase in the couchbase Database
+func (cb *Couchbase) NewRulebase(id string, entry string) error {
+	return cb.putEntry(id, entry, "rulebase")
 }*/
 
 //UpdateUser replaces an existing User in the Couchbase database
@@ -403,7 +403,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 }
 
 func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) error {
-	//check type of entry (document/user/ruleset)
+	//check type of entry (document/user/rulebase)
 	var entryReader *strings.Reader
 	var url string
 	if !designfile {

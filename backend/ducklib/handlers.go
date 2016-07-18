@@ -223,13 +223,13 @@ func postUserHandler(c echo.Context) error {
 }
 
 /*
-Ruleset handlers
+Rulebase handlers
 */
 
-//DB rulesethandlers are not used
+//DB Rulebasehandlers are not used
 /*
 func deleteRsHandler(c echo.Context) error {
-	err := datab.DeleteRuleset(c.Param("id"))
+	err := datab.DeleteRulebase(c.Param("id"))
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
@@ -246,13 +246,13 @@ func putRsHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 	id := c.Param("id")
-	err = datab.PutRuleset(id, resp)
+	err = datab.PutRulebase(id, resp)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	doc, err := datab.GetRuleset(id)
+	doc, err := datab.GetRulebase(id)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
@@ -269,12 +269,12 @@ func postRsHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
 
-	id, err := datab.PostRuleset(req)
+	id, err := datab.PostRulebase(req)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
 	}
-	doc, err := datab.GetRuleset(id)
+	doc, err := datab.GetRulebase(id)
 	if err != nil {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})

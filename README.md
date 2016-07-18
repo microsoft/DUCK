@@ -65,8 +65,8 @@ This project reads its configuration from the file backend/configuration.json or
 ```yaml
   database: 
       location: "http://127.0.0.1"
-      port: 	5984
-      name: 	"duck"
+      port: 5984
+      name: "duck"
 	  username: ""
 	  password: ""
   jwtkey: "secret"

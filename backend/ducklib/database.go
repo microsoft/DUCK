@@ -137,12 +137,12 @@ func (database *Database) PostDocument(doc structs.Document) (ID string, err err
 }
 
 /*
-Ruleset DB operations
+Rulebase DB operations
 */
 /*
-func (database *Database) GetRuleset(id string) (User, error) {
+func (database *Database) GetRulebase(id string) (User, error) {
 	var u User
-	mp, err := db.GetRuleset(id)
+	mp, err := db.GetRulebase(id)
 	if err != nil {
 		return u, err
 	}
@@ -152,15 +152,15 @@ func (database *Database) GetRuleset(id string) (User, error) {
 	return u, err
 }
 
-func (database *Database) DeleteRuleset(id string) error {
+func (database *Database) DeleteRulebase(id string) error {
 
-	doc, err := db.GetRuleset(id)
+	doc, err := db.GetRulebase(id)
 	if err != nil {
 
 		return err
 	}
 	if rev, prs := doc["_rev"]; prs {
-		err := db.DeleteRuleset(id, rev.(string))
+		err := db.DeleteRulebase(id, rev.(string))
 		if err != nil {
 			return err
 		}
@@ -171,17 +171,17 @@ func (database *Database) DeleteRuleset(id string) error {
 
 }
 
-func (database *Database) PutRuleset(id string, content []byte) error {
+func (database *Database) PutRulebase(id string, content []byte) error {
 
-	return db.UpdateRuleset(id, string(content))
+	return db.UpdateRulebase(id, string(content))
 
 }
 
-func (database *Database) PostRuleset(content []byte) (string, error) {
+func (database *Database) PostRulebase(content []byte) (string, error) {
 	u := uuid.NewV4()
 	uuid := uuid.Formatter(u, uuid.Clean)
 
-	return uuid, db.NewRuleset(uuid, string(content))
+	return uuid, db.NewRulebase(uuid, string(content))
 
 }
 */

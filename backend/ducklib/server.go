@@ -77,13 +77,13 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	documents.GET("/:docid", getDocHandler)             //return document
 	documents.POST("/copy/:docid", copyDocHandler)      //copy document
 
-	//ruleset resources
+	//rulebase resources
 	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI
-	//rulesets.POST("/", postRsHandler)                                //create a ruleset
-	//rulesets.DELETE("/:id", deleteRsHandler)                         //delete a ruleset
-	//rulesets.PUT("/:setid", putRsHandler)                            //update a ruleset
-	rulebases.PUT("/:baseid/documents", checkDocHandler)               //process provided document against ruleset
-	rulebases.PUT("/:baseid/documents/:documentid", checkDocIDHandler) //process document against ruleset
+	//rulebases.POST("/", postRsHandler)                                //create a rulebase
+	//rulebases.DELETE("/:id", deleteRsHandler)                         //delete a rulebase
+	//rulebases.PUT("/:setid", putRsHandler)                            //update a rulebase
+	rulebases.PUT("/:baseid/documents", checkDocHandler)               //process provided document against rulebase
+	rulebases.PUT("/:baseid/documents/:documentid", checkDocIDHandler) //process document against rulebase
 
 	// serves the static files
 	wbd := conf.WebDir
