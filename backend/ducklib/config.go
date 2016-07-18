@@ -54,7 +54,6 @@ func getEnv(c *structs.Configuration) {
 		c.JwtKey = env
 	}
 
-	log.Printf("ENV %s", os.Getenv("DUCK_TEST"))
 	env = os.Getenv("DUCK_WEBDIR")
 	if env != "" {
 		c.WebDir = env
