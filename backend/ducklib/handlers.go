@@ -350,7 +350,7 @@ func loginHandler(c echo.Context) error {
 	if err := c.Bind(u); err != nil {
 		return err
 	}
-	id, pw, err := datab.GetLogin(u.Username) //TODO compare with encrypted pw
+	id, pw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
 	if err != nil {
 		log.Println(err)
 		e := err.Error()

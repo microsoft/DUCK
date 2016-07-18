@@ -8,9 +8,9 @@ var gatewayModule = angular.module("duck.gateway");
  */
 gatewayModule.service('SigninService', function (CurrentUser, $http, $q, $translate) {
     var context = this;
-    this.signin = function (username, password) {
+    this.signin = function (email, password) {
         return $q(function (resolve, reject) {
-            $http.post('login', {username, password: password}).success(function (data) {
+            $http.post('login', {email, password: password}).success(function (data) {
                 CurrentUser.initializeWith(data);
                 $translate.use(CurrentUser.locale).then(function () {
                     resolve();
