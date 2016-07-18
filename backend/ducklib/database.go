@@ -2,6 +2,8 @@ package ducklib
 
 import (
 	"encoding/json"
+	"errors"
+	"log"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
@@ -94,6 +96,14 @@ func (database *Database) PutUser(user structs.User) error {
 }
 
 func (database *Database) PostUser(user structs.User) (ID string, err error) {
+	//check for duplicate
+	_, _, err = db.GetLogin(user.Email)
+	log.Printf("LOGINERROR: %s", err)
+	if err == nil || err.Error() != "No Data returned" {
+
+		return "", errors.New("User already exists")
+	}
+
 	u := uuid.NewV4()
 	uuid := uuid.Formatter(u, uuid.Clean)
 	user.ID = uuid
