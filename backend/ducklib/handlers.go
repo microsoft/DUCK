@@ -65,6 +65,32 @@ func getDocHandler(c echo.Context) error {
 	fmt.Printf("GET revision: %s\n", doc.Revision)
 	return c.JSON(http.StatusOK, doc)
 }
+
+func copyDocHandler(c echo.Context) error {
+	doc, err := datab.GetDocument(c.Param("docid"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	}
+
+	newDoc := new(structs.Document)
+	if err := c.Bind(newDoc); err != nil {
+		e := err.Error()
+		fmt.Printf("Error at 1: %s\n", err)
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	newDoc.Statements = doc.Statements
+
+	id, err := datab.PostDocument(*newDoc)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	}
+	returnDoc, err := datab.GetDocument(id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	}
+	return c.JSON(http.StatusOK, returnDoc)
+}
+
 func deleteDocHandler(c echo.Context) error {
 	err := datab.DeleteDocument(c.Param("docid"))
 	if err != nil {
@@ -324,8 +350,14 @@ func loginHandler(c echo.Context) error {
 	if err := c.Bind(u); err != nil {
 		return err
 	}
-	id, pw, _ := datab.GetLogin(u.Username) //TODO compare with encrypted pw
+	id, pw, err := datab.GetLogin(u.Username) //TODO compare with encrypted pw
+	if err != nil {
+		log.Println(err)
+		e := err.Error()
 
+		return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
+	}
+	log.Printf("id: %s, pw: %s", id, pw)
 	if u.Password == pw {
 
 		user, err := datab.GetUser(id)
