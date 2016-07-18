@@ -71,8 +71,8 @@ User DB operations
 */
 
 //GetLogin returns id and password for username
-func (database *Database) GetLogin(username string) (id string, pw string, err error) {
-	return db.GetLogin(username)
+func (database *Database) GetLogin(email string) (id string, pw string, err error) {
+	return db.GetLogin(email)
 }
 
 func (database *Database) GetUser(userid string) (structs.User, error) {

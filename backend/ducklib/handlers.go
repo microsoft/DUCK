@@ -390,15 +390,23 @@ func checkDocIDHandler(c echo.Context) error {
 
 // loginHandler handles the login Process
 func loginHandler(c echo.Context) error {
-
+	/*	resp, err := ioutil.ReadAll(c.Request().Body())
+		if err != nil {
+			e := err.Error()
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
+		fmt.Println("USER: ")
+		fmt.Println(string(resp))
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false})*/
 	u := new(structs.Login)
 	if err := c.Bind(u); err != nil {
 		log.Printf("Error in loginHandler trying to bind user to struct: %s", err)
 		return err
 	}
+
 	id, pw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
 	if err != nil {
-		log.Printf("Error in loginHandler trying to get login  info: %s", err)
+		log.Printf("Error in loginHandler trying to get login info: %s", err)
 
 		e := err.Error()
 
