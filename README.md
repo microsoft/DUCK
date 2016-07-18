@@ -64,11 +64,11 @@ This project reads its configuration from the file backend/configuration.json or
 
 ```yaml
   database: 
-    location: 	"http://127.0.0.1"
-    port: 		5984
-    name: 		"duck"
-	username: 	""
-	password: 	""
+      location: "http://127.0.0.1"
+      port: 	5984
+      name: 	"duck"
+	  username: ""
+	  password: ""
   jwtkey: "secret"
   webdir: "/src/github.com/Microsoft/DUCK/frontend/dist"
   rulebasedir: "/src/github.com/Microsoft/DUCK/RuleBases"
