@@ -69,6 +69,7 @@ The following precendence order is used. Each item takes precedence over the ite
 *config
 *default
 
+#### Default
 The default configuration has these values:
 
 ```yaml
@@ -84,10 +85,11 @@ The default configuration has these values:
   gopathrelative: true
   loadtestdata: false
 ```
-
+#### env
 The environment variable names are prefixed with DUCK_ and all uppercase. Fields in the database object are referenced using the `.` operator, e.g. 
 `DUCK_DATABASE.NAME`.
 
+#### flags
 The flags are handled in the go standard way described in https://golang.org/pkg/flag/. 
 Main points are:
 
