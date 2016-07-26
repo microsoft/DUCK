@@ -158,17 +158,16 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 		return true, nil, nil
 	}
 
-	var docs []*structs.Document
 	if offset > 0 {
 		for k := 0; k < offset; k++ {
 			_, ok := <-docChan
 			if !ok {
 				// no further compliant documents available
-				return false, docs, nil
+				return false, nil, nil
 			}
 		}
 	}
-
+	docs := make([]*structs.Document, 0, maxResults)
 	for i := 0; i < maxResults; i++ {
 		temp, ok := <-docChan
 		if !ok {
@@ -179,6 +178,7 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 		fmt.Println("Compliant Document Found: %+v \n", temp)
 		docs = append(docs, temp)
 	}
+
 	cncl.Cancel()
 	fmt.Println("Checking Cancelled")
 	return false, docs, nil
