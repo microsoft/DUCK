@@ -2,7 +2,7 @@ package ducklib
 
 import (
 	"fmt"
-	"io/ioutil"
+
 	"net/http"
 	"os"
 	"path/filepath"
@@ -39,18 +39,10 @@ func getDocSummaries(c echo.Context) error {
 
 func testdataHandler(c echo.Context) error {
 
-	dat, err := ioutil.ReadFile(testData)
 
-	var e string
-	if err != nil {
-		log.Printf("Error in testdataHandlerwhile trying to read from the file: %s", err)
-		e = err.Error()
-		return c.JSON(http.StatusExpectationFailed, structs.Response{Ok: false, Reason: &e})
-
-	}
-	if err := FillTestdata(dat); err != nil {
+	if err := FillTestdata(testData); err != nil {
 		log.Printf("Error in testdataHandler while trying to fill the database: %s", err)
-		e = err.Error()
+		e := err.Error()
 		return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
 
 	}
@@ -236,7 +228,7 @@ func postUserHandler(c echo.Context) error {
 		log.Printf("Error in postUserHandler while trying to bind new user to struct: %s", err)
 
 		e := err.Error()
-		
+
 		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
 	}
 
@@ -245,7 +237,7 @@ func postUserHandler(c echo.Context) error {
 		log.Printf("Error in postUserHandler while trying to create user in database: %s", err)
 
 		e := err.Error()
-		
+
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 	var u, err2 = datab.GetUser(id)
@@ -253,7 +245,7 @@ func postUserHandler(c echo.Context) error {
 		log.Printf("Error in postUserHandler while trying to get new user: %s", err)
 
 		e := err2.Error()
-		
+
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 
@@ -343,6 +335,7 @@ func checkDocHandler(c echo.Context) error {
 	}
 
 	ok, docs, err := checker.CompliantDocuments(id, doc, 10, 0)
+	//log.Printf("DOCS: %+v", docs)
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
 

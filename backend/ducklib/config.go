@@ -2,6 +2,7 @@ package ducklib
 
 import (
 	"encoding/json"
+	"flag"
 	"io/ioutil"
 	"log"
 	"os"
@@ -28,13 +29,24 @@ func NewConfiguration(confpath string) structs.Configuration {
 
 	getEnv(&c)
 
-	c.DBConfig.Port = 5984
-	c.Gopathrelative = true
+	getFlags(&c)
+
 	log.Printf("Config: %+v", c)
 	log.Printf("Datab: %+v", c.DBConfig)
 	return c
 }
 
+func getFlags(config *structs.Configuration) {
+
+	flag.StringVar(&config.WebDir, "webdir", config.WebDir, "The root directory for serving web content")
+	flag.StringVar(&config.JwtKey, "jwtkey", config.JwtKey, "The secret used to sign the JWT")
+	flag.StringVar(&config.RulebaseDir, "rulebasedir", config.RulebaseDir, "The Directory to the Rulebases")
+	flag.BoolVar(&config.Gopathrelative, "gopathrelative", config.Gopathrelative, "Defines if webdir and rulebasedir are relative to the GOPATH")
+	flag.BoolVar(&config.Loadtestdata, "loadtestdata", config.Loadtestdata, "If this is true, testdata will be loaded into the database")
+
+	flag.Parse()
+
+}
 func getFileConfig(config *structs.Configuration, confpath string) error {
 	dat, err := ioutil.ReadFile(confpath)
 	if err != nil {

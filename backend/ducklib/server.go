@@ -1,6 +1,7 @@
 package ducklib
 
 import (
+	"log"
 	"path/filepath"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
@@ -26,6 +27,15 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	if err != nil {
 		panic(err)
 	}
+
+	if conf.Loadtestdata {
+		var testData = filepath.Join(gopath, "/src/github.com/Microsoft/DUCK/testdata.json")
+
+		if err := FillTestdata(testData); err != nil {
+			log.Printf("Error trying to load testdata: %s", err)
+		}
+	}
+
 	JWT = []byte(conf.JwtKey)
 	rbd := conf.RulebaseDir
 	if conf.Gopathrelative {

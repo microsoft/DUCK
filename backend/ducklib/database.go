@@ -3,6 +3,8 @@ package ducklib
 import (
 	"encoding/json"
 	"errors"
+	"io/ioutil"
+	"log"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
@@ -20,11 +22,17 @@ func NewDatabase(config structs.DBConf) *Database {
 }
 
 //Put this into plugin
-func FillTestdata(data []byte) error {
+func FillTestdata(testData string) error {
 
 	var listOfData []interface{}
 
-	if err := json.Unmarshal(data, &listOfData); err != nil {
+	dat, err := ioutil.ReadFile(testData)
+	if err != nil {
+		log.Printf("Error in testdataHandlerwhile trying to read from the file: %s", err)
+		return err
+	}
+
+	if err := json.Unmarshal(dat, &listOfData); err != nil {
 		return err
 	}
 	for _, l := range listOfData {

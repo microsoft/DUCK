@@ -60,7 +60,16 @@ To create compressed, production-ready assets, run `npm run build`.
 
 ### Configuration
 
-This project reads its configuration from the file backend/configuration.json or environment variables. The environment variables will take precedence over the configuration file, which will take precedence over the default, which has these values:
+This project reads its configuration from the file backend/configuration.json, environment variables and also command-line flags. 
+The following precendence order is used. Each item takes precedence over the item below it:
+
+
+*flag
+*env
+*config
+*default
+
+The default configuration has these values:
 
 ```yaml
   database: 
@@ -78,3 +87,22 @@ This project reads its configuration from the file backend/configuration.json or
 
 The environment variable names are prefixed with DUCK_ and all uppercase. Fields in the database object are referenced using the `.` operator, e.g. 
 `DUCK_DATABASE.NAME`.
+
+The flags are handled in the go standard way described in https://golang.org/pkg/flag/. 
+Main points are:
+
+Command line flag syntax:
+```
+-flag
+-flag=x
+-flag x  // non-boolean flags only
+```
+One or two minus signs may be used; they are equivalent. The last form is not permitted for boolean flags because the meaning of the command
+
+`cmd -x *`
+
+will change if there is a file called 0, false, etc. You must use the -flag=false form to turn off a boolean flag.
+
+Integer flags accept 1234, 0664, 0x1234 and may be negative. Boolean flags may be:
+
+`1, 0, t, f, T, F, true, false, TRUE, FALSE, True, False`
