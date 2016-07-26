@@ -64,10 +64,10 @@ This project reads its configuration from the file backend/configuration.json, e
 The following precendence order is used. Each item takes precedence over the item below it:
 
 
-*flag
-*env
-*config
-*default
+-flag
+-env
+-config
+-default
 
 #### Default
 The default configuration has these values:
