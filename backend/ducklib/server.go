@@ -22,6 +22,7 @@ var checker *ComplianceCheckerPlugin
 //GetServer returns Echo instance with predefined routes
 func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	//webDir string, jwtKey []byte, ruleBaseDir string
+
 	datab = NewDatabase(*conf.DBConfig)
 	err := datab.Init()
 	if err != nil {

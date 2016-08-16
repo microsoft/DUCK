@@ -2,6 +2,7 @@ package mockdb
 
 import (
 	"errors"
+	"log"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
@@ -14,15 +15,43 @@ type Mock struct {
 }
 
 //Init initializes the Mock
-func (m *Mock) Init(url string, databasename string) error {
-	var err error
-	if pluginregistry.DatabasePlugin != nil {
+func (m *Mock) Init(dbconf structs.DBConf) error {
+	m.User = make(map[string]structs.User)
+	m.DataUseDocuments = make(map[string]structs.Document)
+	_, ok := pluginregistry.DatabasePlugin.(*Mock)
 
-		err = errors.New("Already a registered Database. Registered anyway.")
+	if ok {
+		log.Println("MockDB already registered")
+
+		return nil
+	}
+	if pluginregistry.DatabasePlugin != nil {
+		log.Println("Already a registered Database. Registered anyway.")
+
+	} else {
+		log.Println("Registered first")
 	}
 	pluginregistry.RegisterDatabase(m)
-	err = errors.New("Registered first")
-	return err
+
+	return nil
+}
+
+func init() {
+
+	m := &Mock{}
+
+	_, ok := pluginregistry.DatabasePlugin.(*Mock)
+
+	if ok {
+		log.Println("MockDB already registered")
+
+	} else if pluginregistry.DatabasePlugin != nil {
+		log.Println("Already a registered Database. Registered anyway.")
+
+	} else {
+		log.Println("Mockdb Registered first")
+	}
+	pluginregistry.RegisterDatabase(m)
 }
 
 //GetLogin returns ID and Password for the matching username
@@ -34,12 +63,13 @@ func (m *Mock) GetLogin(userMail string) (id string, pw string, err error) {
 			return
 		}
 	}
-	err = errors.New("User not found.")
+	err = errors.New("User not found")
 	return
 }
 
 //GetUser returns a user map
 func (m *Mock) GetUser(id string) (structs.User, error) {
+
 	if u, prs := m.User[id]; prs {
 		return u, nil
 	}
@@ -67,11 +97,12 @@ func (m *Mock) NewUser(user structs.User) error {
 
 // UpdateUser updates an existing User
 func (m *Mock) UpdateUser(user structs.User) error {
+
 	if _, prs := m.User[user.ID]; prs {
 		m.User[user.ID] = user
 		return nil
 	}
-	return errors.New("Cannot delete user: User not found")
+	return errors.New("Cannot Update user: User not found")
 }
 
 //GetDocumentSummariesForUser returns all documents for a user

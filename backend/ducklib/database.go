@@ -104,18 +104,25 @@ func (database *Database) PutUser(user structs.User) error {
 
 func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	//check for duplicate
-	_, _, err = db.GetLogin(user.Email)
-
-	if err == nil || err.Error() != "No Data returned" {
-
-		return "", errors.New("User already exists")
+	if user.Email == "" {
+		return "", errors.New("No email submitted")
+	}
+	if user.Password == "" {
+		return "", errors.New("No password submitted")
 	}
 
-	u := uuid.NewV4()
-	uuid := uuid.Formatter(u, uuid.Clean)
-	user.ID = uuid
-	return uuid, db.NewUser(user)
+	_, _, err = db.GetLogin(user.Email)
 
+	// if user is not in dtabase we can create a new one
+	if err != nil && err.Error() == "User not found" {
+		u := uuid.NewV4()
+		uuid := uuid.Formatter(u, uuid.Clean)
+		user.ID = uuid
+		return uuid, db.NewUser(user)
+
+	}
+
+	return "", errors.New("User already exists")
 }
 
 /*

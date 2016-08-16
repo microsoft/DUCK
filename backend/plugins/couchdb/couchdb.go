@@ -63,8 +63,10 @@ func getMap(resp io.Reader) (map[string]interface{}, error) {
 	var data map[string]interface{}
 
 	if err := json.Unmarshal(content, &data); err != nil {
-		return nil, err
+		return nil, structs.NewHttpError(err, 404)
 	}
+	//e := structs.NewHttpError(err, 404)
+
 	return data, nil
 }
 
@@ -99,6 +101,11 @@ func (cb *Couchbase) GetLogin(email string) (id string, pw string, err error) {
 
 	rows, err := getRows(resp.Body)
 	if err != nil {
+		//Wrap error? http://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully
+
+		if err.Error() == "No Data returned" {
+			return "", "", errors.New("User not found")
+		}
 		return "", "", err
 	}
 	if len(rows) > 1 {
@@ -634,4 +641,5 @@ func init() {
 
 	db := &Couchbase{}
 	pluginregistry.RegisterDatabase(db)
+	log.Println("Couchdb registered")
 }
