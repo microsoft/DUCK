@@ -395,7 +395,7 @@ func loginHandler(c echo.Context) error {
 		log.Printf("Error in loginHandler trying to bind user to struct: %s", err)
 		return err
 	}
-	
+
 	id, pw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
 	if err != nil {
 		log.Printf("Error in loginHandler trying to get login info for userMail %s: %s", u.Email, err)
@@ -438,7 +438,9 @@ func loginHandler(c echo.Context) error {
 			"locale":    user.Locale,
 		})
 	}
-	log.Println("Passwords do not match")
-	return echo.ErrUnauthorized
+	reason := "Passwords do not match"
+	log.Printf("Error in loginHandler: %s", reason)
+
+	return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &reason})
 
 }
