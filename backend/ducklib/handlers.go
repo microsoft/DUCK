@@ -39,7 +39,6 @@ func getDocSummaries(c echo.Context) error {
 
 func testdataHandler(c echo.Context) error {
 
-
 	if err := FillTestdata(testData); err != nil {
 		log.Printf("Error in testdataHandler while trying to fill the database: %s", err)
 		e := err.Error()
@@ -229,7 +228,7 @@ func postUserHandler(c echo.Context) error {
 
 		e := err.Error()
 
-		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 
 	id, err := datab.PostUser(*newUser)
@@ -249,7 +248,7 @@ func postUserHandler(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, u)
+	return c.JSON(http.StatusCreated, u)
 }
 
 /*
@@ -396,16 +395,16 @@ func loginHandler(c echo.Context) error {
 		log.Printf("Error in loginHandler trying to bind user to struct: %s", err)
 		return err
 	}
-
+	
 	id, pw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
 	if err != nil {
-		log.Printf("Error in loginHandler trying to get login info: %s", err)
+		log.Printf("Error in loginHandler trying to get login info for userMail %s: %s", u.Email, err)
 
 		e := err.Error()
 
 		return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
 	}
-	log.Printf("id: %s, pw: %s", id, pw)
+	//log.Printf("id: %s, pw: %s", id, pw)
 	if u.Password == pw {
 
 		user, err := datab.GetUser(id)
