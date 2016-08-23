@@ -264,7 +264,7 @@
       "fixed": true
     }
   ],
-  "dataUseCategory": [
+  "action": [
     {
       "value": "provide",
       "code": "provide",
