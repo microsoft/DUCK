@@ -52,7 +52,7 @@
       "fixed": true
     },
     {
-      "value": "linked or pseudonymized",
+      "value": "pseudonymized",
       "code": "pseudonymized _data",
       "category": "2",
       "fixed": true
