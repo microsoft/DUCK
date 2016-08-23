@@ -108,16 +108,20 @@ func (m *Mock) UpdateUser(user structs.User) error {
 //GetDocumentSummariesForUser returns all documents for a user
 func (m *Mock) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 	var l []structs.Document
+
 	if len(m.DataUseDocuments) == 0 {
 		return l, errors.New("No Documents found")
 	}
 
 	for id, doc := range m.DataUseDocuments {
-		if userid == id {
+
+		if userid == doc.Owner {
+
 			var d structs.Document
-			d.ID = doc.ID
+			d.ID = id
 			d.Name = doc.Name
 			l = append(l, d)
+
 		}
 	}
 	return l, nil
@@ -133,6 +137,7 @@ func (m *Mock) GetDocument(id string) (structs.Document, error) {
 
 //NewDocument creates a new document
 func (m *Mock) NewDocument(doc structs.Document) error {
+
 	if _, prs := m.DataUseDocuments[doc.ID]; !prs {
 		m.DataUseDocuments[doc.ID] = doc
 		return nil
@@ -146,7 +151,7 @@ func (m *Mock) UpdateDocument(doc structs.Document) error {
 		m.DataUseDocuments[doc.ID] = doc
 		return nil
 	}
-	return errors.New("Cannot delete Document: Document not found")
+	return errors.New("Cannot Update Document: Document not found")
 }
 
 //DeleteDocument deletes a document

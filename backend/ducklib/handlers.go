@@ -56,7 +56,9 @@ func getDocHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(c.Param("docid"))
 	if err != nil {
 		log.Printf("Error in getDocHandler: %s", err)
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		e := err.Error()
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	fmt.Printf("GET revision: %s\n", doc.Revision)
 	return c.JSON(http.StatusOK, doc)
@@ -66,7 +68,8 @@ func copyDocHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(c.Param("docid"))
 	if err != nil {
 		log.Printf("Error in copyDocHandler trying to get old document from database: %s", err)
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	newDoc := new(structs.Document)
@@ -155,7 +158,7 @@ func postDocHandler(c echo.Context) error {
 		log.Printf("Error in postDocHandler while trying to bind new doc to struct: %s", err)
 
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
 	}
 
 	id, err := datab.PostDocument(*doc)
@@ -163,17 +166,17 @@ func postDocHandler(c echo.Context) error {
 		log.Printf("Error in postDocHandler while trying to create document in database: %s", err)
 
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
 	}
 	docu, err := datab.GetDocument(id)
 	if err != nil {
 		log.Printf("Error in postDocHandler while trying to get new document: %s", err)
 
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 
-	return c.JSON(http.StatusOK, docu)
+	return c.JSON(http.StatusCreated, docu)
 }
 
 /*
@@ -183,7 +186,7 @@ User handlers
 func deleteUserHandler(c echo.Context) error {
 	err := datab.DeleteUser(c.Param("id"))
 	if err != nil {
-		log.Printf("Error in deleteDocHandler: %s", err)
+		log.Printf("Error in deleteUserHandler: %s", err)
 
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})

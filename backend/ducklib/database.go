@@ -153,6 +153,22 @@ func (database *Database) PutDocument(doc structs.Document) error {
 }
 
 func (database *Database) PostDocument(doc structs.Document) (ID string, err error) {
+	if doc.Name == "" {
+		return "", errors.New("No Document Name submitted")
+	}
+
+	if doc.Owner == "" {
+		return "", errors.New("No Document Owner submitted")
+	}
+
+	smap := make(map[string]bool)
+	for _, s := range doc.Statements {
+		if _, prs := smap[s.TrackingID]; prs {
+			return "", errors.New("Document contains two Statements with the same statement ID")
+		}
+		smap[s.TrackingID] = true
+	}
+
 	u := uuid.NewV4()
 	uuid := uuid.Formatter(u, uuid.Clean)
 	doc.ID = uuid
