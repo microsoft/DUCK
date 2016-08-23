@@ -35,7 +35,14 @@
       "code": "third_party",
       "category": "6",
       "fixed": false
+    },    
+    {
+      "value": "third-party partners and data processors",
+      "code": "third_party_partners",
+      "category": "7",
+      "fixed": false
     }
+
   ],
   "qualifier": [
     {
@@ -46,7 +53,7 @@
     },
     {
       "value": "linked or pseudonymized",
-      "code": "linked_data",
+      "code": "pseudonymized _data",
       "category": "2",
       "fixed": true
     },
@@ -83,9 +90,45 @@
       "fixed": false
     },
     {
-      "value": "customer address lists",
-      "code": "customer_content_address",
+      "value": "customer contact lists",
+      "code": "customer_content_contact",
       "category": "1.2",
+      "fixed": false
+    },
+    {
+      "value": "personal health data & medical records",
+      "code": "customer_content_medical",
+      "category": "1.3",
+      "fixed": false
+    },
+    {
+      "value": "personal genetic data",
+      "code": "customer_content_genetic",
+      "category": "1.4",
+      "fixed": false
+    },
+    {
+      "value": "personal biometric data",
+      "code": "customer_content_biometric",
+      "category": "1.5",
+      "fixed": false
+    },
+    {
+      "value": "personal data of children",
+      "code": "customer_content_children",
+      "category": "1.6",
+      "fixed": false
+    },
+    {
+      "value": "political opinions",
+      "code": "customer_content_political",
+      "category": "1.7",
+      "fixed": false
+    },
+    {
+      "value": "financial details",
+      "code": "customer_content_financial",
+      "category": "1.8",
       "fixed": false
     },
     {
@@ -113,7 +156,7 @@
       "fixed": false
     },
     {
-      "value": "usage",
+      "value": "observed usage of the Service Capability",
       "code": "derived_data_user_usage",
       "category": "2.1.3",
       "fixed": false
@@ -125,8 +168,8 @@
       "fixed": false
     },
     {
-      "value": "interests and favorites",
-      "code": "derived_data_user_interests",
+      "value": "profiling data",
+      "code": "derived_data_user_profiling",
       "category": "2.1.5",
       "fixed": false
     },
@@ -149,7 +192,7 @@
       "fixed": false
     },
     {
-      "value": "precise customer location",
+      "value": "user location",
       "code": "derived_data_user_location",
       "category": "2.1.9",
       "fixed": false
@@ -173,7 +216,7 @@
       "fixed": false
     },
     {
-      "value": "environmental sensor data",
+      "value": "user's environmental sensor data",
       "code": "derived_data_user_environmental",
       "category": "2.1.13",
       "fixed": false
@@ -188,6 +231,18 @@
       "value": "cloud service provider data",
       "code": "provider_data",
       "category": "3",
+      "fixed": true
+    },
+    {
+      "value": "access control and authentication data",
+      "code": "provider_data_access",
+      "category": "3.1",
+      "fixed": true
+    },
+    {
+      "value": "operations data",
+      "code": "provider_data_operations",
+      "category": "3.2",
       "fixed": true
     },
     {
@@ -209,7 +264,7 @@
       "fixed": true
     }
   ],
-  "action": [
+  "dataUseCategory": [
     {
       "value": "provide",
       "code": "provide",
