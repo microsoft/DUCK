@@ -53,12 +53,12 @@
     },
     {
       "value": "pseudonymized",
-      "code": "pseudonymized _data",
+      "code": "pseudonymized_data",
       "category": "2",
       "fixed": true
     },
     {
-      "value": "unlinked or securely pseudonymized",
+      "value": "unlinked pseudonymized",
       "code": "unlinked_data",
       "category": "3",
       "fixed": true
@@ -264,7 +264,7 @@
       "fixed": true
     }
   ],
-  "action": [
+  "dataUseCategory": [
     {
       "value": "provide",
       "code": "provide",
@@ -350,15 +350,9 @@
       "fixed": true
     },
     {
-      "value": "share with partners and data processors",
-      "code": "share_partners",
-      "category": "8.1",
-      "fixed": true
-    },
-    {
       "value": "share to provide the service",
       "code": "share_provide",
-      "category": "8.2",
+      "category": "8.1",
       "fixed": true
     }
   ]
