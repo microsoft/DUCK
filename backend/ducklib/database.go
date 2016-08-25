@@ -22,13 +22,13 @@ func NewDatabase(config structs.DBConf) *Database {
 }
 
 //Put this into plugin
-func FillTestdata(testData string) error {
+func FillTestdata(testDataFile string) error {
 
 	var listOfData []interface{}
 
-	dat, err := ioutil.ReadFile(testData)
+	dat, err := ioutil.ReadFile(testDataFile)
 	if err != nil {
-		log.Printf("Error in testdataHandlerwhile trying to read from the file: %s", err)
+		log.Printf("Error in FillTestdata while trying to read from the file: %s", err)
 		return err
 	}
 
@@ -114,12 +114,18 @@ func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	_, _, err = db.GetLogin(user.Email)
 
 	// if user is not in dtabase we can create a new one
+	//TODO: What if another Database Plugin returns another Error when getting an nonexistant User?
 	if err != nil && err.Error() == "User not found" {
 		u := uuid.NewV4()
 		uuid := uuid.Formatter(u, uuid.Clean)
 		user.ID = uuid
 		return uuid, db.NewUser(user)
 
+	}
+
+	//We don't know if the user exists because we got an error checking this
+	if err != nil {
+		return "", err
 	}
 
 	return "", errors.New("User already exists")
