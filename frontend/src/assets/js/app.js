@@ -1,8 +1,8 @@
 /**
  * This module bootstraps the application, including defining URLs and pages.
  */
-var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.component", "duck.i18n", "duck.signin",
-    "duck.gateway", "ui.router", "ngAnimate", "as.sortable", "pascalprecht.translate"]);
+var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.component", "duck.i18n", "duck.assumption",
+    "duck.signin", "duck.gateway", "ui.router", "ngAnimate", "as.sortable", "pascalprecht.translate"]);
 
 app.factory("AppInfo", function () {
 

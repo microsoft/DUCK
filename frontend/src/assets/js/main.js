@@ -3,7 +3,7 @@
  */
 var mainModule = angular.module("duck.main");
 
-mainModule.controller("MainController", function ($scope, CurrentUser, LocaleService, UserService, $translate, $state) {
+mainModule.controller("MainController", function ($scope, CurrentUser, LocaleService, AssumptionSetService, UserService, $translate, $state) {
     var controller = this;
 
     controller.CurrentUser = CurrentUser;
@@ -11,10 +11,18 @@ mainModule.controller("MainController", function ($scope, CurrentUser, LocaleSer
 
     controller.locales = LocaleService.getLocales();
 
+    controller.assumptionSets = AssumptionSetService.getAssumptionSets();
+
     controller.setLocale = function (localeId) {
         CurrentUser.locale = localeId;
         UserService.update();
         $translate.use(localeId);
+
+    };
+
+    controller.setDefaultAssumptionSet = function (assumptionSetId) {
+        CurrentUser.assumptionSet = assumptionSetId;
+        UserService.update();
 
     };
 
