@@ -18,14 +18,15 @@ type DBConf struct {
 }
 
 type User struct {
-	ID         string     `json:"id"`
-	Email      string     `json:"email"`
-	Password   string     `json:"password"`
-	Firstname  string     `json:"firstname"`
-	Lastname   string     `json:"lastname"`
-	Locale     string     `json:"locale"`
-	Revision   string     `json:"revision"`
-	Dictionary Dictionary `json:"dictionary"`
+	ID            string     `json:"id"`
+	Email         string     `json:"email"`
+	Password      string     `json:"password"`
+	Firstname     string     `json:"firstname"`
+	Lastname      string     `json:"lastname"`
+	Locale        string     `json:"locale"`
+	AssumptionSet string     `json:"assumptionSet"`
+	Revision      string     `json:"revision"`
+	Dictionary    Dictionary `json:"dictionary"`
 	//Documents []string `json:"documents"`
 }
 
@@ -44,7 +45,7 @@ type ComplianceResponse struct {
 }
 
 type Login struct {
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -71,6 +72,9 @@ func (u *User) FromValueMap(mp map[string]interface{}) {
 	if locale, ok := mp["locale"]; ok {
 		u.Locale = locale.(string)
 	}
+	if assumptionSet, ok := mp["assumptionSet"]; ok {
+		u.AssumptionSet = assumptionSet.(string)
+	}
 
 	/*	if docs, prs := mp["documents"].([]interface{}); prs {
 		u.Documents = make([]string, len(docs))
@@ -89,13 +93,13 @@ type Rulebase struct {
 
 //can this be a map?
 type Taxonomy struct {
-	Scope []struct {
+	Scope        []struct {
 		Value    string `json:"value"`
 		Code     string `json:"code"`
 		Category string `json:"category"`
 		Fixed    bool   `json:"fixed"`
 	} `json:"scope"`
-	Qualifier []struct {
+	Qualifier    []struct {
 		Value    string `json:"value"`
 		Code     string `json:"code"`
 		Category string `json:"category"`
@@ -107,7 +111,7 @@ type Taxonomy struct {
 		Category string `json:"category"`
 		Fixed    bool   `json:"fixed"`
 	} `json:"dataCategory"`
-	Action []struct {
+	Action       []struct {
 		Value    string `json:"value"`
 		Code     string `json:"code"`
 		Category string `json:"category"`

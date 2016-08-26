@@ -206,6 +206,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         var data = {};
         data.id = document.id;
         data.locale = document.locale;
+        data.assumptionSet = document.assumptionSet;
         data.name = document.name;
         data.owner = document.owner;
         data.statements = [];
