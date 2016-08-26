@@ -116,6 +116,13 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     };
 
+    this.setAssumptionSet = function (assumptionSetId) {
+        if (context.document) {
+            context.document.assumptionSet = assumptionSetId;
+            context.markDirty();
+        }
+    };
+
     /**
      * Resets the statement field codes as when an ISO field value is edited.
      */

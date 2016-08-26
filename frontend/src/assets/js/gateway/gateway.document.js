@@ -66,6 +66,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var url = "/v1/documents";
             var data = {};
             data.locale = CurrentUser.locale;
+            data.assumptionSet = CurrentUser.assumptionSet;
             data.name = name;
             data.owner = CurrentUser.id;
             data.statements = [];
