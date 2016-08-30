@@ -97,7 +97,7 @@
     },
     {
       "value": "personal health data & medical records",
-      "code": "customer_content_medical",
+      "code": "customer_content_health",
       "category": "1.3",
       "fixed": false
     },
@@ -121,7 +121,7 @@
     },
     {
       "value": "political opinions",
-      "code": "customer_content_political",
+      "code": "customer_content_opinions",
       "category": "1.7",
       "fixed": false
     },
@@ -235,7 +235,7 @@
     },
     {
       "value": "access control and authentication data",
-      "code": "provider_data_access",
+      "code": "provider_data_authentication",
       "category": "3.1",
       "fixed": true
     },

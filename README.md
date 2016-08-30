@@ -16,7 +16,7 @@ This is a Gulp-powered build system with the following features:
 The project build requires:
 
 - [Git](https://git-scm.com/)
-- [Go] (https://golang.org/)  (1.6.2 or later)
+- [Go] (https://golang.org/)  (1.7 or later)
 - [NodeJS](https://nodejs.org/en/) (0.12 or greater, 4.4.7 LTS recommended)
 - [CouchDB](http://couchdb.apache.org/) (1.6 or greater)
 - [SWI Prolog] (http://swi-prolog.org) (Development Release 7.3)
@@ -93,20 +93,20 @@ The environment variable names are prefixed with DUCK_ and all uppercase. Fields
 The flags are handled in the go standard way described in https://golang.org/pkg/flag/. 
 Main points are:
 
-Command line flag syntax:
-```
+>Command line flag syntax:
+>```
 -flag
 -flag=x
 -flag x  // non-boolean flags only
 ```
-One or two minus signs may be used; they are equivalent. The last form is not permitted for boolean flags because the meaning of the command
-
-`cmd -x *`
-
-will change if there is a file called 0, false, etc. You must use the -flag=false form to turn off a boolean flag.
-
-Integer flags accept 1234, 0664, 0x1234 and may be negative. Boolean flags may be:
-
-`1, 0, t, f, T, F, true, false, TRUE, FALSE, True, False`
-
-It is *not* possible to configure the database via flags.
+>One or two minus signs may be used; they are equivalent. The last form is not permitted for boolean flags because the meaning of the command
+>
+>`cmd -x *`
+>
+>will change if there is a file called 0, false, etc. You must use the -flag=false form to turn off a boolean flag.
+>
+>Integer flags accept 1234, 0664, 0x1234 and may be negative. Boolean flags may be:
+>
+>`1, 0, t, f, T, F, true, false, TRUE, FALSE, True, False`
+>
+>It is *not* possible to configure the database via flags.
