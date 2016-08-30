@@ -93,20 +93,20 @@ The environment variable names are prefixed with DUCK_ and all uppercase. Fields
 The flags are handled in the go standard way described in https://golang.org/pkg/flag/. 
 Main points are:
 
-Command line flag syntax:
-```
+>Command line flag syntax:
+>```
 -flag
 -flag=x
 -flag x  // non-boolean flags only
 ```
-One or two minus signs may be used; they are equivalent. The last form is not permitted for boolean flags because the meaning of the command
-
-`cmd -x *`
-
-will change if there is a file called 0, false, etc. You must use the -flag=false form to turn off a boolean flag.
-
-Integer flags accept 1234, 0664, 0x1234 and may be negative. Boolean flags may be:
-
-`1, 0, t, f, T, F, true, false, TRUE, FALSE, True, False`
-
-It is *not* possible to configure the database via flags.
+>One or two minus signs may be used; they are equivalent. The last form is not permitted for boolean flags because the meaning of the command
+>
+>`cmd -x *`
+>
+>will change if there is a file called 0, false, etc. You must use the -flag=false form to turn off a boolean flag.
+>
+>Integer flags accept 1234, 0664, 0x1234 and may be negative. Boolean flags may be:
+>
+>`1, 0, t, f, T, F, true, false, TRUE, FALSE, True, False`
+>
+>It is *not* possible to configure the database via flags.
