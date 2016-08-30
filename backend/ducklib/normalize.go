@@ -1,15 +1,6 @@
 package ducklib
 
-import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"os"
-	"path/filepath"
-
-	"github.com/Microsoft/DUCK/backend/ducklib/structs"
-)
-
+/*
 // Normalizer ...
 type Normalizer struct {
 	original     structs.Document
@@ -131,3 +122,4 @@ func (n *Normalizer) DenormalizeVariants() []structs.Document {
 
 	return nil
 }
+*/

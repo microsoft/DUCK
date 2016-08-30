@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -17,6 +18,17 @@ import (
 	"github.com/labstack/echo/engine/standard"
 )
 
+/*
+TODO
+hello handler?
+testdataHandler
+copyDocHandler
+checkDocHandler(c echo.Context)
+checkDocIDHandler(c echo.Context)
+getRulebasesHandler(c echo.Context)
+
+
+*/
 var (
 	conf structs.Configuration
 	e    *echo.Echo
@@ -25,10 +37,12 @@ var (
 		Pass bool         `json:"pass"`
 		User structs.User `json:"user"`
 	}
+	//eg dacument["document_a"]
 	documents map[string]struct {
 		Pass     bool             `json:"pass"`
 		Document structs.Document `json:"document"`
 	}
+	//eg userIDs["user_a"]="a structs.User.ID"
 	userIDs     = make(map[string]string)
 	documentIDs = make(map[string]string)
 	//documents owners and # of documents they own
@@ -43,6 +57,124 @@ func TestMain(m *testing.M) {
 	if e != nil {
 
 		os.Exit(m.Run())
+	}
+
+}
+
+func TestTestdata(t *testing.T) {
+
+	//t.Logf("User %+v\n", users)
+	//t.Error("AHHHHHH")
+	t.Run("TestdataHandler=1", testTestdataHandler)
+	t.Run("TestdataHandler=2", testTestdataHandlerAgain)
+	t.Run("HelloHandler=1", testHelloHandler)
+
+	var listOfData []interface{}
+	dat, err := ioutil.ReadFile(testData)
+	if err != nil {
+		t.Errorf("Error in TestTestdata cleanup while trying to read from the file: %s", err)
+		t.Fatal("No cleanup effects all later tests. ")
+	}
+
+	if err := json.Unmarshal(dat, &listOfData); err != nil {
+		t.Error("Testfixture User not correctly loading")
+		t.Fatal("No cleanup effects all later tests. ")
+	}
+
+	for _, l := range listOfData {
+
+		mp := l.(map[string]interface{})
+
+		entryType := mp["type"].(string)
+		id := mp["_id"].(string)
+		switch entryType {
+		case "document":
+
+			if err := db.DeleteDocument(id); err != nil {
+				t.Errorf("Error in TestTestdata cleanup while trying to delete document %s: %s", id, err)
+
+			}
+		case "user":
+
+			if err := db.DeleteUser(id); err != nil {
+				t.Errorf("Error in TestTestdata cleanup while trying to delete User %s: %s", id, err)
+			}
+
+		}
+
+	}
+	if t.Failed() {
+		t.Fatal("No cleanup effects all later tests. ")
+	}
+
+}
+
+func testTestdataHandler(t *testing.T) {
+
+	req, err := http.NewRequest(echo.GET, "/loadtestdata", nil)
+
+	if err != nil {
+		t.Errorf("Testing testdataHandler:%s", err)
+
+	}
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+
+	c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+	err = testdataHandler(c)
+	if err != nil {
+		t.Errorf("Testing testdataHandler: %s", err)
+
+	}
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("Testing testdataHandler: Document get does not return HTTP code %d but %d.", http.StatusOK, rec.Code)
+	}
+
+}
+func testTestdataHandlerAgain(t *testing.T) {
+
+	req, err := http.NewRequest(echo.GET, "/loadtestdata", nil)
+
+	if err != nil {
+		t.Errorf("Testing testdataHandler again:%s", err)
+
+	}
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+
+	c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+	err = testdataHandler(c)
+	if err != nil {
+		t.Errorf("Testing testdataHandler again: %s", err)
+
+	}
+
+	if rec.Code != http.StatusConflict {
+		t.Errorf("Testing testdataHandler again: Document get does not return HTTP code %d but %d.", http.StatusConflict, rec.Code)
+	}
+
+}
+func testHelloHandler(t *testing.T) {
+
+	req, err := http.NewRequest(echo.GET, "/", nil)
+
+	if err != nil {
+		t.Errorf("Testing helloHandler:%s", err)
+
+	}
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+
+	c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+	err = helloHandler(c)
+	if err != nil {
+		t.Errorf("Testing helloHandler: %s", err)
+
+	}
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("Testing helloHandler: Document get does not return HTTP code %d but %d.", http.StatusOK, rec.Code)
 	}
 
 }
@@ -85,7 +217,7 @@ func TestDocumentHandler(t *testing.T) {
 	t.Run("PostDocument=1", testpostDocHandler)
 	t.Run("GetDocument=1", testGetDocHandler)
 	t.Run("Summaries=1", testGetDocSummaries)
-	//t.Run("CopyDocument=1", testCopyDocHandler)  NOT IMPLEMENTED YET
+	t.Run("CopyDocument=1", testCopyDocHandler) // NOT IMPLEMENTED YET
 	t.Run("PutDocument=1", testPutDocHandler)
 
 	t.Run("DeleteDocument=1", testDeleteDocHandler)
@@ -467,6 +599,7 @@ func testpostDocHandler(t *testing.T) {
 }
 
 func testPutDocHandler(t *testing.T) {
+
 	for key, value := range documents {
 		if !value.Pass {
 			continue
@@ -496,13 +629,13 @@ func testPutDocHandler(t *testing.T) {
 		}
 
 		if rec.Code != http.StatusOK {
-			t.Errorf("Test with %s: user update does not return HTTP code %d but %d.", key, http.StatusOK, rec.Code)
+			t.Errorf("Test with %s: document update does not return HTTP code %d but %d.", key, http.StatusOK, rec.Code)
 		} else {
 
 			var res structs.Document
 
 			if err := json.Unmarshal(rec.Body.Bytes(), &res); err != nil {
-				t.Errorf("Test with %s: user update does not return valid User struct", key)
+				t.Errorf("Test with %s: document update does not return valid User struct", key)
 			}
 
 			if res.Name != value.Document.Name {
@@ -586,6 +719,9 @@ func testGetDocHandler(t *testing.T) {
 }
 
 func testCopyDocHandler(t *testing.T) {
+
+	var copys []structs.Document
+
 	for key, value := range documents {
 
 		/*
@@ -598,7 +734,15 @@ func testCopyDocHandler(t *testing.T) {
 
 		value.Document.ID = documentIDs[key]
 
-		req, err := http.NewRequest(echo.POST, "/documents/copy/:docid", nil)
+		cp := structs.Document{Name: fmt.Sprintf("NEW%s", value.Document.Name),
+			Locale: "de", Owner: value.Document.Owner}
+
+		docJSON, err := json.Marshal(cp)
+		if err != nil {
+			t.Errorf("Test with %s: user copy json Marshal not functioning", key)
+
+		}
+		req, err := http.NewRequest(echo.POST, "/documents/copy/:docid", bytes.NewReader(docJSON))
 
 		if err != nil {
 			t.Errorf("Test with %s: Error posting Document: %s", key, err)
@@ -635,7 +779,7 @@ func testCopyDocHandler(t *testing.T) {
 					t.Errorf("Test with %s:  Document copy returns Document ID %s which is the same as %s, wants a different one", key, res.Name, documentIDs[key])
 				}
 
-				if res.Name != value.Document.Name {
+				if res.Name != cp.Name {
 					t.Errorf("Test with %s:  Document copy returns Document Name %s, wants %s", key, res.Name, value.Document.Name)
 				}
 				if res.Owner != value.Document.Owner {
@@ -644,9 +788,12 @@ func testCopyDocHandler(t *testing.T) {
 				if len(res.Statements) != len(value.Document.Statements) {
 					t.Errorf("Test with %s:  Document copy returns  Document with %d Statements, wants %d", key, len(res.Statements), len(value.Document.Statements))
 				}
-				if res.Locale != value.Document.Locale {
+				if res.Locale != cp.Locale {
 					t.Errorf("Test with %s:  Document copy returns Document Locale %s, wants %s", key, res.Locale, value.Document.Locale)
 				}
+				//add to documents
+				copys = append(copys, res)
+				log.Printf("%+v", res)
 
 			}
 
@@ -659,6 +806,17 @@ func testCopyDocHandler(t *testing.T) {
 		}
 
 	}
+	count := 1
+	for _, val := range copys {
+		name := fmt.Sprintf("document_copy_%i", count)
+		cp := documents[name]
+		cp.Pass = true
+		cp.Document = val
+		documents[name] = cp
+		documentIDs[name] = val.ID
+		count++
+	}
+
 }
 
 func testGetDocSummaries(t *testing.T) {
