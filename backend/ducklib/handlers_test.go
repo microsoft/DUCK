@@ -48,7 +48,7 @@ var (
 	//documents owners and # of documents they own
 	owners = make(map[string]int)
 )
-
+//Move this into main.go
 func TestMain(m *testing.M) {
 
 	conf = NewConfiguration(filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json"))
