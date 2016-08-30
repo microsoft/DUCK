@@ -371,6 +371,7 @@ func (cb *Couchbase) putUser(u structs.User) error {
 	entryMap["firstname"] = u.Firstname
 	entryMap["lastname"] = u.Lastname
 	entryMap["locale"] = u.Locale
+	entryMap["assumptionSet"] = u.AssumptionSet
 	if u.Revision != "" {
 		entryMap["_rev"] = u.Revision
 	}
@@ -384,6 +385,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	entryMap["name"] = d.Name
 	entryMap["owner"] = d.Owner
 	entryMap["locale"] = d.Locale
+	entryMap["assumptionSet"] = d.AssumptionSet
 	if d.Revision != "" {
 		entryMap["_rev"] = d.Revision
 	}

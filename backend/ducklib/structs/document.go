@@ -1,12 +1,13 @@
 package structs
 
 type Document struct {
-	ID         string      `json:"id"`
-	Name       string      `json:"name"`
-	Revision   string      `json:"revision"`
-	Owner      string      `json:"owner"`
-	Locale     string      `json:"locale"`
-	Statements []Statement `json:"statements"`
+	ID            string      `json:"id"`
+	Name          string      `json:"name"`
+	Revision      string      `json:"revision"`
+	Owner         string      `json:"owner"`
+	Locale        string      `json:"locale"`
+	AssumptionSet string      `json:"assumptionSet"`
+	Statements    []Statement `json:"statements"`
 }
 
 type Statement struct {
@@ -36,6 +37,9 @@ func (d *Document) FromValueMap(mp map[string]interface{}) {
 	}
 	if locale, ok := mp["locale"]; ok {
 		d.Locale = locale.(string)
+	}
+	if assumptionSet, ok := mp["assumptionSet"]; ok {
+		d.AssumptionSet = assumptionSet.(string)
 	}
 
 	d.Statements = make([]Statement, 0)

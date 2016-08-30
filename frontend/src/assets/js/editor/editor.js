@@ -1,11 +1,12 @@
 var editorModule = angular.module("duck.editor");
 
-editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, DocumentExporter,
+editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, AssumptionSetService, DocumentExporter,
                                                       $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
 
     controller.locales = LocaleService.getLocales();
+    controller.assumptionSets = AssumptionSetService.getAssumptionSets();
 
     var documentId = ObjectUtils.notNull($stateParams.documentId) ? $stateParams.documentId : null;
     controller.noDocument = documentId === null;
@@ -37,6 +38,12 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.getLocale = function () {
         return DocumentModel.document ? DocumentModel.document.locale : null;
+    };
+
+    controller.setAssumptionSet = DocumentModel.setAssumptionSet;
+
+    controller.getAssumptionSet = function () {
+        return DocumentModel.document ? DocumentModel.document.assumptionSet : null;
     };
 
     controller.isSelected = function (document) {
