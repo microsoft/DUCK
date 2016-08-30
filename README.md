@@ -108,5 +108,5 @@ Main points are:
 >Integer flags accept 1234, 0664, 0x1234 and may be negative. Boolean flags may be:
 >
 >`1, 0, t, f, T, F, true, false, TRUE, FALSE, True, False`
->
->It is *not* possible to configure the database via flags.
+
+It is *not* possible to configure the database via flags.
