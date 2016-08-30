@@ -35,6 +35,12 @@
       "code": "third_party",
       "category": "6",
       "fixed": false
+    },
+    {
+      "value": "third-party partners and data processors",
+      "code": "third_party_partners",
+      "category": "7",
+      "fixed": false
     }
   ],
   "qualifier": [
@@ -45,13 +51,13 @@
       "fixed": true
     },
     {
-      "value": "비식별화된",
-      "code": "linked_data",
+      "value": "pseudonymized 비식별화된",
+      "code": "pseudonymized_data",
       "category": "2",
       "fixed": true
     },
     {
-      "value": "확실히 비식별화된",
+      "value": "unlinked pseudonymized data 확실히 비식별화된",
       "code": "unlinked_data",
       "category": "3",
       "fixed": true
@@ -83,9 +89,45 @@
       "fixed": false
     },
     {
-      "value": "고객 주소록",
-      "code": "customer_content_address",
+      "value": "customer contact lists  고객 주소록",
+      "code": "customer_content_contact",
       "category": "1.2",
+      "fixed": false
+    },
+    {
+      "value": "personal health data & medical records",
+      "code": "customer_content_medical",
+      "category": "1.3",
+      "fixed": false
+    },
+    {
+      "value": "personal genetic data",
+      "code": "customer_content_genetic",
+      "category": "1.4",
+      "fixed": false
+    },
+    {
+      "value": "personal biometric data",
+      "code": "customer_content_biometric",
+      "category": "1.5",
+      "fixed": false
+    },
+    {
+      "value": "personal data of children",
+      "code": "customer_content_children",
+      "category": "1.6",
+      "fixed": false
+    },
+    {
+      "value": "political opinions",
+      "code": "customer_content_political",
+      "category": "1.7",
+      "fixed": false
+    },
+    {
+      "value": "financial details",
+      "code": "customer_content_financial",
+      "category": "1.8",
       "fixed": false
     },
     {
@@ -113,7 +155,7 @@
       "fixed": false
     },
     {
-      "value": "사용",
+      "value": "observed usage of the Service Capability 사용",
       "code": "derived_data_user_usage",
       "category": "2.1.3",
       "fixed": false
@@ -125,8 +167,8 @@
       "fixed": false
     },
     {
-      "value": "프로파일 정보",
-      "code": "derived_data_user_interests",
+      "value": "profiling data 프로파일 정보",
+      "code": "derived_data_user_profiling",
       "category": "2.1.5",
       "fixed": false
     },
@@ -149,7 +191,7 @@
       "fixed": false
     },
     {
-      "value": "정확한 사용자 위치",
+      "value": "user location 정확한 사용자 위치",
       "code": "derived_data_user_location",
       "category": "2.1.9",
       "fixed": false
@@ -161,7 +203,7 @@
       "fixed": false
     },
     {
-      "value": "의료 건강 정보",
+      "value": "biometric and health data 의료 건강 정보",
       "code": "derived_data_user_biometric",
       "category": "2.1.11",
       "fixed": false
@@ -191,6 +233,18 @@
       "fixed": true
     },
     {
+      "value": "access control and authentication data",
+      "code": "provider_data_access",
+      "category": "3.1",
+      "fixed": true
+    },
+    {
+      "value": "operations data",
+      "code": "provider_data_operations",
+      "category": "3.2",
+      "fixed": true
+    },
+    {
       "value": "계정 정보",
       "code": "account_data",
       "category": "4",
@@ -209,7 +263,7 @@
       "fixed": true
     }
   ],
-  "action": [
+  "dataUseCategory": [
     {
       "value": "제공하다",
       "code": "provide",
@@ -295,15 +349,9 @@
       "fixed": true
     },
     {
-      "value": "파트너, 정보 처리자와 정보 공유",
-      "code": "share_partners",
-      "category": "8.1",
-      "fixed": true
-    },
-    {
       "value": "서비스 제공을 위해 공유하다",
       "code": "share_provide",
-      "category": "8.2",
+      "category": "8.1",
       "fixed": true
     }
   ]

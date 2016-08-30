@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"os"
 	"path/filepath"
 
@@ -13,19 +12,12 @@ import (
 import _ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
 
 var (
-	webDir      string
-	jwtKey      string
-	ruleBaseDir string
-	goPath      = os.Getenv("GOPATH")
-	startDir    = "/src/github.com/Microsoft/DUCK/Rulebases"
+	goPath = os.Getenv("GOPATH")
 )
 
 func main() {
 
-	flag.StringVar(&webDir, "webdir", "frontend/dist", "The root directory for serving web content")
-	flag.StringVar(&jwtKey, "JWTSecret", "secret", "The secret used to sign the JWT")
-	flag.StringVar(&ruleBaseDir, "rulebasedir", startDir, "The Directory to the Rulebases")
-
+	// create config
 	conf := ducklib.NewConfiguration(filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json"))
 
 	//set routes

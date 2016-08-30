@@ -128,3 +128,17 @@ type DictionaryEntry struct {
 }
 
 type Dictionary []DictionaryEntry
+
+type httpError struct {
+	error
+	Status int
+}
+
+// NewHttpError returns a httpError which implements the Error interface and has the additional field Status for a http status code.
+func NewHttpError(err error, code int) httpError {
+	return httpError{err, code}
+}
+
+func (e httpError) Error() string {
+	return e.Error()
+}

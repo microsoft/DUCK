@@ -3,6 +3,7 @@ package ducklib
 import (
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"log"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
@@ -21,11 +22,17 @@ func NewDatabase(config structs.DBConf) *Database {
 }
 
 //Put this into plugin
-func FillTestdata(data []byte) error {
+func FillTestdata(testDataFile string) error {
 
 	var listOfData []interface{}
 
-	if err := json.Unmarshal(data, &listOfData); err != nil {
+	dat, err := ioutil.ReadFile(testDataFile)
+	if err != nil {
+		log.Printf("Error in FillTestdata while trying to read from the file: %s", err)
+		return err
+	}
+
+	if err := json.Unmarshal(dat, &listOfData); err != nil {
 		return err
 	}
 	for _, l := range listOfData {
@@ -97,18 +104,31 @@ func (database *Database) PutUser(user structs.User) error {
 
 func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	//check for duplicate
-	_, _, err = db.GetLogin(user.Email)
-	log.Printf("LOGINERROR: %s", err)
-	if err == nil || err.Error() != "No Data returned" {
-
-		return "", errors.New("User already exists")
+	if user.Email == "" {
+		return "", errors.New("No email submitted")
+	}
+	if user.Password == "" {
+		return "", errors.New("No password submitted")
 	}
 
-	u := uuid.NewV4()
-	uuid := uuid.Formatter(u, uuid.Clean)
-	user.ID = uuid
-	return uuid, db.NewUser(user)
+	_, _, err = db.GetLogin(user.Email)
 
+	// if user is not in dtabase we can create a new one
+	//TODO: What if another Database Plugin returns another Error when getting an nonexistant User?
+	if err != nil && err.Error() == "User not found" {
+		u := uuid.NewV4()
+		uuid := uuid.Formatter(u, uuid.Clean)
+		user.ID = uuid
+		return uuid, db.NewUser(user)
+
+	}
+
+	//We don't know if the user exists because we got an error checking this
+	if err != nil {
+		return "", err
+	}
+
+	return "", errors.New("User already exists")
 }
 
 /*
@@ -139,6 +159,22 @@ func (database *Database) PutDocument(doc structs.Document) error {
 }
 
 func (database *Database) PostDocument(doc structs.Document) (ID string, err error) {
+	if doc.Name == "" {
+		return "", errors.New("No Document Name submitted")
+	}
+
+	if doc.Owner == "" {
+		return "", errors.New("No Document Owner submitted")
+	}
+
+	smap := make(map[string]bool)
+	for _, s := range doc.Statements {
+		if _, prs := smap[s.TrackingID]; prs {
+			return "", errors.New("Document contains two Statements with the same statement ID")
+		}
+		smap[s.TrackingID] = true
+	}
+
 	u := uuid.NewV4()
 	uuid := uuid.Formatter(u, uuid.Clean)
 	doc.ID = uuid

@@ -1,6 +1,7 @@
 package ducklib
 
 import (
+	"log"
 	"path/filepath"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
@@ -21,11 +22,21 @@ var checker *ComplianceCheckerPlugin
 //GetServer returns Echo instance with predefined routes
 func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	//webDir string, jwtKey []byte, ruleBaseDir string
+
 	datab = NewDatabase(*conf.DBConfig)
 	err := datab.Init()
 	if err != nil {
 		panic(err)
 	}
+
+	if conf.Loadtestdata {
+		var testData = filepath.Join(gopath, "/src/github.com/Microsoft/DUCK/testdata.json")
+
+		if err := FillTestdata(testData); err != nil {
+			log.Printf("Error trying to load testdata: %s", err)
+		}
+	}
+
 	JWT = []byte(conf.JwtKey)
 	rbd := conf.RulebaseDir
 	if conf.Gopathrelative {
@@ -79,6 +90,7 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 
 	//rulebase resources
 	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI
+	rulebases.GET("", getRulebasesHandler)              //Returns a dictionary with all available Rulebases
 	//rulebases.POST("/", postRsHandler)                                //create a rulebase
 	//rulebases.DELETE("/:id", deleteRsHandler)                         //delete a rulebase
 	//rulebases.PUT("/:setid", putRsHandler)                            //update a rulebase

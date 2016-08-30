@@ -25,7 +25,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                 context.populate(locale, "scope", taxonomy["scope"]);
                 context.populate(locale, "qualifier", taxonomy["qualifier"]);
                 context.populate(locale, "dataCategory", taxonomy["dataCategory"]);
-                context.populate(locale, "action", taxonomy["action"]);
+                context.populate(locale, "action", taxonomy["dataUseCategory"]);
             }).error(function (data, status) {
                 $log.error("Taxonomy for locale not found: " + locale);
             });
