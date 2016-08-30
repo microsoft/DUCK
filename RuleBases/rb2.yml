@@ -2,6 +2,7 @@ meta:
   title: DUCK Rulebase
   description:
   version: 0.4
+  id:2
 
 language:
   action/2: action(%s,%s)
@@ -155,7 +156,7 @@ argument_schemes:
   category5:
     variables: [X,Y]
     conclusions:
-      - kindOf(derived_data_user_interests,derived_data_user)
+      - kindOf(derived_data_user_profiling,derived_data_user)
 
   category6:
     variables: [X,Y]
@@ -205,7 +206,7 @@ argument_schemes:
   category15:
     variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_address,customer_content)
+      - kindOf(customer_content_contact,customer_content)
 
   category16:
     variables: [X,Y]
@@ -250,7 +251,7 @@ argument_schemes:
   category24:
     variables: [X,Y]
     conclusions:
-      - kindOf(provider_data_authentication,provider_data)  # To Do: Not in taxonomy
+      - kindOf(provider_data_authentication,provider_data)  
 
   category25:
     variables: [X,Y]
@@ -322,12 +323,13 @@ argument_schemes:
     conclusions:
       - kindOf(promote_personalization,promote)        
 
-  action10:
-    variables: [X,Y]
-    conclusions:
-      - kindOf(share_partners,share)
+ # removed from standard
+ # action10:
+ #   variables: [X,Y]
+ #   conclusions:
+ #     - kindOf(share_partners,share)
 
-  action11:
+  action10:
     variables: [X,Y]
     conclusions:
       - kindOf(share_provide,share)            
@@ -377,7 +379,7 @@ argument_schemes:
   pii2:
     variables: [S]
     premises:
-      - dataQualifier(S,linked_data)
+      - dataQualifier(S,pseudonymized_data)
     conclusions:
       - pii(S)
     exceptions:
@@ -410,7 +412,7 @@ argument_schemes:
       constant: 0.6
     variables: [S]
     premises:
-      - dataQualifier(S,linked_data)
+      - dataQualifier(S,pseudonymized_data)
       - dataCategory(S,derived_data_organization)
     conclusions:
       - ¬pii(S)
@@ -420,7 +422,7 @@ argument_schemes:
       constant: 0.6
     variables: [S]
     premises:
-      - dataQualifier(S,linked_data)
+      - dataQualifier(S,pseudonymized_data)
       - dataCategory(S,access_and_authentication_data)  # ToDo: not yet in the taxonomy file!
     conclusions:
       - ¬pii(S)
