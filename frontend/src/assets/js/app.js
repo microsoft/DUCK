@@ -1,8 +1,8 @@
 /**
  * This module bootstraps the application, including defining URLs and pages.
  */
-var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.component", "duck.i18n", "duck.signin",
-    "duck.gateway", "ui.router", "ngAnimate", "as.sortable", "pascalprecht.translate"]);
+var app = angular.module("duck.application", ["duck.main", "duck.home", "duck.editor", "duck.core", "duck.component", "duck.i18n", "duck.assumption",
+    "duck.signin", "duck.gateway", "ui.router", "ngAnimate", "as.sortable", "pascalprecht.translate"]);
 
 app.factory("AppInfo", function () {
 
@@ -97,11 +97,14 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
     }]);
 
 
-app.controller("AppController", function (CurrentUser, TaxonomyService, AppInfo, $translate, $log) {
+app.controller("AppController", function (AssumptionSetService, CurrentUser, TaxonomyService, AppInfo, $translate, $log) {
     $log.info("Initializing version " + AppInfo.version);
 
-    CurrentUser.initialize();
-    $translate.use(CurrentUser.locale);
+    // Initialize the assumption service first since the user service relies on it
+    AssumptionSetService.initialize().then(function () {
+        CurrentUser.initialize();
+        $translate.use(CurrentUser.locale);
+    });
 
     // $translate.preferredLanguage(CurrentUser.locale);
     TaxonomyService.initialize();

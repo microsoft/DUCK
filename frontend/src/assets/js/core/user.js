@@ -3,7 +3,7 @@
  */
 var coreModule = angular.module("duck.core");
 
-coreModule.service("CurrentUser", function ($log, LocaleService, ObjectUtils) {
+coreModule.service("CurrentUser", function ($log, LocaleService, AssumptionSetService, ObjectUtils) {
     this.loggedIn = false;
     this.firstName = "anonymous";
     this.lastName = "anonymous";
@@ -28,6 +28,14 @@ coreModule.service("CurrentUser", function ($log, LocaleService, ObjectUtils) {
         } else {
             this.locale = locale;
         }
+
+        var assumptionSet = this.assumptionSet = localStorage.getItem("duck.assumptionSet");
+        if (ObjectUtils.isNull(assumptionSet)) {
+            this.assumptionSet = AssumptionSetService.getAssumptionSets()[0].id;
+        } else {
+            this.locale = assumptionSet;
+        }
+
         this.loggedIn = true;
         $log.debug("Current user initialized");
     };
@@ -47,6 +55,13 @@ coreModule.service("CurrentUser", function ($log, LocaleService, ObjectUtils) {
         } else {
             this.locale = LocaleService.defaultLocale;
         }
+
+        if (data.assumptionSet) {
+            this.assumptionSet = data.assumptionSet;
+        } else {
+            this.assumptionSet = AssumptionSetService.getAssumptionSets()[0].id;
+        }
+
 
         this.loggedIn = true;
         this.save();

@@ -58,6 +58,21 @@
                             </li>
                         </ul>
                     </div>
+                    <button class="button hollow" type="button" data-toggle="assumption-dropdown">
+                        {{'assumption_set_label'|translate}}
+                    </button>
+                    <div class="dropdown-pane row column" id="assumption-dropdown" data-dropdown data-auto-focus="false">
+                        <ul class="menu vertical">
+                            <li ng-repeat="assumptionSet in editorController.assumptionSets">
+
+                                <a ng-click="editorController.setAssumptionSet(assumptionSet.id)" href="">
+                                    <span class="fa fa-check padding-right-1" ng-show="assumptionSet.id === editorController.getAssumptionSet()"></span>
+                                    <span class="fa fa-check padding-right-1" style="color: #fff" ng-show="locale.id !== editorController.getAssumptionSet()"></span>
+                                    {{assumptionSet.name}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <a class="button hollow" ng-click="editorController.makeActive()">
                         {{"active"|translate}}
                     </a>

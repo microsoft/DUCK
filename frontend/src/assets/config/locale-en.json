@@ -68,7 +68,8 @@
   "qualifier": "Qualifier",
   "source_scope": "Source Scope",
   "action": "Action",
-  "result_scope": "Result Scope"
+  "result_scope": "Result Scope",
+  "assumption_set_label": "Assumption Set"
 
 }
 

@@ -35,10 +35,14 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
 )
+
+//not using default Client: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779
+var netClient = &http.Client{Timeout: time.Second * 10}
 
 //Couchbase implements the pluginregistry.DBPlugin interface for the Couchbase Dabase
 type Couchbase struct {
@@ -91,7 +95,7 @@ func (cb *Couchbase) GetLogin(email string) (id string, pw string, err error) {
 
 	//log.Println("Login query: " + url)
 
-	resp, err := http.Get(url)
+	resp, err := netClient.Get(url)
 	if err != nil {
 		log.Println(err)
 
@@ -169,7 +173,7 @@ func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]i
 
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, cbDocID)
 
-	resp, err := http.Get(url)
+	resp, err := netClient.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +193,8 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Docum
 	url := fmt.Sprintf("%s/%s/_design/app/_view/documents_by_user?startkey=[\"%s\",\"\"]&endkey=[\"%s\",{}]",
 		cb.url, cb.database, userid, userid)
 
-	resp, err := http.Get(url)
+	resp, err := netClient.Get(url)
+
 	if err != nil {
 		return nil, err
 	}
@@ -303,11 +308,10 @@ func (cb *Couchbase) DeleteRulebase(id string, rev string) error {
 func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 	url := fmt.Sprintf("%s/%s/%s?rev=%s", cb.url, cb.database, id, rev)
 
-	client := &http.Client{}
 	request, err := http.NewRequest(http.MethodDelete, url, strings.NewReader(""))
 	//request.SetBasicAuth("admin", "admin")
 	//request.ContentLength = 0
-	resp, err := client.Do(request)
+	resp, err := netClient.Do(request)
 
 	if err != nil {
 		return err
@@ -367,6 +371,7 @@ func (cb *Couchbase) putUser(u structs.User) error {
 	entryMap["firstname"] = u.Firstname
 	entryMap["lastname"] = u.Lastname
 	entryMap["locale"] = u.Locale
+	entryMap["assumptionSet"] = u.AssumptionSet
 	if u.Revision != "" {
 		entryMap["_rev"] = u.Revision
 	}
@@ -380,6 +385,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	entryMap["name"] = d.Name
 	entryMap["owner"] = d.Owner
 	entryMap["locale"] = d.Locale
+	entryMap["assumptionSet"] = d.AssumptionSet
 	if d.Revision != "" {
 		entryMap["_rev"] = d.Revision
 	}
@@ -431,15 +437,13 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		url = fmt.Sprintf("%s/%s/_design/app", cb.url, cb.database)
 	}
 
-	client := &http.Client{}
-
 	request, err := http.NewRequest(http.MethodPut, url, entryReader)
 	if err != nil {
 		panic(err)
 	}
 	//request.SetBasicAuth("admin", "admin")
 	//request.ContentLength = 0
-	resp, err := client.Do(request)
+	resp, err := netClient.Do(request)
 
 	if err != nil {
 		return err
@@ -487,7 +491,7 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 
 	url := config.Location + ":" + port
 
-	resp, err := http.Get(url)
+	resp, err := netClient.Get(url)
 	if err != nil {
 		return err
 	}
@@ -548,7 +552,7 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 func (cb *Couchbase) testFileExists(id string) (bool, error) {
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, id)
 
-	resp, err := http.Get(url)
+	resp, err := netClient.Get(url)
 	if err != nil {
 		return false, err
 	}
@@ -579,11 +583,10 @@ func (cb *Couchbase) testFileExists(id string) (bool, error) {
 func (cb *Couchbase) createDatabase() error {
 	url := fmt.Sprintf("%s/%s", cb.url, cb.database)
 
-	client := &http.Client{}
 	request, err := http.NewRequest(http.MethodPut, url, strings.NewReader(""))
 	//request.SetBasicAuth("admin", "admin")
 	//request.ContentLength = 0
-	resp, err := client.Do(request)
+	resp, err := netClient.Do(request)
 
 	if err != nil {
 		return err
@@ -610,7 +613,7 @@ func (cb *Couchbase) createDatabase() error {
 func (cb *Couchbase) testDBExists() (bool, error) {
 	url := fmt.Sprintf("%s/%s", cb.url, cb.database)
 
-	resp, err := http.Get(url)
+	resp, err := netClient.Get(url)
 	if err != nil {
 		return false, err
 	}

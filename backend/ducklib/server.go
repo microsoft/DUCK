@@ -90,6 +90,7 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 
 	//rulebase resources
 	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI
+	rulebases.GET("", getRulebasesHandler)              //Returns a dictionary with all available Rulebases
 	//rulebases.POST("/", postRsHandler)                                //create a rulebase
 	//rulebases.DELETE("/:id", deleteRsHandler)                         //delete a rulebase
 	//rulebases.PUT("/:setid", putRsHandler)                            //update a rulebase

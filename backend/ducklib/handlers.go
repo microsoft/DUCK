@@ -382,6 +382,13 @@ func checkDocIDHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT", Documents: docs})
 
 }
+func getRulebasesHandler(c echo.Context) error {
+	//log.Printf("Rulebases: %+v", checker.RuleBases)
+	if len(checker.RuleBases) == 0 {
+		return c.JSON(http.StatusNotFound, nil)
+	}
+	return c.JSON(http.StatusOK, checker.RuleBases)
+}
 
 // loginHandler handles the login Process
 func loginHandler(c echo.Context) error {
