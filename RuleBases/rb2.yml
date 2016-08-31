@@ -1,7 +1,7 @@
 meta:
   title: DUCK Rulebase
   description:
-  version: 0.4
+  version: 0.5
   id: 2
 
 language:
@@ -14,10 +14,12 @@ language:
   docConsentRequired/0: docConsentRequired
   ¬docConsentRequired/0: ¬docConsentRequired
   duplicate/2: duplicate(%s,%s)
+  equivalentScope/2: equivalentScope(%s,%s)
   extendsScope/2: extendsScope(%s,%s)
   greaterScope/2: greaterScope(%s,%s)
   id/2: id(%s,%s)
   kindOf/2: kindOf(%s,%s)
+  lesserScope/2: lesserScope(%s,%s)
   li/1: li(%s)
   ¬li/1: ¬li(%s)
   pii/1: pii(%s)
@@ -26,6 +28,7 @@ language:
   partOf/2: partOf(%s,%s)
   qualifier/2: qualifier(%s,%s)
   resultScope/2: resultScope(%s,%s)
+  smallerOrEqualScope/2: smallerOrEqualScope(%s,%s)
   scope/2: scope(%s,%s)
   sourceScope/2: sourceScope(%s,%s)
   useScope/2: useScope(%s,%s)
@@ -72,7 +75,7 @@ argument_schemes:
       - partOf(X,Y)
       - partOf(Y,Z)
     conclusions:
-      - partOf(X,Z)
+     - partOf(X,Z)
 
   # Data Qualifier Rules
 
@@ -86,7 +89,7 @@ argument_schemes:
   qualifier2:
     variables: [S]
     premises:
-      - qualifier(S,unqualified)
+      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy
     conclusions:
       - qualifier(S,unqualified_or_identified)
 
@@ -156,7 +159,7 @@ argument_schemes:
   category5:
     variables: [X,Y]
     conclusions:
-      - kindOf(derived_data_user_profiling,derived_data_user)
+      - kindOf(derived_data_user_interests,derived_data_user)
 
   category6:
     variables: [X,Y]
@@ -206,7 +209,7 @@ argument_schemes:
   category15:
     variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_contact,customer_content)
+      - kindOf(customer_content_address,customer_content)
 
   category16:
     variables: [X,Y]
@@ -251,7 +254,7 @@ argument_schemes:
   category24:
     variables: [X,Y]
     conclusions:
-      - kindOf(provider_data_authentication,provider_data)  
+      - kindOf(provider_data_authentication,provider_data)  # To Do: Not in taxonomy
 
   category25:
     variables: [X,Y]
@@ -323,13 +326,12 @@ argument_schemes:
     conclusions:
       - kindOf(promote_personalization,promote)        
 
- # removed from standard
- # action10:
- #   variables: [X,Y]
- #   conclusions:
- #     - kindOf(share_partners,share)
-
   action10:
+    variables: [X,Y]
+    conclusions:
+      - kindOf(share_partners,share)
+
+  action11:
     variables: [X,Y]
     conclusions:
       - kindOf(share_provide,share)            
@@ -379,7 +381,7 @@ argument_schemes:
   pii2:
     variables: [S]
     premises:
-      - dataQualifier(S,pseudonymized_data)
+      - dataQualifier(S,linked_data)
     conclusions:
       - pii(S)
     exceptions:
@@ -412,7 +414,7 @@ argument_schemes:
       constant: 0.6
     variables: [S]
     premises:
-      - dataQualifier(S,pseudonymized_data)
+      - dataQualifier(S,linked_data)
       - dataCategory(S,derived_data_organization)
     conclusions:
       - ¬pii(S)
@@ -422,7 +424,7 @@ argument_schemes:
       constant: 0.6
     variables: [S]
     premises:
-      - dataQualifier(S,pseudonymized_data)
+      - dataQualifier(S,linked_data)
       - dataCategory(S,access_and_authentication_data)  # ToDo: not yet in the taxonomy file!
     conclusions:
       - ¬pii(S)
@@ -481,14 +483,6 @@ argument_schemes:
     variables: [S]
     conclusions:
       - li(S)
-
-  # li1:
-  #   variables: [S]
-  #   premises:
-  #     - action(S,provide)
-  #     - resultScope(S,capability) 
-  #   conclusions:
-  #     - li(S)
 
   li1:
     variables: [S,C]
@@ -603,6 +597,85 @@ argument_schemes:
     conclusions:
       - li(S)
 
+
+  # equivalentScope Rules
+
+  equivalentScope0:
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,S)
+      - resultScope(S2,S)
+    conclusions:
+      - equivalentScope(S1,S2)
+
+  equivalentScope1:
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,capability)
+      - resultScope(S2,service)
+    conclusions:
+      - equivalentScope(S1,S2)
+      
+  equivalentScope2:
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,services_agreement)
+      - resultScope(S2,csp_services)
+    conclusions:
+      - equivalentScope(S1,S2)
+      
+  equivalentScope3:
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,third_party_partners) # ToDo: not in taxonomy
+      - resultScope(S2,third_party_services) # ToDo: rename in taxonomy (orig: third_party)
+    conclusions:
+      - equivalentScope(S1,S2)
+
+  equivalentScope3:
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,third_party_services) 
+      - resultScope(S2,third_party_partners) 
+    conclusions:
+      - equivalentScope(S1,S2)
+
+  # smallerOrEqualScope Rules
+
+  smallerOrEqualScope1:   # identity
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,C) 
+      - resultScope(S2,C)
+    conclusions:
+      - smallerOrEqualScope(S1,S2)
+
+  smallerOrEqualScope2:  # transitivity
+    variables: [S1,S2,S3]
+    premises:
+      - smallerOrEqualScope(S1,S2) 
+      - smallerOrEqualScope(S2,S3)
+    conclusions:
+      - smallerOrEqualScope(S1,S3)
+
+  smallerOrEqualScope3:
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,P1)
+      - resultScope(S2,P2)
+      - lesserScope(P1,P2)
+    conclusions:
+      - smallerOrEqualScope(S1,S2)
+
+  # lesserScope Rules
+
+  lesserScope1:
+    conclusions:
+      - lesserScope(capability,service)
+      - lesserScope(service,services_agreement)
+      - lesserScope(services_agreement,csp_services)
+      - lesserScope(csp_services,csp_products)
+
   # compatiblePurpose Rules
 
   compatiblePurpose0:
@@ -617,11 +690,76 @@ argument_schemes:
   compatiblePurpose1:
     variables: [S1,S2]
     premises:
-      - resultScope(S2,capability)
-      - resultScope(S1,cabability)
+      - action(S1,A)
+      - action(S2,A)
+      - equivalentScope(S1,S2)
     conclusions:
       - compatiblePurpose(S1,S2)
 
+  compatiblePurpose2:
+    variables: [S1,S2]
+    premises:
+      - action(S1,provide)
+      - action(S2,improve)
+      - smallerOrEqualScope(S2,csp_products)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  compatiblePurpose3:
+    variables: [S1,S2]
+    premises:
+      - action(S1,provide)
+      - action(S2,upgrades)
+      - equivalentScope(S1,S2)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  compatiblePurpose4:
+    variables: [S1,S2]
+    premises:
+      - action(S1,provide)
+      - action(S2,market_advertise_promote)
+      - equivalentScope(S1,S2)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  compatiblePurpose5:
+    variables: [S1,S2]
+    premises:
+      - action(S1,improve)
+      - action(S2,improve)
+      - smallerOrEqualScope(S2,csp_products)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  compatiblePurpose6:
+    variables: [S1,S2]
+    premises:
+      - action(S1,personalize)
+      - action(S2,personalize)
+      - smallerOrEqualScope(S2,services_agreement)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  compatiblePurpose7:
+    variables: [S1,S2]
+    premises:
+      - action(S1,personalize)
+      - action(S2,market_advertise_promote)
+      - smallerOrEqualScope(S2,services_agreement)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  compatiblePurpose8:
+    variables: [S1,S2]
+    premises:
+      - action(S1,upgrades)
+      - action(S2,upgrades)
+      - smallerOrEqualScope(S2,services_agreement)
+    conclusions:
+      - compatiblePurpose(S1,S2)   
+            
+      
   # consentRequired Rules
 
   consentRequired1:
@@ -632,7 +770,7 @@ argument_schemes:
       - ¬consentRequired(S)
 
   consentRequired2:
-    variables: [DUS,Action,UseScope]
+    variables: [S]
     premises:
       - pii(S)
       - ¬li(S)
@@ -640,11 +778,31 @@ argument_schemes:
       - consentRequired(S)
 
   consentRequired4:
+    variables: [S]
+    premises:
+      - pii(S)
+      - li(S)
+    conclusions:
+      - ¬consentRequired(S)
+
+  # Note that consentRequired4 and consentRequired5 can lead
+  # to rebuttals (arguments pro and con)
+  
+  consentRequired4:
     variables: [S1,S2]
     premises:
       - pii(S1)
-      - li(S1)
+      - ¬consentRequired(S2)
       - compatiblePurpose(S1,S2)
     conclusions:
       - ¬consentRequired(S1)
+  
+  consentRequired5:
+    variables: [S1,S2]
+    premises:
+      - pii(S1)
+      - consentRequired(S2)
+      - compatiblePurpose(S1,S2)
+    conclusions:
+      - consentRequired(S1)
 
