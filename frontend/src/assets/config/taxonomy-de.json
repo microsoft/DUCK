@@ -32,7 +32,7 @@
     },
     {
       "value": "Producte und Services Dritter",
-      "code": "third_party",
+      "code": "third_party_services",
       "category": "6",
       "fixed": false
     },    
