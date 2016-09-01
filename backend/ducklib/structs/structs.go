@@ -18,15 +18,15 @@ type DBConf struct {
 }
 
 type User struct {
-	ID            string     `json:"id"`
-	Email         string     `json:"email"`
-	Password      string     `json:"password"`
-	Firstname     string     `json:"firstname"`
-	Lastname      string     `json:"lastname"`
-	Locale        string     `json:"locale"`
-	AssumptionSet string     `json:"assumptionSet"`
-	Revision      string     `json:"revision"`
-	Dictionary    Dictionary `json:"dictionary"`
+	ID            string `json:"id"`
+	Email         string `json:"email"`
+	Password      string `json:"password"`
+	Firstname     string `json:"firstname"`
+	Lastname      string `json:"lastname"`
+	Locale        string `json:"locale"`
+	AssumptionSet string `json:"assumptionSet"`
+	Revision      string `json:"revision"`
+
 	//Documents []string `json:"documents"`
 }
 
@@ -93,13 +93,13 @@ type Rulebase struct {
 
 //can this be a map?
 type Taxonomy struct {
-	Scope        []struct {
+	Scope []struct {
 		Value    string `json:"value"`
 		Code     string `json:"code"`
 		Category string `json:"category"`
 		Fixed    bool   `json:"fixed"`
 	} `json:"scope"`
-	Qualifier    []struct {
+	Qualifier []struct {
 		Value    string `json:"value"`
 		Code     string `json:"code"`
 		Category string `json:"category"`
@@ -111,23 +111,13 @@ type Taxonomy struct {
 		Category string `json:"category"`
 		Fixed    bool   `json:"fixed"`
 	} `json:"dataCategory"`
-	Action       []struct {
+	Action []struct {
 		Value    string `json:"value"`
 		Code     string `json:"code"`
 		Category string `json:"category"`
 		Fixed    bool   `json:"fixed"`
 	} `json:"action"`
 }
-
-type DictionaryEntry struct {
-	Value          string
-	Type           string
-	Code           string
-	Category       string
-	DictionaryType string
-}
-
-type Dictionary []DictionaryEntry
 
 type httpError struct {
 	error
