@@ -68,3 +68,46 @@ func testNoFile(t *testing.T) {
 	}
 
 }
+func testWrongFile(t *testing.T) {
+	c := NewConfiguration(wrongPath)
+
+	//should be default
+	if c.DBConfig != nil {
+		t.Errorf("Configuration with no File: Database Object should be nil, is %+v", c.DBConfig)
+	}
+
+}
+
+func testEnvGopath(t *testing.T) {
+	c := NewConfiguration(correctPath)
+
+	type teststruct struct {
+		envar  string
+		setval string
+		hasval string
+	}
+	//TestTable: map[EnvVar_description] [envar, setval, hasval]
+	testtable := map[string]teststruct{
+		"DUCK_JWTKEY":      {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
+		"DUCK_WEBDIR":      {envar: "DUCK_WEBDIR", setval: "abcde", hasval: "abcde"},
+		"DUCK_RULEBASEDIR": {envar: "DUCK_RULEBASEDIR", setval: "abcde", hasval: "abcde"},
+		"location":         {envar: "DUCK_DATABASE.LOCATION", setval: "abcde", hasval: "abcde"},
+		"port":             {envar: "DUCK_DATABASE.PORT", setval: "1234", hasval: "1234"},
+		"port_wrong":       {envar: "DUCK_DATABASE.PORT", setval: "abcde", hasval: "5984"},
+		"name":             {envar: "DUCK_DATABASE.NAME", setval: "abcde", hasval: "abcde"},
+		"username":         {envar: "DUCK_DATABASE.USERNAME", setval: "abcde", hasval: "abcde"},
+		"Password":         {envar: "DUCK_DATABASE.PASSWORD", setval: "abcde", hasval: "abcde"},
+		"9":                {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
+		"11":               {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
+		"12":               {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
+		"14":               {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
+	}
+	for key, val := range testtable {
+		t.Errorf("%s%s", key, val)
+	}
+	//should be default
+	if c.DBConfig != nil {
+		t.Errorf("Configuration with no File: Database Object should be nil, is %+v", c.DBConfig)
+	}
+
+}

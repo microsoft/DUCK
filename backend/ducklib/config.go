@@ -11,6 +11,16 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
+var cfg structs.Configuration
+
+func init() {
+	flag.StringVar(&cfg.WebDir, "webdir", "", "The root directory for serving web content")
+	flag.StringVar(&cfg.JwtKey, "jwtkey", "", "The secret used to sign the JWT")
+	flag.StringVar(&cfg.RulebaseDir, "rulebasedir", "", "The Directory to the Rulebases")
+	flag.BoolVar(&cfg.Gopathrelative, "gopathrelative", true, "Defines if webdir and rulebasedir are relative to the GOPATH")
+	flag.BoolVar(&cfg.Loadtestdata, "loadtestdata", false, "If this is true, testdata will be loaded into the database")
+	flag.Parse()
+}
 func NewConfiguration(confpath string) structs.Configuration {
 
 	c := structs.Configuration{}
@@ -38,13 +48,23 @@ func NewConfiguration(confpath string) structs.Configuration {
 
 func getFlags(config *structs.Configuration) {
 
-	flag.StringVar(&config.WebDir, "webdir", config.WebDir, "The root directory for serving web content")
-	flag.StringVar(&config.JwtKey, "jwtkey", config.JwtKey, "The secret used to sign the JWT")
-	flag.StringVar(&config.RulebaseDir, "rulebasedir", config.RulebaseDir, "The Directory to the Rulebases")
-	flag.BoolVar(&config.Gopathrelative, "gopathrelative", config.Gopathrelative, "Defines if webdir and rulebasedir are relative to the GOPATH")
-	flag.BoolVar(&config.Loadtestdata, "loadtestdata", config.Loadtestdata, "If this is true, testdata will be loaded into the database")
+	if cfg.JwtKey != "" {
+		config.JwtKey = cfg.WebDir
+	}
+	if cfg.WebDir != "" {
+		config.WebDir = cfg.WebDir
+	}
+	if cfg.RulebaseDir != "" {
+		config.RulebaseDir = cfg.WebDir
+	}
 
-	flag.Parse()
+	if cfg.Gopathrelative != true {
+		config.Gopathrelative = cfg.Gopathrelative
+	}
+
+	if cfg.Loadtestdata != false {
+		config.Loadtestdata = cfg.Loadtestdata
+	}
 
 }
 func getFileConfig(config *structs.Configuration, confpath string) error {

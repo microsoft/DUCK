@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -48,6 +47,7 @@ var (
 	//documents owners and # of documents they own
 	owners = make(map[string]int)
 )
+
 //Move this into main.go
 func TestMain(m *testing.M) {
 
@@ -793,7 +793,6 @@ func testCopyDocHandler(t *testing.T) {
 				}
 				//add to documents
 				copys = append(copys, res)
-				log.Printf("%+v", res)
 
 			}
 
