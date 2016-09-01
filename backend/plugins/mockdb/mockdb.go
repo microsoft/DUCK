@@ -15,7 +15,13 @@ type Mock struct {
 }
 
 //Init initializes the Mock
+// throws error if name equals INVALIDDBNAME
 func (m *Mock) Init(dbconf structs.DBConf) error {
+
+	if dbconf.Name == "INVALIDDBNAME" {
+		return errors.New("Error initializing MockDB: Invalid Database Name")
+	}
+
 	m.User = make(map[string]structs.User)
 	m.DataUseDocuments = make(map[string]structs.Document)
 	_, ok := pluginregistry.DatabasePlugin.(*Mock)

@@ -3,6 +3,7 @@ package ducklib
 import (
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
 )
 
@@ -43,6 +44,8 @@ func TestConfig(t *testing.T) {
 
 	//t.Error("AHHHHHH")
 	t.Run("File=1", testNoFile)
+	t.Run("File=2", testWrongFile)
+	t.Run("Env=1", testEnvGopath)
 
 	//set env to prior values
 	os.Setenv("DUCK_DATABASE.LOCATION", dbLocation)
@@ -79,35 +82,84 @@ func testWrongFile(t *testing.T) {
 }
 
 func testEnvGopath(t *testing.T) {
-	c := NewConfiguration(correctPath)
 
 	type teststruct struct {
-		envar  string
-		setval string
-		hasval string
+		envar   string
+		setval  string
+		wantval string
 	}
 	//TestTable: map[EnvVar_description] [envar, setval, hasval]
 	testtable := map[string]teststruct{
-		"DUCK_JWTKEY":      {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
-		"DUCK_WEBDIR":      {envar: "DUCK_WEBDIR", setval: "abcde", hasval: "abcde"},
-		"DUCK_RULEBASEDIR": {envar: "DUCK_RULEBASEDIR", setval: "abcde", hasval: "abcde"},
-		"location":         {envar: "DUCK_DATABASE.LOCATION", setval: "abcde", hasval: "abcde"},
-		"port":             {envar: "DUCK_DATABASE.PORT", setval: "1234", hasval: "1234"},
-		"port_wrong":       {envar: "DUCK_DATABASE.PORT", setval: "abcde", hasval: "5984"},
-		"name":             {envar: "DUCK_DATABASE.NAME", setval: "abcde", hasval: "abcde"},
-		"username":         {envar: "DUCK_DATABASE.USERNAME", setval: "abcde", hasval: "abcde"},
-		"Password":         {envar: "DUCK_DATABASE.PASSWORD", setval: "abcde", hasval: "abcde"},
-		"9":                {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
-		"11":               {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
-		"12":               {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
-		"14":               {envar: "DUCK_JWTKEY", setval: "abcde", hasval: "abcde"},
+		"DUCK_JWTKEY":      {envar: "DUCK_JWTKEY", setval: "abcde", wantval: "abcde"},
+		"DUCK_WEBDIR":      {envar: "DUCK_WEBDIR", setval: "abcde", wantval: "abcde"},
+		"DUCK_RULEBASEDIR": {envar: "DUCK_RULEBASEDIR", setval: "abcde", wantval: "abcde"},
+		"location":         {envar: "DUCK_DATABASE.LOCATION", setval: "abcde", wantval: "abcde"},
+		"port":             {envar: "DUCK_DATABASE.PORT", setval: "1234", wantval: "1234"},
+		"port_wrong":       {envar: "DUCK_DATABASE.PORT", setval: "abcde", wantval: "5984"},
+		"name":             {envar: "DUCK_DATABASE.NAME", setval: "abcde", wantval: "abcde"},
+		"username":         {envar: "DUCK_DATABASE.USERNAME", setval: "abcde", wantval: "abcde"},
+		"Password":         {envar: "DUCK_DATABASE.PASSWORD", setval: "abcde", wantval: "abcde"},
+		"GOPATH_1":         {envar: "DUCK_GOPATHRELATIVE", setval: "true", wantval: "true"},
+		"GOPATH_2":         {envar: "DUCK_GOPATHRELATIVE", setval: "FALSE", wantval: "false"},
+		"GOPATH_3":         {envar: "DUCK_GOPATHRELATIVE", setval: "0", wantval: "false"},
+		"GOPATH_4":         {envar: "DUCK_GOPATHRELATIVE", setval: "abcde", wantval: "true"},
+		"GOPATH_5":         {envar: "DUCK_GOPATHRELATIVE", setval: "", wantval: "true"},
+		"LOAD_1":           {envar: "DUCK_LOADTESTDATA", setval: "true", wantval: "true"},
+		"LOAD_2":           {envar: "DUCK_LOADTESTDATA", setval: "FALSE", wantval: "false"},
+		"LOAD_3":           {envar: "DUCK_LOADTESTDATA", setval: "1", wantval: "true"},
+		"LOAD_4":           {envar: "DUCK_LOADTESTDATA", setval: "abcde", wantval: "false"},
 	}
 	for key, val := range testtable {
-		t.Errorf("%s%s", key, val)
-	}
-	//should be default
-	if c.DBConfig != nil {
-		t.Errorf("Configuration with no File: Database Object should be nil, is %+v", c.DBConfig)
+
+		os.Setenv(val.envar, val.setval)
+
+		c := NewConfiguration(correctPath)
+
+		switch val.envar {
+		case "DUCK_JWTKEY":
+			if c.JwtKey != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s.  Wanted %s, got %s", key, val.wantval, c.JwtKey)
+			}
+		case "DUCK_WEBDIR":
+			if c.WebDir != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.WebDir)
+			}
+		case "DUCK_RULEBASEDIR":
+			if c.RulebaseDir != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.RulebaseDir)
+			}
+		case "DUCK_GOPATHRELATIVE":
+			if strconv.FormatBool(c.Gopathrelative) != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %t", key, val.wantval, c.Gopathrelative)
+			}
+		case "DUCK_LOADTESTDATA":
+			if strconv.FormatBool(c.Loadtestdata) != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %t", key, val.wantval, c.Loadtestdata)
+			}
+		case "DUCK_DATABASE.LOCATION":
+			if c.DBConfig.Location != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.DBConfig.Location)
+			}
+		case "DUCK_DATABASE.PORT":
+			if strconv.Itoa(c.DBConfig.Port) != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %d", key, val.wantval, c.DBConfig.Port)
+			}
+		case "DUCK_DATABASE.NAME":
+			if c.DBConfig.Name != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.DBConfig.Name)
+			}
+		case "DUCK_DATABASE.USERNAME":
+			if c.DBConfig.Username != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.DBConfig.Username)
+			}
+		case "DUCK_DATABASE.PASSWORD":
+			if c.DBConfig.Password != val.wantval {
+				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.DBConfig.Password)
+			}
+		}
+
+		os.Setenv(val.envar, "")
+
 	}
 
 }
