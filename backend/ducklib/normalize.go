@@ -1,5 +1,6 @@
 package ducklib
 
+/*
 import (
 	"encoding/json"
 	"fmt"
@@ -131,3 +132,4 @@ func (n *Normalizer) DenormalizeVariants() []structs.Document {
 
 	return nil
 }
+*/
