@@ -8,6 +8,7 @@ type Document struct {
 	Locale        string      `json:"locale"`
 	AssumptionSet string      `json:"assumptionSet"`
 	Statements    []Statement `json:"statements"`
+	Dictionary    Dictionary  `json:"dictionary"`
 }
 
 type Statement struct {
@@ -88,3 +89,13 @@ func getFieldBooleanValue(mp map[string]interface{}, field string) bool {
 	}
 	return false
 }
+
+type DictionaryEntry struct {
+	Value          string
+	Type           string
+	Code           string
+	Category       string
+	DictionaryType string
+}
+
+type Dictionary []DictionaryEntry
