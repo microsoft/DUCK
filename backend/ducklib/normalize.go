@@ -13,19 +13,19 @@ import (
 // Normalizer ...
 type Normalizer struct {
 	original   structs.Document
-	normalized NormalizedDocument
+	normalized *NormalizedDocument
 	taxonomy   structs.Taxonomy
 
 	//database     *Database
 	//categoryDict map[string]map[string]*structs.DictionaryEntry
 	//codeDict     map[string]map[string]*structs.DictionaryEntry
 	//  [azure]-> DictionaryEntry
-	codeDict map[string]*structs.DictionaryEntry
+	GlobalDict *structs.Dictionary
 }
 
 type NormalizedDocument struct {
 	structs.Document
-	Parts map[string]string
+	Parts map[string][]string
 }
 
 /*
@@ -43,22 +43,22 @@ func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
 	//norm := Normalizer{original: doc, database: db}
 	norm := Normalizer{original: doc}
 	// set dictionary
+	/*
+		for _, entry := range doc.Dictionary {
+			// for better searchability save pointer to dict entry in map
+			// entries in categoryDict are ordered by Type (e.g. "scope" or "action" etc)
+			// and category (e.g. 2).
+			// entries in codeDict are ordered by Type (e.g. "scope" or "action" etc)
+			// and code (e.g. "account_data" or "linked_data" etc.).
+			//norm.categoryDict[entry.Type][entry.Value] = &entry
+			//norm.codeDict[entry.Type][entry.Code] = &entry
 
-	for _, entry := range doc.Dictionary {
-		// for better searchability save pointer to dict entry in map
-		// entries in categoryDict are ordered by Type (e.g. "scope" or "action" etc)
-		// and category (e.g. 2).
-		// entries in codeDict are ordered by Type (e.g. "scope" or "action" etc)
-		// and code (e.g. "account_data" or "linked_data" etc.).
-		//norm.categoryDict[entry.Type][entry.Value] = &entry
-		//norm.codeDict[entry.Type][entry.Code] = &entry
+			//[microsoft_azure]-> {DictionaryEntry}
+			norm.codeDict[entry.Code] = &entry
 
-		//[microsoft_azure]-> {DictionaryEntry}
-		norm.codeDict[entry.Code] = &entry
-
-	}
+		}*/
 	//DictionaryEntry for MIcrosoft Azure
-	//("Microsoft Azure", {
+	//("microsoft_azure", {
 	//	value : "Microsoft Azure",
 	//	type : "scope",
 	//	code : "microsoft_azure",
@@ -84,28 +84,49 @@ func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
 }
 
 //Normalize normalizes a Document for further validation
-func (n *Normalizer) Normalize() *NormalizedDocument {
+func (n *Normalizer) CreateDict() *NormalizedDocument {
+	n.normalized = new(NormalizedDocument)
+
 	n.normalized.Statements = n.original.Statements
 
+	//make sure we have every part only once for each code
+	parts := make(map[string]map[string]struct{})
 	for _, statement := range n.original.Statements {
-		normStmt := structs.Statement{}
-		normStmt.ActionCode = n.getCode("action", statement.ActionCode)
-		normStmt.DataCategoryCode = n.getCode("dataCategory", statement.DataCategoryCode)
-		normStmt.Passive = statement.Passive
-		normStmt.QualifierCode = n.getCode("qualifier", statement.QualifierCode)
-		normStmt.ResultScopeCode = n.getCode("scope", statement.ResultScopeCode)
-		normStmt.SourceScopeCode = n.getCode("scope", statement.SourceScopeCode)
-		normStmt.TrackingID = statement.TrackingID
-		normStmt.UseScopeCode = n.getCode("scope", statement.UseScopeCode)
-		n.normalized.Statements = append(n.normalized.Statements, normStmt)
+
+		if returnCode := n.getCode("action", statement.ActionCode); returnCode != "" {
+			parts[statement.ActionCode][returnCode] = struct{}{}
+		}
+		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {
+			parts[statement.QualifierCode][returnCode] = struct{}{}
+		}
+		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
+			parts[statement.DataCategoryCode][returnCode] = struct{}{}
+		}
+		if returnCode := n.getCode("scope", statement.UseScopeCode); returnCode != "" {
+			parts[statement.UseScopeCode][returnCode] = struct{}{}
+		}
+		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
+			parts[statement.ResultScopeCode][returnCode] = struct{}{}
+		}
+		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
+			parts[statement.SourceScopeCode][returnCode] = struct{}{}
+		}
+
 	}
+	//put codes into list
+	for key, value := range parts {
+		for code := range value {
+			n.normalized.Parts[key] = append(n.normalized.Parts[key], code)
+		}
+	}
+
 	n.normalized.ID = n.original.ID
 	n.normalized.Locale = n.original.Locale
 	n.normalized.Name = n.original.Name
 	n.normalized.Owner = n.original.Owner
 	n.normalized.Revision = n.original.Revision
 
-	return &n.normalized
+	return n.normalized
 }
 
 // get Code from taxonomy. For this a dictionary entry is retrieved from the codeDict
@@ -114,14 +135,14 @@ func (n *Normalizer) Normalize() *NormalizedDocument {
 //taxonomy is then returned if one is found
 func (n *Normalizer) getCode(Type string, Code string) string {
 
-	dict, prs := n.codeDict[Code]
+	dict, prs := n.original.Dictionary[Code]
 	if !prs {
-		return Code
+		return ""
 	}
 
 	tax, prs := n.taxonomy[Type]
 	if !prs {
-		return Code
+		return ""
 	}
 
 	for _, typ := range tax {
@@ -129,7 +150,7 @@ func (n *Normalizer) getCode(Type string, Code string) string {
 			return typ.Code
 		}
 	}
-	return Code
+	return ""
 
 }
 
