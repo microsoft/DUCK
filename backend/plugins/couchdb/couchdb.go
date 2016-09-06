@@ -133,6 +133,21 @@ func (cb *Couchbase) GetLogin(email string) (id string, pw string, err error) {
 
 }
 
+//GetUserDict returs the Global Dictionary of the specified user
+func (cb *Couchbase) GetUserDict(id string) (structs.Dictionary, error) {
+
+	mp, err := cb.getCouchbaseDocument(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var u structs.User
+	u.FromValueMap(mp)
+	//fmt.Printf("%+v\n", mp)
+	return u.GlobalDictionary, err
+
+}
+
 //GetUser returns a User with the sppecified ID from the Couchbase Database
 func (cb *Couchbase) GetUser(id string) (structs.User, error) {
 
@@ -318,6 +333,19 @@ func (cb *Couchbase) NewRulebase(id string, entry string) error {
 	return cb.putEntry(id, entry, "rulebase")
 }*/
 
+//UpdateUserDict updates an existing UserDict in the Couchbase database
+func (cb *Couchbase) UpdateUserDict(dict structs.Dictionary, userID string) error {
+	user, err := cb.GetUser(userID)
+	if err != nil {
+		return err
+	}
+
+	user.GlobalDictionary = dict
+
+	fmt.Printf("%+v", user)
+	return cb.putUser(user)
+}
+
 //UpdateUser replaces an existing User in the Couchbase database
 func (cb *Couchbase) UpdateUser(user structs.User) error {
 	return cb.putUser(user)
@@ -341,9 +369,22 @@ func (cb *Couchbase) putUser(u structs.User) error {
 	if u.Revision != "" {
 		entryMap["_rev"] = u.Revision
 	}
+	dict := make(map[string]map[string]string)
+	for key, val := range u.GlobalDictionary {
+		dc := make(map[string]string)
+		dc["value"] = val.Value
+		dc["type"] = val.Type
+		dc["code"] = val.Code
+		dc["category"] = val.Category
+		dc["dictionaryType"] = val.DictionaryType
+
+		dict[key] = dc
+	}
+	entryMap["dictionary"] = dict
 	return cb.putEntry(entryMap, false)
 
 }
+
 func (cb *Couchbase) putDocument(d structs.Document) error {
 	entryMap := make(map[string]interface{})
 	entryMap["type"] = "document"

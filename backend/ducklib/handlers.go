@@ -254,6 +254,48 @@ func postUserHandler(c echo.Context) error {
 	return c.JSON(http.StatusCreated, u)
 }
 
+func getUserDictHandler(c echo.Context) error {
+	dict, err := datab.GetUserDict(c.Param("id"))
+	if err != nil {
+		log.Printf("Error in getUserDictHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, dict)
+}
+
+func putUserDictHandler(c echo.Context) error {
+
+	d := new(structs.Dictionary)
+	if err := c.Bind(d); err != nil {
+		log.Printf("Error in putUserDictHandler while trying to bind new dictionary to struct: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	id := c.Param("id")
+
+	err := datab.PutUserDict(*d, id)
+	if err != nil {
+		log.Printf("Error in putUserDictHandler while trying to update user dictionary in database: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	nd, err := datab.GetUserDict(id)
+	if err != nil {
+		log.Printf("Error in putUserDictHandler while trying to get updated user dictionary: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, nd)
+}
+
 /*
 Rulebase handlers
 */

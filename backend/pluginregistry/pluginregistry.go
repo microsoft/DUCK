@@ -12,6 +12,9 @@ type DBPlugin interface {
 	NewUser(user structs.User) error
 	UpdateUser(user structs.User) error
 
+	GetUserDict(id string) (structs.Dictionary, error)
+	UpdateUserDict(dict structs.Dictionary, userID string) error
+
 	GetDocumentSummariesForUser(userid string) ([]structs.Document, error)
 
 	GetDocument(id string) (structs.Document, error)

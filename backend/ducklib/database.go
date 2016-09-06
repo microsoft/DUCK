@@ -131,6 +131,17 @@ func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	return "", errors.New("User already exists")
 }
 
+func (database *Database) GetUserDict(userid string) (structs.Dictionary, error) {
+
+	return db.GetUserDict(userid)
+
+}
+func (database *Database) PutUserDict(dict structs.Dictionary, userID string) error {
+
+	return db.UpdateUserDict(dict, userID)
+
+}
+
 /*
 Document DB operations
 
