@@ -127,10 +127,10 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 	}
 	// End Debugging
 
-	// return true iff the ¬docConsentRequired statement is in
-	s, ok := ag.Statements["¬docConsentRequired"]
+	// return true iff the notDocConsentRequired statement is in
+	s, ok := ag.Statements["notDocConsentRequired"]
 	if !ok {
-		return false, errors.New("¬docConsentRequired is not a statement in the argument graph.")
+		return false, errors.New("notDocConsentRequired is not a statement in the argument graph.")
 	}
 	return s.Label == caes.In, nil
 }
