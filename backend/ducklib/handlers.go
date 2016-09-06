@@ -258,63 +258,6 @@ func postUserHandler(c echo.Context) error {
 Rulebase handlers
 */
 
-//DB Rulebasehandlers are not used
-/*
-func deleteRsHandler(c echo.Context) error {
-	err := datab.DeleteRulebase(c.Param("id"))
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
-	}
-
-	return c.JSON(http.StatusOK, Response{Ok: true})
-}
-
-func putRsHandler(c echo.Context) error {
-
-	resp, err := ioutil.ReadAll(c.Request().Body())
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
-	}
-	id := c.Param("id")
-	err = datab.PutRulebase(id, resp)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
-	}
-
-	doc, err := datab.GetRulebase(id)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
-	}
-
-	return c.JSON(http.StatusOK, doc)
-}
-
-func postRsHandler(c echo.Context) error {
-
-	req, err := ioutil.ReadAll(c.Request().Body())
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
-	}
-
-	id, err := datab.PostRulebase(req)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
-	}
-	doc, err := datab.GetRulebase(id)
-	if err != nil {
-		e := err.Error()
-		return c.JSON(http.StatusNotFound, Response{Ok: false, Reason: &e})
-	}
-
-	return c.JSON(http.StatusOK, doc)
-}
-*/
 func checkDocHandler(c echo.Context) error {
 	/*
 		resp, err := ioutil.ReadAll(c.Request().Body())
@@ -336,7 +279,8 @@ func checkDocHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	ok, docs, err := checker.CompliantDocuments(id, doc, 10, 0)
+	ok, err := checker.IsCompliant(id, doc)
+
 	//log.Printf("DOCS: %+v", docs)
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
@@ -351,7 +295,7 @@ func checkDocHandler(c echo.Context) error {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
 	}
 
-	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT", Documents: docs})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
 }
 
 func checkDocIDHandler(c echo.Context) error {
@@ -367,7 +311,7 @@ func checkDocIDHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	ok, docs, err := checker.CompliantDocuments(id, &doc, 10, 0)
+	ok, err := checker.IsCompliant(id, &doc)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while checking for compliance: %s", err)
 		e := err.Error()
@@ -379,7 +323,7 @@ func checkDocIDHandler(c echo.Context) error {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
 	}
 
-	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT", Documents: docs})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
 
 }
 func getRulebasesHandler(c echo.Context) error {
