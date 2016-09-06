@@ -1,8 +1,8 @@
 meta:
   title: DUCK Rulebase
   description:
-  version: 0.51
-  id: 123   # hack, until the user can select the rulebase with the user interface.
+  version: 0.4
+  id: 2
 
 language:
   action/2: action(%s,%s)
@@ -11,15 +11,13 @@ language:
   consentRequired/1: consentRequired(%s)
   dataCategory/2: dataCategory(%s,%s)
   dataUseStatement/1: dataUseStatement(%s)
-  docConsentRequired: docConsentRequired
-  ¬docConsentRequired: ¬docConsentRequired
+  docConsentRequired/0: docConsentRequired
+  ¬docConsentRequired/0: ¬docConsentRequired
   duplicate/2: duplicate(%s,%s)
-  equivalentScope/2: equivalentScope(%s,%s)
   extendsScope/2: extendsScope(%s,%s)
   greaterScope/2: greaterScope(%s,%s)
   id/2: id(%s,%s)
   kindOf/2: kindOf(%s,%s)
-  lesserScope/2: lesserScope(%s,%s)
   li/1: li(%s)
   ¬li/1: ¬li(%s)
   pii/1: pii(%s)
@@ -28,7 +26,6 @@ language:
   partOf/2: partOf(%s,%s)
   qualifier/2: qualifier(%s,%s)
   resultScope/2: resultScope(%s,%s)
-  smallerOrEqualScope/2: smallerOrEqualScope(%s,%s)
   scope/2: scope(%s,%s)
   sourceScope/2: sourceScope(%s,%s)
   useScope/2: useScope(%s,%s)
@@ -75,7 +72,7 @@ argument_schemes:
       - partOf(X,Y)
       - partOf(Y,Z)
     conclusions:
-     - partOf(X,Z)
+      - partOf(X,Z)
 
   # Data Qualifier Rules
 
@@ -89,7 +86,7 @@ argument_schemes:
   qualifier2:
     variables: [S]
     premises:
-      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy
+      - qualifier(S,unqualified)
     conclusions:
       - qualifier(S,unqualified_or_identified)
 
@@ -137,110 +134,137 @@ argument_schemes:
       - dataCategory(S,Y)
       
   category1:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_telemetry,derived_data_user)
 
   category2:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_connectivity,derived_data_user)
 
   category3:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_usage,derived_data_user)
 
   category4:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_demographic,derived_data_user)
 
   category5:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_profiling,derived_data_user)
 
   category6:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_content,derived_data_user)
 
   category7:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_browsing,derived_data_user)
 
   category8:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_search,derived_data_user)
 
   category9:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_location,derived_data_user)
 
   category10:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_social,derived_data_user)
 
   category11:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_biometric,derived_data_user)
 
   category12:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_contact,derived_data_user)
 
   category13:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_environmental,derived_data_user)
 
   category14:
+    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_credentials,customer_content)
 
   category15:
+    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_contact,customer_content)
 
   category16:
+    variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_health,customer_content)  
+      - kindOf(customer_content_health,customer_content)  # To Do: Not in taxonomy
 
   category17:
+    variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_genetic,customer_content) 
+      - kindOf(customer_content_genetic,customer_content) # To Do: Not in taxonomy
 
   category18:
+    variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_biometric,customer_content) 
+      - kindOf(customer_content_biometric,customer_content) # To Do: Not in taxonomy
 
   category19:
+    variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_children,customer_content) 
+      - kindOf(customer_content_children,customer_content) # To Do: Not in taxonomy
 
   category20:
+    variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_opinions,customer_content) 
+      - kindOf(customer_content_opinions,customer_content) # To Do: Not in taxonomy
 
   category21:
+    variables: [X,Y]
     conclusions:
-      - kindOf(customer_content_financial,customer_content) 
+      - kindOf(customer_content_financial,customer_content) # To Do: Not in taxonomy
 
   category22:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user,derived_data)
 
   category23:
+    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_organization,derived_data)
 
   category24:
+    variables: [X,Y]
     conclusions:
       - kindOf(provider_data_authentication,provider_data)  
 
   category25:
+    variables: [X,Y]
     conclusions:
-      - kindOf(provider_data_operations,provider_data) 
+      - kindOf(provider_data_operations,provider_data) # To Do: Not in taxonomy
 
   category26:
+    variables: [X,Y]
     conclusions:
       - kindOf(account_data_customer,account_data)
 
   category27:
+    variables: [X,Y]
     conclusions:
       - kindOf(account_data_payment,account_data)
 
@@ -255,48 +279,58 @@ argument_schemes:
       - action(S,Y)
       
   action1:
+    variables: [X,Y]
     conclusions:
       - kindOf(market,market_advertise_promote) # To Do: Not in taxonomy
 
   action2:
+    variables: [X,Y]
     conclusions:
       - kindOf(advertise,market_advertise_promote) # To Do: Not in taxonomy
 
   action3:
+    variables: [X,Y]
     conclusions:
       - kindOf(promote,market_advertise_promote) # To Do: Not in taxonomy
 
   action4:
+    variables: [X,Y]
     conclusions:
       - kindOf(market_contextual,market)
 
   action5:
+    variables: [X,Y]
     conclusions:
       - kindOf(market_personalization,market)
 
   action6:
+    variables: [X,Y]
     conclusions:
       - kindOf(advertise_contextual,advertise)
 
   action7:
+    variables: [X,Y]
     conclusions:
       - kindOf(advertise_personalization,advertise)      
 
   action8:
+    variables: [X,Y]
     conclusions:
       - kindOf(promote_contextual,promote)
 
   action9:
+    variables: [X,Y]
     conclusions:
       - kindOf(promote_personalization,promote)        
 
-#
-# Removed from stsndard
-#  action10:
-#    conclusions:
-#      - kindOf(share_partners,share)
+ # removed from standard
+ # action10:
+ #   variables: [X,Y]
+ #   conclusions:
+ #     - kindOf(share_partners,share)
 
   action10:
+    variables: [X,Y]
     conclusions:
       - kindOf(share_provide,share)            
       
@@ -374,6 +408,8 @@ argument_schemes:
       - ¬pii(S)
 
   pii6:
+    weight:
+      constant: 0.6
     variables: [S]
     premises:
       - dataQualifier(S,pseudonymized_data)
@@ -382,14 +418,18 @@ argument_schemes:
       - ¬pii(S)
 
   pii7:
+    weight:
+      constant: 0.6
     variables: [S]
     premises:
       - dataQualifier(S,pseudonymized_data)
-      - dataCategory(S,provider_data_authentication) 
+      - dataCategory(S,access_and_authentication_data)  # ToDo: not yet in the taxonomy file!
     conclusions:
       - ¬pii(S)
 
   pii8:
+    weight:
+      constant: 0.6
     variables: [S]
     premises:
       - dataQualifier(S,unqualified_or_identified)
@@ -398,10 +438,12 @@ argument_schemes:
       - ¬pii(S)
 
   pii9:
+    weight:
+      constant: 0.6
     variables: [S]
     premises:
       - dataQualifier(S,unqualified_or_identified)
-      - dataCategory(S,provider_data_authentication)  
+      - dataCategory(S,access_and_authentication_data)  # ToDo: not yet in the taxonomy file!
     conclusions:
       - ¬pii(S)
 
@@ -425,7 +467,7 @@ argument_schemes:
     variables: [S]
     premises:
       - dataQualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
-      - dataCategory(S,provider_data_authentication) 
+      - dataCategory(S,access_and_authentication_data)  # ToDo: not yet in the taxonomy file!
     conclusions:
       - ¬pii(S)        
 
@@ -440,8 +482,16 @@ argument_schemes:
     conclusions:
       - li(S)
 
+  # li1:
+  #   variables: [S]
+  #   premises:
+  #     - action(S,provide)
+  #     - resultScope(S,capability) 
+  #   conclusions:
+  #     - li(S)
+
   li1:
-    variables: [S]
+    variables: [S,C]
     premises:
       - action(S,provide)
       - resultScope(S,capability)
@@ -553,85 +603,6 @@ argument_schemes:
     conclusions:
       - li(S)
 
-
-  # equivalentScope Rules
-
-  equivalentScope0:
-    variables: [S1,S2]
-    premises:
-      - resultScope(S1,S)
-      - resultScope(S2,S)
-    conclusions:
-      - equivalentScope(S1,S2)
-
-  equivalentScope1:
-    variables: [S1,S2]
-    premises:
-      - resultScope(S1,capability)
-      - resultScope(S2,service)
-    conclusions:
-      - equivalentScope(S1,S2)
-      
-  equivalentScope2:
-    variables: [S1,S2]
-    premises:
-      - resultScope(S1,services_agreement)
-      - resultScope(S2,csp_services)
-    conclusions:
-      - equivalentScope(S1,S2)
-      
-  equivalentScope3:
-    variables: [S1,S2]
-    premises:
-      - resultScope(S1,third_party_partners)
-      - resultScope(S2,third_party_services) 
-    conclusions:
-      - equivalentScope(S1,S2)
-
-  equivalentScope3:
-    variables: [S1,S2]
-    premises:
-      - resultScope(S1,third_party_services) 
-      - resultScope(S2,third_party_partners) 
-    conclusions:
-      - equivalentScope(S1,S2)
-
-  # smallerOrEqualScope Rules
-
-  smallerOrEqualScope1:   # identity
-    variables: [S1,S2,C]
-    premises:
-      - resultScope(S1,C) 
-      - resultScope(S2,C)
-    conclusions:
-      - smallerOrEqualScope(S1,S2)
-
-  smallerOrEqualScope2:  # transitivity
-    variables: [S1,S2,S3]
-    premises:
-      - smallerOrEqualScope(S1,S2) 
-      - smallerOrEqualScope(S2,S3)
-    conclusions:
-      - smallerOrEqualScope(S1,S3)
-
-  smallerOrEqualScope3:
-    variables: [S1,S2,P1,P2]
-    premises:
-      - resultScope(S1,P1)
-      - resultScope(S2,P2)
-      - lesserScope(P1,P2)
-    conclusions:
-      - smallerOrEqualScope(S1,S2)
-
-  # lesserScope Rules
-
-  lesserScope1:
-    conclusions:
-      - lesserScope(capability,service)
-      - lesserScope(service,services_agreement)
-      - lesserScope(services_agreement,csp_services)
-      - lesserScope(csp_services,csp_products)
-
   # compatiblePurpose Rules
 
   compatiblePurpose0:
@@ -640,85 +611,17 @@ argument_schemes:
     weight:
       constant: 0.1 
     variables: [S1,S2]
-    premises:
-      - dataUseStatement(S1)
-      - dataUseStatement(S2)
     conclusions:
       - compatiblePurpose(S1,S2)
 
   compatiblePurpose1:
-    variables: [S1,S2,A]
+    variables: [S1,S2]
     premises:
-      - action(S1,A)
-      - action(S2,A)
-      - equivalentScope(S1,S2)
+      - resultScope(S2,capability)
+      - resultScope(S1,cabability)
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose2:
-    variables: [S1,S2]
-    premises:
-      - action(S1,provide)
-      - action(S2,improve)
-      - smallerOrEqualScope(S2,csp_products)
-    conclusions:
-      - compatiblePurpose(S1,S2)
-
-  compatiblePurpose3:
-    variables: [S1,S2]
-    premises:
-      - action(S1,provide)
-      - action(S2,upgrades)
-      - equivalentScope(S1,S2)
-    conclusions:
-      - compatiblePurpose(S1,S2)
-
-  compatiblePurpose4:
-    variables: [S1,S2]
-    premises:
-      - action(S1,provide)
-      - action(S2,market_advertise_promote)
-      - equivalentScope(S1,S2)
-    conclusions:
-      - compatiblePurpose(S1,S2)
-
-  compatiblePurpose5:
-    variables: [S1,S2]
-    premises:
-      - action(S1,improve)
-      - action(S2,improve)
-      - smallerOrEqualScope(S2,csp_products)
-    conclusions:
-      - compatiblePurpose(S1,S2)
-
-  compatiblePurpose6:
-    variables: [S1,S2]
-    premises:
-      - action(S1,personalize)
-      - action(S2,personalize)
-      - smallerOrEqualScope(S2,services_agreement)
-    conclusions:
-      - compatiblePurpose(S1,S2)
-
-  compatiblePurpose7:
-    variables: [S1,S2]
-    premises:
-      - action(S1,personalize)
-      - action(S2,market_advertise_promote)
-      - smallerOrEqualScope(S2,services_agreement)
-    conclusions:
-      - compatiblePurpose(S1,S2)
-
-  compatiblePurpose8:
-    variables: [S1,S2]
-    premises:
-      - action(S1,upgrades)
-      - action(S2,upgrades)
-      - smallerOrEqualScope(S2,services_agreement)
-    conclusions:
-      - compatiblePurpose(S1,S2)   
-            
-      
   # consentRequired Rules
 
   consentRequired1:
@@ -729,7 +632,7 @@ argument_schemes:
       - ¬consentRequired(S)
 
   consentRequired2:
-    variables: [S]
+    variables: [DUS,Action,UseScope]
     premises:
       - pii(S)
       - ¬li(S)
@@ -737,31 +640,11 @@ argument_schemes:
       - consentRequired(S)
 
   consentRequired4:
-    variables: [S]
-    premises:
-      - pii(S)
-      - li(S)
-    conclusions:
-      - ¬consentRequired(S)
-
-  # Note that consentRequired4 and consentRequired5 can lead
-  # to rebuttals (arguments pro and con)
-  
-  consentRequired4:
     variables: [S1,S2]
     premises:
       - pii(S1)
-      - ¬consentRequired(S2)
+      - li(S1)
       - compatiblePurpose(S1,S2)
     conclusions:
       - ¬consentRequired(S1)
-  
-  consentRequired5:
-    variables: [S1,S2]
-    premises:
-      - pii(S1)
-      - consentRequired(S2)
-      - compatiblePurpose(S1,S2)
-    conclusions:
-      - consentRequired(S1)
 
