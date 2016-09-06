@@ -56,6 +56,11 @@ func (d *Document) FromValueMap(mp map[string]interface{}) {
 		}
 	}
 
+	if dict, prs := mp["dictionary"].(map[string]interface{}); prs {
+		d.Dictionary = make(Dictionary)
+		d.Dictionary.FromInterfaceMap(dict)
+	}
+
 }
 
 func (s *Statement) FromInterfaceMap(mp map[string]interface{}) {
@@ -89,13 +94,3 @@ func getFieldBooleanValue(mp map[string]interface{}, field string) bool {
 	}
 	return false
 }
-
-type DictionaryEntry struct {
-	Value          string
-	Type           string
-	Code           string
-	Category       string
-	DictionaryType string
-}
-
-type Dictionary []DictionaryEntry
