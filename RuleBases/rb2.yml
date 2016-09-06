@@ -7,12 +7,13 @@ meta:
 language:
   action/2: action(%s,%s)
   compatiblePurpose/2: compatiblePurpose(%s,%s)
-  ¬consentRequired/1: ¬consentRequired(%s)
+  notCompatiblePurpse/2: notCompatiblePurpose(%s,%s)
+  notConsentRequired/1: notConsentRequired(%s)
   consentRequired/1: consentRequired(%s)
   dataCategory/2: dataCategory(%s,%s)
   dataUseStatement/1: dataUseStatement(%s)
   docConsentRequired: docConsentRequired
-  ¬docConsentRequired: ¬docConsentRequired
+  notDocConsentRequired: notDocConsentRequired
   duplicate/2: duplicate(%s,%s)
   equivalentScope/2: equivalentScope(%s,%s)
   extendsScope/2: extendsScope(%s,%s)
@@ -21,9 +22,9 @@ language:
   kindOf/2: kindOf(%s,%s)
   lesserScope/2: lesserScope(%s,%s)
   li/1: li(%s)
-  ¬li/1: ¬li(%s)
+  notLi/1: notLi(%s)
   pii/1: pii(%s)
-  ¬pii/1: ¬pii(%s)
+  notPii/1: notPii(%s)
   passive/2: passive(%s,%t)
   partOf/2: partOf(%s,%s)
   qualifier/2: qualifier(%s,%s)
@@ -35,11 +36,11 @@ language:
 
 
 issue_schemes:
-  compatiblePurpose: [compatiblePurpose(S), ¬compatiblePurpose(S)]
-  consent: [consentRequired(S), ¬consentRequired(S)]
-  docConsent: [docConsentRequired, ¬docConsentRequired]
-  li: [li(S), ¬li(S)]
-  pii: [pii(S), ¬pii(S)]
+  compatiblePurpose: [compatiblePurpose(S), notCompatiblePurpose(S)]
+  consent: [consentRequired(S), notConsentRequired(S)]
+  docConsent: [docConsentRequired, notDocConsentRequired]
+  li: [li(S), notLi(S)]
+  pii: [pii(S), notPii(S)]
 
 argument_schemes:
 
@@ -290,12 +291,6 @@ argument_schemes:
     conclusions:
       - kindOf(promote_personalization,promote)        
 
-#
-# Removed from stsndard
-#  action10:
-#    conclusions:
-#      - kindOf(share_partners,share)
-
   action10:
     conclusions:
       - kindOf(share_provide,share)            
@@ -309,7 +304,7 @@ argument_schemes:
     weight:
        constant: 0.1   
     conclusions:
-      - ¬docConsentRequired
+      - notDocConsentRequired
 
   docConsent2:
     meta:
@@ -330,13 +325,15 @@ argument_schemes:
     weight:
       constant: 0.1 
     variables: [S]
+    premises:
+      - dataUseStatement(S)
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii1:
     variables: [S]
     premises:
-      - dataQualifier(S,unqualified_or_identified)
+      - qualifier(S,unqualified_or_identified)
     conclusions:
       - pii(S)
     exceptions:
@@ -345,7 +342,7 @@ argument_schemes:
   pii2:
     variables: [S]
     premises:
-      - dataQualifier(S,pseudonymized_data)
+      - qualifier(S,pseudonymized_data)
     conclusions:
       - pii(S)
     exceptions:
@@ -354,61 +351,61 @@ argument_schemes:
   pii3:
     variables: [S]
     premises:
-      - dataQualifier(S,unlinked_data)  
+      - qualifier(S,unlinked_data)  
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii4:
     variables: [S]
     premises:
-      - dataQualifier(S,anonymized_data)  
+      - qualifier(S,anonymized_data)  
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
 
   pii5:
     variables: [S]
     premises:
-      - dataQualifier(S,aggregated_data)  
+      - qualifier(S,aggregated_data)  
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii6:
     variables: [S]
     premises:
-      - dataQualifier(S,pseudonymized_data)
+      - qualifier(S,pseudonymized_data)
       - dataCategory(S,derived_data_organization)
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii7:
     variables: [S]
     premises:
-      - dataQualifier(S,pseudonymized_data)
+      - qualifier(S,pseudonymized_data)
       - dataCategory(S,provider_data_authentication) 
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii8:
     variables: [S]
     premises:
-      - dataQualifier(S,unqualified_or_identified)
+      - qualifier(S,unqualified_or_identified)
       - dataCategory(S,derived_data_organization)
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii9:
     variables: [S]
     premises:
-      - dataQualifier(S,unqualified_or_identified)
+      - qualifier(S,unqualified_or_identified)
       - dataCategory(S,provider_data_authentication)  
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii10:
     variables: [S]
     premises:
-      - dataQualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
+      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
       - dataCategory(S,customer_content_credentials)
     conclusions:
       - pii(S)    
@@ -416,18 +413,18 @@ argument_schemes:
   pii11:
     variables: [S]
     premises:
-      - dataQualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
+      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
       - dataCategory(S,derived_data_organization)
     conclusions:
-      - ¬pii(S)
+      - notPii(S)
 
   pii12:
     variables: [S]
     premises:
-      - dataQualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
+      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
       - dataCategory(S,provider_data_authentication) 
     conclusions:
-      - ¬pii(S)        
+      - notPii(S)        
 
   # Legitimate Interest (LI) Rules
 
@@ -437,6 +434,8 @@ argument_schemes:
     weight:
       constant: 0.1 
     variables: [S]
+    premises:
+      - dataUseStatement(S)
     conclusions:
       - li(S)
 
@@ -588,7 +587,7 @@ argument_schemes:
     conclusions:
       - equivalentScope(S1,S2)
 
-  equivalentScope3:
+  equivalentScope4:
     variables: [S1,S2]
     premises:
       - resultScope(S1,third_party_services) 
@@ -606,13 +605,13 @@ argument_schemes:
     conclusions:
       - smallerOrEqualScope(S1,S2)
 
-  smallerOrEqualScope2:  # transitivity
-    variables: [S1,S2,S3]
-    premises:
-      - smallerOrEqualScope(S1,S2) 
-      - smallerOrEqualScope(S2,S3)
-    conclusions:
-      - smallerOrEqualScope(S1,S3)
+  # smallerOrEqualScope2:  # transitivity
+  #   variables: [S1,S2,S3]
+  #   premises:
+  #     - smallerOrEqualScope(S1,S2) 
+  #     - smallerOrEqualScope(S2,S3)
+  #   conclusions:
+  #     - smallerOrEqualScope(S1,S3)
 
   smallerOrEqualScope3:
     variables: [S1,S2,P1,P2]
@@ -634,17 +633,17 @@ argument_schemes:
 
   # compatiblePurpose Rules
 
-  compatiblePurpose0:
-    meta:
-      comment: Assume by default that the purpose of further processing is compatible
-    weight:
-      constant: 0.1 
-    variables: [S1,S2]
-    premises:
-      - dataUseStatement(S1)
-      - dataUseStatement(S2)
-    conclusions:
-      - compatiblePurpose(S1,S2)
+  # compatiblePurpose0:
+  #   meta:
+  #     comment: Assume by default that the purpose of further processing is compatible
+  #   weight:
+  #     constant: 0.1 
+  #   variables: [S1,S2]
+  #   premises:
+  #     - dataUseStatement(S1)
+  #     - dataUseStatement(S2)
+  #   conclusions:
+  #     - compatiblePurpose(S1,S2)
 
   compatiblePurpose1:
     variables: [S1,S2,A]
@@ -724,37 +723,37 @@ argument_schemes:
   consentRequired1:
     variables: [S]
     premises:
-      - ¬pii(S)
+      - notPii(S)
     conclusions:
-      - ¬consentRequired(S)
+      - notConsentRequired(S)
 
   consentRequired2:
     variables: [S]
     premises:
       - pii(S)
-      - ¬li(S)
+      - notLi(S)
     conclusions:
       - consentRequired(S)
 
-  consentRequired4:
+  consentRequired3:
     variables: [S]
     premises:
       - pii(S)
       - li(S)
     conclusions:
-      - ¬consentRequired(S)
+      - notConsentRequired(S)
 
   # Note that consentRequired4 and consentRequired5 can lead
   # to rebuttals (arguments pro and con)
   
-  consentRequired4:
-    variables: [S1,S2]
-    premises:
-      - pii(S1)
-      - ¬consentRequired(S2)
-      - compatiblePurpose(S1,S2)
-    conclusions:
-      - ¬consentRequired(S1)
+  # consentRequired4:
+  #   variables: [S1,S2]
+  #   premises:
+  #     - pii(S1)
+  #     - notConsentRequired(S2)
+  #     - compatiblePurpose(S1,S2)
+  #   conclusions:
+  #     - notConsentRequired(S1)
   
   consentRequired5:
     variables: [S1,S2]
