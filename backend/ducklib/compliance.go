@@ -1,15 +1,16 @@
 package ducklib
 
 import (
+	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
-	// "io/ioutil"
-	// "os"
+	"os"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
-	// "github.com/carneades/carneades-4/src/engine/caes/encoding/dot"
+	"github.com/carneades/carneades-4/src/engine/caes/encoding/dot"
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
 
@@ -120,15 +121,18 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 	// Begin Debugging
 	// write the argument graph in dot to a temporary file
 	// so that it can be visualized for debugging purposes
-	//	f, err := ioutil.TempFile(os.TempDir(), "duckDot")
-	//	if err == nil {
-	//		dot.Export(f, *ag)
-	//	}
-	// fmt.Printf("ag.Statements[\"compliant\"].Label = %v\n", ag.Statements["compliant"].Label)
+	f, err := ioutil.TempFile(os.TempDir(), "duckDot")
+	if err == nil {
+		dot.Export(f, *ag)
+	}
 	// End Debugging
 
-	// return true iff the compliance statement is in
-	return ag.Statements["compliant"].Label == caes.In, nil
+	// return true iff the ¬docConsentRequired statement is in
+	s, ok := ag.Statements["¬docConsentRequired"]
+	if !ok {
+		return false, errors.New("¬docConsentRequired is not a statement in the argument graph.")
+	}
+	return s.Label == caes.In, nil
 }
 
 func removeStatement(d *structs.Document, i int) (*structs.Document, error) {
