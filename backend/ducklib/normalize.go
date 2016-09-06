@@ -1,8 +1,5 @@
 package ducklib
 
-<<<<<<< HEAD
-/*
-=======
 import (
 	"encoding/json"
 	"fmt"
@@ -13,7 +10,6 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
->>>>>>> tja-dev
 // Normalizer ...
 type Normalizer struct {
 	original   structs.Document
