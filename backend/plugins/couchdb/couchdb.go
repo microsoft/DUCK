@@ -342,7 +342,7 @@ func (cb *Couchbase) UpdateUserDict(dict structs.Dictionary, userID string) erro
 
 	user.GlobalDictionary = dict
 
-	fmt.Printf("%+v", user)
+	//fmt.Printf("%+v", user)
 	return cb.putUser(user)
 }
 
