@@ -4,7 +4,7 @@ meta:
     This is a trivial ulebase for testing the integration of DUCK with
     Carneades.
   version: 1
-  id: 123
+  id: 1
 
 
 language:

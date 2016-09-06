@@ -1,8 +1,8 @@
 meta:
   title: DUCK Rulebase
   description:
-  version: 0.6
-  id: 2
+  version: 0.51
+  id: 123   # hack, until the user can select the rulebase with the user interface.
 
 language:
   action/2: action(%s,%s)
@@ -11,8 +11,8 @@ language:
   consentRequired/1: consentRequired(%s)
   dataCategory/2: dataCategory(%s,%s)
   dataUseStatement/1: dataUseStatement(%s)
-  docConsentRequired/0: docConsentRequired
-  ¬docConsentRequired/0: ¬docConsentRequired
+  docConsentRequired: docConsentRequired
+  ¬docConsentRequired: ¬docConsentRequired
   duplicate/2: duplicate(%s,%s)
   equivalentScope/2: equivalentScope(%s,%s)
   extendsScope/2: extendsScope(%s,%s)
@@ -137,137 +137,110 @@ argument_schemes:
       - dataCategory(S,Y)
       
   category1:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_telemetry,derived_data_user)
 
   category2:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_connectivity,derived_data_user)
 
   category3:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_usage,derived_data_user)
 
   category4:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_demographic,derived_data_user)
 
   category5:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_profiling,derived_data_user)
 
   category6:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_content,derived_data_user)
 
   category7:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_browsing,derived_data_user)
 
   category8:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_search,derived_data_user)
 
   category9:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_location,derived_data_user)
 
   category10:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_social,derived_data_user)
 
   category11:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_biometric,derived_data_user)
 
   category12:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_contact,derived_data_user)
 
   category13:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user_environmental,derived_data_user)
 
   category14:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_credentials,customer_content)
 
   category15:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_contact,customer_content)
 
   category16:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_health,customer_content)  
 
   category17:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_genetic,customer_content) 
 
   category18:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_biometric,customer_content) 
 
   category19:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_children,customer_content) 
 
   category20:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_opinions,customer_content) 
 
   category21:
-    variables: [X,Y]
     conclusions:
       - kindOf(customer_content_financial,customer_content) 
 
   category22:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_user,derived_data)
 
   category23:
-    variables: [X,Y]
     conclusions:
       - kindOf(derived_data_organization,derived_data)
 
   category24:
-    variables: [X,Y]
     conclusions:
       - kindOf(provider_data_authentication,provider_data)  
 
   category25:
-    variables: [X,Y]
     conclusions:
       - kindOf(provider_data_operations,provider_data) 
 
   category26:
-    variables: [X,Y]
     conclusions:
       - kindOf(account_data_customer,account_data)
 
   category27:
-    variables: [X,Y]
     conclusions:
       - kindOf(account_data_payment,account_data)
 
@@ -282,58 +255,48 @@ argument_schemes:
       - action(S,Y)
       
   action1:
-    variables: [X,Y]
     conclusions:
       - kindOf(market,market_advertise_promote) # To Do: Not in taxonomy
 
   action2:
-    variables: [X,Y]
     conclusions:
       - kindOf(advertise,market_advertise_promote) # To Do: Not in taxonomy
 
   action3:
-    variables: [X,Y]
     conclusions:
       - kindOf(promote,market_advertise_promote) # To Do: Not in taxonomy
 
   action4:
-    variables: [X,Y]
     conclusions:
       - kindOf(market_contextual,market)
 
   action5:
-    variables: [X,Y]
     conclusions:
       - kindOf(market_personalization,market)
 
   action6:
-    variables: [X,Y]
     conclusions:
       - kindOf(advertise_contextual,advertise)
 
   action7:
-    variables: [X,Y]
     conclusions:
       - kindOf(advertise_personalization,advertise)      
 
   action8:
-    variables: [X,Y]
     conclusions:
       - kindOf(promote_contextual,promote)
 
   action9:
-    variables: [X,Y]
     conclusions:
       - kindOf(promote_personalization,promote)        
+
 #
 # Removed from stsndard
 #  action10:
-#    variables: [X,Y]
 #    conclusions:
 #      - kindOf(share_partners,share)
 
   action10:
-    variables: [X,Y]
     conclusions:
       - kindOf(share_provide,share)            
       
@@ -478,7 +441,7 @@ argument_schemes:
       - li(S)
 
   li1:
-    variables: [S,C]
+    variables: [S]
     premises:
       - action(S,provide)
       - resultScope(S,capability)
@@ -636,7 +599,7 @@ argument_schemes:
   # smallerOrEqualScope Rules
 
   smallerOrEqualScope1:   # identity
-    variables: [S1,S2]
+    variables: [S1,S2,C]
     premises:
       - resultScope(S1,C) 
       - resultScope(S2,C)
@@ -652,7 +615,7 @@ argument_schemes:
       - smallerOrEqualScope(S1,S3)
 
   smallerOrEqualScope3:
-    variables: [S1,S2]
+    variables: [S1,S2,P1,P2]
     premises:
       - resultScope(S1,P1)
       - resultScope(S2,P2)
@@ -677,11 +640,14 @@ argument_schemes:
     weight:
       constant: 0.1 
     variables: [S1,S2]
+    premises:
+      - dataUseStatement(S1)
+      - dataUseStatement(S2)
     conclusions:
       - compatiblePurpose(S1,S2)
 
   compatiblePurpose1:
-    variables: [S1,S2]
+    variables: [S1,S2,A]
     premises:
       - action(S1,A)
       - action(S2,A)
