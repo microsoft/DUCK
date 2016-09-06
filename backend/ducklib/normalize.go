@@ -39,11 +39,11 @@ parts:
 */
 
 //NewNormalizer returns a new initialized Normalizer
-func NewNormalizer(doc structs.Document, userID string, db *Database) (*Normalizer, error) {
+func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
 	//norm := Normalizer{original: doc, database: db}
 	norm := Normalizer{original: doc}
 
-	user, err := db.GetUser(userID)
+	user, err := db.GetUser(doc.Owner)
 	if err != nil {
 		return &norm, err
 	}
@@ -68,11 +68,11 @@ func NewNormalizer(doc structs.Document, userID string, db *Database) (*Normaliz
 	if err != nil {
 		return nil, err
 	}
-
-	if err = json.Unmarshal(dat, norm.docTaxonomy); err != nil {
+	//var taxonomy structs.Taxonomy
+	if err = json.Unmarshal(dat, &norm.docTaxonomy); err != nil {
 		return nil, err
 	}
-
+	//norm.docTaxonomy = taxonomy
 	return &norm, nil
 }
 
@@ -87,28 +87,50 @@ func (n *Normalizer) CreateDict() *NormalizedDocument {
 	for _, statement := range n.original.Statements {
 
 		if returnCode := n.getCode("action", statement.ActionCode); returnCode != "" {
+			if parts[statement.ActionCode] == nil {
+				parts[statement.ActionCode] = make(map[string]struct{})
+			}
 			parts[statement.ActionCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {
+			if parts[statement.QualifierCode] == nil {
+				parts[statement.QualifierCode] = make(map[string]struct{})
+			}
 			parts[statement.QualifierCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
+			if parts[statement.DataCategoryCode] == nil {
+				parts[statement.DataCategoryCode] = make(map[string]struct{})
+			}
 			parts[statement.DataCategoryCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("scope", statement.UseScopeCode); returnCode != "" {
+			if parts[statement.UseScopeCode] == nil {
+				parts[statement.UseScopeCode] = make(map[string]struct{})
+			}
 			parts[statement.UseScopeCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
+			if parts[statement.ResultScopeCode] == nil {
+				parts[statement.ResultScopeCode] = make(map[string]struct{})
+			}
 			parts[statement.ResultScopeCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
+			if parts[statement.SourceScopeCode] == nil {
+				parts[statement.SourceScopeCode] = make(map[string]struct{})
+			}
 			parts[statement.SourceScopeCode][returnCode] = struct{}{}
 		}
 
 	}
 	//put codes into list
+	if n.normalized.Parts == nil {
+		n.normalized.Parts = make(map[string][]string)
+	}
 	for key, value := range parts {
 		for code := range value {
+
 			n.normalized.Parts[key] = append(n.normalized.Parts[key], code)
 		}
 	}
