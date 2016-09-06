@@ -1,6 +1,5 @@
 package ducklib
 
-/*
 import (
 	"encoding/json"
 	"fmt"
@@ -13,37 +12,63 @@ import (
 
 // Normalizer ...
 type Normalizer struct {
-	original     structs.Document
-	normalized   structs.Document
-	taxonomy     structs.Taxonomy
-	dictionary   structs.Dictionary
-	database     *Database
-	categoryDict map[string]map[string]*structs.DictionaryEntry
-	codeDict     map[string]map[string]*structs.DictionaryEntry
+	original   structs.Document
+	normalized NormalizedDocument
+	taxonomy   structs.Taxonomy
+
+	//database     *Database
+	//categoryDict map[string]map[string]*structs.DictionaryEntry
+	//codeDict     map[string]map[string]*structs.DictionaryEntry
+	//  [azure]-> DictionaryEntry
+	codeDict map[string]*structs.DictionaryEntry
 }
+
+type NormalizedDocument struct {
+	structs.Document
+	Parts map[string]string
+}
+
+/*
+parts:
+  azure:
+    - c1
+    - c2
+  p1:
+    - azure
+
+*/
 
 //NewNormalizer returns a new initialized Normalizer
 func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
-	norm := Normalizer{original: doc, database: db}
+	//norm := Normalizer{original: doc, database: db}
+	norm := Normalizer{original: doc}
 	// set dictionary
-	user, err := norm.database.GetUser(doc.Owner)
-	if err != nil {
-		return nil, err
-	}
-	norm.dictionary = user.Dictionary
-	for _, entry := range norm.dictionary {
+
+	for _, entry := range doc.Dictionary {
 		// for better searchability save pointer to dict entry in map
 		// entries in categoryDict are ordered by Type (e.g. "scope" or "action" etc)
 		// and category (e.g. 2).
 		// entries in codeDict are ordered by Type (e.g. "scope" or "action" etc)
 		// and code (e.g. "account_data" or "linked_data" etc.).
-		norm.categoryDict[entry.Type][entry.Value] = &entry
-		norm.codeDict[entry.Type][entry.Code] = &entry
+		//norm.categoryDict[entry.Type][entry.Value] = &entry
+		//norm.codeDict[entry.Type][entry.Code] = &entry
+
+		//[microsoft_azure]-> {DictionaryEntry}
+		norm.codeDict[entry.Code] = &entry
+
 	}
+	//DictionaryEntry for MIcrosoft Azure
+	//("Microsoft Azure", {
+	//	value : "Microsoft Azure",
+	//	type : "scope",
+	//	code : "microsoft_azure",
+	//	category : "2",
+	//	dictionaryType : "global"
+	//})
 
 	//Taxonomy
 	goPath := os.Getenv("GOPATH")
-	taxPath := fmt.Sprintf("/src/github.com/Microsoft/DUCK/frontend/src/assets/config/taxonomy-%s.json", user.Locale)
+	taxPath := fmt.Sprintf("/src/github.com/Microsoft/DUCK/frontend/src/assets/config/taxonomy-%s.json", doc.Locale)
 	path := filepath.Join(goPath, taxPath)
 
 	dat, err := ioutil.ReadFile(path)
@@ -59,7 +84,9 @@ func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
 }
 
 //Normalize normalizes a Document for further validation
-func (n *Normalizer) Normalize() *structs.Document {
+func (n *Normalizer) Normalize() *NormalizedDocument {
+	n.normalized.Statements = n.original.Statements
+
 	for _, statement := range n.original.Statements {
 		normStmt := structs.Statement{}
 		normStmt.ActionCode = n.getCode("action", statement.ActionCode)
@@ -87,36 +114,20 @@ func (n *Normalizer) Normalize() *structs.Document {
 //taxonomy is then returned if one is found
 func (n *Normalizer) getCode(Type string, Code string) string {
 
-	dict, prs := n.codeDict[Type][Code]
-	if prs {
-		switch Type {
-		case "action":
-			for _, typ := range n.taxonomy.Action {
-				if dict.Category == typ.Category {
-					return typ.Code
-				}
-			}
-		case "dataCategory":
-			for _, typ := range n.taxonomy.DataCategory {
-				if dict.Category == typ.Category {
-					return typ.Code
-				}
-			}
-		case "qualifier":
-			for _, typ := range n.taxonomy.Qualifier {
-				if dict.Category == typ.Category {
-					return typ.Code
-				}
-			}
-		case "scope":
-			for _, typ := range n.taxonomy.Scope {
-				if dict.Category == typ.Category {
-					return typ.Code
-				}
-			}
+	dict, prs := n.codeDict[Code]
+	if !prs {
+		return Code
+	}
 
+	tax, prs := n.taxonomy[Type]
+	if !prs {
+		return Code
+	}
+
+	for _, typ := range tax {
+		if dict.Category == typ.Category {
+			return typ.Code
 		}
-
 	}
 	return Code
 
@@ -132,4 +143,3 @@ func (n *Normalizer) DenormalizeVariants() []structs.Document {
 
 	return nil
 }
-*/

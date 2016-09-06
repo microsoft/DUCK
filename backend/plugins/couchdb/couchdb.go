@@ -155,7 +155,7 @@ func (cb *Couchbase) GetDocument(id string) (structs.Document, error) {
 	if err != nil {
 		return doc, err
 	}
-
+	//fmt.Printf("%+v\n", mp)
 	doc.FromValueMap(mp)
 
 	return doc, err
@@ -226,40 +226,6 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Docum
 	return documents, err
 
 }
-
-/*
-//GetRulebases returns a list of all rulebases in the DB
-func (cb *Couchbase) GetRulebases() ([]ducklib.Rulebase, error) {
-	url := fmt.Sprintf("%s/%s/_design/app/_view/rulebases", cb.url, cb.database)
-
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	rows, err := getRows(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	documents := make([]ducklib.Rulebase, len(rows))
-
-	for row, intf := range rows {
-
-		doc := intf.(map[string]interface{})
-		var document ducklib.Rulebase
-
-		document.Name = doc["value"].(string)
-		document.ID = doc["id"].(string)
-		documents[row] = document
-
-	}
-
-	return documents, nil
-
-}
-*/
 
 // DeleteDocument deletes a Data Use Document from the Couchbase Database
 func (cb *Couchbase) DeleteDocument(id string) error {
@@ -389,6 +355,19 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	if d.Revision != "" {
 		entryMap["_rev"] = d.Revision
 	}
+	dict := make(map[string]map[string]string)
+	for key, val := range d.Dictionary {
+		dc := make(map[string]string)
+		dc["value"] = val.Value
+		dc["type"] = val.Type
+		dc["code"] = val.Code
+		dc["category"] = val.Category
+		dc["dictionaryType"] = val.DictionaryType
+
+		dict[key] = dc
+	}
+	entryMap["dictionary"] = dict
+
 	var stmts []map[string]string
 	for _, statement := range d.Statements {
 		stmt := make(map[string]string)
@@ -464,7 +443,7 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		return errors.New(reason)
 	}
 
-	return errors.New("Could not undeerstand Couchbase response")
+	return errors.New("Could not understand Couchbase response")
 }
 
 //Init initializes the Couchbase DB & tests for connection errors

@@ -18,17 +18,27 @@ type DBConf struct {
 }
 
 type User struct {
-	ID            string `json:"id"`
-	Email         string `json:"email"`
-	Password      string `json:"password"`
-	Firstname     string `json:"firstname"`
-	Lastname      string `json:"lastname"`
-	Locale        string `json:"locale"`
-	AssumptionSet string `json:"assumptionSet"`
-	Revision      string `json:"revision"`
-
+	ID               string     `json:"id"`
+	Email            string     `json:"email"`
+	Password         string     `json:"password"`
+	Firstname        string     `json:"firstname"`
+	Lastname         string     `json:"lastname"`
+	Locale           string     `json:"locale"`
+	AssumptionSet    string     `json:"assumptionSet"`
+	Revision         string     `json:"revision"`
+	GlobalDictionary Dictionary `json:"dictionary"`
 	//Documents []string `json:"documents"`
 }
+
+type DictionaryEntry struct {
+	Value          string `json:"value"`
+	Type           string `json:"type"`
+	Code           string `json:"code"`
+	Category       string `json:"category"`
+	DictionaryType string `json:"dictionaryType"`
+}
+
+type Dictionary map[string]DictionaryEntry
 
 //Response represents a JSON response from the ducklib server
 type Response struct {
@@ -85,6 +95,42 @@ func (u *User) FromValueMap(mp map[string]interface{}) {
 
 }
 
+func (d Dictionary) FromInterfaceMap(mp map[string]interface{}) {
+
+	//Map looks like
+	//dictionary:
+	//	map[
+	//		microsoft_excel:map[code:microsoft_excel category:1 value:Microsoft Excel type:scope]
+	//		microsoft_word:map[category:1 value:Microsoft Word type:scope code:microsoft_word]]
+
+	if d == nil {
+		d = make(Dictionary)
+	}
+	for key, value := range mp {
+		var de DictionaryEntry
+
+		value := value.(map[string]interface{})
+		if code, ok := value["code"]; ok {
+			de.Code = code.(string)
+		}
+		if tpe, ok := value["type"]; ok {
+			de.Type = tpe.(string)
+		}
+		if val, ok := value["value"]; ok {
+			de.Value = val.(string)
+		}
+		if category, ok := value["category"]; ok {
+			de.Category = category.(string)
+		}
+		if dictionaryType, ok := value["dictionaryType"]; ok {
+			de.DictionaryType = dictionaryType.(string)
+		}
+
+		d[key] = de
+	}
+
+}
+
 type Rulebase struct {
 	Name     string `json:"name"`
 	ID       string `json:"id"`
@@ -92,31 +138,11 @@ type Rulebase struct {
 }
 
 //can this be a map?
-type Taxonomy struct {
-	Scope []struct {
-		Value    string `json:"value"`
-		Code     string `json:"code"`
-		Category string `json:"category"`
-		Fixed    bool   `json:"fixed"`
-	} `json:"scope"`
-	Qualifier []struct {
-		Value    string `json:"value"`
-		Code     string `json:"code"`
-		Category string `json:"category"`
-		Fixed    bool   `json:"fixed"`
-	} `json:"qualifier"`
-	DataCategory []struct {
-		Value    string `json:"value"`
-		Code     string `json:"code"`
-		Category string `json:"category"`
-		Fixed    bool   `json:"fixed"`
-	} `json:"dataCategory"`
-	Action []struct {
-		Value    string `json:"value"`
-		Code     string `json:"code"`
-		Category string `json:"category"`
-		Fixed    bool   `json:"fixed"`
-	} `json:"action"`
+type Taxonomy map[string][]struct {
+	Value    string `json:"value"`
+	Code     string `json:"code"`
+	Category string `json:"category"`
+	Fixed    bool   `json:"fixed"`
 }
 
 type httpError struct {
