@@ -204,8 +204,7 @@ func putUserHandler(c echo.Context) error {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	id := c.Param("id")
-	u.ID = id
+
 	err := datab.PutUser(*u)
 	if err != nil {
 		log.Printf("Error in putUserHandler while trying to update user in database: %s", err)
@@ -214,7 +213,7 @@ func putUserHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	us, err := datab.GetUser(id)
+	us, err := datab.GetUser(u.ID)
 	if err != nil {
 		log.Printf("Error in putUserHandler while trying to get updated user: %s", err)
 
@@ -225,6 +224,7 @@ func putUserHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, us)
 }
 func postUserHandler(c echo.Context) error {
+
 	newUser := new(structs.User)
 	if err := c.Bind(newUser); err != nil {
 		log.Printf("Error in postUserHandler while trying to bind new user to struct: %s", err)
@@ -252,6 +252,7 @@ func postUserHandler(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, u)
+
 }
 
 func getUserDictHandler(c echo.Context) error {

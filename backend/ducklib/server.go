@@ -76,7 +76,7 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	//create a new user - JWT must not be required since during registration (when the user account is created) the user is not authenticated
 	users.POST("", postUserHandler)
 	users.DELETE("/:id", deleteUserHandler, jwtMiddleware)          //delete a user
-	users.PUT("/:id", putUserHandler, jwtMiddleware)                //update a user
+	users.PUT("/", putUserHandler, jwtMiddleware)                   //update a user
 	users.GET("/:id/dictionary", getUserDictHandler, jwtMiddleware) //get a users dictonary
 	users.PUT("/:id/dictionary", putUserDictHandler, jwtMiddleware) //update a users dictonary
 
