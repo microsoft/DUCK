@@ -204,8 +204,7 @@ func putUserHandler(c echo.Context) error {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	id := c.Param("id")
-	u.ID = id
+
 	err := datab.PutUser(*u)
 	if err != nil {
 		log.Printf("Error in putUserHandler while trying to update user in database: %s", err)
@@ -214,7 +213,7 @@ func putUserHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	us, err := datab.GetUser(id)
+	us, err := datab.GetUser(u.ID)
 	if err != nil {
 		log.Printf("Error in putUserHandler while trying to get updated user: %s", err)
 
@@ -225,6 +224,7 @@ func putUserHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, us)
 }
 func postUserHandler(c echo.Context) error {
+
 	newUser := new(structs.User)
 	if err := c.Bind(newUser); err != nil {
 		log.Printf("Error in postUserHandler while trying to bind new user to struct: %s", err)
@@ -252,6 +252,49 @@ func postUserHandler(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, u)
+
+}
+
+func getUserDictHandler(c echo.Context) error {
+	dict, err := datab.GetUserDict(c.Param("id"))
+	if err != nil {
+		log.Printf("Error in getUserDictHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, dict)
+}
+
+func putUserDictHandler(c echo.Context) error {
+
+	d := new(structs.Dictionary)
+	if err := c.Bind(d); err != nil {
+		log.Printf("Error in putUserDictHandler while trying to bind new dictionary to struct: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	id := c.Param("id")
+
+	err := datab.PutUserDict(*d, id)
+	if err != nil {
+		log.Printf("Error in putUserDictHandler while trying to update user dictionary in database: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	nd, err := datab.GetUserDict(id)
+	if err != nil {
+		log.Printf("Error in putUserDictHandler while trying to get updated user dictionary: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, nd)
 }
 
 /*
@@ -279,7 +322,17 @@ func checkDocHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
-	ok, err := checker.IsCompliant(id, doc)
+	normalizer, err := NewNormalizer(*doc, datab)
+	if err != nil {
+		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
+
+		e := err.Error()
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	normDoc := normalizer.CreateDict()
+
+	ok, err := checker.IsCompliant(id, normDoc)
 
 	//log.Printf("DOCS: %+v", docs)
 	if err != nil {
@@ -303,6 +356,7 @@ func checkDocIDHandler(c echo.Context) error {
 	docid := c.Param("documentid")
 
 	doc, err := datab.GetDocument(docid)
+
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to get document from database: %s", err)
 
@@ -310,8 +364,17 @@ func checkDocIDHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
+	normalizer, err := NewNormalizer(doc, datab)
+	if err != nil {
+		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
 
-	ok, err := checker.IsCompliant(id, &doc)
+		e := err.Error()
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	normDoc := normalizer.CreateDict()
+
+	ok, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while checking for compliance: %s", err)
 		e := err.Error()

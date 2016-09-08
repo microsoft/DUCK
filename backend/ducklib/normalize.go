@@ -12,15 +12,15 @@ import (
 
 // Normalizer ...
 type Normalizer struct {
-	original   structs.Document
-	normalized *NormalizedDocument
-	taxonomy   structs.Taxonomy
+	original    structs.Document
+	normalized  *NormalizedDocument
+	docTaxonomy structs.Taxonomy
 
 	//database     *Database
 	//categoryDict map[string]map[string]*structs.DictionaryEntry
 	//codeDict     map[string]map[string]*structs.DictionaryEntry
 	//  [azure]-> DictionaryEntry
-	GlobalDict *structs.Dictionary
+	GlobalDict structs.Dictionary
 }
 
 type NormalizedDocument struct {
@@ -42,21 +42,14 @@ parts:
 func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
 	//norm := Normalizer{original: doc, database: db}
 	norm := Normalizer{original: doc}
+
+	user, err := db.GetUser(doc.Owner)
+	if err != nil {
+		return &norm, err
+	}
+	norm.GlobalDict = user.GlobalDictionary
 	// set dictionary
-	/*
-		for _, entry := range doc.Dictionary {
-			// for better searchability save pointer to dict entry in map
-			// entries in categoryDict are ordered by Type (e.g. "scope" or "action" etc)
-			// and category (e.g. 2).
-			// entries in codeDict are ordered by Type (e.g. "scope" or "action" etc)
-			// and code (e.g. "account_data" or "linked_data" etc.).
-			//norm.categoryDict[entry.Type][entry.Value] = &entry
-			//norm.codeDict[entry.Type][entry.Code] = &entry
 
-			//[microsoft_azure]-> {DictionaryEntry}
-			norm.codeDict[entry.Code] = &entry
-
-		}*/
 	//DictionaryEntry for MIcrosoft Azure
 	//("microsoft_azure", {
 	//	value : "Microsoft Azure",
@@ -68,18 +61,18 @@ func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
 
 	//Taxonomy
 	goPath := os.Getenv("GOPATH")
-	taxPath := fmt.Sprintf("/src/github.com/Microsoft/DUCK/frontend/src/assets/config/taxonomy-%s.json", doc.Locale)
-	path := filepath.Join(goPath, taxPath)
+	docTaxPath := fmt.Sprintf("/src/github.com/Microsoft/DUCK/frontend/src/assets/config/taxonomy-%s.json", doc.Locale)
+	docPath := filepath.Join(goPath, docTaxPath)
 
-	dat, err := ioutil.ReadFile(path)
+	dat, err := ioutil.ReadFile(docPath)
 	if err != nil {
 		return nil, err
 	}
-
-	if err = json.Unmarshal(dat, norm.taxonomy); err != nil {
+	//var taxonomy structs.Taxonomy
+	if err = json.Unmarshal(dat, &norm.docTaxonomy); err != nil {
 		return nil, err
 	}
-
+	//norm.docTaxonomy = taxonomy
 	return &norm, nil
 }
 
@@ -94,28 +87,50 @@ func (n *Normalizer) CreateDict() *NormalizedDocument {
 	for _, statement := range n.original.Statements {
 
 		if returnCode := n.getCode("action", statement.ActionCode); returnCode != "" {
+			if parts[statement.ActionCode] == nil {
+				parts[statement.ActionCode] = make(map[string]struct{})
+			}
 			parts[statement.ActionCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {
+			if parts[statement.QualifierCode] == nil {
+				parts[statement.QualifierCode] = make(map[string]struct{})
+			}
 			parts[statement.QualifierCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
+			if parts[statement.DataCategoryCode] == nil {
+				parts[statement.DataCategoryCode] = make(map[string]struct{})
+			}
 			parts[statement.DataCategoryCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("scope", statement.UseScopeCode); returnCode != "" {
+			if parts[statement.UseScopeCode] == nil {
+				parts[statement.UseScopeCode] = make(map[string]struct{})
+			}
 			parts[statement.UseScopeCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
+			if parts[statement.ResultScopeCode] == nil {
+				parts[statement.ResultScopeCode] = make(map[string]struct{})
+			}
 			parts[statement.ResultScopeCode][returnCode] = struct{}{}
 		}
 		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
+			if parts[statement.SourceScopeCode] == nil {
+				parts[statement.SourceScopeCode] = make(map[string]struct{})
+			}
 			parts[statement.SourceScopeCode][returnCode] = struct{}{}
 		}
 
 	}
 	//put codes into list
+	if n.normalized.Parts == nil {
+		n.normalized.Parts = make(map[string][]string)
+	}
 	for key, value := range parts {
 		for code := range value {
+
 			n.normalized.Parts[key] = append(n.normalized.Parts[key], code)
 		}
 	}
@@ -135,21 +150,40 @@ func (n *Normalizer) CreateDict() *NormalizedDocument {
 //taxonomy is then returned if one is found
 func (n *Normalizer) getCode(Type string, Code string) string {
 
-	dict, prs := n.original.Dictionary[Code]
-	if !prs {
+	dicto, prso := n.original.Dictionary[Code]
+	dictg, prsg := n.GlobalDict[Code]
+
+	if !prso && !prsg {
 		return ""
 	}
+	// document dictionary takes precendence
+	if prso {
+		tax, prs := n.docTaxonomy[Type]
+		if !prs {
+			return ""
+		}
 
-	tax, prs := n.taxonomy[Type]
-	if !prs {
-		return ""
-	}
-
-	for _, typ := range tax {
-		if dict.Category == typ.Category {
-			return typ.Code
+		for _, typ := range tax {
+			if dicto.Category == typ.Category {
+				return typ.Code
+			}
 		}
 	}
+	//if we found a code in the document dict and were able to match it to a code in the taxonomy
+	//we have already returned, if we failed we will try to look for a code from the user/global dict
+	if prsg {
+		tax, prs := n.docTaxonomy[Type]
+		if !prs {
+			return ""
+		}
+
+		for _, typ := range tax {
+			if dictg.Category == typ.Category {
+				return typ.Code
+			}
+		}
+	}
+	// if this also failed we return nothing
 	return ""
 
 }

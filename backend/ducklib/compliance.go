@@ -75,7 +75,7 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 		    the proposition that the document is compliant is in.
 	The error returned will be nil if and only if no errors occur this process.
 */
-func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Document) (bool, error) {
+func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *NormalizedDocument) (bool, error) {
 	// Construct the argument graph
 	ag := caes.NewArgGraph()
 	ag.Theory = theory
@@ -127,15 +127,15 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *structs.Do
 	}
 	// End Debugging
 
-	// return true iff the ¬docConsentRequired statement is in
-	s, ok := ag.Statements["¬docConsentRequired"]
+	// return true iff the notDocConsentRequired statement is in
+	s, ok := ag.Statements["notDocConsentRequired"]
 	if !ok {
-		return false, errors.New("¬docConsentRequired is not a statement in the argument graph.")
+		return false, errors.New("notDocConsentRequired is not a statement in the argument graph")
 	}
 	return s.Label == caes.In, nil
 }
 
-func removeStatement(d *structs.Document, i int) (*structs.Document, error) {
+func removeStatement(d *NormalizedDocument, i int) (*NormalizedDocument, error) {
 	if i < 0 || i > len(d.Statements)-1 {
 		return nil, fmt.Errorf("Statements index out of bounds: %v", i)
 	}
@@ -172,7 +172,7 @@ func removeStatement(d *structs.Document, i int) (*structs.Document, error) {
 	documents are needed, to cause the coroutine to be terminated.
 
 */
-func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.Document, cncl Canceller) (bool, <-chan *structs.Document, error) {
+func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *NormalizedDocument, cncl Canceller) (bool, <-chan *NormalizedDocument, error) {
 	compliant, err := c.IsCompliant(theory, doc)
 	if err != nil {
 		return false, nil, err
@@ -186,12 +186,12 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 	// statements of doc, and push each alternative documents down the
 	// variants channel.
 
-	variants := make(chan *structs.Document)
+	variants := make(chan *NormalizedDocument)
 
 	// generate documents with subsets of the data use documents
 	// and push them down the varients channel
-	var subsets func(int, *structs.Document)
-	subsets = func(i int, d *structs.Document) {
+	var subsets func(int, *NormalizedDocument)
+	subsets = func(i int, d *NormalizedDocument) {
 		if i < 0 {
 			return
 		}
@@ -217,7 +217,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *structs.
 	}()
 
 	// Filter out the noncompliant documents
-	compliantVariants := make(chan *structs.Document)
+	compliantVariants := make(chan *NormalizedDocument)
 
 	go func() {
 		for {

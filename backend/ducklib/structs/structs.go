@@ -26,7 +26,7 @@ type User struct {
 	Locale           string     `json:"locale"`
 	AssumptionSet    string     `json:"assumptionSet"`
 	Revision         string     `json:"revision"`
-	GlobalDictionary Dictionary `json:"dictionary"`
+	GlobalDictionary Dictionary `json:"globalDictionary"`
 	//Documents []string `json:"documents"`
 }
 
@@ -92,6 +92,10 @@ func (u *User) FromValueMap(mp map[string]interface{}) {
 			u.Documents[i] = v.(string)
 		}
 	}*/
+	if dict, prs := mp["dictionary"].(map[string]interface{}); prs {
+		u.GlobalDictionary = make(Dictionary)
+		u.GlobalDictionary.FromInterfaceMap(dict)
+	}
 
 }
 

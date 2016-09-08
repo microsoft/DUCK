@@ -37,16 +37,18 @@ The REST API exposes the following resources. More detail can be found in the _D
 **User**
  
     /v1/users
+    /v1/users/{user id}/dictionary
 
-Handles user management 
+Handles user management and the users global dictionary
 
 **Login**: 
     
     /v1/login
     
 Creates a user login for authentication
+
      
-**Document
+**Document**
 
     /v1/documents
     /v1/documents/{author id}/summary
@@ -54,7 +56,7 @@ Creates a user login for authentication
 
 Retrieves, updates and deletes documents and document summaries (list view)
 
-**Rule Set
+**Rule Set**
 
     /v1/rulesets
     /v1/rulesets/{id}/

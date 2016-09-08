@@ -1,0 +1,841 @@
+{
+	"swagger" : "2.0",
+	"info" : {
+		"description" : " You can find out more about Microsoft DUCK at [https://github.com/Microsoft/DUCK](https://github.com/Microsoft/DUCK).",
+		"version" : "1.0.0",
+		"title" : "Microsoft DUCK",
+		"termsOfService" : "http://swagger.io/terms/",
+		"contact" : {
+			"email" : "apiteam@swagger.io"
+		},
+		"license" : {
+			"name" : "Apache 2.0",
+			"url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+		}
+	},
+	"host" : "localhost:8000",
+	"basePath" : "/v1",
+	"tags" : [{
+			"name" : "document",
+			"description" : "A data use statement document"
+		}, {
+			"name" : "dictionary",
+			"description" : "Access to Users dictionary"
+		}, {
+			"name" : "security",
+			"description" : "Retrieve JSON Web Token"
+		}, {
+			"name" : "user",
+			"description" : "Operations about user"
+		}
+	],
+	"schemes" : ["http"],
+	"paths" : {
+		"/login" : {
+			"post" : {
+				"tags" : ["security"],
+				"summary" : "Login to retrieve User info and JSON Web Token",
+				"description" : "",
+				"operationId" : "login",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "Email and Password",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/LoginData"
+						}
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Successful Login",
+						"schema" : {
+							"$ref" : "#/definitions/UserInfo"
+
+						}
+					},
+					"401" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+					}
+				}
+			}
+		},
+		"/users/" : {
+			"post" : {
+				"tags" : ["user"],
+				"summary" : "Creates a new user",
+				"description" : "",
+				"operationId" : "createUser",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "User object",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/User"
+						}
+					}
+				],
+				"responses" : {
+					"201" : {
+						"description" : "User successful created",
+						"schema" : {
+							"$ref" : "#/definitions/User"
+
+						}
+					},
+					"500" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				}
+			},
+			"put" : {
+				"tags" : ["user"],
+				"summary" : "updates a user",
+				"description" : "",
+				"operationId" : "updateUser",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "User object",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/User"
+						}
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "User successful updated",
+						"schema" : {
+							"$ref" : "#/definitions/User"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		},
+		"/users/{userID}" : {
+			"delete" : {
+				"tags" : ["user"],
+				"summary" : "Delete a user",
+				"operationId" : "deleteUser",
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "userID",
+						"in" : "path",
+						"description" : "ID of user to delete",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Successful operation",
+						"schema" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/ApiResponse"
+							}
+						}
+					},
+					"404" : {
+						"description" : "Invalid User ID",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		},
+		"/users/{userID}/dictionary" : {
+			"get" : {
+				"tags" : ["user", "dictionary"],
+				"summary" : "Returns a users dictionary",
+				"operationId" : "getUserDictionary",
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "userID",
+						"in" : "path",
+						"description" : "ID of user to return dictionary from",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "successful operation",
+						"schema" : {
+							"$ref" : "#/definitions/Dictionary"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			},
+			"put" : {
+				"tags" : ["user", "dictionary"],
+				"summary" : "Updates a users dictionary",
+				"description" : "",
+				"operationId" : "updateUserDictionary",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "Dictionary object",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/Dictionary"
+						}
+					}, {
+						"name" : "userID",
+						"in" : "path",
+						"description" : "ID of user to update dictionary for",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Dictionary successful updated",
+						"schema" : {
+							"$ref" : "#/definitions/Dictionary"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				}
+			}
+		},
+		"/documents" : {
+			"post" : {
+				"tags" : ["document"],
+				"summary" : "Creates a new document",
+				"description" : "",
+				"operationId" : "createDocument",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "Document object",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/User"
+						}
+					}
+				],
+				"responses" : {
+					"201" : {
+						"description" : "Document successful created",
+						"schema" : {
+							"$ref" : "#/definitions/Document"
+
+						}
+					},
+					"500" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				}
+			},
+			"put" : {
+				"tags" : ["document"],
+				"summary" : "updates a document",
+				"description" : "",
+				"operationId" : "updateDocument",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "Document object",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/Document"
+						}
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Document successful updated",
+						"schema" : {
+							"$ref" : "#/definitions/Document"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		},
+		"/documents/{documentID}" : {
+			"delete" : {
+				"tags" : ["document"],
+				"summary" : "Delete a document",
+				"operationId" : "deleteDocument",
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "documentID",
+						"in" : "path",
+						"description" : "ID of document to delete",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Successful operation",
+						"schema" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/ApiResponse"
+							}
+						}
+					},
+					"404" : {
+						"description" : "Invalid document ID",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			},
+			"get" : {
+				"tags" : ["document"],
+				"summary" : "Delete a document",
+				"operationId" : "getDocument",
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "documentID",
+						"in" : "path",
+						"description" : "ID of document to return",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Successful operation",
+						"schema" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/ApiResponse"
+							}
+						}
+					},
+					"404" : {
+						"description" : "Invalid User ID",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		},
+		"/documents/{userID}/summary" : {
+			"get" : {
+				"tags" : ["document", "user"],
+				"summary" : "Returns List with name and ID for each document a user owns",
+				"description" : "",
+				"operationId" : "summarizeDocuments",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "userID",
+						"in" : "path",
+						"description" : "ID of user to get document summaries for",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "successful operation",
+						"schema" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/ApiResponse"
+							}
+						}
+					},
+					"404" : {
+						"description" : "Invalid User ID",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		},
+		"/documents/copy/{documentID}" : {
+			"get" : {
+				"tags" : ["document"],
+				"summary" : "Copy statements from document with documentID to new document",
+				"description" : "",
+				"operationId" : "copyDocument",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "documentID",
+						"in" : "path",
+						"description" : "ID of document to copy staments from",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "successful operation",
+						"schema" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/Document"
+							}
+						}
+					},
+					"404" : {
+						"description" : "Invalid User ID",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		},
+		"/rulebases" : {
+			"get" : {
+				"tags" : ["document"],
+				"summary" : "Gets list of rulebases",
+				"description" : "",
+				"operationId" : "getRulebases",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [],
+				"responses" : {
+					"201" : {
+						"description" : "Document successful created",
+						"schema" : {
+							"$ref" : "#/definitions/Rulebase"
+
+						}
+					},
+					"500" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				}
+			}
+		},
+		"/documents/{rulebaseID}/documents" : {
+			"put" : {
+				"tags" : ["document", "rulebase"],
+				"summary" : "process provided document against rulebase",
+				"description" : "",
+				"operationId" : "checkDocument",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "Document object",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/Document"
+						}
+					},
+					{
+						"name" : "rulebaseID",
+						"in" : "path",
+						"description" : "ID of rulebase to check against",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Document successful updated",
+						"schema" : {
+							"$ref" : "#/definitions/ComplianceResult"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		},
+		"/documents/{rulebaseID}/documents/{documentID}" : {
+			"put" : {
+				"tags" : ["document", "rulebase"],
+				"summary" : "process document against rulebase",
+				"description" : "",
+				"operationId" : "checkDocumentID",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "documentID",
+						"in" : "path",
+						"description" : "ID of document to check",
+						"required" : true,
+						"type" : "string"
+					},
+					{
+						"name" : "rulebaseID",
+						"in" : "path",
+						"description" : "ID of rulebase to check against",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Document checked",
+						"schema" : {
+							"$ref" : "#/definitions/ComplianceResult"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			}
+		}
+	},
+	"securityDefinitions" : {
+		"jwt_key" : {
+			"type" : "apiKey",
+			"description" : "A JSON Web Token",
+			"name" : "jwt_key",
+			"in" : "header"
+		}
+	},
+	"definitions" : {
+		"ApiResponse" : {
+			"type" : "object",
+			"required" : ["ok"],
+			"properties" : {
+				"ok" : {
+					"type" : "boolean"
+				},
+				"reason" : {
+					"type" : "string",
+					"description" : "Reason is given when ok is false"
+				}
+			}
+		},
+		"ComplianceResult" : {
+			"type" : "object",
+			"required" : ["ok", "compliant"],
+			"properties" : {
+				"ok" : {
+					"type" : "boolean"
+				},
+				"compliant" : {
+					"type" : "string",
+					"enum":["COMPLIANT","NOT_COMPLIANT"],
+					"description" : "Reason is given when ok is false"
+				}
+			}
+		},
+		"LoginData" : {
+			"type" : "object",
+			"properties" : {
+				"email" : {
+					"type" : "string",
+					"description" : "Users email"
+
+				},
+				"password" : {
+					"type" : "string",
+					"description" : "Users password"
+				}
+			}
+		},
+		"UserInfo" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "string"
+				},
+				"firstName" : {
+					"type" : "string"
+				},
+				"lastName" : {
+					"type" : "string"
+				},
+				"locale" : {
+					"type" : "string"
+				},
+				"token" : {
+					"type" : "string",
+					"description" : "jwt_token"
+				}
+			}
+		},
+		"User" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "string"
+				},
+				"email" : {
+					"type" : "string"
+				},
+				"firstName" : {
+					"type" : "string"
+				},
+				"lastName" : {
+					"type" : "string"
+				},
+				"locale" : {
+					"type" : "string"
+				},
+				"password" : {
+					"type" : "string"
+				},
+				"revision" : {
+					"type" : "string"
+				},
+				"assumptionSet" : {
+					"type" : "string"
+				},
+				"globalDictionary" : {
+					"$ref" : "#/definitions/Dictionary"
+				}
+			},
+			"xml" : {
+				"name" : "User"
+			}
+		},
+		"Statement" : {
+			"type" : "object",
+			"properties" : {
+				"useScopeCode" : {
+					"type" : "string"
+				},
+				"qualifierCode" : {
+					"type" : "string"
+				},
+				"dataCategoryCode" : {
+					"type" : "string"
+				},
+				"sourceScopeCode" : {
+					"type" : "string"
+				},
+				"actionCode" : {
+					"type" : "string"
+				},
+				"resultScopeCode" : {
+					"type" : "string"
+				},
+				"trackingId" : {
+					"type" : "string"
+				},
+				"passive" : {
+					"type" : "boolean"
+				}
+			},
+			"xml" : {
+				"name" : "Statement"
+			}
+		},
+		"Document" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "string"
+				},
+				"name" : {
+					"type" : "string"
+				},
+				"revision" : {
+					"type" : "string"
+				},
+				"owner" : {
+					"type" : "string"
+				},
+				"locale" : {
+					"type" : "string"
+				},
+				"assumptionSet" : {
+					"type" : "string"
+				},
+				"statements" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/Statement"
+					}
+				},
+				"globalDictionary" : {
+					"$ref" : "#/definitions/Dictionary"
+				}
+			},
+			"xml" : {
+				"name" : "User"
+			}
+		},
+		"Rulebase" : {
+			"type" : "string",
+			"additionalProperties" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "object",
+						"properties" : {
+							"Filename" : {
+								"type" : "string"
+							},
+							"ID" : {
+								"type" : "string"
+							},
+							"Version" : {
+								"type" : "string"
+							},
+							"Title" : {
+								"type" : "string"
+							},
+							"Description" : {
+								"type" : "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"Dictionary" : {
+			"type" : "string",
+			"additionalProperties" : {
+				"type" : "object",
+				"properties" : {
+					"code_string" : {
+						"description" : "The code is also used as key",
+						"type" : "object",
+						"properties" : {
+							"value" : {
+								"type" : "string"
+							},
+							"type" : {
+								"type" : "string"
+							},
+							"code" : {
+								"type" : "string"
+							},
+							"category" : {
+								"type" : "string"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
