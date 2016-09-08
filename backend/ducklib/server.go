@@ -81,7 +81,6 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	users.PUT("/:id/dictionary", putUserDictHandler, jwtMiddleware) //update a users dictonary
 
 	//data use statement document resources
-	//documents := api.Group("/documents") //base URI
 	documents := api.Group("/documents", jwtMiddleware) //base URI
 	documents.POST("", postDocHandler)                  //create document
 	documents.PUT("", putDocHandler)                    //update document
