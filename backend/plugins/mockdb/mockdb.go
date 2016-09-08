@@ -15,7 +15,13 @@ type Mock struct {
 }
 
 //Init initializes the Mock
+// throws error if name equals INVALIDDBNAME
 func (m *Mock) Init(dbconf structs.DBConf) error {
+
+	if dbconf.Name == "INVALIDDBNAME" {
+		return errors.New("Error initializing MockDB: Invalid Database Name")
+	}
+
 	m.User = make(map[string]structs.User)
 	m.DataUseDocuments = make(map[string]structs.Document)
 	_, ok := pluginregistry.DatabasePlugin.(*Mock)
@@ -67,13 +73,33 @@ func (m *Mock) GetLogin(userMail string) (id string, pw string, err error) {
 	return
 }
 
-//GetUser returns a user map
+//GetUser returns a user struct
 func (m *Mock) GetUser(id string) (structs.User, error) {
 
 	if u, prs := m.User[id]; prs {
 		return u, nil
 	}
 	return structs.User{}, errors.New("User not found")
+}
+
+//GetUserDict returns a user dictionary
+func (m *Mock) GetUserDict(id string) (structs.Dictionary, error) {
+
+	if u, prs := m.User[id]; prs {
+		return u.GlobalDictionary, nil
+	}
+	return structs.GlobalDictionary{}, errors.New("User not found")
+}
+
+//UpdateUserDict updates a user dictionary
+func (m *Mock) UpdateUserDict(dict structs.Dictionary, userID string) error {
+
+	if u, prs := m.User[id]; prs {
+		u.GlobalDictionary = dict
+		m.User[user.ID] = u
+		return nil
+	}
+	return errors.New("Could not update Dictionary")
 }
 
 //DeleteUser deletes a user

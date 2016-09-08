@@ -7,8 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Microsoft/DUCK/backend/ducklib/structs"
-
 	"gopkg.in/yaml.v2"
 	// "path/filepath"
 )
@@ -122,7 +120,7 @@ func (c *ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
 
 // IsCompliant returns true iff the document complies with the rules in the given
 // rulebase.  An error is returned if document has syntax errors and cannot be parsed.
-func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *structs.Document) (bool, error) {
+func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *NormalizedDocument) (bool, error) {
 	r := c.ruleBaseReader(ruleBaseID)
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
 	if err != nil {
@@ -139,7 +137,7 @@ func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *struc
 // called repeatedly to scroll through all compliant documents incrementally.  The search
 // for compliant documents is restarted each time CompliantDocuments is called, no matter
 // what the offset is.
-func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *structs.Document, maxResults int, offset int) (bool, []*structs.Document, error) {
+func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document *NormalizedDocument, maxResults int, offset int) (bool, []*NormalizedDocument, error) {
 	fmt.Println("Checking Compliance")
 	r := c.ruleBaseReader(ruleBaseID)
 
@@ -167,7 +165,7 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 			}
 		}
 	}
-	docs := make([]*structs.Document, 0, maxResults)
+	docs := make([]*NormalizedDocument, 0, maxResults)
 	for i := 0; i < maxResults; i++ {
 		temp, ok := <-docChan
 		if !ok {
