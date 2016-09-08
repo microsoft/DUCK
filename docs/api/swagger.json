@@ -515,7 +515,7 @@
 				}
 			}
 		},
-		"/documents/{rulebaseID}/documents" : {
+		"/rulebases/{rulebaseID}/documents" : {
 			"put" : {
 				"tags" : ["document", "rulebase"],
 				"summary" : "process provided document against rulebase",
@@ -563,7 +563,7 @@
 				]
 			}
 		},
-		"/documents/{rulebaseID}/documents/{documentID}" : {
+		"/rulebases/{rulebaseID}/documents/{documentID}" : {
 			"put" : {
 				"tags" : ["document", "rulebase"],
 				"summary" : "process document against rulebase",
