@@ -257,6 +257,94 @@
 				}
 			}
 		},
+		"/users/{userID}/dictionary/{code}" : {
+			"get" : {
+				"tags" : ["user", "dictionary"],
+				"summary" : "Returns a dictionary entry",
+				"operationId" : "getDictionaryEntry",
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "userID",
+						"in" : "path",
+						"description" : "ID of user to return dictionary from",
+						"required" : true,
+						"type" : "string"
+					}, {
+						"name" : "code",
+						"in" : "path",
+						"description" : "key for the dictionary entry, usually the code field",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "successful operation",
+						"schema" : {
+							"$ref" : "#/definitions/DictionaryEntry"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			},
+			"put" : {
+				"tags" : ["user", "dictionary"],
+				"summary" : "Updates a dictionary Entry",
+				"description" : "",
+				"operationId" : "updateDictionaryEntry",
+				"consumes" : ["application/json"],
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"in" : "body",
+						"name" : "body",
+						"description" : "Dictionary object",
+						"required" : true,
+						"schema" : {
+							"$ref" : "#/definitions/DictionaryEntry"
+						}
+					}, {
+						"name" : "userID",
+						"in" : "path",
+						"description" : "ID of user to update dictionary for",
+						"required" : true,
+						"type" : "string"
+					}, {
+						"name" : "code",
+						"in" : "path",
+						"description" : "key for the dictionary entry, usually the code field",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "Dictionary successful updated",
+						"schema" : {
+							"$ref" : "#/definitions/Dictionary"
+
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+
+						}
+
+					}
+				}
+			}
+		},
 		"/documents" : {
 			"post" : {
 				"tags" : ["document"],
@@ -531,8 +619,7 @@
 						"schema" : {
 							"$ref" : "#/definitions/Document"
 						}
-					},
-					{
+					}, {
 						"name" : "rulebaseID",
 						"in" : "path",
 						"description" : "ID of rulebase to check against",
@@ -577,8 +664,7 @@
 						"description" : "ID of document to check",
 						"required" : true,
 						"type" : "string"
-					},
-					{
+					}, {
 						"name" : "rulebaseID",
 						"in" : "path",
 						"description" : "ID of rulebase to check against",
@@ -641,7 +727,7 @@
 				},
 				"compliant" : {
 					"type" : "string",
-					"enum":["COMPLIANT","NOT_COMPLIANT"],
+					"enum" : ["COMPLIANT", "NOT_COMPLIANT"],
 					"description" : "Reason is given when ok is false"
 				}
 			}
@@ -820,20 +906,28 @@
 						"description" : "The code is also used as key",
 						"type" : "object",
 						"properties" : {
-							"value" : {
-								"type" : "string"
-							},
-							"type" : {
-								"type" : "string"
-							},
-							"code" : {
-								"type" : "string"
-							},
-							"category" : {
-								"type" : "string"
+							"Entry" : {
+								"$ref" : "#/definitions/DictionaryEntry"
 							}
 						}
 					}
+				}
+			}
+		},
+		"DictionaryEntry" : {
+			"type" : "object",
+			"properties" : {
+				"value" : {
+					"type" : "string"
+				},
+				"type" : {
+					"type" : "string"
+				},
+				"code" : {
+					"type" : "string"
+				},
+				"category" : {
+					"type" : "string"
 				}
 			}
 		}
