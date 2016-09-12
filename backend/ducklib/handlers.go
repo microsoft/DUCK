@@ -287,6 +287,29 @@ func getDictItemHandler(c echo.Context) error {
 	return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 }
 
+func deleteDictItemHandler(c echo.Context) error {
+	id := c.Param("id")
+	dict, err := datab.GetUserDict(id)
+	if err != nil {
+		log.Printf("Error in getUserDictHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	delete(dict, c.Param("code"))
+
+	err = datab.PutUserDict(dict, id)
+	if err != nil {
+		log.Printf("Error in getUserDictHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, structs.Response{Ok: true})
+}
+
 func putDictItemHandler(c echo.Context) error {
 	d := new(structs.DictionaryEntry)
 	if err := c.Bind(d); err != nil {

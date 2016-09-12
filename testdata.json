@@ -1,73 +1,473 @@
 [
   {
-    "_id": "i086ad881e3f71ec73fa3fe10e2005398",
-    "owner": "086ad881e3f71ec73fa3fe10e2003f99",
-    "type": "document",
+   "_id": "rbtest_pii_no",
+   "assumptionSet": "1",
+   "dictionary": {
+   },
    "locale": "en",
-    "name": "Customer Doc v1",
-    "statements": [
-      {
-        "useScope": "the CSP Services",
-        "qualifier": "identified",
-        "dataCategory": "credentials",
-        "sourceScope": "this capability",
-        "action": "provide",
-        "resultScope": "cloud services defined in the service agreement",
-        "trackingId": "i111111111",
-        "passive": false
-      },
-      {
-        "useScope": "the CSP Services",
-        "qualifier": "anonymized",
-        "dataCategory": "credentials",
-        "sourceScope": "this capability",
-        "action": "provide",
-        "resultScope": "cloud services defined in the service agreement",
-        "trackingId": "i111111112",
-        "passive": false
-      },
-      {
-        "useScope": "the CSP Services",
-        "qualifier": "aggregated data",
-        "dataCategory": "account data",
-        "sourceScope": "this capability",
-        "action": "improve",
-        "resultScope": "cloud services defined in the service agreement",
-        "trackingId": "i111111113",
-        "passive": false
-      }
-    ]
-  },
+   "name": "PII_NO",
+   "owner": "if71ec73fa3fe10e2003f99",
+   "statements": [
+       {
+           "actionCode": "improve",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "unlinked_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a2af6e6e0ae1441968cec0c23ccb1c0b7",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "derived_data_organization",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a26b2baa519b2472d825ec9d1e92925d4",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "improve",
+           "dataCategoryCode": "provider_data_authentication",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "service",
+           "trackingId": "aeff69f3deeb947e1b03dcba69328fe84",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "improve",
+           "dataCategoryCode": "customer_content_financial",
+           "passive": "false",
+           "qualifierCode": "anonymized_data",
+           "resultScopeCode": "service",
+           "sourceScopeCode": "csp_services",
+           "trackingId": "a43bfd3e02fa448f1bc19bb2859dbd2a5",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "share_provide",
+           "dataCategoryCode": "provider_data_authentication",
+           "passive": "false",
+           "qualifierCode": "unlinked_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "third_party_partners",
+           "trackingId": "a3204794c37ac401c8493cb7e708022be",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "provider_data_operations",
+           "passive": "false",
+           "qualifierCode": "anonymized_data",
+           "resultScopeCode": "service",
+           "sourceScopeCode": "third_party_services",
+           "trackingId": "a5395c37adfbc40e28d9c6c7274eef69e",
+           "useScopeCode": "service"
+       },
+       {
+           "actionCode": "improve",
+           "dataCategoryCode": "customer_content_financial",
+           "passive": "false",
+           "qualifierCode": "aggregated_data",
+           "resultScopeCode": "services_agreement",
+           "sourceScopeCode": "csp_products",
+           "trackingId": "adb109fe65ecf437ab623538fcc9bdf00",
+           "useScopeCode": "csp_services"
+       },
+       {
+           "actionCode": "market",
+           "dataCategoryCode": "derived_data_organization",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "csp_services",
+           "sourceScopeCode": "csp_services",
+           "trackingId": "a5b668d17a30b450484d4997533f6415f",
+           "useScopeCode": "third_party_services"
+       },
+       {
+           "actionCode": "market",
+           "dataCategoryCode": "provider_data_authentication",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "csp_products",
+           "sourceScopeCode": "services_agreement",
+           "trackingId": "af8bfbe67c3324d7c9458903f5b127439",
+           "useScopeCode": "csp_products"
+       },
+       {
+           "actionCode": "advertise",
+           "dataCategoryCode": "customer_content_opinions",
+           "passive": "false",
+           "qualifierCode": "unlinked_data",
+           "resultScopeCode": "third_party_services",
+           "sourceScopeCode": "service",
+           "trackingId": "a0a6e8c7cd6a948eea3615ef347f9bf98",
+           "useScopeCode": "third_party_partners"
+       }
+   ],
+   "type": "document"
+},
   {
-    "_id": "i086ad881e3f71ec73fa3fe10e2005399",
-    "owner": "086ad881e3f71ec73fa3fe10e2003f99",
-    "type": "document",
+   "_id": "rbtest_pii_yes",
+   "assumptionSet": "1",
+   "dictionary": {
+   },
    "locale": "en",
-    "name": "Customer Doc v2",
-    "statements": [
-      {
-        "useScope": "the CSP Services",
-        "qualifier": "identified",
-        "dataCategory": "credentials",
-        "sourceScope": "this capability",
-        "action": "provide",
-        "resultScope": "cloud services defined in the service agreement",
-        "trackingId": "i222222222",
-        "passive": false
-      }
-    ]
-  },
+   "name": "PII_YES",
+   "owner": "if71ec73fa3fe10e2003f99",
+   "statements": [
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a3de0b1dfd69c492487adce5a39dc7795",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "derived_data_user_connectivity",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "adf059a79d31c4c88b05cef7376e199ac",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "customer_content_genetic",
+           "passive": "false",
+           "qualifierCode": "unlinked_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "ac74bb5e616e9449f8f504f6a8ccbde1e",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "customer_content_children",
+           "passive": "false",
+           "qualifierCode": "anonymized_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a382c3ac6971c4f45b46849548ce339d9",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "derived_data_user_social",
+           "passive": "false",
+           "qualifierCode": "aggregated_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "acc18624e860c4feaaa4fc95f8f107ad3",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "provider_data_authentication",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a6bf5e759ee6f4177ac862579a1f89570",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "provider_data_operations",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "abfd5f3573ea94310bf57d282d02789f4",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "account_data_payment",
+           "passive": "false",
+           "qualifierCode": "unlinked_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a94acb27e063746e89853999eabfba608",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "customer_content_financial",
+           "passive": "false",
+           "qualifierCode": "unlinked_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "af9f7160067be4a82b078f6d38a3ae892",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "derived_data_user_telemetry",
+           "passive": "false",
+           "qualifierCode": "anonymized_data",
+           "resultScopeCode": "services_agreement",
+           "sourceScopeCode": "capability",
+           "trackingId": "abcce38032ccd48f1b078deb91e34c306",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "derived_data_user_browsing",
+           "passive": "false",
+           "qualifierCode": "aggregated_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a49b72f578f2f4124a496f408f79c14aa",
+           "useScopeCode": "capability"
+       }
+   ],
+   "type": "document"
+},
   {
-    "_id": "i086ad881e3f71ec73fa3fe10e2003f99",
+   "_id": "rbtest_li_yes",
+   "assumptionSet": "1",
+   "dictionary": {
+   },
+   "locale": "en",
+   "name": "LI_YES",
+   "owner": "if71ec73fa3fe10e2003f99",
+   "statements": [
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "aa19dd008b8934c799293bbbfd3b194c6",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "improve",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "services_agreement",
+           "sourceScopeCode": "services_agreement",
+           "trackingId": "a18372a4d4d0e4a27aa303a796b4b837a",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "personalize",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "service",
+           "sourceScopeCode": "service",
+           "trackingId": "afea1b0002dd148908fbe2915f8644faf",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "upgrades",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a56d502ac665a4514908badb1cccb700c",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "market",
+           "dataCategoryCode": "derived_data_user_contact",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a4557676ab2774636902091b0d6087e91",
+           "useScopeCode": "service"
+       },
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "derived_data_user_demographic",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "service",
+           "sourceScopeCode": "capability",
+           "trackingId": "a21664118c4074a4393ea7dc9f5118bf6",
+           "useScopeCode": "third_party_services"
+       },
+       {
+           "actionCode": "improve",
+           "dataCategoryCode": "customer_content_biometric",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "csp_services",
+           "sourceScopeCode": "third_party_services",
+           "trackingId": "abb0678871f0f400d98d063c5932595cd",
+           "useScopeCode": "third_party_services"
+       },
+       {
+           "actionCode": "personalize",
+           "dataCategoryCode": "customer_content_financial",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "csp_services",
+           "trackingId": "a8ed45ad7ac264ffc891d3fa2bff07cbc",
+           "useScopeCode": "csp_services"
+       },
+       {
+           "actionCode": "upgrades",
+           "dataCategoryCode": "derived_data_user_location",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "service",
+           "sourceScopeCode": "csp_products",
+           "trackingId": "ae815b8d4735a4759a5773adc154a0786",
+           "useScopeCode": "service"
+       },
+       {
+           "actionCode": "advertise_personalization",
+           "dataCategoryCode": "derived_data_user_biometric",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "capability",
+           "trackingId": "a5ebb4a57ea3b49c5b2ddfa20e5cfd4c2",
+           "useScopeCode": "capability"
+       }
+   ],
+   "type": "document"
+},
+  {
+   "_id": "rbtest_li_maybe",
+   "assumptionSet": "1",
+   "dictionary": {
+   },
+   "locale": "en",
+   "name": "LI_MAYBE",
+   "owner": "if71ec73fa3fe10e2003f99",
+   "statements": [
+       {
+           "actionCode": "provide",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "services_agreement",
+           "sourceScopeCode": "capability",
+           "trackingId": "aba6c6536477d4786801869b40338aa65",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "improve",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "third_party_partners",
+           "sourceScopeCode": "capability",
+           "trackingId": "ab6ee3075ab09489690cccd1226edf392",
+           "useScopeCode": "service"
+       },
+       {
+           "actionCode": "personalize",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "csp_services",
+           "sourceScopeCode": "capability",
+           "trackingId": "afb14a980bf8f4dbfadbf58fb7c4f29ee",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "upgrades",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "csp_services",
+           "sourceScopeCode": "capability",
+           "trackingId": "a2dc976e0051e4437a3b3d87641576a16",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "advertise",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "csp_products",
+           "sourceScopeCode": "capability",
+           "trackingId": "af4a5e965026b4a3996e2580074dfd8f2",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "share",
+           "dataCategoryCode": "customer_content_credentials",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "service",
+           "sourceScopeCode": "capability",
+           "trackingId": "a96a1228fc3594b9981fdae81b68919fa",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "promote_contextual",
+           "dataCategoryCode": "account_data_payment",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "services_agreement",
+           "sourceScopeCode": "third_party_services",
+           "trackingId": "a3dac045067a74b669388c70cc02aa7ce",
+           "useScopeCode": "csp_products"
+       },
+       {
+           "actionCode": "personalize",
+           "dataCategoryCode": "derived_data_user_demographic",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "capability",
+           "sourceScopeCode": "service",
+           "trackingId": "a6669fbb236784dd6b2e645123a57a1a4",
+           "useScopeCode": "csp_services"
+       },
+       {
+           "actionCode": "share_provide",
+           "dataCategoryCode": "derived_data_user_social",
+           "passive": "false",
+           "qualifierCode": "pseudonymized_data",
+           "resultScopeCode": "csp_products",
+           "sourceScopeCode": "third_party_services",
+           "trackingId": "a75a85a3409fc4c818c23b6a222b8d017",
+           "useScopeCode": "capability"
+       },
+       {
+           "actionCode": "upgrades",
+           "dataCategoryCode": "account_data_customer",
+           "passive": "false",
+           "qualifierCode": "identified_data",
+           "resultScopeCode": "third_party_services",
+           "sourceScopeCode": "csp_services",
+           "trackingId": "a0e49d8cd7c1e4d6fa77be3b0a418567a",
+           "useScopeCode": "capability"
+       }
+   ],
+   "type": "document"
+},
+  {
+    "_id": "if71ec73fa3fe10e2003f99",
     "type": "user",
-    "email": "duck@example.com",
-    "password": "duck",
-    "firstname": "Dudley",
-    "lastname": "Duck",
+    "email": "rule@example.com",
+    "password": "rule",
+    "firstname": "Rulebase",
+    "lastname": "Tests",
     "locale": "en"
   },
   {
-    "_id": "i086ad881e3f71ec73fa3fe10e2003a99",
+    "_id": "if086ad881e3f71ec73fa3fe10e2003a99",
     "type": "user",
     "email": "dieter@example.com",
     "password": "duck",

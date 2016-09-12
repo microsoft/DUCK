@@ -281,8 +281,49 @@
 					"200" : {
 						"description" : "successful operation",
 						"schema" : {
-							"$ref" : "#/definitions/DictionaryEntry"
+							"type" : "string",
+							"description" : "key for the dictionary entry, usually the code field"
 
+						}
+					},
+					"404" : {
+						"description" : "Invalid input",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse"
+						}
+					}
+				},
+				"security" : [{
+						"jwt_key" : []
+					}
+				]
+			},
+			"delete" : {
+				"tags" : ["user", "dictionary"],
+				"summary" : "Deletes a dictionary entry",
+				"description" : "The delete function return success when the entry is deleted or never existed",
+				"operationId" : "deleteDictionaryEntry",
+				"produces" : ["application/json"],
+				"parameters" : [{
+						"name" : "userID",
+						"in" : "path",
+						"description" : "ID of user to deete dictionary from",
+						"required" : true,
+						"type" : "string"
+					}, {
+						"name" : "code",
+						"in" : "path",
+						"description" : "key for the dictionary entry, usually the code field",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "successful operation",
+						"schema" : {
+							"$ref" : "#/definitions/ApiResponse",
+							"description" : "A successful operation will only return {ok: true}"
 						}
 					},
 					"404" : {
@@ -902,14 +943,8 @@
 			"additionalProperties" : {
 				"type" : "object",
 				"properties" : {
-					"code_string" : {
-						"description" : "The code is also used as key",
-						"type" : "object",
-						"properties" : {
-							"Entry" : {
-								"$ref" : "#/definitions/DictionaryEntry"
-							}
-						}
+					"Entry" : {
+						"$ref" : "#/definitions/DictionaryEntry"
 					}
 				}
 			}

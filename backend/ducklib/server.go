@@ -75,12 +75,13 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 
 	//create a new user - JWT must not be required since during registration (when the user account is created) the user is not authenticated
 	users.POST("", postUserHandler)
-	users.DELETE("/:id", deleteUserHandler, jwtMiddleware)                //delete a user
-	users.PUT("/", putUserHandler, jwtMiddleware)                         //update a user
-	users.GET("/:id/dictionary", getUserDictHandler, jwtMiddleware)       //get a users dictonary
-	users.PUT("/:id/dictionary", putUserDictHandler, jwtMiddleware)       //update a users dictonary
-	users.GET("/:id/dictionary/:code", getDictItemHandler, jwtMiddleware) //get a users dictonary
-	users.PUT("/:id/dictionary/:code", putDictItemHandler, jwtMiddleware) //update a users dictonary
+	users.DELETE("/:id", deleteUserHandler, jwtMiddleware)                      //delete a user
+	users.PUT("/", putUserHandler, jwtMiddleware)                               //update a user
+	users.GET("/:id/dictionary", getUserDictHandler, jwtMiddleware)             //get a users dictonary
+	users.PUT("/:id/dictionary", putUserDictHandler, jwtMiddleware)             //update a users dictonary
+	users.GET("/:id/dictionary/:code", getDictItemHandler, jwtMiddleware)       //get a dictonary entry
+	users.PUT("/:id/dictionary/:code", putDictItemHandler, jwtMiddleware)       //update a dictonary entry
+	users.DELETE("/:id/dictionary/:code", deleteDictItemHandler, jwtMiddleware) //delete a dictonary entry
 
 	//data use statement document resources
 	documents := api.Group("/documents", jwtMiddleware) //base URI

@@ -41,6 +41,19 @@ var (
 		Pass     bool             `json:"pass"`
 		Document structs.Document `json:"document"`
 	}
+	dicts struct {
+		User         structs.User
+		Dictionaries map[string]struct {
+			Pass     bool                    `json:"pass"`
+			EntryIn  structs.DictionaryEntry `json:"entryIn"`
+			EntryOut structs.DictionaryEntry `json:"entryOut"`
+		} `json:"dictionaries"`
+		Entries map[string]struct {
+			EntryIn  structs.DictionaryEntry `json:"entryIn"`
+			EntryOut structs.DictionaryEntry `json:"entryOut"`
+		} `json:"entries"`
+	}
+
 	//eg userIDs["user_a"]="a structs.User.ID"
 	userIDs     = make(map[string]string)
 	documentIDs = make(map[string]string)

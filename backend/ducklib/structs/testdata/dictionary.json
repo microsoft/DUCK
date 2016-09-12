@@ -1,0 +1,89 @@
+{
+	"entries" : {
+		"dict_a" : {
+			"pass" : true,
+			"entryIn" : {
+				"value" : "CODE A",
+				"type" : "scope",
+				"code" : "dict_a",
+				"category" : "1"
+			},
+			"entryOut": {
+				"value" : "CODE A",
+				"type" : "scope",
+				"code" : "dict_a",
+				"category" : "1"
+			
+			}
+		},
+		"dict_b" : {
+			"pass" : true,
+			"entryIn" : {
+				"value" : "<'//''$=äÜ?? 💯 🤷 💤   世界",
+				"type" : "scope",
+				"code" : "dict_b",
+				"category" : "1"
+			},
+			"entryOut": {
+				"value" : "<'//''$=äÜ?? 💯 🤷 💤   世界",
+				"type" : "scope",
+				"code" : "dict_b",
+				"category" : "1"
+			
+			}
+		},
+		"dict_c" : {
+			"pass" : true,
+			"entryIn" : {},
+			"entryOut": {
+				"value" : "",
+				"type" : "",
+				"code" : "dict_c",
+				"category" : ""
+			
+			}
+
+		},
+		"dict_d" : {
+			"pass" : true,
+			"entryIn" : {
+				"value" : "",
+				"type" : "<'//''$=äÜ",
+				"code" : "dict_d",
+				"category" : "1"
+			},
+			"entryOut": {
+				"value" : "",
+				"type" : "<'//''$=äÜ",
+				"code" : "dict_d",
+				"category" : "1"
+			
+			}
+		},
+		"dict_e" : {
+			"pass" : true,
+			"entryIn" : {
+				"value" : "dict e",
+				"type" : "other",
+				"code" : "Duck",
+				"category" : "1"
+			},
+			"entryOut": {
+				"value" : "",
+				"type" : "other",
+				"code" : "dict_e",
+				"category" : "1"
+			
+			}
+		}
+	},
+	"dictionaries" : {},
+	"user" : {
+		"email" : "DictionaryTEST@example.com",
+		"password" : "pw",
+		"firstname" : "Dictionary",
+		"lastname" : "Dictionary",
+		"locale" : "en"
+	}
+
+}
