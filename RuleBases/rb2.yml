@@ -430,14 +430,14 @@ argument_schemes:
 
   li0:
     meta:
-      comment: Assume by default that the interest is legitimate
+      comment: Assume by default that the interest is not legitimate
     weight:
       constant: 0.1 
     variables: [S]
     premises:
       - dataUseStatement(S)
     conclusions:
-      - li(S)
+      - notLi(S)
 
   li1:
     variables: [S]
