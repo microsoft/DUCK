@@ -5,7 +5,7 @@
  */
 var signinModule = angular.module("duck.signin");
 
-signinModule.controller("SigninController", function ($state, SigninService, Validator) {
+signinModule.controller("SigninController", function ($state, SigninService, Validator, GlobalDictionary) {
     this.showRegister = false;
     this.username = "";
     this.password = "";
@@ -33,6 +33,7 @@ signinModule.controller("SigninController", function ($state, SigninService, Val
         }
         var promise = SigninService.signin(this.username, this.password);
         promise.then(function () {
+                GlobalDictionary.initialize();
                 $state.go("main.home");
             }, function (code) {
                 // FIXME
