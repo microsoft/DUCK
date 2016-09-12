@@ -263,8 +263,59 @@ func getUserDictHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
+	if dict == nil {
+		dict = make(structs.Dictionary)
+	}
 
 	return c.JSON(http.StatusOK, dict)
+}
+
+func getDictItemHandler(c echo.Context) error {
+	dict, err := datab.GetUserDict(c.Param("id"))
+	if err != nil {
+		log.Printf("Error in getUserDictHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	if entry, prs := dict[c.Param("code")]; prs {
+		return c.JSON(http.StatusOK, entry)
+	}
+	e := "Code not found in dictionary"
+
+	return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+}
+
+func putDictItemHandler(c echo.Context) error {
+	d := new(structs.DictionaryEntry)
+	if err := c.Bind(d); err != nil {
+		log.Printf("Error in putDictItemHandler while trying to bind new dictionary entry to struct: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	code := c.Param("code")
+	id := c.Param("id")
+	dict, err := datab.GetUserDict(id)
+	if err != nil {
+		log.Printf("Error in putDictItemHandler while trying to  user dictionary from database: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	dict[code] = *d
+
+	err = datab.PutUserDict(dict, id)
+	if err != nil {
+		log.Printf("Error in putDictItemHandler while trying to update user dictionary in database: %s", err)
+
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	return c.JSON(http.StatusOK, code)
 }
 
 func putUserDictHandler(c echo.Context) error {
