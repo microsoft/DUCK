@@ -225,7 +225,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         if (dictionaryType === "document") {
             context.document.dictionary.put(value, {value: value, type: type, code: code, category: category, dictionaryType: "document"});
         } else {
-            GlobalDictionary.addTerm(type, $scope.newCategory.code, $scope.newTermValue);
+            GlobalDictionary.addTerm(type, code, category, value);
         }
         TaxonomyService.addTerm(type, code, category, value, dictionaryType);
     };
