@@ -3,7 +3,7 @@ var editorModule = angular.module("duck.editor");
 /**
  * Maintains the global dictionary owned by an author.
  */
-editorModule.service("GlobalDictionary", function (CurrentUser, $http) {
+editorModule.service("GlobalDictionary", function (CurrentUser, $http, $q) {
     this.dictionary = new Hashtable();
     var context = this;
 
@@ -16,7 +16,18 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $http) {
     };
 
     this.addTerm = function (type, code, category, value) {
-        context.dictionary.put(value, {value: value, type: type, code: code, category: category, dictionaryType: "global"});
+        var item = {value: value, type: type, code: code, category: category, dictionaryType: "global"};
+        context.dictionary.put(value, item);
+        return $q(function (resolve, reject) {
+            // create the user and then log them in
+            $http.put('/v1/users/'+CurrentUser.id + "/dictionary/" + code, item).success(function (data) {
+                resolve(item)
+
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+
         // FIXME update server
     };
 
