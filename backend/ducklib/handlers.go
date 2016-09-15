@@ -31,7 +31,8 @@ func getDocSummaries(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in getDocSummaries: %s", err)
 		log.Println(err)
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 
 	return c.JSON(http.StatusOK, docs)
@@ -327,6 +328,9 @@ func putDictItemHandler(c echo.Context) error {
 
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+	if dict == nil {
+		dict = make(structs.Dictionary)
 	}
 	dict[code] = *d
 

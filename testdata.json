@@ -346,12 +346,12 @@
    "type": "document"
 },
   {
-   "_id": "rbtest_li_maybe",
+   "_id": "rbtest_li_no",
    "assumptionSet": "1",
    "dictionary": {
    },
    "locale": "en",
-   "name": "LI_MAYBE",
+   "name": "LI_NO",
    "owner": "if71ec73fa3fe10e2003f99",
    "statements": [
        {
