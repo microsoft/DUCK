@@ -205,6 +205,7 @@ func postDocHandler(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, docu)
+
 }
 
 /*
@@ -300,6 +301,10 @@ func postUserHandler(c echo.Context) error {
 
 }
 
+//getUserDictHandler returns the dictionary struct on the user. if it is null, an empty one will be created and returned
+//
+//Context-Parameter
+//	id		the id of the user whose dictionary should be returned
 func getUserDictHandler(c echo.Context) error {
 	dict, err := datab.GetUserDict(c.Param("id"))
 	if err != nil {
@@ -315,6 +320,12 @@ func getUserDictHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, dict)
 }
 
+//getUserDictHandler returns the dictionary entry from the users ditionary
+//an error will be retuned if the dictionary does not contain the specified key
+//
+//Context-Parameter
+//	id		the id of the user whose dictionary should be accessed
+//	code	the key for the dictionary entry
 func getDictItemHandler(c echo.Context) error {
 	dict, err := datab.GetUserDict(c.Param("id"))
 	if err != nil {
@@ -332,6 +343,13 @@ func getDictItemHandler(c echo.Context) error {
 	return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 }
 
+//deleteDictItemHandler deletes an entry from an users dict if the specified key exists
+//
+//Context-Parameter
+//	id		the id of the user whose dictionary should be accessed
+//	code	the key for the dictionary entry
+//
+//returns okay if the entry is not in the ditcionary anymore or never was
 func deleteDictItemHandler(c echo.Context) error {
 	id := c.Param("id")
 	dict, err := datab.GetUserDict(id)
@@ -355,6 +373,15 @@ func deleteDictItemHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, structs.Response{Ok: true})
 }
 
+//putDictItemHandler places an dictionary entry into the users dictionary
+//if the key already exists the entry will be overwritten
+//
+//Context-Parameter
+//	id				the id of the user whose dictionary should be accessed
+//	code			the key for the dictionary entry
+// 	in RequestBody	the DictionaryEntry
+//
+//returns the code if successful
 func putDictItemHandler(c echo.Context) error {
 	d := new(structs.DictionaryEntry)
 	if err := c.Bind(d); err != nil {
@@ -388,6 +415,12 @@ func putDictItemHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, code)
 }
 
+//putUserDictHandler updates the users dictionary with a new one
+//Context-Parameter
+//	id				the id of the user whose dictionary should be updated
+// 	in RequestBody	the new dictionary
+//
+//returns the new dictionary if successful
 func putUserDictHandler(c echo.Context) error {
 
 	d := new(structs.Dictionary)
@@ -422,6 +455,11 @@ func putUserDictHandler(c echo.Context) error {
 Rulebase handlers
 */
 
+//checkDocHandler checks the document against a rulebase for compliance
+//
+//Context-Parameter
+//	baseid			the id of the rulebase
+// 	in RequestBody	the document
 func checkDocHandler(c echo.Context) error {
 	/*
 		resp, err := ioutil.ReadAll(c.Request().Body())
@@ -452,7 +490,6 @@ func checkDocHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	ok, err := checker.IsCompliant(id, normDoc)
-	//log.Printf("DOCS: %+v", docs)
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
 		e := err.Error()
@@ -464,6 +501,11 @@ func checkDocHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
 }
 
+//checkDocIDHandler checks a document from the database against a rulebase for compliance
+//
+//Context-Parameter
+//	baseid		the id of the rulebase
+// 	documentid	the id of the document
 func checkDocIDHandler(c echo.Context) error {
 	id := c.Param("baseid")
 	docid := c.Param("documentid")
@@ -480,9 +522,7 @@ func checkDocIDHandler(c echo.Context) error {
 	normalizer, err := NewNormalizer(doc, datab)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
-
 		e := err.Error()
-
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	normDoc, err := normalizer.CreateDict()
@@ -491,15 +531,12 @@ func checkDocIDHandler(c echo.Context) error {
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
 	ok, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while checking for compliance: %s", err)
 		e := err.Error()
-
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	fmt.Printf("Compliant: %t", ok)
 	if ok {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
 	}
@@ -507,8 +544,10 @@ func checkDocIDHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
 
 }
+
+//getRulebasesHandler returns a list of  all loaded rulebases
 func getRulebasesHandler(c echo.Context) error {
-	//log.Printf("Rulebases: %+v", checker.RuleBases)
+	//if we have no loaded rulebases return Error
 	if len(checker.RuleBases) == 0 {
 		return c.JSON(http.StatusNotFound, nil)
 	}

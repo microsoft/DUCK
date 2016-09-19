@@ -431,7 +431,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	if stmts != nil {
 		entryMap["statements"] = stmts
 	}
-
+	
 	return cb.putEntry(entryMap, false)
 }
 
