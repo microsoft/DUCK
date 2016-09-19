@@ -65,6 +65,24 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 	return vt.theory, nil
 }
 
+type BoolValue struct {
+	value   bool
+	assumed bool // if true assumed, otherwise proven
+}
+
+type StmtValue struct {
+	value   string // statement tracking id
+	assumed bool   // if true assumed, otherwise proven
+}
+
+type Explanation map[string]struct { // keys are statement tracking ids
+	consentRequired   bool      // informed consent required to use this pii
+	Pii               BoolValue // assumed not to be personally identifiable information
+	Li                BoolValue // assumed there is a legitimate interest in the pii
+	CompatiblePurpose []StmtValue
+	// graph: caes.ArgumentGraph
+}
+
 /*
 	IsCompliant does the following:
 		* Translates the data use statements in the document into Carneades assumptions (terms)
@@ -72,9 +90,18 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 		    to construct a Carneades argument graph
 	    * Evaluates the argument graph to label the statements in the graph in, out or undecided.
 		* Returns true if and only if the statement in the argument representing
-		    the proposition that the document is compliant is in.
+		    the proposition that the document does not require consent is in.
+	Whether or not the document is compliant, an explanation is returned.
+	If the document is not compliant, i.e. requires consent, the explanation
+	lists the statements which require consent.
+	If the document is compliant, i.e. does not require consent, the explanation
+	lists assumptions which were made to reach this conclusion, i.e. whether it
+	was assumed that a statement is not about pii and whether it was assumed
+	that there is a legitimate interest in the content information.
 	The error returned will be nil if and only if no errors occur this process.
 */
+
+// func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *NormalizedDocument) (bool, Explanation, error) {
 func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *NormalizedDocument) (bool, error) {
 	// Construct the argument graph
 	ag := caes.NewArgGraph()
@@ -130,7 +157,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 	// return true iff the notDocConsentRequired statement is in
 	s, ok := ag.Statements["notDocConsentRequired"]
 	if !ok {
-		return false, errors.New("notDocConsentRequired is not a statement in the argument graph")
+		return false, errors.New("notDocConsentRequired is not a statement in the argument graph.")
 	}
 	return s.Label == caes.In, nil
 }
