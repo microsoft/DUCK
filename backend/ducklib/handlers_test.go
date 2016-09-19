@@ -768,7 +768,7 @@ func testCopyDocHandler(t *testing.T) {
 
 		c.SetParamNames("docid")
 		c.SetParamValues(documentIDs[key])
-		err = copyDocHandler(c)
+		err = copyStatementsHandler(c)
 		if err != nil {
 			t.Errorf("Test with %s: Error posting Document during copy:%s", key, err)
 
