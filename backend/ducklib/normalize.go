@@ -77,7 +77,7 @@ func NewNormalizer(doc structs.Document, db *database) (*normalizer, error) {
 //Normalize normalizes a Document for further validation
 func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 	n.normalized = new(NormalizedDocument)
-	n.normalized.Statements = n.original.Statements
+
 	//make sure we have every part only once for each code
 	//for this we make a map for every code which we will later transform into a list
 	parts := make(map[string]map[string]struct{})
@@ -146,8 +146,36 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			statement.QualifierCode = "unqualified"
 		}
 
-		//if we have at least one scope we can fill
+		//if we have at least one scope we can fill the other two (19944  10.2.2.1)
 
+		if statement.UseScopeCode != "" {
+			if statement.SourceScopeCode == "" {
+				statement.SourceScopeCode = statement.UseScopeCode
+			}
+			if statement.ResultScopeCode == "" {
+				statement.ResultScopeCode = statement.UseScopeCode
+			}
+		}
+
+		if statement.SourceScopeCode != "" {
+			if statement.UseScopeCode == "" {
+
+				statement.UseScopeCode = statement.SourceScopeCode
+			}
+			if statement.ResultScopeCode == "" {
+				statement.ResultScopeCode = statement.SourceScopeCode
+			}
+		}
+		if statement.ResultScopeCode != "" {
+			if statement.UseScopeCode == "" {
+				statement.UseScopeCode = statement.ResultScopeCode
+			}
+			if statement.SourceScopeCode == "" {
+				statement.SourceScopeCode = statement.ResultScopeCode
+			}
+		}
+		//add statement to normalized Document
+		n.normalized.Statements = append(n.normalized.Statements, statement)
 	}
 
 	//put codes into list
