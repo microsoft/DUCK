@@ -3,6 +3,8 @@ package ducklib
 import (
 	"fmt"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"net/http"
 	"os"
 	"path/filepath"
@@ -279,13 +281,21 @@ func postUserHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
+	//hash password
+	password := []byte(newUser.Password)
+	// Hashing the password with the default cost of 10
+	hashedPassword, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	if err != nil {
+		log.Printf("Error in postUserHandler while hashing password: %s", err)
+		e := err.Error()
+		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+	}
+	newUser.Password = string(hashedPassword)
 
 	id, err := datab.PostUser(*newUser)
 	if err != nil {
 		log.Printf("Error in postUserHandler while trying to create user in database: %s", err)
-
 		e := err.Error()
-
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
 	var u, err2 = datab.GetUser(id)
@@ -296,7 +306,8 @@ func postUserHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
 	}
-
+	//don't show password hash to frontend
+	u.Password = ""
 	return c.JSON(http.StatusCreated, u)
 
 }
@@ -570,7 +581,7 @@ func loginHandler(c echo.Context) error {
 		return err
 	}
 
-	id, pw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
+	id, hashedpw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
 	if err != nil {
 		log.Printf("Error in loginHandler trying to get login info for userMail %s: %s", u.Email, err)
 
@@ -579,7 +590,14 @@ func loginHandler(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
 	}
 	//log.Printf("id: %s, pw: %s", id, pw)
-	if u.Password == pw {
+
+	correct := true
+	err = bcrypt.CompareHashAndPassword([]byte(hashedpw), []byte(u.Password))
+	if err != nil {
+		correct = (u.Password == hashedpw)
+	}
+
+	if correct {
 
 		user, err := datab.GetUser(id)
 		if err != nil {
