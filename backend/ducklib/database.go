@@ -11,14 +11,15 @@ import (
 	"github.com/twinj/uuid"
 )
 
-type Database struct {
+type database struct {
 	Config structs.DBConf
 }
 
 var db pluginregistry.DBPlugin
 
-func NewDatabase(config structs.DBConf) *Database {
-	return &Database{Config: config}
+//NewDatabase returns an intialized database struct
+func NewDatabase(config structs.DBConf) *database {
+	return &database{Config: config}
 }
 
 //Put this into plugin
@@ -64,7 +65,7 @@ func FillTestdata(testDataFile string) error {
 }
 
 //Init initializes the database and checks for connection errors
-func (database *Database) Init() error {
+func (database *database) Init() error {
 
 	db = pluginregistry.DatabasePlugin
 
@@ -80,29 +81,29 @@ User DB operations
 */
 
 //GetLogin returns id and password for username
-func (database *Database) GetLogin(email string) (id string, pw string, err error) {
+func (database *database) GetLogin(email string) (id string, pw string, err error) {
 	return db.GetLogin(email)
 }
 
-func (database *Database) GetUser(userid string) (structs.User, error) {
+func (database *database) GetUser(userid string) (structs.User, error) {
 
 	return db.GetUser(userid)
 
 }
 
-func (database *Database) DeleteUser(id string) error {
+func (database *database) DeleteUser(id string) error {
 
 	return db.DeleteUser(id)
 
 }
 
-func (database *Database) PutUser(user structs.User) error {
+func (database *database) PutUser(user structs.User) error {
 
 	return db.UpdateUser(user)
 
 }
 
-func (database *Database) PostUser(user structs.User) (ID string, err error) {
+func (database *database) PostUser(user structs.User) (ID string, err error) {
 	//check for duplicate
 	if user.Email == "" {
 		return "", errors.New("No email submitted")
@@ -131,12 +132,12 @@ func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	return "", errors.New("User already exists")
 }
 
-func (database *Database) GetUserDict(userid string) (structs.Dictionary, error) {
+func (database *database) GetUserDict(userid string) (structs.Dictionary, error) {
 
 	return db.GetUserDict(userid)
 
 }
-func (database *Database) PutUserDict(dict structs.Dictionary, userID string) error {
+func (database *database) PutUserDict(dict structs.Dictionary, userID string) error {
 
 	return db.UpdateUserDict(dict, userID)
 
@@ -146,30 +147,30 @@ func (database *Database) PutUserDict(dict structs.Dictionary, userID string) er
 Document DB operations
 
 */
-func (database *Database) GetDocument(documentid string) (structs.Document, error) {
+func (database *database) GetDocument(documentid string) (structs.Document, error) {
 
 	return db.GetDocument(documentid)
 
 }
-func (database *Database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
+func (database *database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 
 	return db.GetDocumentSummariesForUser(userid)
 
 }
 
-func (database *Database) DeleteDocument(id string) error {
+func (database *database) DeleteDocument(id string) error {
 
 	return db.DeleteDocument(id)
 
 }
 
-func (database *Database) PutDocument(doc structs.Document) error {
+func (database *database) PutDocument(doc structs.Document) error {
 
 	return db.UpdateDocument(doc)
 
 }
 
-func (database *Database) PostDocument(doc structs.Document) (ID string, err error) {
+func (database *database) PostDocument(doc structs.Document) (ID string, err error) {
 	if doc.Name == "" {
 		return "", errors.New("No Document Name submitted")
 	}
@@ -189,6 +190,8 @@ func (database *Database) PostDocument(doc structs.Document) (ID string, err err
 	u := uuid.NewV4()
 	uuid := uuid.Formatter(u, uuid.Clean)
 	doc.ID = uuid
+
+	
 	return uuid, db.NewDocument(doc)
 
 }
