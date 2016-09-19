@@ -18,12 +18,15 @@ import (
 var goPath = os.Getenv("GOPATH")
 var testData = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/testdata.json")
 
-//route Handlers
-
+//helloHandler returns just Hello world with StatusOK.
 func helloHandler(c echo.Context) error {
 	return c.String(http.StatusOK, "Hello World")
 }
 
+//getDocSummaries returns ID and name for each Document that has the field owner with a specified userID
+//
+//Context-Parameter:
+//	userid		a userid string which is showing to the user that owns the documents
 func getDocSummaries(c echo.Context) error {
 
 	docs, err := datab.GetDocumentSummariesForUser(c.Param("userid"))
@@ -38,6 +41,7 @@ func getDocSummaries(c echo.Context) error {
 	return c.JSON(http.StatusOK, docs)
 }
 
+//testdataHandler initializes the import of testing data from the file testdata.json into the database
 func testdataHandler(c echo.Context) error {
 
 	if err := FillTestdata(testData); err != nil {
@@ -53,6 +57,11 @@ func testdataHandler(c echo.Context) error {
 /*
 Document handlers
 */
+
+//getDocHandler resturns a document if it exists in the database
+//
+//Context-Parameter:
+//	docid		a docid string which is pointing to the wanted document
 func getDocHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(c.Param("docid"))
 	if err != nil {
@@ -65,10 +74,19 @@ func getDocHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, doc)
 }
 
-func copyDocHandler(c echo.Context) error {
+//copyStatementsHandler  copies the Statements from one document
+//in the database to a new one
+//
+//Context-Parameter:
+//	docid			a docid string which is pointing to the wanted document that is to be copied from
+//
+//	in RequestBody		containing a new document without an statements
+//
+//Returns the new document if successful
+func copyStatementsHandler(c echo.Context) error {
 	doc, err := datab.GetDocument(c.Param("docid"))
 	if err != nil {
-		log.Printf("Error in copyDocHandler trying to get old document from database: %s", err)
+		log.Printf("Error in copyStatementsHandler trying to get old document from database: %s", err)
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -77,26 +95,30 @@ func copyDocHandler(c echo.Context) error {
 	if err := c.Bind(newDoc); err != nil {
 		e := err.Error()
 
-		log.Printf("Error in copyDocHandler trying to bind newDoc: %s", err)
+		log.Printf("Error in copyStatementsHandler trying to bind newDoc: %s", err)
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	newDoc.Statements = doc.Statements
 
 	id, err := datab.PostDocument(*newDoc)
 	if err != nil {
-		log.Printf("Error in copyDocHandler trying to post newDoc to database: %s", err)
+		log.Printf("Error in copyStatementsHandler trying to post newDoc to database: %s", err)
 
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 	returnDoc, err := datab.GetDocument(id)
 	if err != nil {
-		log.Printf("Error in copyDocHandler, trying to get newDoc: %s", err)
+		log.Printf("Error in copyStatementsHandler, trying to get newDoc: %s", err)
 
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
 	}
 	return c.JSON(http.StatusOK, returnDoc)
 }
 
+//deleteDocHandler deletes a document if it exists in the database
+//
+//Context-Parameter:
+//	docid		a docid string which is pointing to the wanted document
 func deleteDocHandler(c echo.Context) error {
 	err := datab.DeleteDocument(c.Param("docid"))
 	if err != nil {
@@ -109,6 +131,12 @@ func deleteDocHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, structs.Response{Ok: true})
 }
 
+//putDocHandler replaces a document in the database with a newer version if both have the same revision number
+//
+//Context-Parameter
+//	in RequestBody		the new version of the document
+//
+//Returns the new version if successful
 func putDocHandler(c echo.Context) error {
 	/*
 		resp, err := ioutil.ReadAll(c.Request().Body())
@@ -122,36 +150,35 @@ func putDocHandler(c echo.Context) error {
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
 		e := err.Error()
-
 		log.Printf("Error in putDocHandler while trying to bind new doc to struct: %s", err)
-
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	fmt.Printf("PUT revision: %s\n", doc.Revision)
 	err := datab.PutDocument(*doc)
 	if err != nil {
 		e := err.Error()
-
 		log.Printf("Error in putDocHandler while trying to update document in database: %s", err)
-
 		if e == "Document update conflict." {
 			return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
 		}
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
 	docu, err := datab.GetDocument(doc.ID)
 	fmt.Printf("PUT RETURN revision: %s\n", docu.Revision) // should be the same one we once got through the document GET
 	if err != nil {
 		e := err.Error()
-
 		log.Printf("Error in putDocHandler while trying to get updated document: %s", err)
-
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
 	return c.JSON(http.StatusOK, docu)
 }
+
+//postDocHandler creates a new structs.Document entry in the database
+//
+//Context-Parameter
+//	in RequestBody:		the new Document
+//
+//Returns the new Document if successful
 func postDocHandler(c echo.Context) error {
 
 	doc := new(structs.Document)
@@ -184,6 +211,10 @@ func postDocHandler(c echo.Context) error {
 User handlers
 */
 
+//deleteUserHandler deletes an existing user from the database
+//
+//Context-Parameter
+//	id		the id of the user who should be deleted
 func deleteUserHandler(c echo.Context) error {
 	err := datab.DeleteUser(c.Param("id"))
 	if err != nil {
@@ -196,6 +227,12 @@ func deleteUserHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, structs.Response{Ok: true})
 }
 
+//putUserHandler replaces a user in the database with a newer version if both have the same revision number
+//
+//Context-Parameter
+//	in RequestBody		the new version of the user
+//
+//Returns the new version if successful
 func putUserHandler(c echo.Context) error {
 
 	u := new(structs.User)
@@ -224,6 +261,13 @@ func putUserHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, us)
 }
+
+//postUserHandler creates a new structs.User entry in the database
+//
+//Context-Parameter
+//	in RequestBody:		the new User
+//
+//Returns the new User if successful
 func postUserHandler(c echo.Context) error {
 
 	newUser := new(structs.User)
@@ -322,10 +366,10 @@ func putDictItemHandler(c echo.Context) error {
 
 	code := c.Param("code")
 	id := c.Param("id")
+
 	dict, err := datab.GetUserDict(id)
 	if err != nil {
 		log.Printf("Error in putDictItemHandler while trying to  user dictionary from database: %s", err)
-
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -337,7 +381,6 @@ func putDictItemHandler(c echo.Context) error {
 	err = datab.PutUserDict(dict, id)
 	if err != nil {
 		log.Printf("Error in putDictItemHandler while trying to update user dictionary in database: %s", err)
-
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
@@ -390,42 +433,34 @@ func checkDocHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false})
 	*/
 	id := c.Param("baseid")
-
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
 		log.Printf("Error in checkDocHandler while trying to bind document to struct: %s", err)
-
 		e := err.Error()
-
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
 	normalizer, err := NewNormalizer(*doc, datab)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
-
 		e := err.Error()
-
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	normDoc := normalizer.CreateDict()
-
+	normDoc, err := normalizer.CreateDict()
+	if err != nil {
+		log.Printf("Error in checkDocHandler while normalizing: %s", err)
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
 	ok, err := checker.IsCompliant(id, normDoc)
-
 	//log.Printf("DOCS: %+v", docs)
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
-
 		e := err.Error()
-
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
 	if ok {
-
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
 	}
-
 	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
 }
 
@@ -450,7 +485,12 @@ func checkDocIDHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	normDoc := normalizer.CreateDict()
+	normDoc, err := normalizer.CreateDict()
+	if err != nil {
+		log.Printf("Error in checkDocIDHandler while normalizing: %s", err)
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
 
 	ok, err := checker.IsCompliant(id, normDoc)
 	if err != nil {

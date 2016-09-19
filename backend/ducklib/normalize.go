@@ -10,8 +10,7 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
-// Normalizer ...
-type Normalizer struct {
+type normalizer struct {
 	original    structs.Document
 	normalized  *NormalizedDocument
 	docTaxonomy structs.Taxonomy
@@ -23,6 +22,8 @@ type Normalizer struct {
 	GlobalDict structs.Dictionary
 }
 
+//NormalizedDocument wraps structs.Document and adds an extra field 'Parts'.
+//the Parts field maps a slice of codes to one more specific code
 type NormalizedDocument struct {
 	structs.Document
 	Parts map[string][]string
@@ -38,18 +39,17 @@ parts:
 
 */
 
-//NewNormalizer returns a new initialized Normalizer
-func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
+//NewNormalizer returns a new initialized normalizer
+func NewNormalizer(doc structs.Document, db *database) (*normalizer, error) {
 	//norm := Normalizer{original: doc, database: db}
-	norm := Normalizer{original: doc}
-
+	norm := normalizer{original: doc}
 	user, err := db.GetUser(doc.Owner)
 	if err != nil {
 		return &norm, err
 	}
-	norm.GlobalDict = user.GlobalDictionary
-	// set dictionary
 
+	// set dictionary
+	//
 	//DictionaryEntry for MIcrosoft Azure
 	//("microsoft_azure", {
 	//	value : "Microsoft Azure",
@@ -58,32 +58,33 @@ func NewNormalizer(doc structs.Document, db *Database) (*Normalizer, error) {
 	//	category : "2",
 	//	dictionaryType : "global"
 	//})
+	norm.GlobalDict = user.GlobalDictionary
 
 	//Taxonomy
 	goPath := os.Getenv("GOPATH")
 	docTaxPath := fmt.Sprintf("/src/github.com/Microsoft/DUCK/frontend/src/assets/config/taxonomy-%s.json", doc.Locale)
 	docPath := filepath.Join(goPath, docTaxPath)
-
 	dat, err := ioutil.ReadFile(docPath)
 	if err != nil {
 		return nil, err
 	}
-	//var taxonomy structs.Taxonomy
 	if err = json.Unmarshal(dat, &norm.docTaxonomy); err != nil {
 		return nil, err
 	}
-	//norm.docTaxonomy = taxonomy
 	return &norm, nil
 }
 
 //Normalize normalizes a Document for further validation
-func (n *Normalizer) CreateDict() *NormalizedDocument {
+func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 	n.normalized = new(NormalizedDocument)
 
-	n.normalized.Statements = n.original.Statements
-
 	//make sure we have every part only once for each code
+	//for this we make a map for every code which we will later transform into a list
 	parts := make(map[string]map[string]struct{})
+
+	//get original taxonomy code for each field in each statement
+	//and save it into parts map
+	//after that we check if we have mising fields in these Statements
 	for _, statement := range n.original.Statements {
 
 		if returnCode := n.getCode("action", statement.ActionCode); returnCode != "" {
@@ -92,30 +93,35 @@ func (n *Normalizer) CreateDict() *NormalizedDocument {
 			}
 			parts[statement.ActionCode][returnCode] = struct{}{}
 		}
+
 		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {
 			if parts[statement.QualifierCode] == nil {
 				parts[statement.QualifierCode] = make(map[string]struct{})
 			}
 			parts[statement.QualifierCode][returnCode] = struct{}{}
 		}
+
 		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
 			if parts[statement.DataCategoryCode] == nil {
 				parts[statement.DataCategoryCode] = make(map[string]struct{})
 			}
 			parts[statement.DataCategoryCode][returnCode] = struct{}{}
 		}
+
 		if returnCode := n.getCode("scope", statement.UseScopeCode); returnCode != "" {
 			if parts[statement.UseScopeCode] == nil {
 				parts[statement.UseScopeCode] = make(map[string]struct{})
 			}
 			parts[statement.UseScopeCode][returnCode] = struct{}{}
 		}
+
 		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
 			if parts[statement.ResultScopeCode] == nil {
 				parts[statement.ResultScopeCode] = make(map[string]struct{})
 			}
 			parts[statement.ResultScopeCode][returnCode] = struct{}{}
 		}
+
 		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
 			if parts[statement.SourceScopeCode] == nil {
 				parts[statement.SourceScopeCode] = make(map[string]struct{})
@@ -123,32 +129,84 @@ func (n *Normalizer) CreateDict() *NormalizedDocument {
 			parts[statement.SourceScopeCode][returnCode] = struct{}{}
 		}
 
+		//if data use category, data category or all scopes are missing, we cant work with this statement
+		if statement.UseScopeCode == "" && statement.ResultScopeCode == "" && statement.SourceScopeCode == "" {
+			return n.normalized, fmt.Errorf("statement is missing all scope fields: %s", statement.TrackingID)
+		}
+		if statement.ActionCode == "" {
+			return n.normalized, fmt.Errorf("statement is missing data use field: %s", statement.TrackingID)
+		}
+
+		if statement.DataCategoryCode == "" {
+			return n.normalized, fmt.Errorf("statement is missing data category field: %s", statement.TrackingID)
+		}
+
+		// if qualifier is missing that means the qualifier is "unqualified"
+		if statement.QualifierCode == "" {
+			statement.QualifierCode = "unqualified"
+		}
+
+		//if we have at least one scope we can fill the other two (19944  10.2.2.1)
+
+		if statement.UseScopeCode != "" {
+			if statement.SourceScopeCode == "" {
+				statement.SourceScopeCode = statement.UseScopeCode
+			}
+			if statement.ResultScopeCode == "" {
+				statement.ResultScopeCode = statement.UseScopeCode
+			}
+		}
+
+		if statement.SourceScopeCode != "" {
+			if statement.UseScopeCode == "" {
+
+				statement.UseScopeCode = statement.SourceScopeCode
+			}
+			if statement.ResultScopeCode == "" {
+				statement.ResultScopeCode = statement.SourceScopeCode
+			}
+		}
+		if statement.ResultScopeCode != "" {
+			if statement.UseScopeCode == "" {
+				statement.UseScopeCode = statement.ResultScopeCode
+			}
+			if statement.SourceScopeCode == "" {
+				statement.SourceScopeCode = statement.ResultScopeCode
+			}
+		}
+		//add statement to normalized Document
+		n.normalized.Statements = append(n.normalized.Statements, statement)
 	}
+
 	//put codes into list
 	if n.normalized.Parts == nil {
 		n.normalized.Parts = make(map[string][]string)
 	}
 	for key, value := range parts {
 		for code := range value {
-
 			n.normalized.Parts[key] = append(n.normalized.Parts[key], code)
 		}
 	}
-
+	//put all the other fields from the original into the normalized struct
 	n.normalized.ID = n.original.ID
 	n.normalized.Locale = n.original.Locale
 	n.normalized.Name = n.original.Name
 	n.normalized.Owner = n.original.Owner
 	n.normalized.Revision = n.original.Revision
 
-	return n.normalized
+	return n.normalized, nil
 }
 
 // get Code from taxonomy. For this a dictionary entry is retrieved from the codeDict
 //in the taxonomy is then looked for the category of the dictionary entry since this
 //should be the same regardless of the code value the corresponding code in the
 //taxonomy is then returned if one is found
-func (n *Normalizer) getCode(Type string, Code string) string {
+func (n *normalizer) getCode(Type string, Code string) string {
+
+	//if code is empty return
+	if Code == "" || Type == "" {
+		return ""
+	}
 
 	dicto, prso := n.original.Dictionary[Code]
 	dictg, prsg := n.GlobalDict[Code]
@@ -189,12 +247,7 @@ func (n *Normalizer) getCode(Type string, Code string) string {
 }
 
 //Denormalize denormalizes a Document after validation
-func (n *Normalizer) Denormalize() *structs.Document {
+func (n *normalizer) Denormalize() *structs.Document {
+	// we have the original, so why Denormalize?
 	return &n.original
-}
-
-//DenormalizeVariants denormalises valid variants of a document
-func (n *Normalizer) DenormalizeVariants() []structs.Document {
-
-	return nil
 }

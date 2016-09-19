@@ -11,7 +11,7 @@ import (
 
 //structs
 
-var datab *Database
+var datab *database
 
 //JWT contains the JWT secret
 var JWT []byte
@@ -90,7 +90,7 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	documents.DELETE("/:docid", deleteDocHandler)       //delete document
 	documents.GET("/:userid/summary", getDocSummaries)  //return document summaries for the author
 	documents.GET("/:docid", getDocHandler)             //return document
-	documents.POST("/copy/:docid", copyDocHandler)      //copy document
+	documents.POST("/copy/:docid", copyStatementsHandler)      //copies the statements from an existing Document to a new one
 
 	//rulebase resources
 	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI
