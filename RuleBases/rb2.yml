@@ -44,7 +44,7 @@ issue_schemes:
 
 argument_schemes:
 
-  selectors:
+  - id: selectors
     variables: [UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive]
     premises:
       - dataUseStatement(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive))
@@ -60,7 +60,7 @@ argument_schemes:
 
   # kindOf Rules
 
-  kindOfTransitivity:
+  - id: kindOfTransitivity
     variables: [X,Y,Z]
     premises:
       - kindOf(X,Y)
@@ -70,24 +70,24 @@ argument_schemes:
 
   # partOf Rules
   
-  partOfTransitivity:
+  - id: partOfTransitivity
     variables: [X,Y,Z]
     premises:
       - partOf(X,Y)
       - partOf(Y,Z)
     conclusions:
-     - partOf(X,Z)
+      - partOf(X,Z)
 
   # Data Qualifier Rules
 
-  qualifier1:
+  - id: qualifier1
     variables: [S]
     premises:
       - qualifier(S,identified_data)
     conclusions:
       - qualifier(S,unqualified_or_identified)
 
-  qualifier2:
+  - id: qualifier2
     variables: [S]
     premises:
       - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy
@@ -99,28 +99,28 @@ argument_schemes:
   # independent scope.  For example, the service scope includes
   # the capability scope.
   
-  scope1:
+  - id: scope1
     variables: [S]
     premises:
       - scope(S,csp_products)
     conclusions:
       - scope(S,csp_services)
 
-  scope2:
+  - id: scope2
     variables: [S]
     premises:
       - scope(S,csp_services)
     conclusions:
       - scope(S,services_agreement)
 
-  scope3:
+  - id: scope3
     variables: [S]
     premises:
       - scope(S,services_agreement)
     conclusions:
       - scope(S,service)
 
-  scope4:
+  - id: scope4
     variables: [S]
     premises:
       - scope(S,service)
@@ -129,7 +129,7 @@ argument_schemes:
 
   # Data Category Rules
 
-  category0:
+  - id: category0
     variables: [S,X,Y]
     premises:
       - dataCategory(S,X)
@@ -137,117 +137,117 @@ argument_schemes:
     conclusions:
       - dataCategory(S,Y)
       
-  category1:
+  - id: category1
     conclusions:
       - kindOf(derived_data_user_telemetry,derived_data_user)
 
-  category2:
+  - id: category2
     conclusions:
       - kindOf(derived_data_user_connectivity,derived_data_user)
 
-  category3:
+  - id: category3
     conclusions:
       - kindOf(derived_data_user_usage,derived_data_user)
 
-  category4:
+  - id: category4
     conclusions:
       - kindOf(derived_data_user_demographic,derived_data_user)
 
-  category5:
+  - id: category5
     conclusions:
       - kindOf(derived_data_user_profiling,derived_data_user)
 
-  category6:
+  - id: category6
     conclusions:
       - kindOf(derived_data_user_content,derived_data_user)
 
-  category7:
+  - id: category7
     conclusions:
       - kindOf(derived_data_user_browsing,derived_data_user)
 
-  category8:
+  - id: category8
     conclusions:
       - kindOf(derived_data_user_search,derived_data_user)
 
-  category9:
+  - id: category9
     conclusions:
       - kindOf(derived_data_user_location,derived_data_user)
 
-  category10:
+  - id: category10
     conclusions:
       - kindOf(derived_data_user_social,derived_data_user)
 
-  category11:
+  - id: category11
     conclusions:
       - kindOf(derived_data_user_biometric,derived_data_user)
 
-  category12:
+  - id: category12
     conclusions:
       - kindOf(derived_data_user_contact,derived_data_user)
 
-  category13:
+  - id: category13
     conclusions:
       - kindOf(derived_data_user_environmental,derived_data_user)
 
-  category14:
+  - id: category14
     conclusions:
       - kindOf(customer_content_credentials,customer_content)
 
-  category15:
+  - id: category15
     conclusions:
       - kindOf(customer_content_contact,customer_content)
 
-  category16:
+  - id: category16
     conclusions:
       - kindOf(customer_content_health,customer_content)  
 
-  category17:
+  - id: category17
     conclusions:
       - kindOf(customer_content_genetic,customer_content) 
 
-  category18:
+  - id: category18
     conclusions:
       - kindOf(customer_content_biometric,customer_content) 
 
-  category19:
+  - id: category19
     conclusions:
       - kindOf(customer_content_children,customer_content) 
 
-  category20:
+  - id: category20
     conclusions:
       - kindOf(customer_content_opinions,customer_content) 
 
-  category21:
+  - id: category21
     conclusions:
       - kindOf(customer_content_financial,customer_content) 
 
-  category22:
+  - id: category22
     conclusions:
       - kindOf(derived_data_user,derived_data)
 
-  category23:
+  - id: category23
     conclusions:
       - kindOf(derived_data_organization,derived_data)
 
-  category24:
+  - id: category24
     conclusions:
       - kindOf(provider_data_authentication,provider_data)  
 
-  category25:
+  - id: category25
     conclusions:
       - kindOf(provider_data_operations,provider_data) 
 
-  category26:
+  - id: category26
     conclusions:
       - kindOf(account_data_customer,account_data)
 
-  category27:
+  - id: category27
     conclusions:
       - kindOf(account_data_payment,account_data)
 
   # Action Rules
 
-  action0:
+  - id: action0
     variables: [S,X,Y]
     premises:
       - action(S,X)
@@ -255,49 +255,49 @@ argument_schemes:
     conclusions:
       - action(S,Y)
       
-  action1:
+  - id: action1
     conclusions:
       - kindOf(market,market_advertise_promote) # To Do: Not in taxonomy
 
-  action2:
+  - id: action2
     conclusions:
       - kindOf(advertise,market_advertise_promote) # To Do: Not in taxonomy
 
-  action3:
+  - id: action3
     conclusions:
       - kindOf(promote,market_advertise_promote) # To Do: Not in taxonomy
 
-  action4:
+  - id: action4
     conclusions:
       - kindOf(market_contextual,market)
 
-  action5:
+  - id: action5
     conclusions:
       - kindOf(market_personalization,market)
 
-  action6:
+  - id: action6
     conclusions:
       - kindOf(advertise_contextual,advertise)
 
-  action7:
+  - id: action7
     conclusions:
       - kindOf(advertise_personalization,advertise)      
 
-  action8:
+  - id: action8
     conclusions:
       - kindOf(promote_contextual,promote)
 
-  action9:
+  - id: action9
     conclusions:
       - kindOf(promote_personalization,promote)        
 
-  action10:
+  - id: action10
     conclusions:
       - kindOf(share_provide,share)            
       
   # docConsent Rules
   
-  docConsent1:
+  - id: docConsent1
     meta:
        comment: >
           By default, a data use document does not require informed consent
@@ -306,7 +306,7 @@ argument_schemes:
     conclusions:
       - notDocConsentRequired
 
-  docConsent2:
+  - id: docConsent2
     meta:
        comment: >
           A data use document does require informed consent
@@ -319,7 +319,7 @@ argument_schemes:
 
   # PII Rules
 
-  pii0:
+  - id: pii0
     meta:
       comment: Assume by default that the information is not personal
     weight:
@@ -330,7 +330,7 @@ argument_schemes:
     conclusions:
       - notPii(S)
 
-  pii1:
+  - id: pii1
     variables: [S]
     premises:
       - qualifier(S,unqualified_or_identified)
@@ -339,7 +339,7 @@ argument_schemes:
     exceptions:
       - dataCategory(S,provider_data_operations)
 
-  pii2:
+  - id: pii2
     variables: [S]
     premises:
       - qualifier(S,pseudonymized_data)
@@ -348,14 +348,14 @@ argument_schemes:
     exceptions:
       - dataCategory(S,derived_data_organization)
       
-  pii3:
+  - id: pii3
     variables: [S]
     premises:
       - qualifier(S,unlinked_data)  
     conclusions:
       - notPii(S)
 
-  pii4:
+  - id: pii4
     variables: [S]
     premises:
       - qualifier(S,anonymized_data)  
@@ -363,14 +363,14 @@ argument_schemes:
       - notPii(S)
 
 
-  pii5:
+  - id: pii5
     variables: [S]
     premises:
       - qualifier(S,aggregated_data)  
     conclusions:
       - notPii(S)
 
-  pii6:
+  - id: pii6
     variables: [S]
     premises:
       - qualifier(S,pseudonymized_data)
@@ -378,7 +378,7 @@ argument_schemes:
     conclusions:
       - notPii(S)
 
-  pii7:
+  - id: pii7
     variables: [S]
     premises:
       - qualifier(S,pseudonymized_data)
@@ -386,7 +386,7 @@ argument_schemes:
     conclusions:
       - notPii(S)
 
-  pii8:
+  - id: pii8
     variables: [S]
     premises:
       - qualifier(S,unqualified_or_identified)
@@ -394,7 +394,7 @@ argument_schemes:
     conclusions:
       - notPii(S)
 
-  pii9:
+  - id: pii9
     variables: [S]
     premises:
       - qualifier(S,unqualified_or_identified)
@@ -402,7 +402,7 @@ argument_schemes:
     conclusions:
       - notPii(S)
 
-  pii10:
+  - id: pii10
     variables: [S]
     premises:
       - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
@@ -410,7 +410,7 @@ argument_schemes:
     conclusions:
       - pii(S)    
 
-  pii11:
+  - id: pii11
     variables: [S]
     premises:
       - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
@@ -418,7 +418,7 @@ argument_schemes:
     conclusions:
       - notPii(S)
 
-  pii12:
+  - id: pii12
     variables: [S]
     premises:
       - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
@@ -428,7 +428,7 @@ argument_schemes:
 
   # Legitimate Interest (LI) Rules
 
-  li0:
+  - id: li0
     meta:
       comment: Assume by default that the interest is not legitimate
     weight:
@@ -439,7 +439,7 @@ argument_schemes:
     conclusions:
       - notLi(S)
 
-  li1:
+  - id: li1
     variables: [S]
     premises:
       - action(S,provide)
@@ -447,7 +447,7 @@ argument_schemes:
     conclusions:
       - li(S)  
 
-  li2:
+  - id: li2
     variables: [S]
     premises:
       - action(S,provide)
@@ -455,7 +455,7 @@ argument_schemes:
     conclusions:
       - li(S)
       
-  li3:
+  - id: li3
     variables: [S]
     premises:
       - action(S,improve)
@@ -463,7 +463,7 @@ argument_schemes:
     conclusions:
       - li(S)
       
-  li4:
+  - id: li4
     variables: [S]
     premises:
       - action(S,improve)
@@ -471,7 +471,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li5:
+  - id: li5
     variables: [S]
     premises:
       - action(S,improve)
@@ -479,7 +479,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li6:
+  - id: li6
     variables: [S]
     premises:
       - action(S,improve)
@@ -487,7 +487,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li7:
+  - id: li7
     variables: [S]
     premises:
       - action(S,improve)
@@ -496,7 +496,7 @@ argument_schemes:
       - li(S)
 
 
-  li8:
+  - id: li8
     variables: [S]
     premises:
       - action(S,personalize)
@@ -504,7 +504,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li9:
+  - id: li9
     variables: [S]
     premises:
       - action(S,personalize)
@@ -512,7 +512,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li10:
+  - id: li10
     variables: [S]
     premises:
       - action(S,upgrades)
@@ -520,7 +520,7 @@ argument_schemes:
     conclusions:
       - li(S)
       
-  li11:
+  - id: li11
     variables: [S]
     premises:
       - action(S,upgrades)
@@ -528,7 +528,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li12:
+  - id: li12
     variables: [S]
     premises:
       - action(S,upgrades)
@@ -536,7 +536,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li13:
+  - id: li13
     variables: [S]
     premises:
       - action(S,market_advertise_promote)
@@ -544,7 +544,7 @@ argument_schemes:
     conclusions:
       - li(S)
 
-  li14:
+  - id: li14
     variables: [S]
     premises:
       - action(S,market_advertise_promote)
@@ -555,7 +555,7 @@ argument_schemes:
 
   # equivalentScope Rules
 
-  equivalentScope0:
+  - id: equivalentScope0
     variables: [S1,S2]
     premises:
       - resultScope(S1,S)
@@ -563,7 +563,7 @@ argument_schemes:
     conclusions:
       - equivalentScope(S1,S2)
 
-  equivalentScope1:
+  - id: equivalentScope1
     variables: [S1,S2]
     premises:
       - resultScope(S1,capability)
@@ -571,7 +571,7 @@ argument_schemes:
     conclusions:
       - equivalentScope(S1,S2)
       
-  equivalentScope2:
+  - id: equivalentScope2
     variables: [S1,S2]
     premises:
       - resultScope(S1,services_agreement)
@@ -579,7 +579,7 @@ argument_schemes:
     conclusions:
       - equivalentScope(S1,S2)
       
-  equivalentScope3:
+  - id: equivalentScope3
     variables: [S1,S2]
     premises:
       - resultScope(S1,third_party_partners)
@@ -587,7 +587,7 @@ argument_schemes:
     conclusions:
       - equivalentScope(S1,S2)
 
-  equivalentScope4:
+  - id: equivalentScope4
     variables: [S1,S2]
     premises:
       - resultScope(S1,third_party_services) 
@@ -597,7 +597,7 @@ argument_schemes:
 
   # smallerOrEqualScope Rules
 
-  smallerOrEqualScope1:   # identity
+  - id: smallerOrEqualScope1   # equal scopes
     variables: [S1,S2,C]
     premises:
       - resultScope(S1,C) 
@@ -605,15 +605,24 @@ argument_schemes:
     conclusions:
       - smallerOrEqualScope(S1,S2)
 
-  # smallerOrEqualScope2:  # transitivity
-  #   variables: [S1,S2,S3]
-  #   premises:
-  #     - smallerOrEqualScope(S1,S2) 
-  #     - smallerOrEqualScope(S2,S3)
-  #   conclusions:
-  #     - smallerOrEqualScope(S1,S3)
+  - id: smallerOrEqualScope2 # delete duplicates
+    variables: [S1,S2]
+    premises:
+      1: smallerOrEqualScope(S1,S2)
+      2: smallerOrEqualScope(S1,S2)
+    deletions: [2]
+    conclusions:
+      - true
 
-  smallerOrEqualScope3:
+  - id: smallerOrEqualScope3  # transitivity
+    variables: [S1,S2,S3]
+    premises:
+      - smallerOrEqualScope(S1,S2) 
+      - smallerOrEqualScope(S2,S3)
+    conclusions:
+      - smallerOrEqualScope(S1,S3)
+
+  - id: smallerOrEqualScope4
     variables: [S1,S2,P1,P2]
     premises:
       - resultScope(S1,P1)
@@ -624,7 +633,7 @@ argument_schemes:
 
   # lesserScope Rules
 
-  lesserScope1:
+  - id: lesserScope1
     conclusions:
       - lesserScope(capability,service)
       - lesserScope(service,services_agreement)
@@ -633,19 +642,28 @@ argument_schemes:
 
   # compatiblePurpose Rules
 
-  # compatiblePurpose0:
-  #   meta:
-  #     comment: Assume by default that the purpose of further processing is compatible
-  #   weight:
-  #     constant: 0.1 
-  #   variables: [S1,S2]
-  #   premises:
-  #     - dataUseStatement(S1)
-  #     - dataUseStatement(S2)
-  #   conclusions:
-  #     - compatiblePurpose(S1,S2)
+  - id: compatiblePurposeDuplicates
+    variables: [S1,S2]
+    premises:
+      1: compatiblePurpose(S1,S2)
+      2: compatiblePurpose(S1,S2)
+    deletions: [2]
+    conclusions:
+      - true
+ 
+  - id: compatiblePurpose0
+    meta:
+      comment: Assume by default that the purpose of further processing is compatible
+    weight:
+      constant: 0.1 
+    variables: [S1,S2]
+    premises:
+      - dataUseStatement(S1)
+      - dataUseStatement(S2)
+    conclusions:
+      - compatiblePurpose(S1,S2)
 
-  compatiblePurpose1:
+  - id: compatiblePurpose1
     variables: [S1,S2,A]
     premises:
       - action(S1,A)
@@ -654,7 +672,7 @@ argument_schemes:
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose2:
+  - id: compatiblePurpose2
     variables: [S1,S2]
     premises:
       - action(S1,provide)
@@ -663,7 +681,7 @@ argument_schemes:
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose3:
+  - id: compatiblePurpose3
     variables: [S1,S2]
     premises:
       - action(S1,provide)
@@ -672,7 +690,7 @@ argument_schemes:
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose4:
+  - id: compatiblePurpose4
     variables: [S1,S2]
     premises:
       - action(S1,provide)
@@ -681,7 +699,7 @@ argument_schemes:
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose5:
+  - id: compatiblePurpose5
     variables: [S1,S2]
     premises:
       - action(S1,improve)
@@ -690,7 +708,7 @@ argument_schemes:
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose6:
+  - id: compatiblePurpose6
     variables: [S1,S2]
     premises:
       - action(S1,personalize)
@@ -699,7 +717,7 @@ argument_schemes:
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose7:
+  - id: compatiblePurpose7
     variables: [S1,S2]
     premises:
       - action(S1,personalize)
@@ -708,7 +726,7 @@ argument_schemes:
     conclusions:
       - compatiblePurpose(S1,S2)
 
-  compatiblePurpose8:
+  - id: compatiblePurpose8
     variables: [S1,S2]
     premises:
       - action(S1,upgrades)
@@ -720,14 +738,32 @@ argument_schemes:
       
   # consentRequired Rules
 
-  consentRequired1:
+  - id: consentRequired0  # remove duplicate consentRequired statements
+    variables: [S1]
+    premises:
+      1: consentRequired(S1)
+      2: consentRequired(S1)
+    deletions: [2]
+    conclusions:
+      - true
+
+  - id: consentRequired1 # remove duplicate notConsentRequired statements
+    variables: [S1]
+    premises:
+      1: notConsentRequired(S1)
+      2: notConsentRequired(S1)
+    deletions: [2]
+    conclusions:
+      - true
+      
+  - id: consentRequired2
     variables: [S]
     premises:
       - notPii(S)
     conclusions:
       - notConsentRequired(S)
 
-  consentRequired2:
+  - id: consentRequired3
     variables: [S]
     premises:
       - pii(S)
@@ -735,7 +771,7 @@ argument_schemes:
     conclusions:
       - consentRequired(S)
 
-  consentRequired3:
+  - id: consentRequired4
     variables: [S]
     premises:
       - pii(S)
@@ -746,16 +782,16 @@ argument_schemes:
   # Note that consentRequired4 and consentRequired5 can lead
   # to rebuttals (arguments pro and con)
   
-  # consentRequired4:
-  #   variables: [S1,S2]
-  #   premises:
-  #     - pii(S1)
-  #     - notConsentRequired(S2)
-  #     - compatiblePurpose(S1,S2)
-  #   conclusions:
-  #     - notConsentRequired(S1)
+  - id: consentRequired5
+    variables: [S1,S2]
+    premises:
+      - pii(S1)
+      - notConsentRequired(S2)
+      - compatiblePurpose(S1,S2)
+    conclusions:
+      - notConsentRequired(S1)
   
-  consentRequired5:
+  - id: consentRequired6
     variables: [S1,S2]
     premises:
       - pii(S1)
