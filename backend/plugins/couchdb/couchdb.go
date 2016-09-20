@@ -436,9 +436,10 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 }
 
 func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) error {
-	//check type of entry (document/user/rulebase)
+
 	var entryReader *strings.Reader
 	var url string
+	//set url which is different when we want to create a new designfile
 	if !designfile {
 		var entryBytes []byte
 
@@ -450,17 +451,21 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		url = fmt.Sprintf("%s/%s/%s", cb.url, cb.database, entry["_id"])
 	} else {
 
+		//if we want to create a new design file, the whole file is in one entry in the entry map
+		//the key is entry.
+		//This is a hack which might have to be fixed somewhen
 		if _, ok := entry["entry"]; !ok {
 			return errors.New("Expected a map with one entry: \"entry\" but did not get it.")
 		}
 		entryReader = strings.NewReader(entry["entry"].(string))
 		url = fmt.Sprintf("%s/%s/_design/app", cb.url, cb.database)
 	}
-
+	//submit data
 	request, err := http.NewRequest(http.MethodPut, url, entryReader)
 	if err != nil {
 		panic(err)
 	}
+	//TODO: AUTH
 	//request.SetBasicAuth("admin", "admin")
 	//request.ContentLength = 0
 	resp, err := netClient.Do(request)
@@ -469,7 +474,7 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		return err
 	}
 	defer resp.Body.Close()
-
+	//check if we succeeded, couchdb answers with a map containing the field "ok"
 	jsonbody, err := getMap(resp.Body)
 	if err != nil {
 		return err
@@ -491,6 +496,8 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 func (cb *Couchbase) Init(config structs.DBConf) error {
 	log.Println("Couchbase initialization")
 
+	//this is an design document with th id "_design/app" and some view functions that are used to access the user and documents
+	//the view functions are used in this source code file and should be therefore present
 	designDoc := `{"_id":"_design/app","views":{"foo":{"map":"function(doc){ emit(doc._id, doc._rev)}"},` +
 		`"by_date":{"map":"function(doc) { if(doc.date && doc.title) {   emit(doc.date, doc.title);  }}"},` +
 		`"user_login":{"map":"function(doc) { if(doc.type =='user') {   emit(doc.email,  doc.password);  }}"},` +
@@ -527,8 +534,9 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 	if !prs || cdb != "Welcome" {
 		return errors.New("Connection to couchdb not successfull")
 	}
-	cb.url = url
 
+	cb.url = url
+	//TODO: this will probably not work when like it is
 	cb.auth = false
 	if config.Username != "" && config.Password != "" {
 		cb.user = config.Username

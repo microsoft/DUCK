@@ -21,6 +21,10 @@ func init() {
 	flag.BoolVar(&cfg.Loadtestdata, "loadtestdata", false, "If this is true, testdata will be loaded into the database")
 	flag.Parse()
 }
+
+//NewConfiguration is the Constructor for a new structs.Configuration struct.
+//it uses information from a cofiguration file, command flags, environment Variables and its own defaults to
+//decide initial values for the configuration
 func NewConfiguration(confpath string) structs.Configuration {
 
 	c := structs.Configuration{}
@@ -32,20 +36,19 @@ func NewConfiguration(confpath string) structs.Configuration {
 	c.Gopathrelative = true
 	c.Loadtestdata = false
 
+	//overwrite defaults with information from config file
 	if err := getFileConfig(&c, confpath); err != nil {
 		log.Printf("Could not load configuration file: %s", err)
 
 	}
-
+	//overwrite with information from environment
 	getEnv(&c)
-
+	//overwrite with information from flags
 	getFlags(&c)
-
-	log.Printf("Config: %+v", c)
-	log.Printf("Datab: %+v", c.DBConfig)
 	return c
 }
 
+//getFlags populates the configuration struct with data from the flags this program is called with
 func getFlags(config *structs.Configuration) {
 
 	if cfg.JwtKey != "" {
@@ -67,6 +70,9 @@ func getFlags(config *structs.Configuration) {
 	}
 
 }
+
+//getFileConfig reads the config from a JSON formatted config file and
+// sets the read values as configuration values
 func getFileConfig(config *structs.Configuration, confpath string) error {
 	dat, err := ioutil.ReadFile(confpath)
 	if err != nil {
@@ -95,6 +101,7 @@ func getEnv(c *structs.Configuration) {
 	if env != "" {
 		c.RulebaseDir = env
 	}
+	//has to be not empty and also something like a boolean to be set
 	env = os.Getenv("DUCK_GOPATHRELATIVE")
 	if env != "" {
 		if gpr, err := strconv.ParseBool(env); err == nil {
@@ -110,7 +117,6 @@ func getEnv(c *structs.Configuration) {
 		} else {
 			log.Printf("Could not read value for LOADTESTDATA: %s", err)
 		}
-
 	}
 	env = os.Getenv("DUCK_DATABASE.LOCATION")
 	if env != "" {
@@ -123,7 +129,6 @@ func getEnv(c *structs.Configuration) {
 		} else {
 			log.Printf("Could not read value for PORT: %s", err)
 		}
-
 	}
 	env = os.Getenv("DUCK_DATABASE.USERNAME")
 	if env != "" {

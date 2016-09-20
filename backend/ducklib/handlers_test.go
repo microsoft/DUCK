@@ -289,9 +289,10 @@ func testPostUserHandler(t *testing.T) {
 				if res.Lastname != value.User.Lastname {
 					t.Errorf("Test with %s: User creation returns User Lastname %s, wants %s", key, res.Lastname, value.User.Lastname)
 				}
-				if res.Password != value.User.Password {
+				//Passwords are not retuned anymore
+				/*if res.Password != value.User.Password {
 					t.Errorf("Test with %s: User creation returns User Password %s, wants %s", key, res.Password, value.User.Password)
-				}
+				}*/
 				userIDs[key] = res.ID
 				value.User.ID = res.ID
 			}
@@ -768,7 +769,7 @@ func testCopyDocHandler(t *testing.T) {
 
 		c.SetParamNames("docid")
 		c.SetParamValues(documentIDs[key])
-		err = copyDocHandler(c)
+		err = copyStatementsHandler(c)
 		if err != nil {
 			t.Errorf("Test with %s: Error posting Document during copy:%s", key, err)
 
