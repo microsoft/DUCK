@@ -299,9 +299,8 @@ func testPostUserHandler(t *testing.T) {
 
 		} else { //  test missing values
 
-			//this might not always be 500
-			if rec.Code != http.StatusInternalServerError {
-				t.Errorf("Test with %s: user creation does not return HTTP code %d but %d.", key, http.StatusInternalServerError, rec.Code)
+			if rec.Code < 400 {
+				t.Errorf("Test with %s: user creation does not return a HTTP error code (>=400) but %d.", key, rec.Code)
 			}
 		}
 
@@ -331,9 +330,8 @@ func testPostUserHandlerAgain(t *testing.T) {
 			t.Errorf("Test with %s: Error creating User during post:%s", key, err)
 		}
 
-		//this might not always be 500
-		if rec.Code != http.StatusInternalServerError {
-			t.Errorf("Test with %s: user creation does not return HTTP code %d but %d.", key, http.StatusInternalServerError, rec.Code)
+		if rec.Code < 400 {
+			t.Errorf("Test with %s: user creation does not return a HTTP error code (>=400) but %d.", key, rec.Code)
 		}
 
 	}
@@ -367,10 +365,10 @@ func testLoginHandler(t *testing.T) {
 
 		if value.Pass {
 			if err != nil {
-				t.Errorf("Test with %s: Error creating User during post: %s", key, err)
+				t.Errorf("Test with %s: Error logging in: %s", key, err)
 			}
 			if rec.Code != http.StatusOK {
-				t.Errorf("Test with %s: user update does not return HTTP code %d but %d.", key, http.StatusOK, rec.Code)
+				t.Errorf("Test with %s: user Login does not return HTTP code %d but %d.", key, http.StatusOK, rec.Code)
 			} else {
 
 				var dat map[string]interface{}
@@ -378,7 +376,7 @@ func testLoginHandler(t *testing.T) {
 				//log.Println(rec.Body.String())
 
 				if err := json.Unmarshal(rec.Body.Bytes(), &dat); err != nil {
-					t.Errorf("Test with %s: user update does not return valid JSON", key)
+					t.Errorf("Test with %s: user login does not return valid JSON", key)
 				}
 
 				if _, prs := dat["token"]; !prs {
@@ -388,7 +386,7 @@ func testLoginHandler(t *testing.T) {
 
 				if s, prs := dat["firstName"]; prs {
 					if value.User.Firstname != s.(string) {
-						t.Errorf("Test with %s: User update returns User Firstname %s, wants %s", key, s.(string), value.User.Firstname)
+						t.Errorf("Test with %s: User login returns User Firstname %s, wants %s", key, s.(string), value.User.Firstname)
 					}
 				} else {
 					t.Errorf("Test with %s: User login does not return Firstname", key)
@@ -397,7 +395,7 @@ func testLoginHandler(t *testing.T) {
 
 				if s, prs := dat["lastName"]; prs {
 					if value.User.Lastname != s.(string) {
-						t.Errorf("Test with %s: User update returns User Lastname %s, wants %s", key, s.(string), value.User.Lastname)
+						t.Errorf("Test with %s: User login returns User Lastname %s, wants %s", key, s.(string), value.User.Lastname)
 					}
 				} else {
 					t.Errorf("Test with %s: User login does not return Lastname", key)
@@ -406,7 +404,7 @@ func testLoginHandler(t *testing.T) {
 
 				if s, prs := dat["id"]; prs {
 					if value.User.ID != s.(string) {
-						t.Errorf("Test with %s: User update returns User id %s, wants %s", key, s.(string), value.User.ID)
+						t.Errorf("Test with %s: User login returns User id %s, wants %s", key, s.(string), value.User.ID)
 					}
 				} else {
 					t.Errorf("Test with %s: User login does not return id", key)

@@ -276,11 +276,20 @@ func postUserHandler(c echo.Context) error {
 	newUser := new(structs.User)
 	if err := c.Bind(newUser); err != nil {
 		log.Printf("Error in postUserHandler while trying to bind new user to struct: %s", err)
-
 		e := err.Error()
-
-		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		}
 	}
+	//no password no user
+	if newUser.Password == "" {
+		e := "No password submitted"
+		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
+	}
+
 	//hash password
 	password := []byte(newUser.Password)
 	// Hashing the password with the default cost of 10
@@ -288,7 +297,12 @@ func postUserHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in postUserHandler while hashing password: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	newUser.Password = string(hashedPassword)
 
@@ -296,15 +310,24 @@ func postUserHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in postUserHandler while trying to create user in database: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		}
 	}
-	var u, err2 = datab.GetUser(id)
-	if err2 != nil {
+	u, err := datab.GetUser(id)
+	if err != nil {
 		log.Printf("Error in postUserHandler while trying to get new user: %s", err)
 
-		e := err2.Error()
-
-		return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		e := err.Error()
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusInternalServerError, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	//don't show password hash to frontend
 	u.Password = ""
@@ -321,8 +344,12 @@ func getUserDictHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in getUserDictHandler: %s", err)
 		e := err.Error()
-
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	if dict == nil {
 		dict = make(structs.Dictionary)
@@ -342,8 +369,12 @@ func getDictItemHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in getUserDictHandler: %s", err)
 		e := err.Error()
-
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	if entry, prs := dict[c.Param("code")]; prs {
@@ -367,8 +398,12 @@ func deleteDictItemHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in getUserDictHandler: %s", err)
 		e := err.Error()
-
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	delete(dict, c.Param("code"))
@@ -377,8 +412,12 @@ func deleteDictItemHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in getUserDictHandler: %s", err)
 		e := err.Error()
-
-		return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	return c.JSON(http.StatusOK, structs.Response{Ok: true})
@@ -397,9 +436,13 @@ func putDictItemHandler(c echo.Context) error {
 	d := new(structs.DictionaryEntry)
 	if err := c.Bind(d); err != nil {
 		log.Printf("Error in putDictItemHandler while trying to bind new dictionary entry to struct: %s", err)
-
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	code := c.Param("code")
@@ -409,7 +452,12 @@ func putDictItemHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in putDictItemHandler while trying to  user dictionary from database: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	if dict == nil {
 		dict = make(structs.Dictionary)
@@ -420,7 +468,12 @@ func putDictItemHandler(c echo.Context) error {
 	if err != nil {
 		log.Printf("Error in putDictItemHandler while trying to update user dictionary in database: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	return c.JSON(http.StatusOK, code)
@@ -437,26 +490,38 @@ func putUserDictHandler(c echo.Context) error {
 	d := new(structs.Dictionary)
 	if err := c.Bind(d); err != nil {
 		log.Printf("Error in putUserDictHandler while trying to bind new dictionary to struct: %s", err)
-
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	id := c.Param("id")
 
 	err := datab.PutUserDict(*d, id)
 	if err != nil {
 		log.Printf("Error in putUserDictHandler while trying to update user dictionary in database: %s", err)
-
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	nd, err := datab.GetUserDict(id)
 	if err != nil {
 		log.Printf("Error in putUserDictHandler while trying to get updated user dictionary: %s", err)
-
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	return c.JSON(http.StatusOK, nd)
@@ -486,25 +551,45 @@ func checkDocHandler(c echo.Context) error {
 	if err := c.Bind(doc); err != nil {
 		log.Printf("Error in checkDocHandler while trying to bind document to struct: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	normalizer, err := NewNormalizer(*doc, datab)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	normDoc, err := normalizer.CreateDict()
 	if err != nil {
 		log.Printf("Error in checkDocHandler while normalizing: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	ok, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	if ok {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
@@ -525,28 +610,46 @@ func checkDocIDHandler(c echo.Context) error {
 
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to get document from database: %s", err)
-
 		e := err.Error()
-
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	normalizer, err := NewNormalizer(doc, datab)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	normDoc, err := normalizer.CreateDict()
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while normalizing: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	ok, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while checking for compliance: %s", err)
 		e := err.Error()
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	if ok {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
@@ -578,16 +681,25 @@ func loginHandler(c echo.Context) error {
 	u := new(structs.Login)
 	if err := c.Bind(u); err != nil {
 		log.Printf("Error in loginHandler trying to bind user to struct: %s", err)
-		return err
+		e := err.Error()
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 
 	id, hashedpw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
 	if err != nil {
 		log.Printf("Error in loginHandler trying to get login info for userMail %s: %s", u.Email, err)
-
 		e := err.Error()
-
-		return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
+		switch t := err.(type) {
+		case structs.HTTPError:
+			return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+		default:
+			return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
+		}
 	}
 	//log.Printf("id: %s, pw: %s", id, pw)
 
@@ -602,8 +714,13 @@ func loginHandler(c echo.Context) error {
 		user, err := datab.GetUser(id)
 		if err != nil {
 			log.Printf("Error in loginHandler trying to get user info: %s", err)
-
-			return echo.ErrUnauthorized
+			e := err.Error()
+			switch t := err.(type) {
+			case structs.HTTPError:
+				return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+			default:
+				return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
+			}
 		}
 
 		// Create token
@@ -620,7 +737,13 @@ func loginHandler(c echo.Context) error {
 		t, err := token.SignedString([]byte(JWT))
 		if err != nil {
 			log.Printf("Error in loginHandler: %s", err)
-			return err
+			e := err.Error()
+			switch t := err.(type) {
+			case structs.HTTPError:
+				return c.JSON(t.Status, structs.Response{Ok: false, Reason: &e})
+			default:
+				return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
+			}
 		}
 		return c.JSON(http.StatusOK, map[string]string{
 			"token":     t,
