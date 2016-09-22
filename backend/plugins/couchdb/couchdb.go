@@ -27,7 +27,6 @@ delete Rulebase		✓
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -58,7 +57,7 @@ func getMap(resp io.Reader) (map[string]interface{}, error) {
 
 	content, err := ioutil.ReadAll(resp)
 	if err != nil {
-		return nil, err
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 
 	//TODO: remove this when not used anymore
@@ -67,7 +66,7 @@ func getMap(resp io.Reader) (map[string]interface{}, error) {
 	var data map[string]interface{}
 
 	if err := json.Unmarshal(content, &data); err != nil {
-		return nil, structs.NewHttpError(err, 404)
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	//e := structs.NewHttpError(err, 404)
 
@@ -83,7 +82,7 @@ func getRows(resp io.Reader) ([]interface{}, error) {
 	rows, prs := jsonbody["rows"].([]interface{})
 	//fmt.Println(jsonbody)
 	if !prs || len(rows) < 1 {
-		return nil, errors.New("No Data returned")
+		return nil, structs.NewHTTPError("No Data returned", 502)
 	}
 	return rows, nil
 }
@@ -99,7 +98,7 @@ func (cb *Couchbase) GetLogin(email string) (id string, pw string, err error) {
 	if err != nil {
 		log.Println(err)
 
-		return "", "", err
+		return "", "", structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
@@ -108,27 +107,27 @@ func (cb *Couchbase) GetLogin(email string) (id string, pw string, err error) {
 		//Wrap error? http://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully
 
 		if err.Error() == "No Data returned" {
-			return "", "", errors.New("User not found")
+			return "", "", structs.NewHTTPError("User not found", 404)
 		}
 		return "", "", err
 	}
 	if len(rows) > 1 {
-		return "", "", errors.New("User not unique")
+		return "", "", structs.NewHTTPError("User not unique", 409)
 	}
 
 	row := rows[0].(map[string]interface{})
 
 	pw, prs := row["value"].(string)
 	if !prs || len(pw) <= 0 {
-		return "", "", errors.New("Password not found")
+		return "", "", structs.NewHTTPError("Password not found", 401)
 	}
 
 	id, prs = row["id"].(string)
 	if !prs || len(id) <= 0 {
-		return "", "", errors.New("ID not found")
+		return "", "", structs.NewHTTPError("ID not found", 404)
 	}
 
-	log.Printf("id: %s, pw: %s", id, pw)
+	//log.Printf("id: %s, pw: %s", id, pw)
 	return
 
 }
@@ -144,7 +143,7 @@ func (cb *Couchbase) GetUserDict(id string) (structs.Dictionary, error) {
 	var u structs.User
 	u.FromValueMap(mp)
 	//fmt.Printf("%+v\n", mp)
-	return u.GlobalDictionary, err
+	return u.GlobalDictionary, nil
 
 }
 
@@ -159,7 +158,7 @@ func (cb *Couchbase) GetUser(id string) (structs.User, error) {
 
 	u.FromValueMap(mp)
 
-	return u, err
+	return u, nil
 
 }
 
@@ -173,7 +172,7 @@ func (cb *Couchbase) GetDocument(id string) (structs.Document, error) {
 	//fmt.Printf("%+v\n", mp)
 	doc.FromValueMap(mp)
 
-	return doc, err
+	return doc, nil
 
 }
 
@@ -190,17 +189,17 @@ func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]i
 
 	resp, err := netClient.Get(url)
 	if err != nil {
-		return nil, err
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
 	cbDoc, err := getMap(resp.Body)
 
-	if _, prs := cbDoc["_id"]; prs {
-		return cbDoc, nil
+	if _, prs := cbDoc["_id"]; !prs {
+		return nil, structs.NewHTTPError("No Data", 409)
 	}
+	return cbDoc, nil
 
-	return nil, errors.New("No Data")
 }
 
 //GetDocumentSummariesForUser returns a list all data use documents a user owns
@@ -211,13 +210,13 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Docum
 	resp, err := netClient.Get(url)
 
 	if err != nil {
-		return nil, err
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
 	rows, err := getRows(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 
 	var documents []structs.Document
@@ -238,7 +237,7 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Docum
 
 	}
 
-	return documents, err
+	return documents, nil
 
 }
 
@@ -258,7 +257,7 @@ func (cb *Couchbase) DeleteDocument(id string) error {
 		return nil
 	}
 
-	return errors.New("Could not delete Entry")
+	return structs.NewHTTPError("Could not delete Entry", 409)
 
 }
 
@@ -277,7 +276,7 @@ func (cb *Couchbase) DeleteUser(id string) error {
 		return nil
 	}
 
-	return errors.New("Could not delete Entry")
+	return structs.NewHTTPError("Could not delete Entry", 409)
 }
 
 /*
@@ -295,7 +294,7 @@ func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 	resp, err := netClient.Do(request)
 
 	if err != nil {
-		return err
+		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
@@ -309,15 +308,15 @@ func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 
 	if err, prs := jsonbody["error"]; prs {
 		reason := jsonbody["reason"].(string)
-
-		return errors.New("Error:" + err.(string) + ", Reason: " + reason)
+		e := "Error:" + err.(string) + ", Reason: " + reason
+		return structs.NewHTTPError(e, 400)
 	}
 
-	return errors.New("Could not decrypt Couchbase response")
+	return structs.NewHTTPError("Could not decrypt Couchbase response", 500)
 
 }
 
-// NewUser creates a new user in the couchbase Databse
+// NewUser creates a new user in the couchbase Database
 func (cb *Couchbase) NewUser(user structs.User) error {
 	return cb.putUser(user)
 }
@@ -445,7 +444,7 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 
 		entryBytes, err := json.Marshal(entry)
 		if err != nil {
-			return err
+			return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 500))
 		}
 		entryReader = strings.NewReader(string(entryBytes))
 		url = fmt.Sprintf("%s/%s/%s", cb.url, cb.database, entry["_id"])
@@ -455,7 +454,7 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		//the key is entry.
 		//This is a hack which might have to be fixed somewhen
 		if _, ok := entry["entry"]; !ok {
-			return errors.New("Expected a map with one entry: \"entry\" but did not get it.")
+			return structs.NewHTTPError("Expected a map with one entry: \"entry\" but did not get it.", 409)
 		}
 		entryReader = strings.NewReader(entry["entry"].(string))
 		url = fmt.Sprintf("%s/%s/_design/app", cb.url, cb.database)
@@ -463,7 +462,7 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 	//submit data
 	request, err := http.NewRequest(http.MethodPut, url, entryReader)
 	if err != nil {
-		panic(err)
+		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	//TODO: AUTH
 	//request.SetBasicAuth("admin", "admin")
@@ -471,7 +470,7 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 	resp, err := netClient.Do(request)
 
 	if err != nil {
-		return err
+		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 	//check if we succeeded, couchdb answers with a map containing the field "ok"
@@ -483,13 +482,14 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		return nil
 	}
 
-	if _, prs := jsonbody["error"]; prs {
+	if err, prs := jsonbody["error"]; prs {
 		reason := jsonbody["reason"].(string)
 
-		return errors.New(reason)
+		e := "Error:" + err.(string) + ", Reason: " + reason
+		return structs.NewHTTPError(e, 400)
 	}
 
-	return errors.New("Could not understand Couchbase response")
+	return structs.NewHTTPError("Could not understand Couchbase response", 502)
 }
 
 //Init initializes the Couchbase DB & tests for connection errors
@@ -510,17 +510,17 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 	designMap := map[string]interface{}{"entry": designDoc}
 	port := strconv.Itoa(config.Port)
 	if port == "" {
-		return errors.New("couchDB needs an port entry in config")
+		return structs.NewHTTPError("couchDB needs an port entry in config", 400)
 	}
 	if config.Location == "" {
-		return errors.New("couchDB needs an url entry in config")
+		return structs.NewHTTPError("couchDB needs an url entry in config", 400)
 	}
 
 	url := config.Location + ":" + port
 
 	resp, err := netClient.Get(url)
 	if err != nil {
-		return err
+		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
@@ -532,7 +532,7 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 
 	cdb, prs := jsonbody["couchdb"].(string)
 	if !prs || cdb != "Welcome" {
-		return errors.New("Connection to couchdb not successfull")
+		return structs.NewHTTPError("Connection to couchdb failed", 400)
 	}
 
 	cb.url = url
@@ -546,8 +546,7 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 	}
 
 	if config.Name == "" {
-		return errors.New("Couchdb needs a database entry in the config file to know the name of the database.")
-
+		return structs.NewHTTPError("Couchdb needs a database entry in the config file to know the name of the database.", 400)
 	}
 	cb.database = config.Name
 
@@ -582,7 +581,7 @@ func (cb *Couchbase) testFileExists(id string) (bool, error) {
 
 	resp, err := netClient.Get(url)
 	if err != nil {
-		return false, err
+		return false, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
@@ -591,18 +590,17 @@ func (cb *Couchbase) testFileExists(id string) (bool, error) {
 		return false, err
 	}
 
-	cdb, prs := jsonbody["_id"]
-	if !prs {
+	if _, prs := jsonbody["_id"]; !prs {
 
-		cdb, prs = jsonbody["error"]
+		cdb, prs := jsonbody["error"]
 		if !prs {
-			return false, errors.New("Could not decrypt Couchbase response")
+			return false, structs.NewHTTPError("Could not decrypt Couchbase response", 502)
 		}
 		e := cdb.(string)
 		if e == "not_found" {
 			return false, nil
 		}
-		return false, errors.New(e)
+		return false, structs.NewHTTPError(e, 502)
 	}
 	return true, nil
 
@@ -617,7 +615,7 @@ func (cb *Couchbase) createDatabase() error {
 	resp, err := netClient.Do(request)
 
 	if err != nil {
-		return err
+		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
@@ -632,10 +630,10 @@ func (cb *Couchbase) createDatabase() error {
 	if _, prs := jsonbody["error"]; prs {
 		reason := jsonbody["reason"].(string)
 
-		return errors.New(reason)
+		return structs.NewHTTPError(reason, 502)
 	}
 
-	return errors.New("Could not decrypt Couchbase response")
+	return structs.NewHTTPError("Could not decrypt Couchbase response", 502)
 }
 
 func (cb *Couchbase) testDBExists() (bool, error) {
@@ -643,7 +641,7 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 
 	resp, err := netClient.Get(url)
 	if err != nil {
-		return false, err
+		return false, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
 	}
 	defer resp.Body.Close()
 
@@ -657,13 +655,13 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 
 		cdb, prs = jsonbody["error"]
 		if !prs {
-			return false, errors.New("Could not decrypt Couchbase response")
+			return false, structs.NewHTTPError("Could not decrypt Couchbase response", 502)
 		}
 		e := cdb.(string)
 		if e == "not_found" {
 			return false, nil
 		}
-		return false, errors.New(e)
+		return false, structs.NewHTTPError(e, 502)
 	}
 	return true, nil
 }

@@ -141,7 +141,7 @@ type Rulebase struct {
 	Revision string `json:"_rev"`
 }
 
-//can this be a map?
+//
 type Taxonomy map[string][]struct {
 	Value    string `json:"value"`
 	Code     string `json:"code"`
@@ -149,16 +149,24 @@ type Taxonomy map[string][]struct {
 	Fixed    bool   `json:"fixed"`
 }
 
-type httpError struct {
-	error
+// HTTPError is an error with an http statuscode, it can also wrap another underlying error
+type HTTPError struct {
+	Err    string
 	Status int
+	Cause  error
 }
 
-// NewHttpError returns a httpError which implements the Error interface and has the additional field Status for a http status code.
-func NewHttpError(err error, code int) httpError {
-	return httpError{err, code}
+// NewHTTPError returns a httpError which implements the Error interface and has the additional field Status for a http status code.
+func NewHTTPError(err string, code int) HTTPError {
+	return HTTPError{err, code, nil}
 }
 
-func (e httpError) Error() string {
-	return e.Error()
+func WrapErrWith(err error, herr HTTPError) HTTPError {
+	herr.Cause = err
+	return herr
+}
+
+func (e HTTPError) Error() string {
+	return e.Err
+
 }

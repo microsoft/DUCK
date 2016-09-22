@@ -2,7 +2,6 @@ package ducklib
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"log"
 
@@ -30,7 +29,7 @@ func FillTestdata(testDataFile string) error {
 	dat, err := ioutil.ReadFile(testDataFile)
 	if err != nil {
 		log.Printf("Error in FillTestdata while trying to read from the file: %s", err)
-		return err
+		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 500))
 	}
 
 	if err := json.Unmarshal(dat, &listOfData); err != nil {
@@ -48,13 +47,13 @@ func FillTestdata(testDataFile string) error {
 			d.FromValueMap(mp)
 
 			if err := db.NewDocument(d); err != nil {
-				return err
+				return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 500))
 			}
 		case "user":
 			var u structs.User
 			u.FromValueMap(mp)
 			if err := db.NewUser(u); err != nil {
-				return err
+				return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 500))
 			}
 
 		}
@@ -69,11 +68,8 @@ func (database *database) Init() error {
 
 	db = pluginregistry.DatabasePlugin
 
-	err := db.Init(database.Config)
-	if err != nil {
-		return err
-	}
-	return nil
+	return db.Init(database.Config)
+
 }
 
 /*
@@ -106,15 +102,15 @@ func (database *database) PutUser(user structs.User) error {
 func (database *database) PostUser(user structs.User) (ID string, err error) {
 	//check for duplicate
 	if user.Email == "" {
-		return "", errors.New("No email submitted")
+		return "", structs.NewHTTPError("No email submitted", 400)
 	}
 	if user.Password == "" {
-		return "", errors.New("No password submitted")
+		return "", structs.NewHTTPError("No password submitted", 400)
 	}
-
+	
 	_, _, err = db.GetLogin(user.Email)
 
-	// if user is not in dtabase we can create a new one
+	// if user is not in database we can create a new one
 	//TODO: What if another Database Plugin returns another Error when getting an nonexistant User?
 	if err != nil && err.Error() == "User not found" {
 		u := uuid.NewV4()
@@ -129,7 +125,7 @@ func (database *database) PostUser(user structs.User) (ID string, err error) {
 		return "", err
 	}
 
-	return "", errors.New("User already exists")
+	return "", structs.NewHTTPError("User already exists", 409)
 }
 
 func (database *database) GetUserDict(userid string) (structs.Dictionary, error) {
@@ -172,17 +168,17 @@ func (database *database) PutDocument(doc structs.Document) error {
 
 func (database *database) PostDocument(doc structs.Document) (ID string, err error) {
 	if doc.Name == "" {
-		return "", errors.New("No Document Name submitted")
+		return "", structs.NewHTTPError("No Document Name submitted", 400)
 	}
 
 	if doc.Owner == "" {
-		return "", errors.New("No Document Owner submitted")
+		return "", structs.NewHTTPError("No Document Owner submitted", 400)
 	}
 
 	smap := make(map[string]bool)
 	for _, s := range doc.Statements {
 		if _, prs := smap[s.TrackingID]; prs {
-			return "", errors.New("Document contains two Statements with the same statement ID")
+			return "", structs.NewHTTPError("Document contains two Statements with the same statement ID", 400)
 		}
 		smap[s.TrackingID] = true
 	}
@@ -191,7 +187,6 @@ func (database *database) PostDocument(doc structs.Document) (ID string, err err
 	uuid := uuid.Formatter(u, uuid.Clean)
 	doc.ID = uuid
 
-	
 	return uuid, db.NewDocument(doc)
 
 }
