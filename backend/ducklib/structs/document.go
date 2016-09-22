@@ -6,6 +6,7 @@ type Document struct {
 	Revision      string      `json:"revision"`
 	Owner         string      `json:"owner"`
 	Locale        string      `json:"locale"`
+	Description   string      `json:"description"`
 	AssumptionSet string      `json:"assumptionSet"`
 	Statements    []Statement `json:"statements"`
 	Dictionary    Dictionary  `json:"dictionary"`
@@ -22,6 +23,8 @@ type Statement struct {
 	Passive          bool   `json:"passive"`
 }
 
+//FromValueMap fills the fields of a document struct with values that
+//are Unmarshalled from JSON into a map
 func (d *Document) FromValueMap(mp map[string]interface{}) {
 
 	if id, ok := mp["_id"]; ok {
@@ -41,6 +44,9 @@ func (d *Document) FromValueMap(mp map[string]interface{}) {
 	}
 	if assumptionSet, ok := mp["assumptionSet"]; ok {
 		d.AssumptionSet = assumptionSet.(string)
+	}
+	if description, ok := mp["description"]; ok {
+		d.Description = description.(string)
 	}
 
 	d.Statements = make([]Statement, 0)
