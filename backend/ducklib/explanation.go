@@ -1,8 +1,6 @@
 package ducklib
 
 import (
-	"encoding/json"
-	"fmt"
 
 	"github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
