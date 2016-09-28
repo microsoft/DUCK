@@ -7,7 +7,7 @@ meta:
 language:
   action/2: action(%s,%s)
   compatiblePurpose/2: compatiblePurpose(%s,%s)
-  notCompatiblePurpse/2: notCompatiblePurpose(%s,%s)
+#   notCompatiblePurpse/2: notCompatiblePurpose(%s,%s)
   notConsentRequired/1: notConsentRequired(%s)
   consentRequired/1: consentRequired(%s)
   dataCategory/2: dataCategory(%s,%s)
@@ -36,7 +36,7 @@ language:
 
 
 issue_schemes:
-  compatiblePurpose: [compatiblePurpose(S), notCompatiblePurpose(S)]
+#  compatiblePurpose: [compatiblePurpose(S), notCompatiblePurpose(S)]
   consent: [consentRequired(S), notConsentRequired(S)]
   docConsent: [docConsentRequired, notDocConsentRequired]
   li: [li(S), notLi(S)]
@@ -297,10 +297,7 @@ argument_schemes:
       
   # docConsent Rules
   
-  - id: docConsent1
-    meta:
-       comment: >
-          By default, a data use document does not require informed consent
+  - id: docConsent1 # default
     weight:
        constant: 0.1   
     conclusions:
@@ -319,34 +316,32 @@ argument_schemes:
 
   # PII Rules
 
-  - id: pii0
-    meta:
-      comment: Assume by default that the information is not personal
+  - id: pii0  # default rule
     weight:
       constant: 0.1 
     variables: [S]
     premises:
       - dataUseStatement(S)
     conclusions:
-      - notPii(S)
-
-  - id: pii1
-    variables: [S]
-    premises:
-      - qualifier(S,unqualified_or_identified)
-    conclusions:
       - pii(S)
-    exceptions:
-      - dataCategory(S,provider_data_operations)
 
-  - id: pii2
-    variables: [S]
-    premises:
-      - qualifier(S,pseudonymized_data)
-    conclusions:
-      - pii(S)
-    exceptions:
-      - dataCategory(S,derived_data_organization)
+  # - id: pii1
+  #   variables: [S]
+  #   premises:
+  #     - qualifier(S,unqualified_or_identified)
+  #   conclusions:
+  #     - pii(S)
+  #   exceptions:
+  #     - dataCategory(S,provider_data_operations)
+
+  # - id: pii2
+  #   variables: [S]
+  #   premises:
+  #     - qualifier(S,pseudonymized_data)
+  #   conclusions:
+  #     - pii(S)
+  #   exceptions:
+  #     - dataCategory(S,derived_data_organization)
       
   - id: pii3
     variables: [S]
@@ -361,7 +356,6 @@ argument_schemes:
       - qualifier(S,anonymized_data)  
     conclusions:
       - notPii(S)
-
 
   - id: pii5
     variables: [S]
@@ -402,13 +396,13 @@ argument_schemes:
     conclusions:
       - notPii(S)
 
-  - id: pii10
-    variables: [S]
-    premises:
-      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
-      - dataCategory(S,customer_content_credentials)
-    conclusions:
-      - pii(S)    
+  # - id: pii10
+  #   variables: [S]
+  #   premises:
+  #     - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
+  #     - dataCategory(S,customer_content_credentials)
+  #   conclusions:
+  #    - pii(S)    
 
   - id: pii11
     variables: [S]
@@ -428,9 +422,7 @@ argument_schemes:
 
   # Legitimate Interest (LI) Rules
 
-  - id: li0
-    meta:
-      comment: Assume by default that the interest is not legitimate
+  - id: li0  # default rule
     weight:
       constant: 0.1 
     variables: [S]
@@ -494,7 +486,6 @@ argument_schemes:
       - resultScope(S,csp_products)
     conclusions:
       - li(S)
-
 
   - id: li8
     variables: [S]
@@ -651,17 +642,15 @@ argument_schemes:
     conclusions:
       - true
  
-  - id: compatiblePurpose0
-    meta:
-      comment: Assume by default that the purpose of further processing is compatible
-    weight:
-      constant: 0.1 
-    variables: [S1,S2]
-    premises:
-      - dataUseStatement(S1)
-      - dataUseStatement(S2)
-    conclusions:
-      - compatiblePurpose(S1,S2)
+  # - id: compatiblePurpose0  # default rule
+  #   weight:
+  #     constant: 0.1 
+  #   variables: [S1,S2]
+  #   premises:
+  #     - dataUseStatement(S1)
+  #     - dataUseStatement(S2)
+  #   conclusions:
+  #     - notCompatiblePurpose(S1,S2)
 
   - id: compatiblePurpose1
     variables: [S1,S2,A]
@@ -755,21 +744,30 @@ argument_schemes:
     deletions: [2]
     conclusions:
       - true
+
+  - id: consentRequired2  # default rule
+    weight:
+      constant: 0.1
+    variables: [S]
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - consentRequired(S)
+
+  # - id: consentRequired3 
+  #   variables: [S]
+  #   premises:
+  #     - pii(S)
+  #     - notLi(S)
+  #   conclusions:
+  #     - consentRequired(S)
       
-  - id: consentRequired2
+  - id: consentRequired3
     variables: [S]
     premises:
       - notPii(S)
     conclusions:
       - notConsentRequired(S)
-
-  - id: consentRequired3
-    variables: [S]
-    premises:
-      - pii(S)
-      - notLi(S)
-    conclusions:
-      - consentRequired(S)
 
   - id: consentRequired4
     variables: [S]
@@ -779,7 +777,7 @@ argument_schemes:
     conclusions:
       - notConsentRequired(S)
 
-  # Note that consentRequired4 and consentRequired5 can lead
+  # Note that consentRequired5 and consentRequired6 can lead
   # to rebuttals (arguments pro and con)
   
   - id: consentRequired5
@@ -791,12 +789,12 @@ argument_schemes:
     conclusions:
       - notConsentRequired(S1)
   
-  - id: consentRequired6
-    variables: [S1,S2]
-    premises:
-      - pii(S1)
-      - consentRequired(S2)
-      - compatiblePurpose(S1,S2)
-    conclusions:
-      - consentRequired(S1)
+  # - id: consentRequired6
+  #   variables: [S1,S2]
+  #   premises:
+  #     - pii(S1)
+  #     - consentRequired(S2)
+  #     - compatiblePurpose(S1,S2)
+  #   conclusions:
+  #     - consentRequired(S1)
 
