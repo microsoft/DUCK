@@ -120,11 +120,11 @@ func (c *ComplianceCheckerPlugin) ruleBaseReader(ruleBaseID string) io.Reader {
 
 // IsCompliant returns true iff the document complies with the rules in the given
 // rulebase.  An error is returned if document has syntax errors and cannot be parsed.
-func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *NormalizedDocument) (bool, error) {
+func (c *ComplianceCheckerPlugin) IsCompliant(ruleBaseID string, document *NormalizedDocument) (bool, Explanation, error) {
 	r := c.ruleBaseReader(ruleBaseID)
 	theory, err := c.checker.GetTheory(ruleBaseID, "irrelevant", r)
 	if err != nil {
-		return false, err
+		return false, nil, err
 	}
 	return c.checker.IsCompliant(theory, document)
 }
