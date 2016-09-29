@@ -690,9 +690,10 @@ func loginHandler(c echo.Context) error {
 		}
 	}
 
-	id, hashedpw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
+	id, hashedpw, err := datab.GetLogin(u.Email)
 	if err != nil {
 		log.Printf("Error in loginHandler trying to get login info for userMail %s: %s", u.Email, err)
+		log.Printf("#%v", u)
 		e := err.Error()
 		switch t := err.(type) {
 		case structs.HTTPError:
@@ -713,7 +714,7 @@ func loginHandler(c echo.Context) error {
 
 		user, err := datab.GetUser(id)
 		if err != nil {
-			log.Printf("Error in loginHandler trying to get user info: %s", err)
+			log.Printf("Error in loginHandler trying to get user info for userMail %s: %s", u.Email, err)
 			e := err.Error()
 			switch t := err.(type) {
 			case structs.HTTPError:
@@ -754,7 +755,7 @@ func loginHandler(c echo.Context) error {
 		})
 	}
 	reason := "Passwords do not match"
-	log.Printf("Error in loginHandler: %s", reason)
+	log.Printf("Error in loginHandler for userMail %s: %s", u.Email, reason)
 
 	return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &reason})
 
