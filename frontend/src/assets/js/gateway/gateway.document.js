@@ -212,6 +212,12 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         data.statements = [];
         context.copyStatements(document, data);
         data.revision = document.revision;
+        data.dictionary = {};
+        var entries = document.dictionary.entries();
+        entries.forEach(function(entry){
+            var term = entry[1];
+            data.dictionary[entry[0]] = {value: term.value, type: term.type, code: term.code, category: term.category, dictionaryType: "document"};
+        });
         return data;
     };
 
