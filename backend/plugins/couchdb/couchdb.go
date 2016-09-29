@@ -392,6 +392,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	entryMap["owner"] = d.Owner
 	entryMap["locale"] = d.Locale
 	entryMap["assumptionSet"] = d.AssumptionSet
+	entryMap["description"] = d.Description
 	if d.Revision != "" {
 		entryMap["_rev"] = d.Revision
 	}

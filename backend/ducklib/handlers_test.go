@@ -19,9 +19,7 @@ import (
 
 /*
 TODO
-hello handler?
-testdataHandler
-copyDocHandler
+
 checkDocHandler(c echo.Context)
 checkDocIDHandler(c echo.Context)
 getRulebasesHandler(c echo.Context)
@@ -36,7 +34,7 @@ var (
 		Pass bool         `json:"pass"`
 		User structs.User `json:"user"`
 	}
-	//eg dacument["document_a"]
+	//eg document["document_a"]
 	documents map[string]struct {
 		Pass     bool             `json:"pass"`
 		Document structs.Document `json:"document"`
@@ -44,9 +42,9 @@ var (
 	dicts struct {
 		User         structs.User
 		Dictionaries map[string]struct {
-			Pass     bool                    `json:"pass"`
-			EntryIn  structs.DictionaryEntry `json:"entryIn"`
-			EntryOut structs.DictionaryEntry `json:"entryOut"`
+			Pass     bool               `json:"pass"`
+			EntryIn  structs.Dictionary `json:"entryIn"`
+			EntryOut structs.Dictionary `json:"entryOut"`
 		} `json:"dictionaries"`
 		Entries map[string]struct {
 			EntryIn  structs.DictionaryEntry `json:"entryIn"`
@@ -230,11 +228,46 @@ func TestDocumentHandler(t *testing.T) {
 	t.Run("PostDocument=1", testpostDocHandler)
 	t.Run("GetDocument=1", testGetDocHandler)
 	t.Run("Summaries=1", testGetDocSummaries)
-	t.Run("CopyDocument=1", testCopyDocHandler) // NOT IMPLEMENTED YET
+	t.Run("CopyDocument=1", testCopyDocHandler)
 	t.Run("PutDocument=1", testPutDocHandler)
 
 	t.Run("DeleteDocument=1", testDeleteDocHandler)
 	//t.Error("AHHHHHH")
+
+}
+
+func TestDictionaryHandler(t *testing.T) {
+
+	dat, err := ioutil.ReadFile("structs/testdata/dictionary.json")
+
+	if err = json.Unmarshal(dat, &dicts); err != nil {
+		t.Error("Testfixture Dictionary not correctly loading")
+		t.Skip("No testfixtures no dictionary tests")
+	}
+	id, err := datab.PostUser(dicts.User)
+	if err != nil {
+		t.Skip("Not able to save user to mockdb in dictionary test. Skipping tests..")
+	}
+	defer func() {
+		err := datab.DeleteUser(id)
+		if err != nil {
+			t.Log("Could not delete user from mockDB in dictionary test this can interfere with other tests")
+		}
+	}()
+	user, err := datab.GetUser(id)
+	if err != nil {
+		t.Skip("Not able to read user from mockdb in dictionary test. Skipping tests ..")
+	}
+	dicts.User = user
+
+	//t.Logf("User %+v\n", documents)
+	/*	t.Run("PostDocument=1", testpostDocHandler)
+		t.Run("GetDocument=1", testGetDocHandler)
+		t.Run("Summaries=1", testGetDocSummaries)
+		t.Run("CopyDocument=1", testCopyDocHandler)
+		t.Run("PutDocument=1", testPutDocHandler)
+
+		t.Run("DeleteDocument=1", testDeleteDocHandler)*/
 
 }
 
@@ -424,32 +457,38 @@ func testLoginHandler(t *testing.T) {
 func testWrongLogin(t *testing.T) {
 	key := "user_a"
 	value := users[key]
-	value.User.Password = "WrongPassword"
+	value.User.Password += "WrongPassword"
+	logins := make([]interface{}, 4)
 
-	login := structs.Login{Email: value.User.Email, Password: value.User.Password}
+	logins[0] = structs.Login{Email: value.User.Email, Password: value.User.Password}
+	logins[1] = structs.Login{Email: value.User.Email}
+	docs := make([]structs.Document, 2)
+	logins[2] = structs.Response{Documents: &docs}
+	logins[3] = "teststring"
 
-	userJSON, err := json.Marshal(login)
-	if err != nil {
-		t.Errorf("Test with %s: user login with wrong password json Marshal not functioning", key)
+	for i, login := range logins {
+		userJSON, err := json.Marshal(login)
+		if err != nil {
+			t.Errorf("Test with login %d: user login with wrong password json Marshal not functioning", i)
 
+		}
+
+		req, err := http.NewRequest(echo.POST, "/login", bytes.NewReader(userJSON))
+
+		if err != nil {
+			t.Errorf("Test with login %d: Error login with wrong password: %s", i, err)
+		}
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+
+		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+
+		err = loginHandler(c)
+
+		if rec.Code != echo.ErrUnauthorized.Code && rec.Code != echo.ErrNotFound.Code {
+			t.Errorf("Test with login %d: wrong user login test does not return HTTP code %d or %d but %d.", i, echo.ErrUnauthorized.Code, echo.ErrNotFound.Code, rec.Code)
+		}
 	}
-
-	req, err := http.NewRequest(echo.POST, "/login", bytes.NewReader(userJSON))
-
-	if err != nil {
-		t.Errorf("Test with %s: Error login with wrong password: %s", key, err)
-	}
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-
-	c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
-
-	err = loginHandler(c)
-
-	if rec.Code != echo.ErrUnauthorized.Code {
-		t.Errorf("Test with %s: user login with wrong password does not return HTTP code %d but %d.", key, echo.ErrUnauthorized.Code, rec.Code)
-	}
-
 }
 
 func testPutUserHandler(t *testing.T) {

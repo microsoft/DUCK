@@ -3,5 +3,6 @@
     "user_b":{"pass": true, "user":{"email":"dä@example.com","password":"<'//''$=äÜ","firstname":"Sören","lastname":"Duck","locale":"de"}},
     "user_c":{"pass": false, "user":{}},
     "user_d":{"pass": false, "user":{"email":"","password":"<'//''$=äÜ","firstname":"François","lastname":"Duck","locale":"de"}},
-    "user_e":{"pass": false, "user":{"email":"däe@example.com","firstname":"Marie","lastname":"Duck","locale":"de"}}
+    "user_e":{"pass": false, "user":{"test":"","password":"<'//''$=äÜ","François":"firstName","lastname":"Duck","locale":"de"}},
+    "user_f":{"pass": false, "user":{"email":"däe@example.com","firstname":"Marie","lastname":"Duck","locale":"de"}}
 }

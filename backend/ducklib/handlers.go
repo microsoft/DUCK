@@ -580,7 +580,7 @@ func checkDocHandler(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	ok, _, err := checker.IsCompliant(id, normDoc)
+	ok, exp, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
 		e := err.Error()
@@ -592,9 +592,9 @@ func checkDocHandler(c echo.Context) error {
 		}
 	}
 	if ok {
-		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
+		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: exp})
 	}
-	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "NON_COMPLIANT", Explanation: exp})
 }
 
 //checkDocIDHandler checks a document from the database against a rulebase for compliance
@@ -640,7 +640,7 @@ func checkDocIDHandler(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	ok, _, err := checker.IsCompliant(id, normDoc)
+	ok, exp, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while checking for compliance: %s", err)
 		e := err.Error()
@@ -652,10 +652,10 @@ func checkDocIDHandler(c echo.Context) error {
 		}
 	}
 	if ok {
-		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
+		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: exp})
 	}
 
-	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "NON_COMPLIANT", Explanation: exp})
 
 }
 
@@ -690,9 +690,10 @@ func loginHandler(c echo.Context) error {
 		}
 	}
 
-	id, hashedpw, err := datab.GetLogin(u.Email) //TODO compare with encrypted pw
+	id, hashedpw, err := datab.GetLogin(u.Email)
 	if err != nil {
 		log.Printf("Error in loginHandler trying to get login info for userMail %s: %s", u.Email, err)
+		log.Printf("#%v", u)
 		e := err.Error()
 		switch t := err.(type) {
 		case structs.HTTPError:
@@ -713,7 +714,7 @@ func loginHandler(c echo.Context) error {
 
 		user, err := datab.GetUser(id)
 		if err != nil {
-			log.Printf("Error in loginHandler trying to get user info: %s", err)
+			log.Printf("Error in loginHandler trying to get user info for userMail %s: %s", u.Email, err)
 			e := err.Error()
 			switch t := err.(type) {
 			case structs.HTTPError:
@@ -754,7 +755,7 @@ func loginHandler(c echo.Context) error {
 		})
 	}
 	reason := "Passwords do not match"
-	log.Printf("Error in loginHandler: %s", reason)
+	log.Printf("Error in loginHandler for userMail %s: %s", u.Email, reason)
 
 	return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &reason})
 
