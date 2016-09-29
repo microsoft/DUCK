@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row padding-bottom-0-5">
     <form>
         <div mass-autocomplete>
             <div ng-init="context={currentField: null}" ng-if="editorController.isEditable() && !statement.passive"
@@ -15,7 +15,7 @@
 
 
 <div ng-if="editorController.isEditable()">
-    <div class="row padding-top-2">
+    <div class="row">
         <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
             <div ng-show="statement.errors.useScope.active">
                 <error-label fragment="statement.errors.useScope"></error-label>
@@ -28,11 +28,10 @@
         </div>
     </div>
 
-    <div class="row" ng-show="!editorController.emptyStatement(statement)">
-        <hr>
-    </div>
-    <div class="row" ng-show="!editorController.emptyStatement(statement)">
-        <h5><strong>Preview</strong></h5>
+    <!--<div ng-show="!editorController.emptyStatement(statement)">-->
+        <!--<hr>-->
+    <!--</div>-->
+    <div class="row  padding-bottom-0-5" ng-show="!editorController.emptyStatement(statement)">
         <div class="row column">
             <div ng-if="!statement.passive"
                  ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>

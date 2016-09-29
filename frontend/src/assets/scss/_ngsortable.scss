@@ -2,9 +2,10 @@
  * Styles for the ng-sortable component
  */
 .as-sortable-item, .as-sortable-placeholder {
-  min-height: 50px;
-  margin: 1px 2px 5px 1px;
-  padding: 2em;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-top: .5em;
+  padding-bottom: .5em;
 }
 
 .as-sortable-item {

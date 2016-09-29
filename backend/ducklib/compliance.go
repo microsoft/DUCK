@@ -10,7 +10,7 @@ import (
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
-	"github.com/carneades/carneades-4/src/engine/caes/encoding/dot"
+	"github.com/carneades/carneades-4/src/engine/caes/encoding/graphml"
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
 
@@ -65,24 +65,6 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 	return vt.theory, nil
 }
 
-type BoolValue struct {
-	value   bool
-	assumed bool // if true assumed, otherwise proven
-}
-
-type StmtValue struct {
-	value   string // statement tracking id
-	assumed bool   // if true assumed, otherwise proven
-}
-
-type Explanation map[string]struct { // keys are statement tracking ids
-	consentRequired   bool      // informed consent required to use this pii
-	Pii               BoolValue // assumed not to be personally identifiable information
-	Li                BoolValue // assumed there is a legitimate interest in the pii
-	CompatiblePurpose []StmtValue
-	// graph: caes.ArgumentGraph
-}
-
 /*
 	IsCompliant does the following:
 		* Translates the data use statements in the document into Carneades assumptions (terms)
@@ -101,8 +83,8 @@ type Explanation map[string]struct { // keys are statement tracking ids
 	The error returned will be nil if and only if no errors occur this process.
 */
 
-// func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *NormalizedDocument) (bool, Explanation, error) {
-func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *NormalizedDocument) (bool, error) {
+func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *NormalizedDocument) (bool, Explanation, error) {
+	// func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *NormalizedDocument) (bool, error) {
 	// Construct the argument graph
 	ag := caes.NewArgGraph()
 	ag.Theory = theory
@@ -138,28 +120,33 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 
 	err := ag.Infer()
 	if err != nil {
-		return false, err
+		return false, nil, err
 	}
 
 	// evaluate the argument graph
 	l := ag.GroundedLabelling()
 	ag.ApplyLabelling(l)
 
-	// Begin Debugging
+	// Begin DEBUG
 	// write the argument graph in dot to a temporary file
 	// so that it can be visualized for debugging purposes
-	f, err := ioutil.TempFile(os.TempDir(), "duckDot")
+	f, err := ioutil.TempFile(os.TempDir(), "duckGraphml")
 	if err == nil {
-		dot.Export(f, *ag)
+		graphml.Export(f, ag)
 	}
-	// End Debugging
+	// End DEBUG
 
 	// return true iff the notDocConsentRequired statement is in
 	s, ok := ag.Statements["notDocConsentRequired"]
 	if !ok {
-		return false, errors.New("notDocConsentRequired is not a statement in the argument graph.")
+		return false, nil, errors.New("notDocConsentRequired is not a statement in the argument graph.")
 	}
-	return s.Label == caes.In, nil
+	e, err := c.GetExplanation(theory, ag)
+	if err != nil {
+		return false, nil, err
+	}
+
+	return s.Label == caes.In, e, nil
 }
 
 func removeStatement(d *NormalizedDocument, i int) (*NormalizedDocument, error) {
@@ -200,7 +187,7 @@ func removeStatement(d *NormalizedDocument, i int) (*NormalizedDocument, error) 
 
 */
 func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *NormalizedDocument, cncl Canceller) (bool, <-chan *NormalizedDocument, error) {
-	compliant, err := c.IsCompliant(theory, doc)
+	compliant, _, err := c.IsCompliant(theory, doc)
 	if err != nil {
 		return false, nil, err
 	}
@@ -257,7 +244,7 @@ func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *Normaliz
 					return
 				}
 
-				compliant, err := c.IsCompliant(theory, d3)
+				compliant, _, err := c.IsCompliant(theory, d3)
 				if err != nil {
 					fmt.Printf("Compliance checking error: %v\n", err)
 				} else if compliant {
