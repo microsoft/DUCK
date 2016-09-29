@@ -54,6 +54,12 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {
                 var document = angular.fromJson(data);
+                // replace dictionary with hashtable
+                var dictionaryObj = document.dictionary;
+                document.dictionary = new Hashtable();
+                angular.forEach(dictionaryObj, function (value, key) {
+                    document.dictionary.put(key, value);
+                });
                 resolve(document);
             }).error(function (data, status, headers, config) {
                 reject(status);
@@ -214,7 +220,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         data.revision = document.revision;
         data.dictionary = {};
         var entries = document.dictionary.entries();
-        entries.forEach(function(entry){
+        entries.forEach(function (entry) {
             var term = entry[1];
             data.dictionary[entry[0]] = {value: term.value, type: term.type, code: term.code, category: term.category, dictionaryType: "document"};
         });

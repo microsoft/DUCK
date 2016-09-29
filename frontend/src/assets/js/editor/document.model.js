@@ -41,16 +41,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
             DataUseDocumentService.getDocument(documentId).then(function (useDocument) {
                 context.originalDocument = useDocument;
                 context.document = useDocument;
-                context.document.dictionary = new Hashtable();
-                // Create a fake term dictionary for testing
-                // context.document.dictionary.put("Foo Service", {
-                //     value: "Foo Service",
-                //     type: "scope",
-                //     code: "foo-service",
-                //     category: "2",
-                //     dictionaryType: "document"
-                // });
-
                 context.dirty = false;
 
                 // configure the taxonomy service with the global and document dictionaries as the document will be edited.
