@@ -49,9 +49,8 @@ type Response struct {
 }
 
 type ComplianceResponse struct {
-	Ok        bool        `json:"ok"`
-	Compliant string      `json:"compliant"`
-	Documents []*Document `json:"documents,omitempty"`
+	Compliant   string      `json:"compliant"`
+	Explanation interface{} `json:"explanation"`
 }
 
 type Login struct {

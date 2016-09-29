@@ -580,7 +580,7 @@ func checkDocHandler(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	ok, _, err := checker.IsCompliant(id, normDoc)
+	ok, exp, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
 		e := err.Error()
@@ -592,9 +592,9 @@ func checkDocHandler(c echo.Context) error {
 		}
 	}
 	if ok {
-		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
+		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: exp})
 	}
-	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "NON_COMPLIANT", Explanation: exp})
 }
 
 //checkDocIDHandler checks a document from the database against a rulebase for compliance
@@ -640,7 +640,7 @@ func checkDocIDHandler(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	ok, _, err := checker.IsCompliant(id, normDoc)
+	ok, exp, err := checker.IsCompliant(id, normDoc)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while checking for compliance: %s", err)
 		e := err.Error()
@@ -652,10 +652,10 @@ func checkDocIDHandler(c echo.Context) error {
 		}
 	}
 	if ok {
-		return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "COMPLIANT"})
+		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: exp})
 	}
 
-	return c.JSON(http.StatusOK, structs.ComplianceResponse{Ok: ok, Compliant: "NON_COMPLIANT"})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "NON_COMPLIANT", Explanation: exp})
 
 }
 
