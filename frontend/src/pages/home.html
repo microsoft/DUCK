@@ -19,22 +19,17 @@
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
         <h5>{{"no_documents_heading"|translate}}</h5>
     </div>
-    <div class="row small-up-4" ng-if="home.summaries.length > 0">
+    <div class="row small-up-8" ng-if="home.summaries.length > 0">
         <div class="columns text-center" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
-            <div class="image-wrapper overlay-fade-in">
-                <img class="" src="http://placehold.it/300x350">
+            <div class="image-wrapper overlay-fade-in" style="width:120px">
+                <div class="document-box"></div>
                 <div class="image-overlay-content">
-                    <div class="text-right padding-right-1 padding-top-0-5">
-                        <a class="padding-right-1" href="" ng-attr-title="{{'download'|translate}}">
-                            <i class="fa fa-cloud-download white"></i> </a>
-                        <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
-                            <i class="fa fa-clone white"></i>
-                        </a>
+                    <div class="text-right padding-top-0-5 padding-right-0-5">
                         <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
                             <i class="fa fa-trash white"></i>
                         </a>
                     </div>
-                    <div class="padding-top-2">
+                    <div class="padding-top-0-5">
                         <a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>
                     </div>
 
