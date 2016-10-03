@@ -141,6 +141,43 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         });
     };
 
+    this.complianceCheck = function (document, rulebaseId) {
+        return $q(function (resolve, reject) {
+            var url = "/v1/rulebases/" + rulebaseId + "/documents";
+            var documentData = context.createDocumentData(document);
+
+            // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
+            // stub for testing
+            var complianceResult = {
+                compliant: "COMPLIANT",
+                explanation: {
+                    "122": {
+                        consentRequired: "true",
+                        pi: "true",
+                        compatiblePurpose: []
+                    },
+                    "123": {
+                        consentRequired: "true",
+                        pi: "true",
+                        compatiblePurpose: []
+                    },
+
+                }
+            };
+
+            resolve(complianceResult);
+            return;
+
+            $http.put(url, documentData).success(function (data) {
+                var complianceResult = angular.fromJson(data);
+                resolve(complianceResult);
+                // FIXME handle errors
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+    };
+
     /**
      * Performs a compliance check on a document and returns possible alternatives.
      *

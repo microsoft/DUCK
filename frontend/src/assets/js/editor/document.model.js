@@ -14,8 +14,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.originalDocument = null;
 
-    this.alternativeVersions = [];
-
     /**
      * Tracks the local edit state of the document.
      */
@@ -53,8 +51,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                     };
                     context.lookupAndSetTerms(context.document);
                 });
-                context.alternativeVersions.length = 0; // clear the array
-                // context.alternativeVersions.push({id: context.document.id, name: context.document.name, locale: context.document.locale, statements: []});
 
                 // callback
                 resolve();
@@ -67,40 +63,18 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     };
 
     /**
-     * Returns true if the current selected document can be edited. Only the original document can be edited, so if an alternative version is selected, this
-     * method will return false.
+     * Returns true if the current selected document can be edited.
      *
      * @return {boolean}
      */
     this.isEditable = function () {
-        return context.document === context.originalDocument;
-    };
-
-    /**
-     * Selects the original document.
-     */
-    this.selectOriginal = function () {
-        context.document = context.originalDocument;
-    };
-
-    /**
-     * Selects an alternative version of the document.
-     *
-     * @param document the document to select
-     */
-    this.selectAlternateVersion = function (document) {
-        context.document = document;
-        context.clearCurrentStatement();
+        return true;  // not currently required; placeholder
     };
 
     this.setDocumentLocale = function (locale) {
         if (context.document) {
             context.document.locale = locale;
             context.lookupAndSetTerms(context.document);
-            context.alternativeVersions.forEach(function (alternative) {
-                alternative.locale = locale;
-                context.lookupAndSetTerms(alternative);
-            });
             context.markDirty();
         }
 
@@ -242,33 +216,11 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         context.markDirty();
     };
 
-    this.complianceCheckWithAlternatives = function () {
-        context.selectOriginal(); // make sure the original is selected and clear existing alternatives
-        context.alternativeVersions.length = 0;
+    this.complianceCheck = function () {
         // FIXME ruleset id
-        DataUseDocumentService.complianceCheckWithAlternatives(context.document, "123").then(function (complianceResult) {
+        DataUseDocumentService.complianceCheck(context.document, "123").then(function (complianceResult) {
             context.state = complianceResult.compliant;
-            context.alternativeVersions.length = 0; // clear array
-            complianceResult.documents.forEach(function (alternative) {
-
-                // decorate diff information
-                for (var i = 0; i < context.originalDocument.statements.length; i++) {
-                    var originalStatement = context.originalDocument.statements[i];
-                    var diffStatement;
-                    if (i >= alternative.statements.length) {
-                        // statement was deleted at the end of the array
-                        diffStatement = context.createDiffStatement(originalStatement);
-                        alternative.statements.push(diffStatement);
-
-                    } else if (originalStatement.trackingId !== alternative.statements[i].trackingId) {
-                        diffStatement = context.createDiffStatement(originalStatement);
-                        alternative.statements.splice(i, 0, diffStatement);
-                    }
-                }
-                context.lookupAndSetTerms(alternative);
-                context.alternativeVersions.push(alternative);
-
-            });
+            // TODO group documents
         });
     };
 
@@ -310,17 +262,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.markDirty = function () {
         context.dirty = true;
-    };
-
-    this.adoptAlternativeVersion = function () {
-        context.clearCurrentStatement();
-        context.document.statements.without(function (statement) {
-            return statement._diff;     // clear out diff statements
-        });
-        context.originalDocument = context.document;
-        context.markDirty();
-        context.state = "COMPLIANT";
-        context.alternativeVersions.length = 0; // clear alternatives
     };
 
     this.validateSyntax = function () {
