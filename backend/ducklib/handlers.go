@@ -693,7 +693,6 @@ func loginHandler(c echo.Context) error {
 	id, hashedpw, err := datab.GetLogin(u.Email)
 	if err != nil {
 		log.Printf("Error in loginHandler trying to get login info for userMail %s: %s", u.Email, err)
-		log.Printf("#%v", u)
 		e := err.Error()
 		switch t := err.(type) {
 		case structs.HTTPError:
