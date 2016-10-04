@@ -34,6 +34,13 @@
     transition: all 0.2s linear;
   }
 
+  .document-box {
+    width: 120px;
+    height: 160px;
+    border: 1px solid #777777;
+    border-radius: 3px;
+  }
+
   .image-overlay-content {
     opacity: 0;
     background-color: rgba(20, 33, 40, .7);

@@ -54,6 +54,12 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             //noinspection JSUnusedLocalSymbols
             $http.get(url).success(function (data, status, headers, config) {
                 var document = angular.fromJson(data);
+                // replace dictionary with hashtable
+                var dictionaryObj = document.dictionary;
+                document.dictionary = new Hashtable();
+                angular.forEach(dictionaryObj, function (value, key) {
+                    document.dictionary.put(key, value);
+                });
                 resolve(document);
             }).error(function (data, status, headers, config) {
                 reject(status);
@@ -128,6 +134,43 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             var url = "/v1/documents/" + id;
             $http.delete(url).success(function () {
                 resolve();
+                // FIXME handle errors
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+    };
+
+    this.complianceCheck = function (document, rulebaseId) {
+        return $q(function (resolve, reject) {
+            var url = "/v1/rulebases/" + rulebaseId + "/documents";
+            var documentData = context.createDocumentData(document);
+
+            // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
+            // stub for testing
+            var complianceResult = {
+                compliant: "COMPLIANT",
+                explanation: {
+                    "122": {
+                        consentRequired: "true",
+                        pi: "true",
+                        compatiblePurpose: []
+                    },
+                    "123": {
+                        consentRequired: "true",
+                        pi: "true",
+                        compatiblePurpose: []
+                    },
+
+                }
+            };
+
+            resolve(complianceResult);
+            return;
+
+            $http.put(url, documentData).success(function (data) {
+                var complianceResult = angular.fromJson(data);
+                resolve(complianceResult);
                 // FIXME handle errors
             }).error(function (data, status) {
                 reject(status);
@@ -214,7 +257,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         data.revision = document.revision;
         data.dictionary = {};
         var entries = document.dictionary.entries();
-        entries.forEach(function(entry){
+        entries.forEach(function (entry) {
             var term = entry[1];
             data.dictionary[entry[0]] = {value: term.value, type: term.type, code: term.code, category: term.category, dictionaryType: "document"};
         });

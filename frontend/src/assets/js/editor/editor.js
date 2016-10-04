@@ -59,13 +59,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         $scope.document = DocumentModel.document;
     };
 
-    controller.selectAlternateVersion = function (alternative) {
-        DocumentModel.selectAlternateVersion(alternative);
-        $scope.document = alternative;
-    };
-
-    controller.adoptAlternativeVersion = DocumentModel.adoptAlternativeVersion;
-
     controller.revert = DocumentModel.revert;
 
     controller.deleteStatement = DocumentModel.deleteStatement;
@@ -76,7 +69,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.makeActive = DocumentModel.makeActive;
 
-    controller.complianceCheckWithAlternatives = DocumentModel.complianceCheckWithAlternatives;
+    controller.complianceCheck = DocumentModel.complianceCheck;
 
     controller.getState = function () {
         return DocumentModel.state;
@@ -84,10 +77,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.toggleEdit = function (statement) {
         DocumentModel.toggleEdit(statement);
-    };
-
-    controller.getAlternativeVersions = function () {
-        return DocumentModel.alternativeVersions;
     };
 
     controller.dirty = function () {
