@@ -307,7 +307,7 @@
 				"parameters" : [{
 						"name" : "userID",
 						"in" : "path",
-						"description" : "ID of user to deete dictionary from",
+						"description" : "ID of user to delete dictionary from",
 						"required" : true,
 						"type" : "string"
 					}, {
@@ -320,10 +320,10 @@
 				],
 				"responses" : {
 					"200" : {
-						"description" : "successful operation",
+						"description" : "A successful operation will only return {ok: true}",
 						"schema" : {
 							"$ref" : "#/definitions/ApiResponse",
-							"description" : "A successful operation will only return {ok: true}"
+
 						}
 					},
 					"404" : {
@@ -761,15 +761,69 @@
 		},
 		"ComplianceResult" : {
 			"type" : "object",
-			"required" : ["ok", "compliant"],
+			"required" : ["explanation", "compliant"],
 			"properties" : {
-				"ok" : {
-					"type" : "boolean"
-				},
 				"compliant" : {
 					"type" : "string",
 					"enum" : ["COMPLIANT", "NOT_COMPLIANT"],
 					"description" : "Reason is given when ok is false"
+				},
+				"explanation" : {
+					"$ref" : "#/definitions/Explanation"
+				}
+			}
+		},
+		"Explanation" : {
+			"type" : "object",
+			"properties" : {
+				"stmnt_id" : {
+					"type" : "string",
+					"additionalProperties" : {
+						"type" : "object",
+						"properties" : {
+							"ConsentRequired" : {
+								"type" : "object",
+								"properties" : {
+									"Value" : {
+										"type" : "boolean"
+									},
+									"Assumed" : {
+										"type" : "boolean"
+									}
+								}
+							},
+							"Pii" : {
+								"type" : "object",
+								"properties" : {
+									"Value" : {
+										"type" : "boolean"
+									},
+									"Assumed" : {
+										"type" : "boolean"
+									}
+								}
+							},
+							"Li" : {
+								"type" : "object",
+								"properties" : {
+									"Value" : {
+										"type" : "boolean"
+									},
+									"Assumed" : {
+										"type" : "boolean"
+									}
+								}
+							},
+							"CompatiblePurpose" : {
+								"type" : "array",
+								"items" : {
+									"type" : "string"
+								}
+
+							}
+
+						}
+					}
 				}
 			}
 		},
