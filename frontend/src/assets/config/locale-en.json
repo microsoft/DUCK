@@ -69,7 +69,13 @@
   "source_scope": "Source Scope",
   "action": "Action",
   "result_scope": "Result Scope",
-  "assumption_set_label": "Assumption Set"
-
+  "assumption_set_label": "Assumption Set",
+  "consent_not_required": "Consent Not Required",
+  "consent_required": "Consent Required",
+  "filtering_compatible":"Filtering compatible statements",
+  "show_all_action": "SHOW ALL",
+  "relates_pii": "Relates to PII",
+  "legitimate_interest": "Legitimate Interest",
+  "show_compatible_action": "SHOW COMPATIBLE"
 }
 

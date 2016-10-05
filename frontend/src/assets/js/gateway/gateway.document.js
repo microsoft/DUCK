@@ -141,41 +141,80 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
         });
     };
 
+    /**
+     * Performs a document compliance check, returning a compliance result. Note the compliance result has an additional 'map' property of statements
+     * explanations keyed by statement tracking id.
+     *
+     * @param document the document to check
+     * @param rulebaseId the rule base to use
+     * @return {*} the result
+     */
     this.complianceCheck = function (document, rulebaseId) {
         return $q(function (resolve, reject) {
             var url = "/v1/rulebases/" + rulebaseId + "/documents";
             var documentData = context.createDocumentData(document);
 
             // compliant values: NON_COMPLIANT; UNKNOWN; or COMPLIANT
+
             // stub for testing
-            var complianceResult = {
-                compliant: "COMPLIANT",
-                explanation: {
-                    "122": {
-                        consentRequired: "true",
-                        pi: "true",
-                        compatiblePurpose: []
-                    },
-                    "123": {
-                        consentRequired: "true",
-                        pi: "true",
-                        compatiblePurpose: []
-                    },
 
+            if (false) {
+                if (document.statements.length != 4) {
+                    resolve({compliant: "COMPLIANT"});
+                    return;
                 }
-            };
+                var complianceResult = {
+                    compliant: "COMPLIANT",
+                    explanation: {}
+                };
 
-            resolve(complianceResult);
-            return;
+                complianceResult.explanation[document.statements[0].trackingId] = {
+                    consentRequired: {value: "true", assumed: "false"},
+                    pii: {value: "true", assumed: "false"},
+                    li: {value: "true", assumed: "false"},
+                    compatiblePurpose: [document.statements[1].trackingId]
+                };
+                complianceResult.explanation[document.statements[1].trackingId] = {
+                    consentRequired: {value: "true", assumed: "false"},
+                    pii: {value: "true", assumed: "true"},
+                    li: {value: "true", assumed: "true"},
+                    compatiblePurpose: [document.statements[0].trackingId]
+                };
+                complianceResult.explanation[document.statements[2].trackingId] = {
+                    consentRequired: {value: "true", assumed: "false"},
+                    pii: {value: "false", assumed: "false"},
+                    li: {value: "false", assumed: "false"},
+                    compatiblePurpose: []
+                };
+                complianceResult.explanation[document.statements[3].trackingId] = {
+                    consentRequired: {value: "false", assumed: "false"},
+                    pii: {value: "false", assumed: "false"},
+                    li: {value: "true", assumed: "false"},
+                    compatiblePurpose: []
+                };
+
+                resolve(context.mapExplanation(complianceResult));
+                return;
+            }
+            // end testing stub
 
             $http.put(url, documentData).success(function (data) {
                 var complianceResult = angular.fromJson(data);
-                resolve(complianceResult);
+                resolve(context.mapExplanation(complianceResult));
                 // FIXME handle errors
             }).error(function (data, status) {
                 reject(status);
             });
         });
+    };
+
+    this.mapExplanation = function (complianceResult) {
+        var map = new Hashtable();
+        angular.forEach(complianceResult.explanation, function (statementExplanation, trackingId) {
+            map.put(trackingId, statementExplanation);
+        });
+        complianceResult.map = map;
+        return complianceResult;
     };
 
     /**

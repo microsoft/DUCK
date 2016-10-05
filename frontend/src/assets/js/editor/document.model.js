@@ -26,6 +26,8 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     this.currentStatement = null;
 
+    this.state = "UNKNOWN";
+
     var context = this;
 
     /**
@@ -60,6 +62,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     this.release = function () {
         TaxonomyService.deactivateDictionaries();
+        context.resetCompliance();
     };
 
     /**
@@ -84,6 +87,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         if (context.document) {
             context.document.assumptionSet = assumptionSetId;
             context.markDirty();
+            context.resetCompliance();
         }
     };
 
@@ -129,6 +133,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
             return element === statement;
         });
         context.dirty = true;
+        context.resetCompliance();
     };
 
     /**
@@ -175,6 +180,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         context.document.statements.push(statement);
         statement.trackingId = UUID.next();
         context.dirty = true;
+        context.resetCompliance();
     };
 
     /**
@@ -220,7 +226,14 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         // FIXME ruleset id
         DataUseDocumentService.complianceCheck(context.document, "123").then(function (complianceResult) {
             context.state = complianceResult.compliant;
-            // TODO group documents
+            context.document.statements.forEach(function (statement) {
+                var statementExplanation = complianceResult.map.get(statement.trackingId);
+                if (statementExplanation == null) {
+                    return;
+                }
+                statement.$$statementExplanation = statementExplanation;    // note  $$ signals Angular to ignore this property during serialization
+
+            })
         });
     };
 
@@ -296,6 +309,13 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     this.emptyStatement = function (statement) {
         return (ObjectUtils.isNull(statement.useScope) || statement.useScope.trim().length === 0) && (ObjectUtils.isNull(statement.action) || statement.action.trim().length === 0)
+    };
+
+    this.resetCompliance = function () {
+        context.state = "UNKNOWN";
+        context.document.statements.forEach(function (statement) {
+            delete statement.$$statementExplanation;
+        });
     }
 }); 
     
