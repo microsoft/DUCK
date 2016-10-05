@@ -50,6 +50,33 @@ gatewayModule.service('UserService', function (CurrentUser, $http, $q) {
     }
 });
 
+gatewayModule.service('RulebaseService', function (CurrentUser, $http, $q) {
+    this.rulebases = null;
+    var context = this;
+
+    this.getRulebases = function () {
+        return context.rulebases;
+    };
+
+    this.initialize = function () {
+        return $q(function (resolve, reject) {
+            // make sure the user is signed in
+            if (!CurrentUser.loggedIn) {
+                $state.go('signin');
+            }
+            var url = "/v1/rulebases";
+
+            $http.get(url).success(function (data) {
+                context.rulebases = angular.fromJson(data);
+                resolve(context.rulebases);
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+
+    }
+});
+
 /**
  * Interceptor that adds an authorization token to the outbound request and handles errors reported from the server.
  */
