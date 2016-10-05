@@ -42,6 +42,8 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	if conf.Gopathrelative {
 		rbd = filepath.Join(goPath, conf.RulebaseDir)
 	}
+	log.Printf("Rulebase directory: " + rbd)
+
 	checker, err = MakeComplianceCheckerPlugin(rbd)
 	if err != nil {
 		panic(err)
@@ -106,6 +108,7 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	if conf.Gopathrelative {
 		wbd = filepath.Join(goPath, conf.WebDir)
 	}
+	log.Printf("Web directory: " + wbd)
 	e.Static("/", wbd)
 
 	return e
