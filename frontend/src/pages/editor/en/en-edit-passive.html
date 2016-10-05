@@ -7,12 +7,14 @@
 <div class="row padding-left-1">
     <input placeholder="qualifier"
            ng-model="statement.qualifier"
+           class="qualifier-field"
            mass-autocomplete-item="qualifierCompletion"
            ng-attr-title="{{'qualifier'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'qualifier'" ng-blur="context.currentField = null">
     <span ng-show="context.currentField === 'qualifier'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
     <input placeholder="data category"
            ng-model="statement.dataCategory"
+           class="data-category-field"
            mass-autocomplete-item="dataCategoryCompletion"
            ng-attr-title="{{'data_category'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'data_category'" ng-blur="context.currentField = null">
@@ -20,6 +22,7 @@
     from
     <input placeholder="source scope"
            ng-model="statement.sourceScope"
+           class="source-scope-field"
            mass-autocomplete-item="sourceScopeCompletion"
            ng-attr-title="{{'source_scope'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'source_scope'" ng-blur="context.currentField = null">
@@ -29,6 +32,7 @@
     <input error-marker="statement.errors.useScope"
            placeholder="use scope"
            ng-model="statement.useScope"
+           class="use-scope-field"
            mass-autocomplete-item="useScopeCompletion"
            ng-attr-title="{{'use_scope'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'use_scope'" ng-blur="context.currentField = null">
@@ -38,6 +42,7 @@
     <input error-marker="statement.errors.action"
            placeholder="action"
            ng-model="statement.action"
+           class="action-field"
            mass-autocomplete-item="actionCompletion"
            ng-attr-title="{{'action'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'action'" ng-blur="context.currentField = null">
@@ -45,6 +50,7 @@
     the
     <input placeholder="result scope"
            ng-model="statement.resultScope"
+           class="result-scope-field"
            mass-autocomplete-item="resultScopeCompletion"
            ng-attr-title="{{'result_scope'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'result_scope'" ng-blur="context.currentField = null">
