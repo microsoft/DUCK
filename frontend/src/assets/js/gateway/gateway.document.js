@@ -115,7 +115,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
             $http.put(url, documentData).success(function (data, status, headers, config) {
                 var newDocument = angular.fromJson(data);
                 // update the document revision
-                document.revision = newDocument.revison;
+                document.revision = newDocument.revision;
                 resolve(document);
             }).error(function (data, status, headers, config) {
                 reject(status);
