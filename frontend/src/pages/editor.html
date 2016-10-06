@@ -29,9 +29,8 @@
 
         <div class="row" ng-show="document">
             <div class="clearfix">
-                <div class="button-group small float-left noselect" ng-show="editorController.isEditable()">
-                    <a href="" class="button hollow" ng-click="editorController.addStatement()" ng-attr-title="{{'new_statement'|translate}}"
-                       ng-class="{'sidebar-icon-disabled': !editorController.isEditable()}">
+                <div class="button-group small float-left noselect">
+                    <a href="" class="button hollow" ng-click="editorController.addStatement()" ng-attr-title="{{'new_statement'|translate}}">
                         <i class="fa fa-plus"></i>
                     </a>
                     <a href="" class="button hollow" ng-click="editorController.save()" ng-attr-title="{{'save'|translate}}"
@@ -47,7 +46,7 @@
                         <i class="fa fa-download"></i>
                     </a>
                 </div>
-                <div class="button-group small float-right noselect" ng-show="editorController.isEditable()">
+                <div class="button-group small float-right noselect">
                     <button class="button hollow" type="button" data-toggle="example-dropdown">
                         {{'language_label'|translate}}
                     </button>
@@ -92,7 +91,7 @@
                     <li data-ng-repeat="statement in document.statements | compatibleFilter : editorController.filterStatement" data-as-sortable-item
                         ng-class="{'diff-remove': statement._diff}">
                         <div data-as-sortable-item-handle>
-                            <div class="row" ng-if="editorController.isEditable()">
+                            <div class="row">
                                 <div class="small-5 columns">
                                     <div class="button-group tiny noselect">
                                         <a class="button secondary" ng-class="{'hollow':statement.passive}"
@@ -105,18 +104,28 @@
                                 </div>
                                 <div class="small-5 text-right columns" ng-if="statement.$$statementExplanation">
                                     <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed ===true,
-                                                     'is-hidden': statement.$$statementExplanation.consentRequired.value !== true}">
+                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.consentRequired.value === true}">
+                                        {{'consent_not_required'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.consentRequired.value === false}">
                                         {{'consent_required'|translate}}
                                     </span>
                                     <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed ===true,
-                                                     'is-hidden': statement.$$statementExplanation.pii.value !== true}">
+                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.pii.value === true}">
+                                        {{'does_not_relate_to_pii'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.pii.value === false}">
                                         {{'relates_pii'|translate}}
                                     </span>
                                     <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed ===true,
-                                                     'is-hidden': statement.$$statementExplanation.li.value !== true}">
+                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.li.value === false}">
                                         {{'legitimate_interest'|translate}}
                                     </span>
                                 </div>
@@ -146,20 +155,6 @@
     <div class="row columns text-center padding-top-6" ng-if="editorController.noDocument">
         <i class="fa fa-4x fa-exclamation-triangle medium-gray" aria-hidden="true"></i>
         <h5>{{"no_document_found"|no_document_found}}</h5>
-    </div>
-
-    <div class="reveal tiny" id="revertModal" data-reveal data-overlay="false">
-        <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
-        <h4>{{"revert_changes" |translate}}</h4>
-        <div class="row">
-            {{"revert_changes_question"|translate}}
-        </div>
-        <div class="row float-right padding-top-2">
-            <div class="column ">
-                <a class="button small secondary" data-close>{{"no_action"}}</a>
-                <a class="button small" data-close ng-click="editorController.revert()">{{"yes_action"}}</a>
-            </div>
-        </div>
     </div>
 
     <!-- Mass autocomplete div needs to wrap reveal div to workaround positioning problem described here:
