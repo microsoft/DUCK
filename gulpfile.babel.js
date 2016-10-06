@@ -166,7 +166,7 @@ function backendCompile(done) {
 
 // launch the backend serving the web distribution directory
 function backend(done) {
-    go = gulpgo.run("main.go", ["--webdir",  "/src/github.com/Microsoft/DUCK/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
+    go = gulpgo.run("main.go", ["--webdir",  "src/github.com/Microsoft/DUCK/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
     done();
 }
 
