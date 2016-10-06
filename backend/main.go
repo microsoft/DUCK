@@ -11,18 +11,19 @@ import (
 //Database lugin, change this if you have another Plugin/database
 import _ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
 
-var (
-	goPath = os.Getenv("GOPATH")
-)
-
 func main() {
 
+	goPath := os.Getenv("GOPATH")
+	confPath := "configuration.json"
+	if goPath != "" {
+		confPath = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json")
+	}
 	// create config
-	conf := ducklib.NewConfiguration(filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json"))
+	conf := ducklib.NewConfiguration(confPath)
 
 	//set routes
 	//	e := ducklib.GetServer(webDir, []byte(jwtKey), ruleBaseDir)
-	e := ducklib.GetServer(conf, goPath)
+	e := ducklib.GetServer(conf)
 
 	//start server
 	e.Run(standard.New(":3000"))

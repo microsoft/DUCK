@@ -13,8 +13,8 @@ var (
 
 func TestConfig(t *testing.T) {
 
-	wrongPath = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/nofile")
-	correctPath = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json")
+	wrongPath = filepath.Join(os.Getenv("GOPATH"), "/src/github.com/Microsoft/DUCK/backend/nofile")
+	correctPath = filepath.Join(os.Getenv("GOPATH"), "/src/github.com/Microsoft/DUCK/backend/configuration.json")
 	testPath = "structs/testdata/configuration.json"
 	//get env vars if they are set
 	dbLocation := os.Getenv("DUCK_DATABASE.LOCATION")
@@ -26,7 +26,6 @@ func TestConfig(t *testing.T) {
 	jwtkey := os.Getenv("DUCK_JWTKEY")
 	webdir := os.Getenv("DUCK_WEBDIR")
 	rbdir := os.Getenv("DUCK_RULEBASEDIR")
-	gpr := os.Getenv("DUCK_GOPATHRELATIVE")
 	loadtd := os.Getenv("DUCK_LOADTESTDATA")
 
 	//set them all to zero	//set env to prior values
@@ -39,7 +38,6 @@ func TestConfig(t *testing.T) {
 	os.Setenv("DUCK_JWTKEY", "")
 	os.Setenv("DUCK_WEBDIR", "")
 	os.Setenv("DUCK_RULEBASEDIR", "")
-	os.Setenv("DUCK_GOPATHRELATIVE", "")
 	os.Setenv("DUCK_LOADTESTDATA", "")
 
 	//t.Error("AHHHHHH")
@@ -57,7 +55,6 @@ func TestConfig(t *testing.T) {
 	os.Setenv("DUCK_JWTKEY", jwtkey)
 	os.Setenv("DUCK_WEBDIR", webdir)
 	os.Setenv("DUCK_RULEBASEDIR", rbdir)
-	os.Setenv("DUCK_GOPATHRELATIVE", gpr)
 	os.Setenv("DUCK_LOADTESTDATA", loadtd)
 
 }
@@ -88,26 +85,28 @@ func testEnvGopath(t *testing.T) {
 		setval  string
 		wantval string
 	}
+	abs, err := filepath.Abs("abcde")
+	if err != nil {
+		t.Errorf("Configuration with env Var, error getting absolute filepath: %s", err)
+	}
+	goabs := filepath.Join(os.Getenv("GOPATH"), "abcde")
 	//TestTable: map[EnvVar_description] [envar, setval, hasval]
 	testtable := map[string]teststruct{
-		"DUCK_JWTKEY":      {envar: "DUCK_JWTKEY", setval: "abcde", wantval: "abcde"},
-		"DUCK_WEBDIR":      {envar: "DUCK_WEBDIR", setval: "abcde", wantval: "abcde"},
-		"DUCK_RULEBASEDIR": {envar: "DUCK_RULEBASEDIR", setval: "abcde", wantval: "abcde"},
-		"location":         {envar: "DUCK_DATABASE.LOCATION", setval: "abcde", wantval: "abcde"},
-		"port":             {envar: "DUCK_DATABASE.PORT", setval: "1234", wantval: "1234"},
-		"port_wrong":       {envar: "DUCK_DATABASE.PORT", setval: "abcde", wantval: "5984"},
-		"name":             {envar: "DUCK_DATABASE.NAME", setval: "abcde", wantval: "abcde"},
-		"username":         {envar: "DUCK_DATABASE.USERNAME", setval: "abcde", wantval: "abcde"},
-		"Password":         {envar: "DUCK_DATABASE.PASSWORD", setval: "abcde", wantval: "abcde"},
-		"GOPATH_1":         {envar: "DUCK_GOPATHRELATIVE", setval: "true", wantval: "true"},
-		"GOPATH_2":         {envar: "DUCK_GOPATHRELATIVE", setval: "FALSE", wantval: "false"},
-		"GOPATH_3":         {envar: "DUCK_GOPATHRELATIVE", setval: "0", wantval: "false"},
-		"GOPATH_4":         {envar: "DUCK_GOPATHRELATIVE", setval: "abcde", wantval: "true"},
-		"GOPATH_5":         {envar: "DUCK_GOPATHRELATIVE", setval: "", wantval: "true"},
-		"LOAD_1":           {envar: "DUCK_LOADTESTDATA", setval: "true", wantval: "true"},
-		"LOAD_2":           {envar: "DUCK_LOADTESTDATA", setval: "FALSE", wantval: "false"},
-		"LOAD_3":           {envar: "DUCK_LOADTESTDATA", setval: "1", wantval: "true"},
-		"LOAD_4":           {envar: "DUCK_LOADTESTDATA", setval: "abcde", wantval: "false"},
+		"DUCK_JWTKEY":          {envar: "DUCK_JWTKEY", setval: "abcde", wantval: "abcde"},
+		"DUCK_WEBDIR":          {envar: "DUCK_WEBDIR", setval: "abcde", wantval: goabs},
+		"DUCK_WEBDIR_ABS":      {envar: "DUCK_WEBDIR", setval: abs, wantval: abs},
+		"DUCK_RULEBASEDIR":     {envar: "DUCK_RULEBASEDIR", setval: "abcde", wantval: goabs},
+		"DUCK_RULEBASEDIR_ABS": {envar: "DUCK_RULEBASEDIR", setval: abs, wantval: abs},
+		"location":             {envar: "DUCK_DATABASE.LOCATION", setval: "abcde", wantval: "abcde"},
+		"port":                 {envar: "DUCK_DATABASE.PORT", setval: "1234", wantval: "1234"},
+		"port_wrong":           {envar: "DUCK_DATABASE.PORT", setval: "abcde", wantval: "5984"},
+		"name":                 {envar: "DUCK_DATABASE.NAME", setval: "abcde", wantval: "abcde"},
+		"username":             {envar: "DUCK_DATABASE.USERNAME", setval: "abcde", wantval: "abcde"},
+		"Password":             {envar: "DUCK_DATABASE.PASSWORD", setval: "abcde", wantval: "abcde"},
+		"LOAD_1":               {envar: "DUCK_LOADTESTDATA", setval: "true", wantval: "true"},
+		"LOAD_2":               {envar: "DUCK_LOADTESTDATA", setval: "FALSE", wantval: "false"},
+		"LOAD_3":               {envar: "DUCK_LOADTESTDATA", setval: "1", wantval: "true"},
+		"LOAD_4":               {envar: "DUCK_LOADTESTDATA", setval: "abcde", wantval: "false"},
 	}
 	for key, val := range testtable {
 
@@ -127,10 +126,6 @@ func testEnvGopath(t *testing.T) {
 		case "DUCK_RULEBASEDIR":
 			if c.RulebaseDir != val.wantval {
 				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.RulebaseDir)
-			}
-		case "DUCK_GOPATHRELATIVE":
-			if strconv.FormatBool(c.Gopathrelative) != val.wantval {
-				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %t", key, val.wantval, c.Gopathrelative)
 			}
 		case "DUCK_LOADTESTDATA":
 			if strconv.FormatBool(c.Loadtestdata) != val.wantval {

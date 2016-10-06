@@ -7,6 +7,5 @@
 	"jwtkey": "secret",
 	"webdir": "/src/github.com/Microsoft/DUCK/frontend/dist",
 	"rulebasedir": "/src/github.com/Microsoft/DUCK/RuleBases",
-	"gopathrelative": true,
    "loadtestdata": false
 }

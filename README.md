@@ -82,9 +82,14 @@ The default configuration has these values:
   jwtkey: "secret"
   webdir: "/src/github.com/Microsoft/DUCK/frontend/dist"
   rulebasedir: "/src/github.com/Microsoft/DUCK/RuleBases"
-  gopathrelative: true
   loadtestdata: false
 ```
+
+##### regarding path variables
+
+If rulebasedir or webdir hae an absolute path it is used as an absolute path.
+If it is a relative path it will be assumed to be relative to the GOPATH environment variable if present. If GOPATH is not found the path is assumed to be relative to the go executable.
+
 #### env
 The environment variable names are prefixed with DUCK_ and all uppercase. Fields in the database object are referenced using the `.` operator, e.g. 
 `DUCK_DATABASE.NAME`.
