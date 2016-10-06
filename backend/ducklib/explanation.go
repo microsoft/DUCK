@@ -1,21 +1,20 @@
 package ducklib
 
 import (
-
 	"github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
 )
 
 type BoolValue struct {
-	Value   bool
-	Assumed bool // if true assumed, otherwise proven
+	Value   bool `json:"value"`
+	Assumed bool `json:"assumed"` // if true assumed, otherwise proven
 }
 
 type StmtExplanation struct {
-	ConsentRequired   BoolValue // informed consent required
-	Pii               BoolValue // personally identifiable information
-	Li                BoolValue // legitimate interest in the pii
-	CompatiblePurpose []string  // ids of statements with a proven compatible purpose
+	ConsentRequired   BoolValue `json:"consentRequired"`  // informed consent required
+	Pii               BoolValue `json:"pii"`              // personally identifiable information
+	Li                BoolValue `json:"li"`               // legitimate interest in the pii
+	CompatiblePurpose []string `json:"compatiblePurpose"` // ids of statements with a proven compatible purpose
 }
 
 type Explanation map[string]StmtExplanation // keys are statement tracking ids

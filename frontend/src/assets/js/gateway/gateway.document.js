@@ -169,27 +169,27 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 };
 
                 complianceResult.explanation[document.statements[0].trackingId] = {
-                    consentRequired: {value: "true", assumed: "false"},
-                    pii: {value: "true", assumed: "false"},
-                    li: {value: "true", assumed: "false"},
+                    consentRequired: {value: true, assumed: false},
+                    pii: {value: true, assumed: false},
+                    li: {value: true, assumed: false},
                     compatiblePurpose: [document.statements[1].trackingId]
                 };
                 complianceResult.explanation[document.statements[1].trackingId] = {
-                    consentRequired: {value: "true", assumed: "false"},
-                    pii: {value: "true", assumed: "true"},
-                    li: {value: "true", assumed: "true"},
+                    consentRequired: {value: true, assumed: false},
+                    pii: {value: true, assumed: true},
+                    li: {value: true, assumed: true},
                     compatiblePurpose: [document.statements[0].trackingId]
                 };
                 complianceResult.explanation[document.statements[2].trackingId] = {
-                    consentRequired: {value: "true", assumed: "false"},
-                    pii: {value: "false", assumed: "false"},
-                    li: {value: "false", assumed: "false"},
+                    consentRequired: {value: true, assumed: false},
+                    pii: {value: false, assumed: false},
+                    li: {value: false, assumed: false},
                     compatiblePurpose: []
                 };
                 complianceResult.explanation[document.statements[3].trackingId] = {
-                    consentRequired: {value: "false", assumed: "false"},
-                    pii: {value: "false", assumed: "false"},
-                    li: {value: "true", assumed: "false"},
+                    consentRequired: {value: false, assumed: false},
+                    pii: {value: false, assumed: false},
+                    li: {value: true, assumed: false},
                     compatiblePurpose: []
                 };
 
