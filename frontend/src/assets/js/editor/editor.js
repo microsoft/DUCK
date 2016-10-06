@@ -79,8 +79,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         $scope.document = DocumentModel.document;
     };
 
-    controller.revert = DocumentModel.revert;
-
     controller.deleteStatement = DocumentModel.deleteStatement;
 
     controller.emptyStatement = DocumentModel.emptyStatement;
@@ -93,10 +91,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.getState = function () {
         return DocumentModel.state;
-    };
-
-    controller.toggleEdit = function (statement) {
-        DocumentModel.toggleEdit(statement);
     };
 
     controller.dirty = function () {

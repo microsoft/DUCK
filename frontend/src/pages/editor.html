@@ -157,20 +157,6 @@
         <h5>{{"no_document_found"|no_document_found}}</h5>
     </div>
 
-    <div class="reveal tiny" id="revertModal" data-reveal data-overlay="false">
-        <!--data-animation-in="hinge-in" data-animation-out="hinge-out">-->
-        <h4>{{"revert_changes" |translate}}</h4>
-        <div class="row">
-            {{"revert_changes_question"|translate}}
-        </div>
-        <div class="row float-right padding-top-2">
-            <div class="column ">
-                <a class="button small secondary" data-close>{{"no_action"}}</a>
-                <a class="button small" data-close ng-click="editorController.revert()">{{"yes_action"}}</a>
-            </div>
-        </div>
-    </div>
-
     <!-- Mass autocomplete div needs to wrap reveal div to workaround positioning problem described here:
          https://github.com/hakib/MassAutocomplete/issues/13 -->
     <div ng-controller="NewTermController as termController">

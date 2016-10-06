@@ -137,22 +137,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         return this.currentStatement;
     };
 
-    this.toggleEdit = function (statement) {
-        statement.$_edit = !statement.$_edit;
-    };
-
-    this.edit = function (statement) {
-        statement.$_edit = true;
-    };
-
-    this.close = function (statement) {
-        statement.$_edit = false;
-    };
-
-    this.editing = function (statement) {
-        return statement.$_edit;
-    };
-
     /**
      * Adds the statement in the local model (i.e. it is not synchronized to the backend.
      *
@@ -236,36 +220,12 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         });
     };
 
-    this.createDiffStatement = function (originalStatement) {
-        return {
-            _diff: true,
-            trackingId: originalStatement.trackingId,
-            actionCode: originalStatement.actionCode,
-            dataCategoryCode: originalStatement.dataCategoryCode,
-            qualifierCode: originalStatement.qualifierCode,
-            resultScopeCode: originalStatement.resultScopeCode,
-            sourceScopeCode: originalStatement.sourceScopeCode,
-            useScopeCode: originalStatement.useScopeCode,
-            passive: originalStatement.passive
-        };
-    };
-
     /**
      * Saves the local model to the backend.
      */
     this.save = function () {
         DataUseDocumentService.saveDocument(context.document);
         context.dirty = false;
-    };
-
-    /**
-     * Reverts local changes to the document.
-     */
-    this.revert = function () {
-        if (context.document === null) {
-            return;
-        }
-        context.initialize(context.document.id);
     };
 
     /**
