@@ -55,6 +55,7 @@ func NewConfiguration(confpath string) structs.Configuration {
 func setAbsPaths(c *structs.Configuration) {
 	goPath := os.Getenv("GOPATH")
 	if goPath != "" {
+		log.Println("GOPATH exists, using it.")
 		if !filepath.IsAbs(c.RulebaseDir) {
 			c.RulebaseDir = filepath.Join(goPath, c.RulebaseDir)
 		}

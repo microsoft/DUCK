@@ -49,6 +49,28 @@ func FillTestdata() error {
 	if err := json.Unmarshal(dat, &listOfData); err != nil {
 		return err
 	}
+
+	for _, l := range listOfData {
+
+		mp := l.(map[string]interface{})
+		entryType := mp["type"].(string)
+
+		if entryType == "user" {
+			var u structs.User
+			u.FromValueMap(mp)
+
+			docs, err := db.GetDocumentSummariesForUser(u.ID)
+			if err == nil {
+				for _, val := range docs {
+					db.DeleteDocument(val.ID)
+				}
+
+			}
+
+		}
+
+	}
+
 	for _, l := range listOfData {
 
 		mp := l.(map[string]interface{})
@@ -67,7 +89,8 @@ func FillTestdata() error {
 			var u structs.User
 			u.FromValueMap(mp)
 			if err := db.NewUser(u); err != nil {
-				return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 500))
+				log.Printf("tried to put user %s with ID %s into database but ID already exists", u.Email, u.ID)
+
 			}
 
 		}
