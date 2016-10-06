@@ -18,10 +18,13 @@ var JWT []byte
 // Checker is a ComplianceCheckerPlugin
 var checker *ComplianceCheckerPlugin
 
+var config structs.Configuration
+
 //GetServer returns Echo instance with predefined routes
 func GetServer(conf structs.Configuration) *echo.Echo {
 	//webDir string, jwtKey []byte, ruleBaseDir string
 
+	config = conf
 	datab = NewDatabase(*conf.DBConfig)
 	err := datab.Init()
 	if err != nil {

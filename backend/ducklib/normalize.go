@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"
+	
 	"path/filepath"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
@@ -61,9 +61,9 @@ func NewNormalizer(doc structs.Document, db *database) (*normalizer, error) {
 	norm.GlobalDict = user.GlobalDictionary
 
 	//Taxonomy
-	goPath := os.Getenv("GOPATH")
-	docTaxPath := fmt.Sprintf("/src/github.com/Microsoft/DUCK/frontend/src/assets/config/taxonomy-%s.json", doc.Locale)
-	docPath := filepath.Join(goPath, docTaxPath)
+	
+	docTaxPath := fmt.Sprintf("/assets/config/taxonomy-%s.json", doc.Locale)
+	docPath := filepath.Join(config.WebDir, docTaxPath)
 	dat, err := ioutil.ReadFile(docPath)
 	if err != nil {
 		return nil, err
