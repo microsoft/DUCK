@@ -26,8 +26,6 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $http, $q) {
                 reject(status);
             });
         });
-
-        // FIXME update server
     };
 
     this.removeTerm = function (type, code, value) {
