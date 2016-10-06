@@ -10,8 +10,12 @@
                     {{'show_all_action'|translate}}
                 </a>
             </div>
+            <div class="middle fixed-message">
+                <div class="label secondary" ng-if="editorController.NotificationService.hasMessage()">
+                   {{editorController.NotificationService.getMessage()}}
+                </div>
+            </div>
             <div class="middle fixed-label-right">
-
                 <div class="label warning" ng-if="editorController.getState() === 'NON_COMPLIANT'">
                     <i class="fa fa-warning"></i> {{"consent_required"|translate}}
                 </div>

@@ -76,6 +76,10 @@
   "show_all_action": "SHOW ALL",
   "relates_pii": "Relates to PII",
   "legitimate_interest": "Legitimate Interest",
-  "show_compatible_action": "SHOW COMPATIBLE"
+  "show_compatible_action": "SHOW COMPATIBLE",
+  "document_saving": "Saving document...",
+  "document_saved": "Document saved",
+  "document_validating": "Validating document..."
+
 }
 

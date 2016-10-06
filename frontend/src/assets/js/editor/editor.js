@@ -1,10 +1,11 @@
 var editorModule = angular.module("duck.editor");
 
 editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, AssumptionSetService, DocumentExporter,
-                                                      $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
+                                                      $stateParams, AbandonComponent, NotificationService, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
 
+    controller.NotificationService = NotificationService;
     controller.locales = LocaleService.getLocales();
     controller.assumptionSets = AssumptionSetService.getAssumptionSets();
 

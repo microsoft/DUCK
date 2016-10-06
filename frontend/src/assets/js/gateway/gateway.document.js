@@ -3,7 +3,7 @@ var gatewayModule = angular.module("duck.gateway");
 /**
  * Manages synchronization of user statement documents with the backend.
  */
-gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $http, $q) {
+gatewayModule.service('DataUseDocumentService', function (CurrentUser, NotificationService, UUID, $http, $q) {
 
     var context = this;
     context.runServer = true;
@@ -108,6 +108,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
      * @return the request promise
      */
     this.saveDocument = function (document) {
+        NotificationService.display("document_saving");
         return $q(function (resolve, reject) {
             var url = "/v1/documents";
             var documentData = context.createDocumentData(document);
@@ -116,8 +117,10 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 var newDocument = angular.fromJson(data);
                 // update the document revision
                 document.revision = newDocument.revision;
+                NotificationService.display("document_saved", 1000);
                 resolve(document);
             }).error(function (data, status, headers, config) {
+                NotificationService.clear();
                 reject(status);
             });
         });
@@ -150,6 +153,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
      * @return {*} the result
      */
     this.complianceCheck = function (document, rulebaseId) {
+        NotificationService.display("document_validating");
         return $q(function (resolve, reject) {
             var url = "/v1/rulebases/" + rulebaseId + "/documents";
             var documentData = context.createDocumentData(document);
@@ -192,7 +196,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                     li: {value: true, assumed: false},
                     compatiblePurpose: []
                 };
-
+                NotificationService.clear();
                 resolve(context.mapExplanation(complianceResult));
                 return;
             }
@@ -204,6 +208,8 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, UUID, $ht
                 // FIXME handle errors
             }).error(function (data, status) {
                 reject(status);
+            }).finally(function () {
+                NotificationService.clear();
             });
         });
     };
