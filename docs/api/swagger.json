@@ -322,7 +322,7 @@
 					"200" : {
 						"description" : "A successful operation will only return {ok: true}",
 						"schema" : {
-							"$ref" : "#/definitions/ApiResponse",
+							"$ref" : "#/definitions/ApiResponse"
 
 						}
 					},
