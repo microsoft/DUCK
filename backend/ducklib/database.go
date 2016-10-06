@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
@@ -22,9 +24,21 @@ func NewDatabase(config structs.DBConf) *database {
 }
 
 //Put this into plugin
-func FillTestdata(testDataFile string) error {
+func FillTestdata() error {
 
 	var listOfData []interface{}
+	testDataFile := "/src/github.com/Microsoft/DUCK/testdata.json"
+	goPath := os.Getenv("GOPATH")
+	if goPath != "" && !filepath.IsAbs(testDataFile) {
+		testDataFile = filepath.Join(goPath, testDataFile)
+	}
+
+	if _, err := os.Stat(testDataFile); os.IsNotExist(err) {
+		testDataFile = "testdata.json"
+		if _, err := os.Stat(testDataFile); os.IsNotExist(err) {
+			return structs.NewHTTPError("testdata.json not found", 404)
+		}
+	}
 
 	dat, err := ioutil.ReadFile(testDataFile)
 	if err != nil {
@@ -107,7 +121,7 @@ func (database *database) PostUser(user structs.User) (ID string, err error) {
 	if user.Password == "" {
 		return "", structs.NewHTTPError("No password submitted", 400)
 	}
-	
+
 	_, _, err = db.GetLogin(user.Email)
 
 	// if user is not in database we can create a new one

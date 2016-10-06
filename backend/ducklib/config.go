@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 
+	"path/filepath"
+
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
@@ -17,7 +19,6 @@ func init() {
 	flag.StringVar(&cfg.WebDir, "webdir", "", "The root directory for serving web content")
 	flag.StringVar(&cfg.JwtKey, "jwtkey", "", "The secret used to sign the JWT")
 	flag.StringVar(&cfg.RulebaseDir, "rulebasedir", "", "The Directory to the Rulebases")
-	flag.BoolVar(&cfg.Gopathrelative, "gopathrelative", true, "Defines if webdir and rulebasedir are relative to the GOPATH")
 	flag.BoolVar(&cfg.Loadtestdata, "loadtestdata", false, "If this is true, testdata will be loaded into the database")
 	flag.Parse()
 }
@@ -33,7 +34,7 @@ func NewConfiguration(confpath string) structs.Configuration {
 	c.JwtKey = "secret"
 	c.WebDir = "/src/github.com/Microsoft/DUCK/frontend/dist"
 	c.RulebaseDir = "/src/github.com/Microsoft/DUCK/RuleBases"
-	c.Gopathrelative = true
+
 	c.Loadtestdata = false
 
 	//overwrite defaults with information from config file
@@ -45,7 +46,23 @@ func NewConfiguration(confpath string) structs.Configuration {
 	getEnv(&c)
 	//overwrite with information from flags
 	getFlags(&c)
+
+	setAbsPaths(&c)
 	return c
+}
+
+//If there is an env var GOPATH and RulebaseDir or WebDir are relative paths they are assumed to be ralative to the gopath
+func setAbsPaths(c *structs.Configuration) {
+	goPath := os.Getenv("GOPATH")
+	if goPath != "" {
+		if !filepath.IsAbs(c.RulebaseDir) {
+			c.RulebaseDir = filepath.Join(goPath, c.RulebaseDir)
+		}
+
+		if !filepath.IsAbs(c.WebDir) {
+			c.WebDir = filepath.Join(goPath, c.WebDir)
+		}
+	}
 }
 
 //getFlags populates the configuration struct with data from the flags this program is called with
@@ -59,10 +76,6 @@ func getFlags(config *structs.Configuration) {
 	}
 	if cfg.RulebaseDir != "" {
 		config.RulebaseDir = cfg.RulebaseDir
-	}
-
-	if cfg.Gopathrelative != true {
-		config.Gopathrelative = cfg.Gopathrelative
 	}
 
 	if cfg.Loadtestdata != false {
@@ -102,14 +115,7 @@ func getEnv(c *structs.Configuration) {
 		c.RulebaseDir = env
 	}
 	//has to be not empty and also something like a boolean to be set
-	env = os.Getenv("DUCK_GOPATHRELATIVE")
-	if env != "" {
-		if gpr, err := strconv.ParseBool(env); err == nil {
-			c.Gopathrelative = gpr
-		} else {
-			log.Printf("Could not read value for GOPATHRELATIVE: %s", err)
-		}
-	}
+
 	env = os.Getenv("DUCK_LOADTESTDATA")
 	if env != "" {
 		if ldt, err := strconv.ParseBool(env); err == nil {

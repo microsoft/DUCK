@@ -6,8 +6,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
 
 	"log"
@@ -17,8 +15,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-var goPath = os.Getenv("GOPATH")
-var testData = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/testdata.json")
+
+
 
 //helloHandler returns just Hello world with StatusOK.
 func helloHandler(c echo.Context) error {
@@ -46,7 +44,7 @@ func getDocSummaries(c echo.Context) error {
 //testdataHandler initializes the import of testing data from the file testdata.json into the database
 func testdataHandler(c echo.Context) error {
 
-	if err := FillTestdata(testData); err != nil {
+	if err := FillTestdata(); err != nil {
 		log.Printf("Error in testdataHandler while trying to fill the database: %s", err)
 		e := err.Error()
 		return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})

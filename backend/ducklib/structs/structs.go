@@ -1,12 +1,11 @@
 package structs
 
 type Configuration struct {
-	DBConfig       *DBConf `json:"database,omitempty"`
-	JwtKey         string  `json:"jwtkey,omitempty"`
-	WebDir         string  `json:"webdir,omitempty"`
-	RulebaseDir    string  `json:"rulebasedir,omitempty"`
-	Gopathrelative bool    `json:"gopathrelative,omitempty"`
-	Loadtestdata   bool    `json:"loadtestdata,omitempty"`
+	DBConfig     *DBConf `json:"database,omitempty"`
+	JwtKey       string  `json:"jwtkey,omitempty"`
+	WebDir       string  `json:"webdir,omitempty"`
+	RulebaseDir  string  `json:"rulebasedir,omitempty"`
+	Loadtestdata bool    `json:"loadtestdata,omitempty"`
 }
 
 type DBConf struct {

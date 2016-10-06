@@ -62,9 +62,9 @@ var (
 //Move this into main.go
 func TestMain(m *testing.M) {
 
-	conf = NewConfiguration(filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json"))
+	conf = NewConfiguration(filepath.Join(os.Getenv("GOPATH"), "/src/github.com/Microsoft/DUCK/backend/configuration.json"))
 
-	e = GetServer(conf, goPath)
+	e = GetServer(conf)
 	if e != nil {
 
 		os.Exit(m.Run())
@@ -81,7 +81,9 @@ func TestTestdata(t *testing.T) {
 	t.Run("HelloHandler=1", testHelloHandler)
 
 	var listOfData []interface{}
-	dat, err := ioutil.ReadFile(testData)
+
+	testDataFile := filepath.Join(os.Getenv("GOPATH"), "/src/github.com/Microsoft/DUCK/testdata.json")
+	dat, err := ioutil.ReadFile(testDataFile)
 	if err != nil {
 		t.Errorf("Error in TestTestdata cleanup while trying to read from the file: %s", err)
 		t.Fatal("No cleanup effects all later tests. ")
