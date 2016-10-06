@@ -56,15 +56,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         context.resetCompliance();
     };
 
-    /**
-     * Returns true if the current selected document can be edited.
-     *
-     * @return {boolean}
-     */
-    this.isEditable = function () {
-        return true;  // not currently required; placeholder
-    };
-
     this.setDocumentLocale = function (locale) {
         if (context.document) {
             context.document.locale = locale;

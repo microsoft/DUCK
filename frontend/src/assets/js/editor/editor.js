@@ -74,8 +74,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.save = DocumentModel.save;
 
-    controller.isEditable = DocumentModel.isEditable;
-
     controller.selectOriginal = function () {
         DocumentModel.selectOriginal();
         $scope.document = DocumentModel.document;
