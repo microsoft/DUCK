@@ -52,13 +52,13 @@ func NewConfiguration(confpath string) structs.Configuration {
 func getFlags(config *structs.Configuration) {
 
 	if cfg.JwtKey != "" {
-		config.JwtKey = cfg.WebDir
+		config.JwtKey = cfg.JwtKey
 	}
 	if cfg.WebDir != "" {
 		config.WebDir = cfg.WebDir
 	}
 	if cfg.RulebaseDir != "" {
-		config.RulebaseDir = cfg.WebDir
+		config.RulebaseDir = cfg.RulebaseDir
 	}
 
 	if cfg.Gopathrelative != true {

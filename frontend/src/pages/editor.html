@@ -4,14 +4,24 @@
             <div class="small-10 columns">
                 <h4>{{document.name}}</h4>
             </div>
-            <div class="middle fixed-label-right">
-                <!--<div class="label alert" ng-if="editorController.getState() === 'NON_COMPLIANT'"><i class="fa fa-warning"></i> {{"invalid"|translate}}</div>-->
-                <div class="label warning" ng-if="editorController.getState() === 'NON_COMPLIANT'">
-                    <i class="fa fa-warning"></i>{{"non_compliant"|translate}}
+            <div ng-if="editorController.isComplianceChecked() && editorController.filtering()" class="label secondary fixed-filter-right">
+                {{'filtering_compatible'|translate}} -
+                <a class="white" ng-click="editorController.showAllStatements()">
+                    {{'show_all_action'|translate}}
+                </a>
+            </div>
+            <div class="middle fixed-message">
+                <div class="label secondary" ng-if="editorController.NotificationService.hasMessage()">
+                   {{editorController.NotificationService.getMessage()}}
                 </div>
-                <div class="validation-label" ng-if="editorController.getState() === 'COMPLIANT'"><i class="fa fa-check"></i> {{"compliant"|translate}}</div>
-                <div class="label secondary" ng-if="editorController.getState() === 'NOT_VALIDATED'">
-                    <i class="fa fa-question"></i> {{"not_validated"|translate}}
+            </div>
+            <div class="middle fixed-label-right">
+                <div class="label warning" ng-if="editorController.getState() === 'NON_COMPLIANT'">
+                    <i class="fa fa-warning"></i> {{"consent_required"|translate}}
+                </div>
+                <div class="validation-label" ng-if="editorController.getState() === 'COMPLIANT'">{{"consent_not_required"|translate}}</div>
+                <div class="label secondary" ng-if="editorController.getState() === 'UNKNOWN'">
+                    {{"not_validated"|translate}}
                 </div>
             </div>
             <hr>
@@ -62,7 +72,8 @@
 
                                 <a ng-click="editorController.setAssumptionSet(assumptionSet.id)" href="">
                                     <span class="fa fa-check padding-right-1" ng-show="assumptionSet.id === editorController.getAssumptionSet()"></span>
-                                    <span class="fa fa-check padding-right-1" style="color: #fff" ng-show="locale.id !== editorController.getAssumptionSet()"></span>
+                                    <span class="fa fa-check padding-right-1" style="color: #fff"
+                                          ng-show="locale.id !== editorController.getAssumptionSet()"></span>
                                     {{assumptionSet.name}}
                                 </a>
                             </li>
@@ -78,16 +89,44 @@
             </div>
             <div class="row column">
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
-                    <li data-ng-repeat="statement in document.statements" data-as-sortable-item ng-class="{'diff-remove': statement._diff}">
+                    <li data-ng-repeat="statement in document.statements | compatibleFilter : editorController.filterStatement" data-as-sortable-item
+                        ng-class="{'diff-remove': statement._diff}">
                         <div data-as-sortable-item-handle>
                             <div class="row" ng-if="editorController.isEditable()">
-                                <div class="button-group small noselect">
-                                    <a class="button secondary" ng-class="{'hollow':statement.passive}"
-                                       ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
-                                    <a class="button secondary" ng-class="{'hollow':!statement.passive}"
-                                       ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
-                                    <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)">
-                                        <i class="fa fa-trash medium-gray"></i> </a>
+                                <div class="small-5 columns">
+                                    <div class="button-group tiny noselect">
+                                        <a class="button secondary" ng-class="{'hollow':statement.passive}"
+                                           ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
+                                        <a class="button secondary" ng-class="{'hollow':!statement.passive}"
+                                           ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
+                                        <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)">
+                                            <i class="fa fa-trash medium-gray"></i> </a>
+                                    </div>
+                                </div>
+                                <div class="small-5 text-right columns" ng-if="statement.$$statementExplanation">
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed ===true,
+                                                     'is-hidden': statement.$$statementExplanation.consentRequired.value !== true}">
+                                        {{'consent_required'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed ===true,
+                                                     'is-hidden': statement.$$statementExplanation.pii.value !== true}">
+                                        {{'relates_pii'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed ===true,
+                                                     'is-hidden': statement.$$statementExplanation.li.value !== true}">
+                                        {{'legitimate_interest'|translate}}
+                                    </span>
+                                </div>
+                                <div class="small-2 right columns">
+                                    <span class="button-group tiny float-right noselect">
+                                        <a ng-if="editorController.isComplianceChecked() && !editorController.filtering()" class="button hollow"
+                                           ng-click="editorController.filterOnStatement(statement)">
+                                            {{'show_compatible_action'|translate}}
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
                             <div class="row noselect">

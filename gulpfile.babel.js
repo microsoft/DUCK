@@ -38,7 +38,8 @@ function loadConfig() {
 gulp.task("build",
     gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy)));
 
-gulp.task("test",
+// build the distribution
+gulp.task("distro",
     gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy)));
 
 // Build the site, run the server, and watch for file changes
@@ -159,8 +160,7 @@ var go;
 
 // launch the backend serving the web distribution directory
 function backendCompile(done) {
-    // go = gulpgo.run("backend.go", ["--webdir", __dirname + "/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
-    child.spawnSync('go', ['install']);
+    child.spawnSync('go', ['install'],  {cwd: "backend", stdio: "inherit"});
     done();
 }
 

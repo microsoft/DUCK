@@ -1,12 +1,33 @@
 var editorModule = angular.module("duck.editor");
 
 editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, AssumptionSetService, DocumentExporter,
-                                                      $stateParams, AbandonComponent, ObjectUtils, $scope, $rootScope) {
+                                                      $stateParams, AbandonComponent, NotificationService, ObjectUtils, $scope, $rootScope) {
 
     var controller = this;
 
+    controller.NotificationService = NotificationService;
     controller.locales = LocaleService.getLocales();
     controller.assumptionSets = AssumptionSetService.getAssumptionSets();
+
+    controller.filterStatement = null; // statement groups to filter on; provided as part of the validation result
+
+    controller.filterOnStatement = function (statement) {
+        // This will trigger the 'compatibleFilter' filter to remove statements determined (from validation) not compatible with the
+        // given statement
+        controller.filterStatement = statement;
+    };
+
+    controller.showAllStatements = function () {
+        controller.filterStatement = null;
+    };
+
+    controller.isComplianceChecked = function () {
+        return DocumentModel.state !== "UNKNOWN";
+    };
+
+    controller.filtering = function () {
+        return controller.filterStatement != null;
+    };
 
     var documentId = ObjectUtils.notNull($stateParams.documentId) ? $stateParams.documentId : null;
     controller.noDocument = documentId === null;
@@ -29,6 +50,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     $scope.$on("$destroy", function () {
         unregisterDirtyCheck();
+        controller.filterStatement = null
         DocumentModel.release();
     });
 
@@ -107,7 +129,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     };
 
     controller.downloadDocument = function () {
-       DocumentExporter.export("text/plain", DocumentModel.document);
+        DocumentExporter.export("text/plain", DocumentModel.document);
     };
 
     DocumentModel.initialize(documentId).then(function () {
@@ -321,6 +343,28 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
         controller.clear();
     };
 
+});
+
+editorModule.filter('compatibleFilter', function (ObjectUtils) {
+    return function (statements, filterStatement) {
+        if (ObjectUtils.isNull(statements)) {
+            return;
+        }
+        if (ObjectUtils.isNull(filterStatement) || ObjectUtils.isNull(filterStatement.$$statementExplanation)) {
+            return statements; // no compliance check is active, do not filter
+        }
+        var set = new HashSet();
+        set.add(filterStatement.trackingId);
+        set.addAll(filterStatement.$$statementExplanation.compatiblePurpose);
+
+        var filtered = [];
+        statements.forEach(function (statement) {
+            if (set.contains(statement.trackingId)) {
+                filtered.push(statement);
+            }
+        });
+        return filtered;
+    }
 });
 
 

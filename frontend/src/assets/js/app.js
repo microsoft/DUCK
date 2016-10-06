@@ -97,7 +97,7 @@ app.config(["$urlRouterProvider", "$locationProvider", "$stateProvider", "$logPr
     }]);
 
 
-app.controller("AppController", function (AssumptionSetService, CurrentUser, GlobalDictionary, TaxonomyService, AppInfo, $translate, $log) {
+app.controller("AppController", function (AssumptionSetService, CurrentUser, GlobalDictionary, TaxonomyService, RulebaseService, AppInfo, $translate, $log) {
     $log.info("Initializing version " + AppInfo.version);
 
     // Initialize the assumption service first since the user service relies on it
@@ -106,6 +106,7 @@ app.controller("AppController", function (AssumptionSetService, CurrentUser, Glo
         $translate.use(CurrentUser.locale);
         if (CurrentUser.loggedIn) {
             GlobalDictionary.initialize();
+            RulebaseService.initialize();
         }
 
     });

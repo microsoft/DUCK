@@ -14,30 +14,25 @@
 </div>
 
 
-<div ng-if="editorController.isEditable()">
-    <div class="row">
-        <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
-            <div ng-show="statement.errors.useScope.active">
-                <error-label fragment="statement.errors.useScope"></error-label>
-                {{statement.errors.useScope.message}}
-            </div>
-            <div ng-show="statement.errors.action.active">
-                <error-label fragment="statement.errors.action"></error-label>
-                {{statement.errors.action.message}}
-            </div>
+<div class="row">
+    <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
+        <div ng-show="statement.errors.useScope.active">
+            <error-label fragment="statement.errors.useScope"></error-label>
+            {{statement.errors.useScope.message}}
+        </div>
+        <div ng-show="statement.errors.action.active">
+            <error-label fragment="statement.errors.action"></error-label>
+            {{statement.errors.action.message}}
         </div>
     </div>
+</div>
 
-    <!--<div ng-show="!editorController.emptyStatement(statement)">-->
-        <!--<hr>-->
-    <!--</div>-->
-    <div class="row  padding-bottom-0-5" ng-show="!editorController.emptyStatement(statement)">
-        <div class="row column">
-            <div ng-if="!statement.passive"
-                 ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
-            <div ng-if="statement.passive"
-                 ng-include="editorController.getLocalePrefix()+'-preview-passive.html'"></div>
-        </div>
+<div class="row padding-top-1  padding-bottom-0-5" ng-show="!editorController.emptyStatement(statement)">
+    <div class="row column">
+        <div ng-if="!statement.passive"
+             ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
+        <div ng-if="statement.passive"
+             ng-include="editorController.getLocalePrefix()+'-preview-passive.html'"></div>
     </div>
 </div>
 
