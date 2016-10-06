@@ -105,18 +105,28 @@
                                 </div>
                                 <div class="small-5 text-right columns" ng-if="statement.$$statementExplanation">
                                     <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed ===true,
-                                                     'is-hidden': statement.$$statementExplanation.consentRequired.value !== true}">
+                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.consentRequired.value === true}">
+                                        {{'consent_not_required'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.consentRequired.value === false}">
                                         {{'consent_required'|translate}}
                                     </span>
                                     <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed ===true,
-                                                     'is-hidden': statement.$$statementExplanation.pii.value !== true}">
+                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.pii.value === true}">
+                                        {{'does_not_relate_to_pii'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.pii.value === false}">
                                         {{'relates_pii'|translate}}
                                     </span>
                                     <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed ===true,
-                                                     'is-hidden': statement.$$statementExplanation.li.value !== true}">
+                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.li.value === false}">
                                         {{'legitimate_interest'|translate}}
                                     </span>
                                 </div>
