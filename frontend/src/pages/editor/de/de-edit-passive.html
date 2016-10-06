@@ -5,14 +5,18 @@
     <h6 class="medium-gray">{{context.currentField | translate}}</h6>
 </div>
 <div class="row padding-left-1">
-    <input placeholder="qualifier"
+    <error-label fragment="statement.errors.qualifier"></error-label>
+    <input error-marker="statement.errors.qualifier"
+           placeholder="qualifier"
            ng-model="statement.qualifier"
            class="qualifier-field"
            mass-autocomplete-item="qualifierCompletion"
            ng-attr-title="{{'qualifier'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'qualifier'" ng-blur="context.currentField = null">
     <span ng-show="context.currentField === 'qualifier'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
-    <input placeholder="data category"
+    <error-label fragment="statement.errors.dataCategory"></error-label>
+    <input error-marker="statement.errors.dataCategory"
+           placeholder="data category"
            ng-model="statement.dataCategory"
            class="data-category-field"
            mass-autocomplete-item="dataCategoryCompletion"
@@ -20,7 +24,9 @@
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'data_category'" ng-blur="context.currentField = null">
     <span ng-show="context.currentField === 'data_category'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
     von
-    <input placeholder="source scope"
+    <error-label fragment="statement.errors.sourceScope"></error-label>
+    <input error-marker="statement.errors.sourceScope"
+           placeholder="source scope"
            ng-model="statement.sourceScope"
            class="source-scope-field"
            mass-autocomplete-item="sourceScopeCompletion"
@@ -48,7 +54,9 @@
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'action'" ng-blur="context.currentField = null">
     <span ng-show="context.currentField === 'action'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
     das
-    <input placeholder="result scope"
+    <error-label fragment="statement.errors.resultScope"></error-label>
+    <input error-marker="statement.errors.resultScope"
+           placeholder="result scope"
            ng-model="statement.resultScope"
            class="result-scope-field"
            mass-autocomplete-item="resultScopeCompletion"

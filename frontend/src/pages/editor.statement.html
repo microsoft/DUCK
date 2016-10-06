@@ -16,13 +16,9 @@
 
 <div class="row">
     <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
-        <div ng-show="statement.errors.useScope.active">
-            <error-label fragment="statement.errors.useScope"></error-label>
-            {{statement.errors.useScope.message}}
-        </div>
-        <div ng-show="statement.errors.action.active">
-            <error-label fragment="statement.errors.action"></error-label>
-            {{statement.errors.action.message}}
+        <div ng-repeat="error in statement.errors" class="padding-top-0-5">
+            <error-label fragment="error"></error-label>
+            <span>{{error.message}}</span>
         </div>
     </div>
 </div>

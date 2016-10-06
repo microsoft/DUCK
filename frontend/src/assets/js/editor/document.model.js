@@ -10,11 +10,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     this.document = null;
 
     /**
-     * The original document being edited
-     */
-    this.originalDocument = null;
-
-    /**
      * Tracks the local edit state of the document.
      */
     this.dirty = false;
@@ -39,7 +34,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     this.initialize = function (documentId) {
         return $q(function (resolve) {
             DataUseDocumentService.getDocument(documentId).then(function (useDocument) {
-                context.originalDocument = useDocument;
                 context.document = useDocument;
                 context.dirty = false;
 
@@ -47,10 +41,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                 TaxonomyService.activate([GlobalDictionary.getDictionary(), context.document.dictionary.values()]);
 
                 context.document.statements.forEach(function (statement) {
-                    statement.errors = {
-                        useScope: {active: false, level: null, action: false},
-                        action: {active: false, level: null, action: false}
-                    };
+                    context.addStatementErrorObject(statement);
                     context.lookupAndSetTerms(context.document);
                 });
 
@@ -177,10 +168,23 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      * @param statement the statement
      */
     this.addStatement = function (statement) {
+        context.addStatementErrorObject(statement);
         context.document.statements.push(statement);
         statement.trackingId = UUID.next();
         context.dirty = true;
         context.resetCompliance();
+    };
+
+    this.addStatementErrorObject = function (statement) {
+        statement.errors = {
+            useScope: {active: false, level: null, action: false},
+            qualifier: {active: false, level: null, action: false},
+            dataCategory: {active: false, level: null, action: false},
+            sourceScope: {active: false, level: null, action: false},
+            action: {active: false, level: null, action: false},
+            resultScope: {active: false, level: null, action: false}
+        };
+
     };
 
     /**
@@ -223,6 +227,10 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     };
 
     this.complianceCheck = function () {
+
+        if (!context.validateSyntax(true)) {
+            return;
+        }
         // FIXME ruleset id
         DataUseDocumentService.complianceCheck(context.document, "123").then(function (complianceResult) {
             context.state = complianceResult.compliant;
@@ -256,7 +264,6 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.save = function () {
         DataUseDocumentService.saveDocument(context.document);
-        context.originalDocument = context.document;
         context.dirty = false;
     };
 
@@ -277,27 +284,96 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         context.dirty = true;
     };
 
-    this.validateSyntax = function () {
-        var errorNumber = 1;
+    this.validateSyntax = function (full) {
+        var fullValidation = full === undefined ? false : full;
+        var totalErrors = 0;
         context.document.statements.forEach(function (statement) {
-            if (ObjectUtils.isNull(statement.errors)) {
-                return;
+            var errorNumber = 1;
+            if (ObjectUtils.isNull(statement.errors) && !fullValidation) {
+                return true;
             }
+
+            // use scope
             if (!ObjectUtils.isEmptyString(statement.useScope)) {
                 if (TaxonomyService.contains("scope", context.document.locale, statement.useScope)) {
                     context.resetValidation(statement.errors.useScope);
                 } else {
-                    statement.errors.useScope.active = true;
-                    statement.errors.useScope.level = "error";
-                    statement.errors.useScope.errorNumber = errorNumber;
-                    statement.errors.useScope.message = "Use scope is not recognized";
+                    context.createError(statement.errors.useScope, "Use scope is not recognized", errorNumber);
                     errorNumber++;
                 }
+            } else if (fullValidation) {
+                context.createError(statement.errors.useScope, "Use scope is not specified", errorNumber);
+                errorNumber++;
             } else {
                 context.resetValidation(statement.errors.useScope);
             }
-            // statement.errors.action = {active: true, level: "warning", errorNumber: 2, message: "Action is not an ISO-defined term"};
-        })
+
+            // qualifier
+            if (!ObjectUtils.isEmptyString(statement.qualifier)) {
+                // TODO
+                context.resetValidation(statement.errors.qualifier);
+            } else if (fullValidation) {
+                context.createError(statement.errors.qualifier, "Qualifier is not specified", errorNumber);
+                errorNumber++;
+            } else {
+                context.resetValidation(statement.errors.qualifier);
+            }
+
+            // data category
+            if (!ObjectUtils.isEmptyString(statement.dataCategory)) {
+                // TODO
+                context.resetValidation(statement.errors.dataCategory);
+            } else if (fullValidation) {
+                context.createError(statement.errors.dataCategory, "Data category is not specified", errorNumber);
+                errorNumber++;
+            } else {
+                context.resetValidation(statement.errors.dataCategory);
+            }
+
+            // source scope
+            if (!ObjectUtils.isEmptyString(statement.sourceScope)) {
+                // TODO
+                context.resetValidation(statement.errors.sourceScope);
+            } else if (fullValidation) {
+                context.createError(statement.errors.sourceScope, "Source Scope is not specified", errorNumber);
+                errorNumber++;
+            } else {
+                context.resetValidation(statement.errors.sourceScope);
+            }
+
+            // action
+            if (!ObjectUtils.isEmptyString(statement.action)) {
+                // TODO
+                context.resetValidation(statement.errors.action);
+            } else if (fullValidation) {
+                context.createError(statement.errors.action, "Action is not specified", errorNumber);
+                errorNumber++;
+            } else {
+                context.resetValidation(statement.errors.action);
+            }
+
+            // result scope
+            if (!ObjectUtils.isEmptyString(statement.resultScope)) {
+                // TODO
+                context.resetValidation(statement.errors.resultScope);
+            } else if (fullValidation) {
+                context.createError(statement.errors.resultScope, "Result Scope is not specified", errorNumber);
+                errorNumber++;
+            } else {
+                context.resetValidation(statement.errors.resultScope);
+            }
+            totalErrors = totalErrors + errorNumber - 1;
+
+        });
+        return totalErrors === 0;
+    };
+
+    this.createError = function (errorObject, message, errorNumber) {
+        errorObject.active = true;
+        errorObject.level = "error";
+        errorObject.errorNumber = errorNumber;
+        errorObject.message = message;
+
     };
 
     this.resetValidation = function (errorObject) {
@@ -317,5 +393,5 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
             delete statement.$$statementExplanation;
         });
     }
-}); 
+});
     
