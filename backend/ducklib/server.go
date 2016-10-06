@@ -2,7 +2,6 @@ package ducklib
 
 import (
 	"log"
-	"path/filepath"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/labstack/echo"
@@ -20,7 +19,7 @@ var JWT []byte
 var checker *ComplianceCheckerPlugin
 
 //GetServer returns Echo instance with predefined routes
-func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
+func GetServer(conf structs.Configuration) *echo.Echo {
 	//webDir string, jwtKey []byte, ruleBaseDir string
 
 	datab = NewDatabase(*conf.DBConfig)
@@ -30,18 +29,15 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	}
 
 	if conf.Loadtestdata {
-		var testData = filepath.Join(gopath, "/src/github.com/Microsoft/DUCK/testdata.json")
 
-		if err := FillTestdata(testData); err != nil {
+		if err := FillTestdata(); err != nil {
 			log.Printf("Error trying to load testdata: %s", err)
 		}
 	}
 
 	JWT = []byte(conf.JwtKey)
 	rbd := conf.RulebaseDir
-	if conf.Gopathrelative {
-		rbd = filepath.Join(goPath, conf.RulebaseDir)
-	}
+
 	log.Printf("Rulebase directory: " + rbd)
 
 	checker, err = MakeComplianceCheckerPlugin(rbd)
@@ -86,13 +82,13 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 	users.DELETE("/:id/dictionary/:code", deleteDictItemHandler, jwtMiddleware) //delete a dictonary entry
 
 	//data use statement document resources
-	documents := api.Group("/documents", jwtMiddleware) //base URI
-	documents.POST("", postDocHandler)                  //create document
-	documents.PUT("", putDocHandler)                    //update document
-	documents.DELETE("/:docid", deleteDocHandler)       //delete document
-	documents.GET("/:userid/summary", getDocSummaries)  //return document summaries for the author
-	documents.GET("/:docid", getDocHandler)             //return document
-	documents.POST("/copy/:docid", copyStatementsHandler)      //copies the statements from an existing Document to a new one
+	documents := api.Group("/documents", jwtMiddleware)   //base URI
+	documents.POST("", postDocHandler)                    //create document
+	documents.PUT("", putDocHandler)                      //update document
+	documents.DELETE("/:docid", deleteDocHandler)         //delete document
+	documents.GET("/:userid/summary", getDocSummaries)    //return document summaries for the author
+	documents.GET("/:docid", getDocHandler)               //return document
+	documents.POST("/copy/:docid", copyStatementsHandler) //copies the statements from an existing Document to a new one
 
 	//rulebase resources
 	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI
@@ -105,9 +101,7 @@ func GetServer(conf structs.Configuration, gopath string) *echo.Echo {
 
 	// serves the static files
 	wbd := conf.WebDir
-	if conf.Gopathrelative {
-		wbd = filepath.Join(goPath, conf.WebDir)
-	}
+
 	log.Printf("Web directory: " + wbd)
 	e.Static("/", wbd)
 
