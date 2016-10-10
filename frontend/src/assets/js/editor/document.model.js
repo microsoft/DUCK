@@ -224,8 +224,9 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      * Saves the local model to the backend.
      */
     this.save = function () {
-        DataUseDocumentService.saveDocument(context.document);
+        var promise = DataUseDocumentService.saveDocument(context.document);
         context.dirty = false;
+        return promise;
     };
 
     /**
