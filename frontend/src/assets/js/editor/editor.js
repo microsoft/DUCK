@@ -124,6 +124,10 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         DocumentExporter.export("text/plain", DocumentModel.document);
     };
 
+    controller.exportDocument = function () {
+        DocumentExporter.export("text/plain", DocumentModel.document, "json");
+    };
+
     DocumentModel.initialize(documentId).then(function () {
         // ng-sortable and watch requires the use of $scope
         $scope.document = DocumentModel.document;

@@ -77,6 +77,7 @@
   "does_not_relate_to_pii": "Does Not Relate to PII",
   "relates_pii": "Relates to PII",
   "legitimate_interest": "Legitimate Interest",
+  "no_legitimate_interest": "No Legitimate Interest",
   "show_compatible_action": "SHOW COMPATIBLE",
   "document_saving": "Saving document...",
   "document_saved": "Document saved",

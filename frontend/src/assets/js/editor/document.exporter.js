@@ -18,8 +18,9 @@ editorModule.service("DocumentExporter", function (FileSaver, $log) {
         context.exporters.put(type + ":" + locale, exporter);
     };
 
-    this.export = function (type, document) {
-        var exporter = context.exporters.get(type + ":" + document.locale);
+    this.export = function (type, document, localeOverride) {
+
+        var exporter = localeOverride ? context.exporters.get(type + ":" + localeOverride) : context.exporters.get(type + ":" + document.locale);
         if (exporter === null) {
             $log.error("Document exporter not found: " + type + "," + document.locale);
             return "Error exporting document: Exporter not registered."
@@ -31,5 +32,6 @@ editorModule.service("DocumentExporter", function (FileSaver, $log) {
 
         // save the file
         FileSaver.saveAs(data, name + "." + context.extensions.get(type));
-    }
+    };
+
 });
