@@ -1,5 +1,7 @@
 package structs
 
+import "strconv"
+
 type Document struct {
 	ID            string      `json:"id"`
 	Name          string      `json:"name"`
@@ -81,6 +83,7 @@ func (s *Statement) FromInterfaceMap(mp map[string]interface{}) {
 	s.Passive = getFieldBooleanValue(mp, "passive")
 
 }
+
 func getFieldValue(mp map[string]interface{}, field string) string {
 
 	if interf, ok := mp[field]; ok {
@@ -94,8 +97,11 @@ func getFieldValue(mp map[string]interface{}, field string) string {
 func getFieldBooleanValue(mp map[string]interface{}, field string) bool {
 
 	if interf, ok := mp[field]; ok {
-		if value, ok := interf.(bool); ok {
-			return value
+		if str, ok := interf.(string); ok {
+			b, err := strconv.ParseBool(str)
+			if err == nil {
+				return b
+			}
 		}
 	}
 	return false
