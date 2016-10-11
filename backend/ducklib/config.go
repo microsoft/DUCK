@@ -32,8 +32,8 @@ func NewConfiguration(confpath string) structs.Configuration {
 
 	//setting defaults
 	c.JwtKey = "secret"
-	c.WebDir = "/src/github.com/Microsoft/DUCK/frontend/dist"
-	c.RulebaseDir = "/src/github.com/Microsoft/DUCK/RuleBases"
+	c.WebDir = "src/github.com/Microsoft/DUCK/frontend/dist"
+	c.RulebaseDir = "src/github.com/Microsoft/DUCK/RuleBases"
 
 	c.Loadtestdata = false
 

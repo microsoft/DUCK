@@ -1,4 +1,4 @@
-<div class="row padding-top-2 padding-left-1" ng-controller="HomeController as home">
+<div class="row padding-top-2 padding-left-1 padding-right-1" ng-controller="HomeController as home">
     <div class="row column">
         <h4>{{"my_documents_heading" |translate}}</h4>
     </div>
@@ -13,6 +13,7 @@
             <!--<label for="exampleFileUpload" class="button"><i class="fa fa-cloud-upload"></i> {{"upload_file"|translate}}</label>-->
             <!--<input type="file" id="exampleFileUpload" class="show-for-sr">-->
             <a data-open="createModal" href="" class="button">{{"create"|translate}}</a>
+            <a data-open="createTestModal" href="" class="button">Create Test Document</a>
         </div>
 
     </div>
@@ -60,6 +61,21 @@
             <div class="columns ">
                 <a class="button small secondary" data-close> {{"cancel_action" |translate}}</a>
                 <a class="button small" data-close ng-click="home.createDocument(home.newName)"> {{"create_action" |translate}}</a>
+            </div>
+        </div>
+    </div>
+    <div class="reveal tiny" id="createTestModal" data-reveal data-overlay="false">
+        <h4> {{"create_document" |translate}}</h4>
+        <div class="row padding-top-2">
+            <input ng-model="home.newName" type="text" ng-attr-placeholder="'document_name_placeholder' | translate">
+            <select ng-model="home.testDataType">
+                <option value="{{key}}" ng-repeat="(key, value)  in home.testData">{{value.description}}</option>
+            </select>
+        </div>
+        <div class="row float-right padding-top-2">
+            <div class="columns ">
+                <a class="button small secondary" data-close> {{"cancel_action" |translate}}</a>
+                <a class="button small" data-close ng-click="home.createTestDocument(home.newName, home.testDataType)"> {{"create_action" |translate}}</a>
             </div>
         </div>
     </div>

@@ -1,8 +1,10 @@
 var homeModule = angular.module("duck.home");
 
-homeModule.controller("HomeController", function (DataUseDocumentService, $state) {
+homeModule.controller("HomeController", function (DataUseDocumentService, DocumentModel, $state) {
     var home = this;
     home.summaries = [];
+    home.testDataType = "PII_YES";
+    home.testData = null;
 
     // load document summaries for the current user
     DataUseDocumentService.getAuthoredDocumentSummaries().then(function (summaries) {
@@ -32,7 +34,7 @@ homeModule.controller("HomeController", function (DataUseDocumentService, $state
 
 
     };
-    
+
     home.copyDocument = function (name, documentId) {
         DataUseDocumentService.copyDocument(name, documentId).then(function (document) {
             $state.go('main.editor', {documentId: document.id});
@@ -41,6 +43,28 @@ homeModule.controller("HomeController", function (DataUseDocumentService, $state
         });
 
 
-    }
+    };
+
+    home.createTestDocument = function (name, type) {
+        DataUseDocumentService.createDocument(name).then(function (document) {
+            DocumentModel.initialize(document.id).then(function () {
+                home.testData[type].statements.forEach(function (statement) {
+                    DocumentModel.addStatement(statement);
+                });
+                DocumentModel.lookupAndSetTerms(DocumentModel.document);
+
+                DocumentModel.save().then(function () {
+                    $state.go('main.editor', {documentId: document.id});
+                });
+            });
+        }, function (error) {
+            //FIXME
+        });
+
+    };
+
+    DataUseDocumentService.getTestData().then(function (data) {
+        home.testData = data;
+    });
 
 });

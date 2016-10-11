@@ -67,6 +67,23 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
         });
     };
 
+    this.getTestData = function () {
+        return $q(function (resolve, reject) {
+            // make sure the user is signed in is set
+            if (!CurrentUser.loggedIn) {
+                $state.go('signin');
+            }
+            var url = "assets/config/test-data.json";
+
+            $http.get(url).success(function (data) {
+                var testData = angular.fromJson(data);
+                resolve(testData);
+            }).error(function (data, status) {
+                reject(status);
+            });
+        });
+    };
+
     this.createDocument = function (name) {
         return $q(function (resolve, reject) {
             var url = "/v1/documents";

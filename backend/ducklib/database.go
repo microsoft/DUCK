@@ -27,7 +27,7 @@ func NewDatabase(config structs.DBConf) *database {
 func FillTestdata() error {
 
 	var listOfData []interface{}
-	testDataFile := "/src/github.com/Microsoft/DUCK/testdata.json"
+	testDataFile := "src/github.com/Microsoft/DUCK/testdata.json"
 	goPath := os.Getenv("GOPATH")
 	if goPath != "" && !filepath.IsAbs(testDataFile) {
 		testDataFile = filepath.Join(goPath, testDataFile)
