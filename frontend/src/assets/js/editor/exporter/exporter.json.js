@@ -9,12 +9,18 @@ editorModule.run(function (DocumentExporter) {
      * Exports US-EN text.
      */
     DocumentExporter.register("text/plain", "json", function (document) {
-        var exportObject = {statements:[]};
+        var exportObject = {statements: []};
 
         document.statements.forEach(function (statement) {
-            exportObject.statements.push(statement);
-            // text = text + statement.useScope + " uses " + statement.qualifier + " " + statement.dataCategory + " from " + statement.sourceScope
-            //     + " to " + statement.action + " the" + " " + statement.resultScope + ".\n\n";
+            exportObject.statements.push({
+                "useScopeCode": statement.useScopeCode,
+                "qualifierCode": statement.qualifierCode,
+                "dataCategoryCode": statement.dataCategoryCode,
+                "sourceScopeCode": statement.sourceScopeCode,
+                "actionCode": statement.actionCode,
+                "resultScopeCode": statement.resultScopeCode
+
+            });
         });
         var text = angular.toJson(exportObject);
         return new Blob([text], {type: 'text/plain;charset=utf-8'});
