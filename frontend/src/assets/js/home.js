@@ -3,7 +3,7 @@ var homeModule = angular.module("duck.home");
 homeModule.controller("HomeController", function (DataUseDocumentService, DocumentModel, $state) {
     var home = this;
     home.summaries = [];
-    home.testDataType = "PII_YES";
+    home.testDataType = "DEMO_DOCUMENT1";
     home.testData = null;
 
     // load document summaries for the current user

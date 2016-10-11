@@ -96,6 +96,7 @@
                         ng-class="{'diff-remove': statement._diff}">
                         <div data-as-sortable-item-handle>
                             <div class="row">
+                                <!--{{editorController.filterStatement === statement}}&#45;&#45;&#45;&#45;&#45;&#45;-->
                                 <div class="small-5 columns">
                                     <div class="button-group tiny noselect">
                                         <a class="button secondary" ng-class="{'hollow':statement.passive}"
@@ -144,6 +145,10 @@
                                            ng-click="editorController.filterOnStatement(statement)">
                                             {{'show_compatible_action'|translate}}
                                         </a>
+                                        <span class="label padding-right-1 float-right"
+                                              ng-class="{'is-hidden': editorController.filterStatement !== statement}">
+                                            {{'main_statement'|translate}}
+                                        </span>
                                     </span>
                                 </div>
                             </div>
