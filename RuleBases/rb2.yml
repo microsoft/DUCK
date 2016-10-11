@@ -780,15 +780,15 @@ argument_schemes:
   # Note that consentRequired5 and consentRequired6 can lead
   # to rebuttals (arguments pro and con)
   
-  - id: consentRequired5
-    variables: [S1,S2]
-    premises:
-      - pii(S1)
-      - notConsentRequired(S2)
-      - compatiblePurpose(S1,S2)
-    conclusions:
-      - notConsentRequired(S1)
-  
+  # - id: consentRequired5
+  #  variables: [S1,S2]
+  #  premises:
+  #    - pii(S1)
+  #    - notConsentRequired(S2)
+  #    - compatiblePurpose(S1,S2)
+  #  conclusions:
+  #    - notConsentRequired(S1)
+       
   # - id: consentRequired6
   #   variables: [S1,S2]
   #   premises:
