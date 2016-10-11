@@ -340,7 +340,7 @@
 		]
 	},
 	"NO_CONSENT_REQUIRED" : {
-		"description" : "No statement in this documents requires consent",
+		"description" : "Consent not required example",
 		"statements" : [{
 				"useScopeCode" : "csp_services",
 				"qualifierCode" : "identified_data",
@@ -373,7 +373,7 @@
 		]
 	},
 	"CONSENT_REQUIRED" : {
-		"description" : "Each statement in this documents requires consent",
+		"description" : "Consent required example",
 		"statements" : [{
 				"useScopeCode" : "capability",
 				"qualifierCode" : "pseudonymized_data",
