@@ -50,7 +50,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     $scope.$on("$destroy", function () {
         unregisterDirtyCheck();
-        controller.filterStatement = null
+        controller.filterStatement = null;
         DocumentModel.release();
     });
 

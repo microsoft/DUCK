@@ -79,6 +79,7 @@
   "legitimate_interest": "Legitimate Interest",
   "no_legitimate_interest": "No Legitimate Interest",
   "show_compatible_action": "SHOW COMPATIBLE",
+  "main_statement": "Primary statement",
   "document_saving": "Saving document...",
   "document_saved": "Document saved",
   "document_validating": "Validating document..."
