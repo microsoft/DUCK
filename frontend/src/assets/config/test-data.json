@@ -361,14 +361,6 @@
 			{
 				"useScopeCode": "service",
 				"qualifierCode": "identified_data",
-				"dataCategoryCode": "derived_data_user_profiling",
-				"sourceScopeCode": "service",
-				"actionCode": "personalize",
-				"resultScopeCode": "csp_services"
-			},
-			{
-				"useScopeCode": "service",
-				"qualifierCode": "identified_data",
 				"dataCategoryCode": "provider_data_operations",
 				"sourceScopeCode": "service",
 				"actionCode": "personalize",
@@ -383,12 +375,12 @@
 				"resultScopeCode": "capability"
 			},
 			{
-				"useScopeCode": "capability",
+				"useScopeCode": "service",
 				"qualifierCode": "identified_data",
-				"dataCategoryCode": "customer_content_financial",
-				"sourceScopeCode": "third_party_partners",
-				"actionCode": "upgrades",
-				"resultScopeCode": "csp_products"
+				"dataCategoryCode": "derived_data_user_profiling",
+				"sourceScopeCode": "service",
+				"actionCode": "personalize",
+				"resultScopeCode": "csp_services"
 			},
 			{
 				"useScopeCode": "capability",
@@ -396,6 +388,14 @@
 				"dataCategoryCode": "customer_content_credentials",
 				"sourceScopeCode": "csp_services",
 				"actionCode": "improve",
+				"resultScopeCode": "csp_products"
+			},
+			{
+				"useScopeCode": "capability",
+				"qualifierCode": "identified_data",
+				"dataCategoryCode": "customer_content_financial",
+				"sourceScopeCode": "third_party_partners",
+				"actionCode": "upgrades",
 				"resultScopeCode": "csp_products"
 			}
 		]
