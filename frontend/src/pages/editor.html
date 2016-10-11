@@ -97,7 +97,7 @@
                         <div data-as-sortable-item-handle>
                             <div class="row">
                                 <!--{{editorController.filterStatement === statement}}&#45;&#45;&#45;&#45;&#45;&#45;-->
-                                <div class="small-5 columns">
+                                <div class="small-3 columns">
                                     <div class="button-group tiny noselect">
                                         <a class="button secondary" ng-class="{'hollow':statement.passive}"
                                            ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
@@ -107,7 +107,7 @@
                                             <i class="fa fa-trash medium-gray"></i> </a>
                                     </div>
                                 </div>
-                                <div class="small-5 text-right columns" ng-if="statement.$$statementExplanation">
+                                <div class="small-7 text-right columns" ng-if="statement.$$statementExplanation">
                                     <span class="label padding-right-1 right"
                                           ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.consentRequired.value === true}">
@@ -131,12 +131,12 @@
                                     <span class="label padding-right-1 right"
                                           ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.li.value === true}">
-                                        {{'legitimate_interest'|translate}}
+                                        {{'no_legitimate_interest'|translate}}
                                     </span>
                                     <span class="label padding-right-1 right"
                                           ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.li.value === false}">
-                                        {{'no_legitimate_interest'|translate}}
+                                        {{'legitimate_interest'|translate}}
                                     </span>
                                 </div>
                                 <div class="small-2 right columns">
