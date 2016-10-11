@@ -141,8 +141,9 @@
                                 </div>
                                 <div class="small-2 right columns">
                                     <span class="button-group tiny float-right noselect">
-                                        <a ng-if="editorController.isComplianceChecked() && !editorController.filtering() && statement.$$statementExplanation.compatiblePurpose.length > 0"
+                                        <a ng-if="editorController.isComplianceChecked() && !editorController.filtering()"
                                            class="button hollow"
+                                           ng-class="{'disabled': statement.$$statementExplanation.compatiblePurpose.length === 0}"
                                            ng-click="editorController.filterOnStatement(statement)">
                                             {{'show_compatible_action'|translate}}
                                         </a>
