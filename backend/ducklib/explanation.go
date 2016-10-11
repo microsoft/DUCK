@@ -11,10 +11,10 @@ type BoolValue struct {
 }
 
 type StmtExplanation struct {
-	ConsentRequired   BoolValue `json:"consentRequired"`  // informed consent required
-	Pii               BoolValue `json:"pii"`              // personally identifiable information
-	Li                BoolValue `json:"li"`               // legitimate interest in the pii
-	CompatiblePurpose []string `json:"compatiblePurpose"` // ids of statements with a proven compatible purpose
+	ConsentRequired   BoolValue `json:"consentRequired"`   // informed consent required
+	Pii               BoolValue `json:"pii"`               // personally identifiable information
+	Li                BoolValue `json:"li"`                // legitimate interest in the pii
+	CompatiblePurpose []string  `json:"compatiblePurpose"` // ids of statements with a proven compatible purpose
 }
 
 type Explanation map[string]StmtExplanation // keys are statement tracking ids
@@ -87,7 +87,7 @@ func li(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
 	// find the li statement for this dus
 	goal, ok := terms.ReadString("li(" + dus.String() + ")")
 	if !ok {
-		return BoolValue{true, true}
+		return BoolValue{false, true}
 	}
 	for wff, stmt := range ag.Statements {
 		t, ok := terms.ReadString(wff)
@@ -98,7 +98,7 @@ func li(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
 		_, ok = terms.Match(goal, t, b)
 		if ok {
 			v := stmt.Label == caes.In // is li In?
-			return BoolValue{!v, !v}   // notLi assumed
+			return BoolValue{v, !v}    // notLi assumed
 		}
 	}
 	return BoolValue{false, true} // notLi assumed
