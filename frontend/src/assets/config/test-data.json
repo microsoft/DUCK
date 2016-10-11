@@ -186,7 +186,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "capability",
         "sourceScopeCode": "capability",
-        "trackingId": "aa19dd008b8934c799293bbbfd3b194c6",
         "useScopeCode": "capability"
       },
       {
@@ -195,7 +194,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "services_agreement",
         "sourceScopeCode": "services_agreement",
-        "trackingId": "a18372a4d4d0e4a27aa303a796b4b837a",
         "useScopeCode": "capability"
       },
       {
@@ -204,7 +202,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "service",
         "sourceScopeCode": "service",
-        "trackingId": "afea1b0002dd148908fbe2915f8644faf",
         "useScopeCode": "capability"
       },
       {
@@ -213,7 +210,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "capability",
         "sourceScopeCode": "capability",
-        "trackingId": "a56d502ac665a4514908badb1cccb700c",
         "useScopeCode": "capability"
       },
       {
@@ -222,7 +218,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "capability",
         "sourceScopeCode": "capability",
-        "trackingId": "a4557676ab2774636902091b0d6087e91",
         "useScopeCode": "service"
       },
       {
@@ -231,7 +226,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "service",
         "sourceScopeCode": "capability",
-        "trackingId": "a21664118c4074a4393ea7dc9f5118bf6",
         "useScopeCode": "third_party_services"
       },
       {
@@ -240,7 +234,6 @@
         "qualifierCode": "pseudonymized_data",
         "resultScopeCode": "csp_services",
         "sourceScopeCode": "third_party_services",
-        "trackingId": "abb0678871f0f400d98d063c5932595cd",
         "useScopeCode": "third_party_services"
       },
       {
@@ -249,7 +242,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "capability",
         "sourceScopeCode": "csp_services",
-        "trackingId": "a8ed45ad7ac264ffc891d3fa2bff07cbc",
         "useScopeCode": "csp_services"
       },
       {
@@ -258,7 +250,6 @@
         "qualifierCode": "pseudonymized_data",
         "resultScopeCode": "service",
         "sourceScopeCode": "csp_products",
-        "trackingId": "ae815b8d4735a4759a5773adc154a0786",
         "useScopeCode": "service"
       },
       {
@@ -267,7 +258,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "capability",
         "sourceScopeCode": "capability",
-        "trackingId": "a5ebb4a57ea3b49c5b2ddfa20e5cfd4c2",
         "useScopeCode": "capability"
       }
     ]
@@ -281,7 +271,6 @@
         "qualifierCode": "pseudonymized_data",
         "resultScopeCode": "services_agreement",
         "sourceScopeCode": "capability",
-        "trackingId": "aba6c6536477d4786801869b40338aa65",
         "useScopeCode": "capability"
       },
       {
@@ -290,7 +279,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "third_party_partners",
         "sourceScopeCode": "capability",
-        "trackingId": "ab6ee3075ab09489690cccd1226edf392",
         "useScopeCode": "service"
       },
       {
@@ -299,7 +287,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "csp_services",
         "sourceScopeCode": "capability",
-        "trackingId": "afb14a980bf8f4dbfadbf58fb7c4f29ee",
         "useScopeCode": "capability"
       },
       {
@@ -308,7 +295,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "csp_services",
         "sourceScopeCode": "capability",
-        "trackingId": "a2dc976e0051e4437a3b3d87641576a16",
         "useScopeCode": "capability"
       },
       {
@@ -317,7 +303,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "csp_products",
         "sourceScopeCode": "capability",
-        "trackingId": "af4a5e965026b4a3996e2580074dfd8f2",
         "useScopeCode": "capability"
       },
       {
@@ -326,7 +311,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "service",
         "sourceScopeCode": "capability",
-        "trackingId": "a96a1228fc3594b9981fdae81b68919fa",
         "useScopeCode": "capability"
       },
       {
@@ -335,7 +319,6 @@
         "qualifierCode": "pseudonymized_data",
         "resultScopeCode": "services_agreement",
         "sourceScopeCode": "third_party_services",
-        "trackingId": "a3dac045067a74b669388c70cc02aa7ce",
         "useScopeCode": "csp_products"
       },
       {
@@ -344,7 +327,6 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "capability",
         "sourceScopeCode": "service",
-        "trackingId": "a6669fbb236784dd6b2e645123a57a1a4",
         "useScopeCode": "csp_services"
       },
       {
@@ -353,7 +335,6 @@
         "qualifierCode": "pseudonymized_data",
         "resultScopeCode": "csp_products",
         "sourceScopeCode": "third_party_services",
-        "trackingId": "a75a85a3409fc4c818c23b6a222b8d017",
         "useScopeCode": "capability"
       },
       {
@@ -362,8 +343,44 @@
         "qualifierCode": "identified_data",
         "resultScopeCode": "third_party_services",
         "sourceScopeCode": "csp_services",
-        "trackingId": "a0e49d8cd7c1e4d6fa77be3b0a418567a",
         "useScopeCode": "capability"
+      }
+    ]
+  },
+  "DEMO_DOCUMENT1": {
+    "description": "Demo Document",
+    "statements": [
+      {
+        "useScopeCode": "service",
+        "qualifierCode": "anonymized_data",
+        "dataCategoryCode": "customer_content",
+        "sourceScopeCode": "service",
+        "actionCode": "market",
+        "resultScopeCode": "csp_products"
+      },
+      {
+        "useScopeCode": "service",
+        "qualifierCode": "identified_data",
+        "dataCategoryCode": "provider_data_operations",
+        "sourceScopeCode": "service",
+        "actionCode": "personalize",
+        "resultScopeCode": "service"
+      },
+      {
+        "useScopeCode": "service",
+        "qualifierCode": "identified_data",
+        "dataCategoryCode": "derived_data_user_profiling",
+        "sourceScopeCode": "service",
+        "actionCode": "personalize",
+        "resultScopeCode": "service"
+      },
+      {
+        "useScopeCode": "service",
+        "qualifierCode": "identified_data",
+        "dataCategoryCode": "derived_data_user_location",
+        "sourceScopeCode": "service",
+        "actionCode": "improve",
+        "resultScopeCode": "csp_products"
       }
     ]
   }
