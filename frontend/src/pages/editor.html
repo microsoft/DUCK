@@ -45,6 +45,10 @@
                        ng-attr-title="{{'download'|translate}}">
                         <i class="fa fa-download"></i>
                     </a>
+                    <a class="button hollow" ng-click="editorController.exportDocument()"
+                       ng-attr-title="{{'export'|translate}}">
+                        <i class="fa fa-code"></i>
+                    </a>
                 </div>
                 <div class="button-group small float-right noselect">
                     <button class="button hollow" type="button" data-toggle="example-dropdown">
@@ -125,8 +129,13 @@
                                     </span>
                                     <span class="label padding-right-1 right"
                                           ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
-                                                     'is-hidden': statement.$$statementExplanation.li.value === false}">
+                                                     'is-hidden': statement.$$statementExplanation.li.value === true}">
                                         {{'legitimate_interest'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.li.value === false}">
+                                        {{'no_legitimate_interest'|translate}}
                                     </span>
                                 </div>
                                 <div class="small-2 right columns">
