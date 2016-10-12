@@ -23,8 +23,17 @@ The project build requires:
 
 ### Setup
 
-First clone the project repository (make sure it is under the GOPATH directory):
+First clone the project repository. Make sure it is under the GOPATH directory, for example if your GOPATH is:
 
+```bash
+/gocode
+```
+DUCK should be checked out to:
+
+```bash
+/gocode/src/github.com/Microsoft/DUCK
+```
+To clone the codebase, use: 
 ```bash
 git clone https://github.com/Microsoft/DUCK DUCK
 ```
