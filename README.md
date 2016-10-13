@@ -17,7 +17,7 @@ The project build requires:
 
 - [Git](https://git-scm.com/)
 - [Go] (https://golang.org/)  (1.7 or later)
-- [NodeJS](https://nodejs.org/en/) (0.12 or greater, 4.4.7 LTS recommended)
+- [NodeJS](https://nodejs.org/en/) (0.12 or greater, LTS version >4.0.0 recommended)
 - [CouchDB](http://couchdb.apache.org/) (1.6 or greater)
 - [SWI Prolog] (http://swi-prolog.org) (Development Release 7.3)
 
@@ -53,6 +53,8 @@ Update go dependencies by executing 'go get' in the DUCK directory:
 go get github.com/carneades/carneades-4
 go get  gopkg.in/yaml.v2
 ```
+
+You might get a warning that for carneades that it did not find bildable source files. You can continue nontheless.
 
 Make sure Couch DB is running.
 
