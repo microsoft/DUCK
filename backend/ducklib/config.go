@@ -34,7 +34,7 @@ func NewConfiguration(confpath string) structs.Configuration {
 	c.WebDir = "src/github.com/Microsoft/DUCK/frontend/dist"
 	c.RulebaseDir = "src/github.com/Microsoft/DUCK/RuleBases"
 
-	c.Loadtestdata = false
+	
 
 	//overwrite defaults with information from config file
 	if err := getFileConfig(&c, confpath); err != nil {
