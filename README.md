@@ -93,7 +93,6 @@ The default configuration has these values:
   jwtkey: "secret"
   webdir: "/src/github.com/Microsoft/DUCK/frontend/dist"
   rulebasedir: "/src/github.com/Microsoft/DUCK/RuleBases"
-  loadtestdata: false
 ```
 
 ##### regarding path variables
