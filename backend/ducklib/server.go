@@ -31,12 +31,7 @@ func GetServer(conf structs.Configuration) *echo.Echo {
 		panic(err)
 	}
 
-	if conf.Loadtestdata {
 
-		if err := FillTestdata(); err != nil {
-			log.Printf("Error trying to load testdata: %s", err)
-		}
-	}
 
 	JWT = []byte(conf.JwtKey)
 	rbd := conf.RulebaseDir

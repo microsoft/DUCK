@@ -26,7 +26,6 @@ func TestConfig(t *testing.T) {
 	jwtkey := os.Getenv("DUCK_JWTKEY")
 	webdir := os.Getenv("DUCK_WEBDIR")
 	rbdir := os.Getenv("DUCK_RULEBASEDIR")
-	loadtd := os.Getenv("DUCK_LOADTESTDATA")
 
 	//set them all to zero	//set env to prior values
 	os.Setenv("DUCK_DATABASE.LOCATION", "")
@@ -38,7 +37,6 @@ func TestConfig(t *testing.T) {
 	os.Setenv("DUCK_JWTKEY", "")
 	os.Setenv("DUCK_WEBDIR", "")
 	os.Setenv("DUCK_RULEBASEDIR", "")
-	os.Setenv("DUCK_LOADTESTDATA", "")
 
 	//t.Error("AHHHHHH")
 	t.Run("File=1", testNoFile)
@@ -55,7 +53,6 @@ func TestConfig(t *testing.T) {
 	os.Setenv("DUCK_JWTKEY", jwtkey)
 	os.Setenv("DUCK_WEBDIR", webdir)
 	os.Setenv("DUCK_RULEBASEDIR", rbdir)
-	os.Setenv("DUCK_LOADTESTDATA", loadtd)
 
 }
 
@@ -103,10 +100,7 @@ func testEnvGopath(t *testing.T) {
 		"name":                 {envar: "DUCK_DATABASE.NAME", setval: "abcde", wantval: "abcde"},
 		"username":             {envar: "DUCK_DATABASE.USERNAME", setval: "abcde", wantval: "abcde"},
 		"Password":             {envar: "DUCK_DATABASE.PASSWORD", setval: "abcde", wantval: "abcde"},
-		"LOAD_1":               {envar: "DUCK_LOADTESTDATA", setval: "true", wantval: "true"},
-		"LOAD_2":               {envar: "DUCK_LOADTESTDATA", setval: "FALSE", wantval: "false"},
-		"LOAD_3":               {envar: "DUCK_LOADTESTDATA", setval: "1", wantval: "true"},
-		"LOAD_4":               {envar: "DUCK_LOADTESTDATA", setval: "abcde", wantval: "false"},
+
 	}
 	for key, val := range testtable {
 
@@ -126,10 +120,6 @@ func testEnvGopath(t *testing.T) {
 		case "DUCK_RULEBASEDIR":
 			if c.RulebaseDir != val.wantval {
 				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %s", key, val.wantval, c.RulebaseDir)
-			}
-		case "DUCK_LOADTESTDATA":
-			if strconv.FormatBool(c.Loadtestdata) != val.wantval {
-				t.Errorf("Testing environment Variable setting. Key: %s. Wanted %s, got %t", key, val.wantval, c.Loadtestdata)
 			}
 		case "DUCK_DATABASE.LOCATION":
 			if c.DBConfig.Location != val.wantval {

@@ -1,8 +1,6 @@
 package ducklib
 
 import (
-	"fmt"
-
 	"golang.org/x/crypto/bcrypt"
 
 	"net/http"
@@ -14,9 +12,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 )
-
-
-
 
 //helloHandler returns just Hello world with StatusOK.
 func helloHandler(c echo.Context) error {
@@ -41,18 +36,7 @@ func getDocSummaries(c echo.Context) error {
 	return c.JSON(http.StatusOK, docs)
 }
 
-//testdataHandler initializes the import of testing data from the file testdata.json into the database
-func testdataHandler(c echo.Context) error {
 
-	if err := FillTestdata(); err != nil {
-		log.Printf("Error in testdataHandler while trying to fill the database: %s", err)
-		e := err.Error()
-		return c.JSON(http.StatusConflict, structs.Response{Ok: false, Reason: &e})
-
-	}
-
-	return c.JSON(http.StatusOK, structs.Response{Ok: true})
-}
 
 /*
 Document handlers
@@ -70,7 +54,6 @@ func getDocHandler(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	fmt.Printf("GET revision: %s\n", doc.Revision)
 	return c.JSON(http.StatusOK, doc)
 }
 
@@ -153,7 +136,7 @@ func putDocHandler(c echo.Context) error {
 		log.Printf("Error in putDocHandler while trying to bind new doc to struct: %s", err)
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-	fmt.Printf("PUT revision: %s\n", doc.Revision)
+
 	err := datab.PutDocument(*doc)
 	if err != nil {
 		e := err.Error()
@@ -164,7 +147,7 @@ func putDocHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
 	docu, err := datab.GetDocument(doc.ID)
-	fmt.Printf("PUT RETURN revision: %s\n", docu.Revision) // should be the same one we once got through the document GET
+
 	if err != nil {
 		e := err.Error()
 		log.Printf("Error in putDocHandler while trying to get updated document: %s", err)

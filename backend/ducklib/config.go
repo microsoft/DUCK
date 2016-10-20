@@ -19,7 +19,6 @@ func init() {
 	flag.StringVar(&cfg.WebDir, "webdir", "", "The root directory for serving web content")
 	flag.StringVar(&cfg.JwtKey, "jwtkey", "", "The secret used to sign the JWT")
 	flag.StringVar(&cfg.RulebaseDir, "rulebasedir", "", "The Directory to the Rulebases")
-	flag.BoolVar(&cfg.Loadtestdata, "loadtestdata", false, "If this is true, testdata will be loaded into the database")
 	flag.Parse()
 }
 
@@ -79,10 +78,6 @@ func getFlags(config *structs.Configuration) {
 		config.RulebaseDir = cfg.RulebaseDir
 	}
 
-	if cfg.Loadtestdata != false {
-		config.Loadtestdata = cfg.Loadtestdata
-	}
-
 }
 
 //getFileConfig reads the config from a JSON formatted config file and
@@ -116,15 +111,6 @@ func getEnv(c *structs.Configuration) {
 		c.RulebaseDir = env
 	}
 	//has to be not empty and also something like a boolean to be set
-
-	env = os.Getenv("DUCK_LOADTESTDATA")
-	if env != "" {
-		if ldt, err := strconv.ParseBool(env); err == nil {
-			c.Loadtestdata = ldt
-		} else {
-			log.Printf("Could not read value for LOADTESTDATA: %s", err)
-		}
-	}
 	env = os.Getenv("DUCK_DATABASE.LOCATION")
 	if env != "" {
 		c.DBConfig.Location = env
