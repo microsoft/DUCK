@@ -31,8 +31,6 @@ func GetServer(conf structs.Configuration) *echo.Echo {
 		panic(err)
 	}
 
-
-
 	JWT = []byte(conf.JwtKey)
 	rbd := conf.RulebaseDir
 
@@ -61,7 +59,6 @@ func GetServer(conf structs.Configuration) *echo.Echo {
 	e.Use(middleware.Recover())
 
 	e.POST("/login", loginHandler)
-	e.GET("/loadtestdata", testdataHandler)
 	//create sub-router for api functions
 	api := e.Group("/v1")
 

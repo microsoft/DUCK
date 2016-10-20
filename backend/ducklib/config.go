@@ -34,8 +34,6 @@ func NewConfiguration(confpath string) structs.Configuration {
 	c.WebDir = "src/github.com/Microsoft/DUCK/frontend/dist"
 	c.RulebaseDir = "src/github.com/Microsoft/DUCK/RuleBases"
 
-	c.Loadtestdata = false
-
 	//overwrite defaults with information from config file
 	if err := getFileConfig(&c, confpath); err != nil {
 		log.Printf("Could not load configuration file: %s", err)
@@ -54,7 +52,7 @@ func NewConfiguration(confpath string) structs.Configuration {
 func setAbsPaths(c *structs.Configuration) {
 	goPath := os.Getenv("GOPATH")
 	if goPath != "" {
-		log.Println("GOPATH exists, using it.")
+		log.Println("Found GOPATH, will use gopath for relative paths.")
 		if !filepath.IsAbs(c.RulebaseDir) {
 			c.RulebaseDir = filepath.Join(goPath, c.RulebaseDir)
 		}

@@ -5,7 +5,6 @@ type Configuration struct {
 	JwtKey       string  `json:"jwtkey,omitempty"`
 	WebDir       string  `json:"webdir,omitempty"`
 	RulebaseDir  string  `json:"rulebasedir,omitempty"`
-	Loadtestdata bool    `json:"loadtestdata,omitempty"`
 }
 
 type DBConf struct {

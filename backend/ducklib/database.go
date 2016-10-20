@@ -1,12 +1,6 @@
 package ducklib
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"log"
-	"os"
-	"path/filepath"
-
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
 	"github.com/twinj/uuid"
@@ -22,8 +16,6 @@ var db pluginregistry.DBPlugin
 func NewDatabase(config structs.DBConf) *database {
 	return &database{Config: config}
 }
-
-
 
 //Init initializes the database and checks for connection errors
 func (database *database) Init() error {
