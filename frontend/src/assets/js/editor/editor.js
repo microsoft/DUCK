@@ -117,7 +117,8 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         if (ObjectUtils.isNull(errors)) {
             return false;
         }
-        return errors.useScope.active || errors.action.active;
+
+        return  errors.useScope.active || errors.qualifier.active ||  errors.dataCategory.active ||   errors.sourceScope.active ||   errors.action.active || errors.resultScope.active;
     };
 
     controller.downloadDocument = function () {
