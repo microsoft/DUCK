@@ -78,8 +78,8 @@ function sass() {
         .pipe($.autoprefixer({
             browsers: COMPATIBILITY
         }))
-        .pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS)))
-        .pipe($.if(PRODUCTION, $.cssnano()))
+        // .pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS)))
+        // .pipe($.if(PRODUCTION, $.cssnano()))
         .pipe(addsrc.append(PATHS.css))
         .pipe($.concat('app.css'))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
