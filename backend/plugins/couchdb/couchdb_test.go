@@ -64,20 +64,20 @@ func TestCouchbase_GetLogin(t *testing.T) {
 		name    string
 		cb      *Couchbase
 		args    args
-		wantId  string
+		wantID  string
 		wantPw  string
 		wantErr bool
 	}{
 	// TODO: Add test cases.
 	}
 	for _, tt := range tests {
-		gotId, gotPw, err := tt.cb.GetLogin(tt.args.email)
+		gotID, gotPw, err := tt.cb.GetLogin(tt.args.email)
 		if (err != nil) != tt.wantErr {
 			t.Errorf("%q. Couchbase.GetLogin() error = %v, wantErr %v", tt.name, err, tt.wantErr)
 			continue
 		}
-		if gotId != tt.wantId {
-			t.Errorf("%q. Couchbase.GetLogin() gotId = %v, want %v", tt.name, gotId, tt.wantId)
+		if gotID != tt.wantID {
+			t.Errorf("%q. Couchbase.GetLogin() gotId = %v, want %v", tt.name, gotID, tt.wantID)
 		}
 		if gotPw != tt.wantPw {
 			t.Errorf("%q. Couchbase.GetLogin() gotPw = %v, want %v", tt.name, gotPw, tt.wantPw)
@@ -499,16 +499,5 @@ func TestCouchbase_testDBExists(t *testing.T) {
 		if got != tt.want {
 			t.Errorf("%q. Couchbase.testDBExists() = %v, want %v", tt.name, got, tt.want)
 		}
-	}
-}
-
-func Test_init(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-	// TODO: Add test cases.
-	}
-	for range tests {
-		init()
 	}
 }
