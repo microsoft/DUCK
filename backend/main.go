@@ -5,11 +5,12 @@ import (
 	"path/filepath"
 
 	"github.com/Microsoft/DUCK/backend/ducklib"
+	"github.com/Microsoft/DUCK/backend/ducklib/config"
 	"github.com/labstack/echo/engine/standard"
-)
 
-//Database lugin, change this if you have another Plugin/database
-import _ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
+	//Database lugin, change this if you have another Plugin/database
+	_ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
+)
 
 func main() {
 
@@ -19,7 +20,7 @@ func main() {
 		confPath = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json")
 	}
 	// create config
-	conf := ducklib.NewConfiguration(confPath)
+	conf := config.NewConfiguration(confPath)
 
 	//set routes
 	//	e := ducklib.GetServer(webDir, []byte(jwtKey), ruleBaseDir)

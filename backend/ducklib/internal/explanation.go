@@ -1,4 +1,4 @@
-package ducklib
+package internal
 
 import (
 	"github.com/carneades/carneades-4/src/engine/caes"

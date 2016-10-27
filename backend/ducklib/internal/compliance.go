@@ -1,4 +1,4 @@
-package ducklib
+package internal
 
 import (
 	"errors"

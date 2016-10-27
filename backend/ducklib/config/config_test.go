@@ -1,4 +1,4 @@
-package ducklib
+package config
 
 import (
 	"os"
@@ -100,7 +100,6 @@ func testEnvGopath(t *testing.T) {
 		"name":                 {envar: "DUCK_DATABASE.NAME", setval: "abcde", wantval: "abcde"},
 		"username":             {envar: "DUCK_DATABASE.USERNAME", setval: "abcde", wantval: "abcde"},
 		"Password":             {envar: "DUCK_DATABASE.PASSWORD", setval: "abcde", wantval: "abcde"},
-
 	}
 	for key, val := range testtable {
 

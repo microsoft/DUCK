@@ -1,4 +1,4 @@
-package ducklib
+package db
 
 import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
@@ -6,19 +6,20 @@ import (
 	"github.com/twinj/uuid"
 )
 
-type database struct {
+//Database handles the database communication
+type Database struct {
 	Config structs.DBConf
 }
 
 var db pluginregistry.DBPlugin
 
 //NewDatabase returns an intialized database struct
-func NewDatabase(config structs.DBConf) *database {
-	return &database{Config: config}
+func NewDatabase(config structs.DBConf) *Database {
+	return &Database{Config: config}
 }
 
 //Init initializes the database and checks for connection errors
-func (database *database) Init() error {
+func (database *Database) Init() error {
 
 	db = pluginregistry.DatabasePlugin
 
@@ -31,29 +32,33 @@ User DB operations
 */
 
 //GetLogin returns id and password for username
-func (database *database) GetLogin(email string) (id string, pw string, err error) {
+func (database *Database) GetLogin(email string) (id string, pw string, err error) {
 	return db.GetLogin(email)
 }
 
-func (database *database) GetUser(userid string) (structs.User, error) {
+//GetUser ...
+func (database *Database) GetUser(userid string) (structs.User, error) {
 
 	return db.GetUser(userid)
 
 }
 
-func (database *database) DeleteUser(id string) error {
+//DeleteUser ..
+func (database *Database) DeleteUser(id string) error {
 
 	return db.DeleteUser(id)
 
 }
 
-func (database *database) PutUser(user structs.User) error {
+//PutUser ..
+func (database *Database) PutUser(user structs.User) error {
 
 	return db.UpdateUser(user)
 
 }
 
-func (database *database) PostUser(user structs.User) (ID string, err error) {
+//PostUser ..
+func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	//check for duplicate
 	if user.Email == "" {
 		return "", structs.NewHTTPError("No email submitted", 400)
@@ -82,12 +87,15 @@ func (database *database) PostUser(user structs.User) (ID string, err error) {
 	return "", structs.NewHTTPError("User already exists", 409)
 }
 
-func (database *database) GetUserDict(userid string) (structs.Dictionary, error) {
+//GetUserDict ..
+func (database *Database) GetUserDict(userid string) (structs.Dictionary, error) {
 
 	return db.GetUserDict(userid)
 
 }
-func (database *database) PutUserDict(dict structs.Dictionary, userID string) error {
+
+//PutUserDict ..
+func (database *Database) PutUserDict(dict structs.Dictionary, userID string) error {
 
 	return db.UpdateUserDict(dict, userID)
 
@@ -97,30 +105,37 @@ func (database *database) PutUserDict(dict structs.Dictionary, userID string) er
 Document DB operations
 
 */
-func (database *database) GetDocument(documentid string) (structs.Document, error) {
+
+//GetDocument ..
+func (database *Database) GetDocument(documentid string) (structs.Document, error) {
 
 	return db.GetDocument(documentid)
 
 }
-func (database *database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
+
+//GetDocumentSummariesForUser ..
+func (database *Database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 
 	return db.GetDocumentSummariesForUser(userid)
 
 }
 
-func (database *database) DeleteDocument(id string) error {
+//DeleteDocument ..
+func (database *Database) DeleteDocument(id string) error {
 
 	return db.DeleteDocument(id)
 
 }
 
-func (database *database) PutDocument(doc structs.Document) error {
+//PutDocument ..
+func (database *Database) PutDocument(doc structs.Document) error {
 
 	return db.UpdateDocument(doc)
 
 }
 
-func (database *database) PostDocument(doc structs.Document) (ID string, err error) {
+//PostDocument ..
+func (database *Database) PostDocument(doc structs.Document) (ID string, err error) {
 	if doc.Name == "" {
 		return "", structs.NewHTTPError("No Document Name submitted", 400)
 	}
@@ -144,53 +159,3 @@ func (database *database) PostDocument(doc structs.Document) (ID string, err err
 	return uuid, db.NewDocument(doc)
 
 }
-
-/*
-Rulebase DB operations
-*/
-/*
-func (database *Database) GetRulebase(id string) (User, error) {
-	var u User
-	mp, err := db.GetRulebase(id)
-	if err != nil {
-		return u, err
-	}
-
-	u.fromValueMap(mp)
-
-	return u, err
-}
-
-func (database *Database) DeleteRulebase(id string) error {
-
-	doc, err := db.GetRulebase(id)
-	if err != nil {
-
-		return err
-	}
-	if rev, prs := doc["_rev"]; prs {
-		err := db.DeleteRulebase(id, rev.(string))
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	return errors.New("Could not delete Entry")
-
-}
-
-func (database *Database) PutRulebase(id string, content []byte) error {
-
-	return db.UpdateRulebase(id, string(content))
-
-}
-
-func (database *Database) PostRulebase(content []byte) (string, error) {
-	u := uuid.NewV4()
-	uuid := uuid.Formatter(u, uuid.Clean)
-
-	return uuid, db.NewRulebase(uuid, string(content))
-
-}
-*/
