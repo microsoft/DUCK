@@ -1,12 +1,13 @@
-package ducklib
+package internal
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	
+
 	"path/filepath"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/db"
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
@@ -40,7 +41,7 @@ parts:
 */
 
 //NewNormalizer returns a new initialized normalizer
-func NewNormalizer(doc structs.Document, db *database) (*normalizer, error) {
+func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*normalizer, error) {
 	//norm := Normalizer{original: doc, database: db}
 	norm := normalizer{original: doc}
 	user, err := db.GetUser(doc.Owner)
@@ -61,9 +62,9 @@ func NewNormalizer(doc structs.Document, db *database) (*normalizer, error) {
 	norm.GlobalDict = user.GlobalDictionary
 
 	//Taxonomy
-	
+
 	docTaxPath := fmt.Sprintf("/assets/config/taxonomy-%s.json", doc.Locale)
-	docPath := filepath.Join(config.WebDir, docTaxPath)
+	docPath := filepath.Join(webdir, docTaxPath)
 	dat, err := ioutil.ReadFile(docPath)
 	if err != nil {
 		return nil, err

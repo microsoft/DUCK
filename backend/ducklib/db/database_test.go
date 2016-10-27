@@ -1,4 +1,4 @@
-package ducklib
+package db
 
 import (
 	"reflect"
@@ -22,8 +22,6 @@ func TestNewDatabase(t *testing.T) {
 		}
 	}
 }
-
-
 
 func Test_database_Init(t *testing.T) {
 
