@@ -262,8 +262,12 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
             // qualifier
             if (!ObjectUtils.isEmptyString(statement.qualifier)) {
-                // TODO
-                context.resetValidation(statement.errors.qualifier);
+                if (TaxonomyService.contains("qualifier", context.document.locale, statement.qualifier)) {
+                    context.resetValidation(statement.errors.qualifier);
+                } else {
+                    context.createError(statement.errors.qualifier, "Qualifier is not recognized", errorNumber);
+                    errorNumber++;
+                }
             } else if (fullValidation) {
                 context.createError(statement.errors.qualifier, "Qualifier is not specified", errorNumber);
                 errorNumber++;
@@ -273,8 +277,12 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
             // data category
             if (!ObjectUtils.isEmptyString(statement.dataCategory)) {
-                // TODO
-                context.resetValidation(statement.errors.dataCategory);
+                if (TaxonomyService.contains("dataCategory", context.document.locale, statement.dataCategory)) {
+                    context.resetValidation(statement.errors.dataCategory);
+                } else {
+                    context.createError(statement.errors.dataCategory, "Data category is not recognized", errorNumber);
+                    errorNumber++;
+                }
             } else if (fullValidation) {
                 context.createError(statement.errors.dataCategory, "Data category is not specified", errorNumber);
                 errorNumber++;
@@ -284,8 +292,12 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
             // source scope
             if (!ObjectUtils.isEmptyString(statement.sourceScope)) {
-                // TODO
-                context.resetValidation(statement.errors.sourceScope);
+                if (TaxonomyService.contains("scope", context.document.locale, statement.sourceScope)) {
+                    context.resetValidation(statement.errors.sourceScope);
+                } else {
+                    context.createError(statement.errors.sourceScope, "Source scope is not recognized", errorNumber);
+                    errorNumber++;
+                }
             } else if (fullValidation) {
                 context.createError(statement.errors.sourceScope, "Source Scope is not specified", errorNumber);
                 errorNumber++;
@@ -295,8 +307,12 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
             // action
             if (!ObjectUtils.isEmptyString(statement.action)) {
-                // TODO
-                context.resetValidation(statement.errors.action);
+                if (TaxonomyService.contains("action", context.document.locale, statement.action)) {
+                    context.resetValidation(statement.errors.action);
+                } else {
+                    context.createError(statement.errors.action, "Action is not recognized", errorNumber);
+                    errorNumber++;
+                }
             } else if (fullValidation) {
                 context.createError(statement.errors.action, "Action is not specified", errorNumber);
                 errorNumber++;
@@ -306,8 +322,12 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
             // result scope
             if (!ObjectUtils.isEmptyString(statement.resultScope)) {
-                // TODO
-                context.resetValidation(statement.errors.resultScope);
+                if (TaxonomyService.contains("scope", context.document.locale, statement.resultScope)) {
+                    context.resetValidation(statement.errors.resultScope);
+                } else {
+                    context.createError(statement.errors.resultScope, "Result scope is not recognized", errorNumber);
+                    errorNumber++;
+                }
             } else if (fullValidation) {
                 context.createError(statement.errors.resultScope, "Result Scope is not specified", errorNumber);
                 errorNumber++;

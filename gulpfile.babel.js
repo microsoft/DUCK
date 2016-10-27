@@ -92,11 +92,11 @@ function vendorJS() {
     return gulp.src(PATHS.vendorJS)
         .pipe($.sourcemaps.init())
         .pipe($.concat("vendor.js"))
-        .pipe($.if(PRODUCTION, $.uglify()
-            .on("error", e => {
-                console.log(e);
-            })
-        ))
+        // .pipe($.if(PRODUCTION, $.uglify()
+        //     .on("error", e => {
+        //         console.log(e);
+        //     })
+        // ))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
         .pipe(gulp.dest(PATHS.dist + "/assets/js"));
 }
@@ -106,11 +106,11 @@ function javascript() {
         .pipe($.sourcemaps.init())
         .pipe($.babel())
         .pipe($.concat("app.js"))
-        .pipe($.if(PRODUCTION, $.uglify()
-            .on("error", e => {
-                console.log(e);
-            })
-        ))
+        // .pipe($.if(PRODUCTION, $.uglify()
+        //     .on("error", e => {
+        //         console.log(e);
+        //     })
+        // ))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
         .pipe(gulp.dest(PATHS.dist + "/assets/js"));
 }

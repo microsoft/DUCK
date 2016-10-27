@@ -68,6 +68,13 @@ application update.
 
 To create compressed, production-ready assets, run `npm run build`.
 
+### Building a Distrubution
+
+Execute the distribution build using:
+
+```
+npm run distro
+```
 
 ### Configuration
 

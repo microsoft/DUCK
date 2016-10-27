@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gulp",
     "test": "gulp test",
-    "build": "gulp build --production"
+    "distro": "gulp distro --production"
   },
   "author": "jmarino@metaformsystems.com",
   "license": "MIT",
