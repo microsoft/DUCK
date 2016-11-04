@@ -7,6 +7,7 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
+//TODO setup with adatabase
 func TestNewDatabase(t *testing.T) {
 
 	tests := []struct {
