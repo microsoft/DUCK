@@ -98,8 +98,8 @@ defined interface (SPI) and link it to the backend during compilation.
 
 The frontend is designed to be loosely coupled with the backend. It is based on two complimentary UI technologies:
     
-* AngularJS
-* ZURB Foundation
+* [AngularJS 1.X](https://angularjs.org)
+* [ZURB Foundation for Sites 6] (http://foundation.zurb.com/sites.html)
     
 AngularJS provides UI-side service lifecycle management, databinding, templating, MVC, and REST communications with the backend. ZURB Foundation provides 
 grid-based UI layout, cross-browser support, componentry, and typography. In addition, Sass (SCSS) is used for CSS extensibility.
@@ -108,5 +108,33 @@ The frontend UI is constrained to (mostly) coarse-grained requests to the backen
 will be performed on the client. This enhances fault-tolerance as well as performance since it avoids server invocation latency as well as introduces higher 
 tolerance for network and server-side interruptions. From an end-user perspective, this will assist DUCK in providing a consistent and performant UI 
 experience.  
+ 
+#### Modularity
+ 
+ The frontend UI contains the following modules:
+  
+  * duck.core - Core functions and infrastructure including user tracking
+  * duck.component - UI form components
+  * duck.i18n - Internationalization
+  * duck.gateway - Services for handling REST comminications with the backend
+  * duck.assumption - Handles assumption configuration
+  * duck.main - The main UI controller
+  * duck.editor - The document editor 
+  * duck.signin - Handles user authentication with the backend
+  * duck.home - The top-level controller
+  
+  
+#### Internationalization
+  
+  UI internationalization configuration is contained in the frontend module under /src/assets/config. To add a new language/locale, two files are required:
+  
+  * A locale JSON file (example locale-de.json)
+  * An ISO taxonomy file (example taxonomy-de.json)
+  
+  Once these files are present in the system, a language is installed by updating the LocaleService in i18n.js to include the above configuration.
+  
+  
+    
+    
  
     

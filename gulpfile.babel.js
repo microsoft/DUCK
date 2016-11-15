@@ -11,6 +11,7 @@ import gulpgo from "gulp-go";
 import gutil from "gulp-util";
 import child from "child_process";
 import addsrc from "gulp-add-src";
+import zip from "gulp-zip";
 
 
 // Load all Gulp plugins into one variable
@@ -40,7 +41,7 @@ gulp.task("build",
 
 // build the distribution
 gulp.task("distro",
-    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy)));
+    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy), copyWeb, copyConfig, copyRuleBases, copyBinary, zipit));
 
 // Build the site, run the server, and watch for file changes
 gulp.task("default",
@@ -49,6 +50,32 @@ gulp.task("default",
 // Delete the "dist" folder every time a build starts.
 function clean(done) {
     rimraf(PATHS.dist, done);
+}
+
+function copyWeb() {
+    return gulp.src(PATHS.dist + "/**")
+        .pipe(gulp.dest("./image/stage/dist"));
+}
+
+function copyRuleBases() {
+    return gulp.src("RuleBases/**")
+        .pipe(gulp.dest("./image/stage/RuleBases"));
+}
+
+function copyBinary() {
+    return gulp.src(process.env.GOPATH + "/bin/backend*")
+        .pipe(gulp.dest("./image/stage"));
+}
+
+function copyConfig() {
+    return gulp.src("backend/configuration.json")
+        .pipe(gulp.dest("./image/stage"));
+}
+
+function zipit() {
+    return gulp.src("./image/stage/**")
+        .pipe(zip('duck.zip'))
+        .pipe(gulp.dest('./image'));
 }
 
 // Copy files out of the assets folder. This task skips over the "img", "js", and "scss" folders, which are parsed separately
@@ -72,8 +99,8 @@ function sass() {
     return gulp.src("frontend/src/assets/scss/app.scss")
         .pipe($.sourcemaps.init())
         .pipe($.sass({
-                includePaths: PATHS.sass
-            })
+            includePaths: PATHS.sass
+        })
             .on("error", $.sass.logError))
         .pipe($.autoprefixer({
             browsers: COMPATIBILITY
@@ -160,13 +187,13 @@ var go;
 
 // launch the backend serving the web distribution directory
 function backendCompile(done) {
-    child.spawnSync('go', ['install'],  {cwd: "backend", stdio: "inherit"});
+    child.spawnSync('go', ['install'], {cwd: "backend", stdio: "inherit"});
     done();
 }
 
 // launch the backend serving the web distribution directory
 function backend(done) {
-    go = gulpgo.run("main.go", ["--webdir",  "src/github.com/Microsoft/DUCK/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
+    go = gulpgo.run("main.go", ["--webdir", "src/github.com/Microsoft/DUCK/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
     done();
 }
 
