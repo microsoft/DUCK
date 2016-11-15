@@ -76,6 +76,8 @@ Execute the distribution build using:
 npm run distro
 ```
 
+A binary archive will be generated in the /image directory
+
 ### Configuration
 
 This project reads its configuration from the file `backend/configuration.json`, environment variables and also command-line flags. 

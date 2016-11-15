@@ -50,6 +50,7 @@ gulp.task("default",
 // Delete the "dist" folder every time a build starts.
 function clean(done) {
     rimraf(PATHS.dist, done);
+    rimraf("./image", done);
 }
 
 function copyWeb() {
