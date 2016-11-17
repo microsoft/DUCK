@@ -21,3 +21,5 @@ docker-dir/image/
 .vscode/
 main.exe*
 /backend/backend
+image
+
