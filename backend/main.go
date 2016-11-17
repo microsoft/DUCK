@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 
 	"github.com/Microsoft/DUCK/backend/ducklib"
 	"github.com/Microsoft/DUCK/backend/ducklib/config"
@@ -12,7 +14,22 @@ import (
 	_ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
 )
 
+//main Testcomment
 func main() {
+
+	defer func() {
+		if r := recover(); r != nil {
+
+			fmt.Printf("%s: %s", r, debug.Stack())
+
+			fmt.Print("Press enter to exit ")
+			var input string
+			fmt.Scanln(&input)
+			panic(r)
+
+		}
+
+	}()
 
 	goPath := os.Getenv("GOPATH")
 	confPath := "configuration.json"
