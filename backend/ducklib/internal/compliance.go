@@ -14,6 +14,8 @@ import (
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
 
+const DEBUG = false
+
 type Canceller chan struct{}
 
 func MakeCanceller() Canceller {
@@ -127,14 +129,14 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 	l := ag.GroundedLabelling()
 	ag.ApplyLabelling(l)
 
-	// Begin DEBUG
 	// write the argument graph in dot to a temporary file
 	// so that it can be visualized for debugging purposes
-	f, err := ioutil.TempFile(os.TempDir(), "duckGraphml")
-	if err == nil {
-		graphml.Export(f, ag)
+	if DEBUG {
+		f, err := ioutil.TempFile(os.TempDir(), "duckGraphml")
+		if err == nil {
+			graphml.Export(f, ag)
+		}
 	}
-	// End DEBUG
 
 	// return true iff the notDocConsentRequired statement is in
 	s, ok := ag.Statements["notDocConsentRequired"]
