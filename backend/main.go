@@ -14,9 +14,12 @@ import (
 	_ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
 )
 
-//main Testcomment
+//main function: loading config, starting server
 func main() {
 
+	//when panic occours print stack & then wait for user input to close
+	//this is especially useful for windows users who start the compiled exe directly
+	//and wont see the cause of an error when the program closes immediately afterwards
 	defer func() {
 		if r := recover(); r != nil {
 
@@ -31,6 +34,9 @@ func main() {
 
 	}()
 
+	//when GOPATH is set, the person executing this program is probably also
+	//writing code for it, it will thus also be in the goPath
+	//when there is no GOPATH, the configuration.json should be right next to the executable
 	goPath := os.Getenv("GOPATH")
 	confPath := "configuration.json"
 	if goPath != "" {
