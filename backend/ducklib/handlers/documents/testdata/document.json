@@ -161,7 +161,7 @@
 			
 			"owner" : "086ad881e3f71fa3fe10e2003f39",
 			"locale" : "de",
-		"name" : "'''''''\"##))}]=éà",
+			"name" : "'''''''\"##))}]=éà",
 			"statements" : [{
 					"useScope" : "the CSP Services",
 					"qualifier" : "identified",
@@ -550,7 +550,7 @@
 					"action" : "improve",
 					"resultScope" : "cloud services defined in the service agreement",
 					"trackingId" : "u41",
-					"passive" : false
+					"passive" : true
 				}, {
 					"useScope" : "the CSP Services",
 					"qualifier" : "aggregated data",

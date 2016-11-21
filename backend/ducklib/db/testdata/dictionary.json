@@ -1,0 +1,78 @@
+{
+	
+		"dict a" : {
+			"error" : false,
+			"put" : {
+				"some_capability" : {
+					"category" : "1",
+					"code" : "some_capability",
+					"dictionaryType" : "",
+					"type" : "scope",
+					"value" : "Some Capability"
+				},
+				"some_other_capability" : {
+					"category" : "1",
+					"code" : "some_other_capability",
+					"dictionaryType" : "",
+					"type" : "scope",
+					"value" : "Other Capability"
+				},
+				"something_@more" : {
+					"category" : "1",
+					"code" : "something_more",
+					"dictionaryType" : "",
+					"type" : "scope",
+					"value" : ""
+				},
+				"something_more" : {
+					"category" : "",
+					"code" : "",
+					"dictionaryType" : "",
+					"type" : "",
+					"value" : ""
+				}
+			},
+			"want" : {
+				"some_capability" : {
+					"category" : "1",
+					"code" : "some_capability",
+					"dictionaryType" : "",
+					"type" : "scope",
+					"value" : "Some Capability"
+				},
+				"some_other_capability" : {
+					"category" : "1",
+					"code" : "some_other_capability",
+					"dictionaryType" : "",
+					"type" : "scope",
+					"value" : "Other Capability"
+				},
+				"something_@more" : {
+					"category" : "1",
+					"code" : "something_more",
+					"dictionaryType" : "",
+					"type" : "scope",
+					"value" : ""
+				},
+				"something_more" : {
+					"category" : "",
+					"code" : "",
+					"dictionaryType" : "",
+					"type" : "",
+					"value" : ""
+				}
+			}
+		},
+		"dict b" : {
+			"error" : false,
+			"put" : {},
+			"want" : {}
+		},
+		"dict c" : {
+			"error" : false,
+			"put" : null,
+			"want" : null
+		}
+	}
+
+

@@ -6,24 +6,26 @@ import (
 	"github.com/twinj/uuid"
 )
 
-//Database handles the database communication
+//Database is a Wrapper around the DBPlugin and handles the database communication
 type Database struct {
 	Config structs.DBConf
+	db     pluginregistry.DBPlugin
 }
 
 var db pluginregistry.DBPlugin
 
-//NewDatabase returns an intialized database struct
-func NewDatabase(config structs.DBConf) *Database {
-	return &Database{Config: config}
-}
+//NewDatabase returns an intialized database struct;
+//returns an error if connection problems were detected
+func NewDatabase(config structs.DBConf) (*Database, error) {
 
-//Init initializes the database and checks for connection errors
-func (database *Database) Init() error {
+	database := &Database{Config: config}
 
-	db = pluginregistry.DatabasePlugin
-
-	return db.Init(database.Config)
+	database.db = pluginregistry.DatabasePlugin
+	err := database.db.Init(database.Config)
+	if err != nil {
+		return &Database{}, err
+	}
+	return database, nil
 
 }
 
@@ -31,33 +33,33 @@ func (database *Database) Init() error {
 User DB operations
 */
 
-//GetLogin returns id and password for username
+//GetLogin returns id and password for username.
 func (database *Database) GetLogin(email string) (id string, pw string, err error) {
-	return db.GetLogin(email)
+	return database.db.GetLogin(email)
 }
 
-//GetUser ...
+//GetUser returns a User from the plugged in Database.
 func (database *Database) GetUser(userid string) (structs.User, error) {
 
-	return db.GetUser(userid)
+	return database.db.GetUser(userid)
 
 }
 
-//DeleteUser ..
+//DeleteUser deletes a structs.User from the plugged in Database.
 func (database *Database) DeleteUser(id string) error {
 
-	return db.DeleteUser(id)
+	return database.db.DeleteUser(id)
 
 }
 
-//PutUser ..
+//PutUser updates an existing User in the plugged in Database.
 func (database *Database) PutUser(user structs.User) error {
 
-	return db.UpdateUser(user)
+	return database.db.UpdateUser(user)
 
 }
 
-//PostUser ..
+//PostUser creates a new User in the plugged in Database and returns its ID, if no other user has this users mail address.
 func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	//check for duplicate
 	if user.Email == "" {
@@ -67,7 +69,7 @@ func (database *Database) PostUser(user structs.User) (ID string, err error) {
 		return "", structs.NewHTTPError("No password submitted", 400)
 	}
 
-	_, _, err = db.GetLogin(user.Email)
+	_, _, err = database.db.GetLogin(user.Email)
 
 	// if user is not in database we can create a new one
 	//TODO: What if another Database Plugin returns another Error when getting an nonexistant User?
@@ -75,7 +77,7 @@ func (database *Database) PostUser(user structs.User) (ID string, err error) {
 		u := uuid.NewV4()
 		uuid := uuid.Formatter(u, uuid.Clean)
 		user.ID = uuid
-		return uuid, db.NewUser(user)
+		return uuid, database.db.NewUser(user)
 
 	}
 
@@ -90,14 +92,14 @@ func (database *Database) PostUser(user structs.User) (ID string, err error) {
 //GetUserDict ..
 func (database *Database) GetUserDict(userid string) (structs.Dictionary, error) {
 
-	return db.GetUserDict(userid)
+	return database.db.GetUserDict(userid)
 
 }
 
 //PutUserDict ..
 func (database *Database) PutUserDict(dict structs.Dictionary, userID string) error {
 
-	return db.UpdateUserDict(dict, userID)
+	return database.db.UpdateUserDict(dict, userID)
 
 }
 
@@ -109,28 +111,28 @@ Document DB operations
 //GetDocument ..
 func (database *Database) GetDocument(documentid string) (structs.Document, error) {
 
-	return db.GetDocument(documentid)
+	return database.db.GetDocument(documentid)
 
 }
 
 //GetDocumentSummariesForUser ..
 func (database *Database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 
-	return db.GetDocumentSummariesForUser(userid)
+	return database.db.GetDocumentSummariesForUser(userid)
 
 }
 
 //DeleteDocument ..
 func (database *Database) DeleteDocument(id string) error {
 
-	return db.DeleteDocument(id)
+	return database.db.DeleteDocument(id)
 
 }
 
 //PutDocument ..
 func (database *Database) PutDocument(doc structs.Document) error {
 
-	return db.UpdateDocument(doc)
+	return database.db.UpdateDocument(doc)
 
 }
 
@@ -156,6 +158,6 @@ func (database *Database) PostDocument(doc structs.Document) (ID string, err err
 	uuid := uuid.Formatter(u, uuid.Clean)
 	doc.ID = uuid
 
-	return uuid, db.NewDocument(doc)
+	return uuid, database.db.NewDocument(doc)
 
 }
