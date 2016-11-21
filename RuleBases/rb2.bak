@@ -1,0 +1,801 @@
+meta:
+  title: DUCK Rulebase
+  description:
+  version: 0.51
+  id: 123   # hack, until the user can select the rulebase with the user interface.
+
+language:
+  action/2: action(%s,%s)
+  compatiblePurpose/2: compatiblePurpose(%s,%s)
+#   notCompatiblePurpse/2: notCompatiblePurpose(%s,%s)
+  notConsentRequired/1: notConsentRequired(%s)
+  consentRequired/1: consentRequired(%s)
+  dataCategory/2: dataCategory(%s,%s)
+  dataUseStatement/1: dataUseStatement(%s)
+  docConsentRequired: docConsentRequired
+  notDocConsentRequired: notDocConsentRequired
+  duplicate/2: duplicate(%s,%s)
+  equivalentScope/2: equivalentScope(%s,%s)
+  extendsScope/2: extendsScope(%s,%s)
+  greaterScope/2: greaterScope(%s,%s)
+  id/2: id(%s,%s)
+  kindOf/2: kindOf(%s,%s)
+  lesserScope/2: lesserScope(%s,%s)
+  li/1: li(%s)
+  notLi/1: notLi(%s)
+  pii/1: pii(%s)
+  notPii/1: notPii(%s)
+  passive/2: passive(%s,%t)
+  partOf/2: partOf(%s,%s)
+  qualifier/2: qualifier(%s,%s)
+  resultScope/2: resultScope(%s,%s)
+  smallerOrEqualScope/2: smallerOrEqualScope(%s,%s)
+  scope/2: scope(%s,%s)
+  sourceScope/2: sourceScope(%s,%s)
+  useScope/2: useScope(%s,%s)
+
+
+issue_schemes:
+#  compatiblePurpose: [compatiblePurpose(S), notCompatiblePurpose(S)]
+  consent: [consentRequired(S), notConsentRequired(S)]
+  docConsent: [docConsentRequired, notDocConsentRequired]
+  li: [li(S), notLi(S)]
+  pii: [pii(S), notPii(S)]
+
+argument_schemes:
+
+  - id: selectors
+    variables: [UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive]
+    premises:
+      - dataUseStatement(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive))
+    conclusions:
+      - useScope(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),UseScope)
+      - qualifier(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),Qualifier)
+      - dataCategory(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),DataCategory)
+      - sourceScope(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),SourceScope)
+      - action(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),Action)
+      - resultScope(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),ResultScope)
+      - id(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),ID)
+      - passive(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),Passive)
+
+  # kindOf Rules
+
+  - id: kindOfTransitivity
+    variables: [X,Y,Z]
+    premises:
+      - kindOf(X,Y)
+      - kindOf(Y,Z)
+    conclusions:
+      - kindOf(X,Z)
+
+  # partOf Rules
+  
+  - id: partOfTransitivity
+    variables: [X,Y,Z]
+    premises:
+      - partOf(X,Y)
+      - partOf(Y,Z)
+    conclusions:
+      - partOf(X,Z)
+
+  # Data Qualifier Rules
+
+  - id: qualifier1
+    variables: [S]
+    premises:
+      - qualifier(S,identified_data)
+    conclusions:
+      - qualifier(S,unqualified_or_identified)
+
+  - id: qualifier2
+    variables: [S]
+    premises:
+      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy
+    conclusions:
+      - qualifier(S,unqualified_or_identified)
+
+  # Scope Rules
+  # Wider scopes include narrower scopes, expect for third_party items, which
+  # independent scope.  For example, the service scope includes
+  # the capability scope.
+  
+  - id: scope1
+    variables: [S]
+    premises:
+      - scope(S,csp_products)
+    conclusions:
+      - scope(S,csp_services)
+
+  - id: scope2
+    variables: [S]
+    premises:
+      - scope(S,csp_services)
+    conclusions:
+      - scope(S,services_agreement)
+
+  - id: scope3
+    variables: [S]
+    premises:
+      - scope(S,services_agreement)
+    conclusions:
+      - scope(S,service)
+
+  - id: scope4
+    variables: [S]
+    premises:
+      - scope(S,service)
+    conclusions:
+      - scope(S,cability)
+
+  # Data Category Rules
+
+  - id: category0
+    variables: [S,X,Y]
+    premises:
+      - dataCategory(S,X)
+      - kindOf(X,Y)
+    conclusions:
+      - dataCategory(S,Y)
+      
+  - id: category1
+    conclusions:
+      - kindOf(derived_data_user_telemetry,derived_data_user)
+
+  - id: category2
+    conclusions:
+      - kindOf(derived_data_user_connectivity,derived_data_user)
+
+  - id: category3
+    conclusions:
+      - kindOf(derived_data_user_usage,derived_data_user)
+
+  - id: category4
+    conclusions:
+      - kindOf(derived_data_user_demographic,derived_data_user)
+
+  - id: category5
+    conclusions:
+      - kindOf(derived_data_user_profiling,derived_data_user)
+
+  - id: category6
+    conclusions:
+      - kindOf(derived_data_user_content,derived_data_user)
+
+  - id: category7
+    conclusions:
+      - kindOf(derived_data_user_browsing,derived_data_user)
+
+  - id: category8
+    conclusions:
+      - kindOf(derived_data_user_search,derived_data_user)
+
+  - id: category9
+    conclusions:
+      - kindOf(derived_data_user_location,derived_data_user)
+
+  - id: category10
+    conclusions:
+      - kindOf(derived_data_user_social,derived_data_user)
+
+  - id: category11
+    conclusions:
+      - kindOf(derived_data_user_biometric,derived_data_user)
+
+  - id: category12
+    conclusions:
+      - kindOf(derived_data_user_contact,derived_data_user)
+
+  - id: category13
+    conclusions:
+      - kindOf(derived_data_user_environmental,derived_data_user)
+
+  - id: category14
+    conclusions:
+      - kindOf(customer_content_credentials,customer_content)
+
+  - id: category15
+    conclusions:
+      - kindOf(customer_content_contact,customer_content)
+
+  - id: category16
+    conclusions:
+      - kindOf(customer_content_health,customer_content)  
+
+  - id: category17
+    conclusions:
+      - kindOf(customer_content_genetic,customer_content) 
+
+  - id: category18
+    conclusions:
+      - kindOf(customer_content_biometric,customer_content) 
+
+  - id: category19
+    conclusions:
+      - kindOf(customer_content_children,customer_content) 
+
+  - id: category20
+    conclusions:
+      - kindOf(customer_content_opinions,customer_content) 
+
+  - id: category21
+    conclusions:
+      - kindOf(customer_content_financial,customer_content) 
+
+  - id: category22
+    conclusions:
+      - kindOf(derived_data_user,derived_data)
+
+  - id: category23
+    conclusions:
+      - kindOf(derived_data_organization,derived_data)
+
+  - id: category24
+    conclusions:
+      - kindOf(provider_data_authentication,provider_data)  
+
+  - id: category25
+    conclusions:
+      - kindOf(provider_data_operations,provider_data) 
+
+  - id: category26
+    conclusions:
+      - kindOf(account_data_customer,account_data)
+
+  - id: category27
+    conclusions:
+      - kindOf(account_data_payment,account_data)
+
+  # Action Rules
+
+  - id: action0
+    variables: [S,X,Y]
+    premises:
+      - action(S,X)
+      - kindOf(X,Y)
+    conclusions:
+      - action(S,Y)
+      
+  - id: action1
+    conclusions:
+      - kindOf(market,market_advertise_promote) # To Do: Not in taxonomy
+
+  - id: action2
+    conclusions:
+      - kindOf(advertise,market_advertise_promote) # To Do: Not in taxonomy
+
+  - id: action3
+    conclusions:
+      - kindOf(promote,market_advertise_promote) # To Do: Not in taxonomy
+
+  - id: action4
+    conclusions:
+      - kindOf(market_contextual,market)
+
+  - id: action5
+    conclusions:
+      - kindOf(market_personalization,market)
+
+  - id: action6
+    conclusions:
+      - kindOf(advertise_contextual,advertise)
+
+  - id: action7
+    conclusions:
+      - kindOf(advertise_personalization,advertise)      
+
+  - id: action8
+    conclusions:
+      - kindOf(promote_contextual,promote)
+
+  - id: action9
+    conclusions:
+      - kindOf(promote_personalization,promote)        
+
+  - id: action10
+    conclusions:
+      - kindOf(share_provide,share)            
+      
+  # docConsent Rules
+  
+  - id: docConsent1 # default
+    weight:
+       constant: 0.1   
+    conclusions:
+      - notDocConsentRequired
+
+  - id: docConsent2
+    meta:
+       comment: >
+          A data use document does require informed consent
+          if any of its data use statements requires informed consent.
+    variables: [S]
+    premises:
+      - consentRequired(S)
+    conclusions:
+      - docConsentRequired
+
+  # PII Rules
+
+  - id: pii0  # default rule
+    weight:
+      constant: 0.1 
+    variables: [S]
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - pii(S)
+
+  # - id: pii1
+  #   variables: [S]
+  #   premises:
+  #     - qualifier(S,unqualified_or_identified)
+  #   conclusions:
+  #     - pii(S)
+  #   exceptions:
+  #     - dataCategory(S,provider_data_operations)
+
+  # - id: pii2
+  #   variables: [S]
+  #   premises:
+  #     - qualifier(S,pseudonymized_data)
+  #   conclusions:
+  #     - pii(S)
+  #   exceptions:
+  #     - dataCategory(S,derived_data_organization)
+      
+  - id: pii3
+    variables: [S]
+    premises:
+      - qualifier(S,unlinked_data)  
+    conclusions:
+      - notPii(S)
+
+  - id: pii4
+    variables: [S]
+    premises:
+      - qualifier(S,anonymized_data)  
+    conclusions:
+      - notPii(S)
+
+  - id: pii5
+    variables: [S]
+    premises:
+      - qualifier(S,aggregated_data)  
+    conclusions:
+      - notPii(S)
+
+  - id: pii6
+    variables: [S]
+    premises:
+      - qualifier(S,pseudonymized_data)
+      - dataCategory(S,derived_data_organization)
+    conclusions:
+      - notPii(S)
+
+  - id: pii7
+    variables: [S]
+    premises:
+      - qualifier(S,pseudonymized_data)
+      - dataCategory(S,provider_data_authentication) 
+    conclusions:
+      - notPii(S)
+
+  - id: pii8
+    variables: [S]
+    premises:
+      - qualifier(S,unqualified_or_identified)
+      - dataCategory(S,derived_data_organization)
+    conclusions:
+      - notPii(S)
+
+  - id: pii9
+    variables: [S]
+    premises:
+      - qualifier(S,unqualified_or_identified)
+      - dataCategory(S,provider_data_authentication)  
+    conclusions:
+      - notPii(S)
+
+  # - id: pii10
+  #   variables: [S]
+  #   premises:
+  #     - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
+  #     - dataCategory(S,customer_content_credentials)
+  #   conclusions:
+  #    - pii(S)    
+
+  - id: pii11
+    variables: [S]
+    premises:
+      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
+      - dataCategory(S,derived_data_organization)
+    conclusions:
+      - notPii(S)
+
+  - id: pii12
+    variables: [S]
+    premises:
+      - qualifier(S,unqualified)  # ToDo: not yet in the taxonomy file!
+      - dataCategory(S,provider_data_authentication) 
+    conclusions:
+      - notPii(S)        
+
+  # Legitimate Interest (LI) Rules
+
+  - id: li0  # default rule
+    weight:
+      constant: 0.1 
+    variables: [S]
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - notLi(S)
+
+  - id: li1
+    variables: [S]
+    premises:
+      - action(S,provide)
+      - resultScope(S,capability)
+    conclusions:
+      - li(S)  
+
+  - id: li2
+    variables: [S]
+    premises:
+      - action(S,provide)
+      - resultScope(S,service) 
+    conclusions:
+      - li(S)
+      
+  - id: li3
+    variables: [S]
+    premises:
+      - action(S,improve)
+      - resultScope(S,capability) 
+    conclusions:
+      - li(S)
+      
+  - id: li4
+    variables: [S]
+    premises:
+      - action(S,improve)
+      - resultScope(S,service)
+    conclusions:
+      - li(S)
+
+  - id: li5
+    variables: [S]
+    premises:
+      - action(S,improve)
+      - resultScope(S,services_agreement) 
+    conclusions:
+      - li(S)
+
+  - id: li6
+    variables: [S]
+    premises:
+      - action(S,improve)
+      - resultScope(S,csp_services)
+    conclusions:
+      - li(S)
+
+  - id: li7
+    variables: [S]
+    premises:
+      - action(S,improve)
+      - resultScope(S,csp_products)
+    conclusions:
+      - li(S)
+
+  - id: li8
+    variables: [S]
+    premises:
+      - action(S,personalize)
+      - resultScope(S,capability)
+    conclusions:
+      - li(S)
+
+  - id: li9
+    variables: [S]
+    premises:
+      - action(S,personalize)
+      - resultScope(S,service)
+    conclusions:
+      - li(S)
+
+  - id: li10
+    variables: [S]
+    premises:
+      - action(S,upgrades)
+      - resultScope(S,capability)
+    conclusions:
+      - li(S)
+      
+  - id: li11
+    variables: [S]
+    premises:
+      - action(S,upgrades)
+      - resultScope(S,service)
+    conclusions:
+      - li(S)
+
+  - id: li12
+    variables: [S]
+    premises:
+      - action(S,upgrades)
+      - resultScope(S,services_agreement)
+    conclusions:
+      - li(S)
+
+  - id: li13
+    variables: [S]
+    premises:
+      - action(S,market_advertise_promote)
+      - resultScope(S,capability)
+    conclusions:
+      - li(S)
+
+  - id: li14
+    variables: [S]
+    premises:
+      - action(S,market_advertise_promote)
+      - resultScope(S,service)
+    conclusions:
+      - li(S)
+
+
+  # equivalentScope Rules
+
+  - id: equivalentScope0
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,S)
+      - resultScope(S2,S)
+    conclusions:
+      - equivalentScope(S1,S2)
+
+  - id: equivalentScope1
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,capability)
+      - resultScope(S2,service)
+    conclusions:
+      - equivalentScope(S1,S2)
+      
+  - id: equivalentScope2
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,services_agreement)
+      - resultScope(S2,csp_services)
+    conclusions:
+      - equivalentScope(S1,S2)
+      
+  - id: equivalentScope3
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,third_party_partners)
+      - resultScope(S2,third_party_services) 
+    conclusions:
+      - equivalentScope(S1,S2)
+
+  - id: equivalentScope4
+    variables: [S1,S2]
+    premises:
+      - resultScope(S1,third_party_services) 
+      - resultScope(S2,third_party_partners) 
+    conclusions:
+      - equivalentScope(S1,S2)
+
+  # smallerOrEqualScope Rules
+
+  - id: smallerOrEqualScope1   # equal scopes
+    variables: [S1,S2,C]
+    premises:
+      - resultScope(S1,C) 
+      - resultScope(S2,C)
+    conclusions:
+      - smallerOrEqualScope(S1,S2)
+
+  - id: smallerOrEqualScope2 # delete duplicates
+    variables: [S1,S2]
+    premises:
+      - smallerOrEqualScope(S1,S2)
+    deletions:
+      - smallerOrEqualScope(S1,S2)
+    conclusions:
+      - true
+
+  - id: smallerOrEqualScope3  # transitivity
+    variables: [S1,S2,S3]
+    premises:
+      - smallerOrEqualScope(S1,S2) 
+      - smallerOrEqualScope(S2,S3)
+    conclusions:
+      - smallerOrEqualScope(S1,S3)
+
+  - id: smallerOrEqualScope4
+    variables: [S1,S2,P1,P2]
+    premises:
+      - resultScope(S1,P1)
+      - resultScope(S2,P2)
+      - lesserScope(P1,P2)
+    conclusions:
+      - smallerOrEqualScope(S1,S2)
+
+  # lesserScope Rules
+
+  - id: lesserScope1
+    conclusions:
+      - lesserScope(capability,service)
+      - lesserScope(service,services_agreement)
+      - lesserScope(services_agreement,csp_services)
+      - lesserScope(csp_services,csp_products)
+
+  # compatiblePurpose Rules
+
+  - id: compatiblePurposeDuplicates
+    variables: [S1,S2]
+    premises:
+      - compatiblePurpose(S1,S2)
+    deletions:
+      - compatiblePurpose(S1,S2)
+    conclusions:
+      - true
+ 
+  # - id: compatiblePurpose0  # default rule
+  #   weight:
+  #     constant: 0.1 
+  #   variables: [S1,S2]
+  #   premises:
+  #     - dataUseStatement(S1)
+  #     - dataUseStatement(S2)
+  #   conclusions:
+  #     - notCompatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose1
+    variables: [S1,S2,A]
+    premises:
+      - action(S1,A)
+      - action(S2,A)
+      - equivalentScope(S1,S2)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose2
+    variables: [S1,S2]
+    premises:
+      - action(S1,provide)
+      - action(S2,improve)
+      - smallerOrEqualScope(S2,csp_products)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose3
+    variables: [S1,S2]
+    premises:
+      - action(S1,provide)
+      - action(S2,upgrades)
+      - equivalentScope(S1,S2)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose4
+    variables: [S1,S2]
+    premises:
+      - action(S1,provide)
+      - action(S2,market_advertise_promote)
+      - equivalentScope(S1,S2)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose5
+    variables: [S1,S2]
+    premises:
+      - action(S1,improve)
+      - action(S2,improve)
+      - smallerOrEqualScope(S2,csp_products)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose6
+    variables: [S1,S2]
+    premises:
+      - action(S1,personalize)
+      - action(S2,personalize)
+      - smallerOrEqualScope(S2,services_agreement)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose7
+    variables: [S1,S2]
+    premises:
+      - action(S1,personalize)
+      - action(S2,market_advertise_promote)
+      - smallerOrEqualScope(S2,services_agreement)
+    conclusions:
+      - compatiblePurpose(S1,S2)
+
+  - id: compatiblePurpose8
+    variables: [S1,S2]
+    premises:
+      - action(S1,upgrades)
+      - action(S2,upgrades)
+      - smallerOrEqualScope(S2,services_agreement)
+    conclusions:
+      - compatiblePurpose(S1,S2)   
+            
+      
+  # consentRequired Rules
+
+  - id: consentRequired0  # remove duplicate consentRequired statements
+    variables: [S1]
+    premises:
+      - consentRequired(S1)
+    deletions: 
+      - consentRequired(S1)
+    conclusions:
+      - true
+
+  - id: consentRequired1 # remove duplicate notConsentRequired statements
+    variables: [S1]
+    premises:
+      - notConsentRequired(S1)
+    deletions:
+      - notConsentRequired(S1)
+    conclusions:
+      - true
+
+  - id: consentRequired2  # default rule
+    weight:
+      constant: 0.1
+    variables: [S]
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - consentRequired(S)
+
+  # - id: consentRequired3 
+  #   variables: [S]
+  #   premises:
+  #     - pii(S)
+  #     - notLi(S)
+  #   conclusions:
+  #     - consentRequired(S)
+      
+  - id: consentRequired3
+    variables: [S]
+    premises:
+      - notPii(S)
+    conclusions:
+      - notConsentRequired(S)
+
+  - id: consentRequired4
+    variables: [S]
+    premises:
+      - pii(S)
+      - li(S)
+    conclusions:
+      - notConsentRequired(S)
+
+  # Note that consentRequired5 and consentRequired6 can lead
+  # to rebuttals (arguments pro and con)
+  
+  - id: consentRequired5
+    variables: [S1,S2]
+    premises:
+      - pii(S1)
+      - pii(S2)
+      - li(S2)
+      - compatiblePurpose(S1,S2)
+    conclusions:
+      - notConsentRequired(S1)
+       
+  # - id: consentRequired6
+  #   variables: [S1,S2]
+  #   premises:
+  #     - pii(S1)
+  #     - consentRequired(S2)
+  #     - compatiblePurpose(S1,S2)
+  #   conclusions:
+  #     - consentRequired(S1)
+
