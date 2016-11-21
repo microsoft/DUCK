@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/carneades"
 	"github.com/Microsoft/DUCK/backend/ducklib/db"
-	"github.com/Microsoft/DUCK/backend/ducklib/internal"
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/labstack/echo"
 )
@@ -14,7 +14,7 @@ import (
 type Handler struct {
 	Db      *db.Database
 	WebDir  string
-	Checker *internal.ComplianceCheckerPlugin
+	Checker *carneades.ComplianceCheckerPlugin
 }
 
 //CheckDoc checks the document against a rulebase for compliance
@@ -44,7 +44,7 @@ func (h *Handler) CheckDoc(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	normalizer, err := internal.NewNormalizer(*doc, h.Db, h.WebDir)
+	normalizer, err := carneades.NewNormalizer(*doc, h.Db, h.WebDir)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
 		e := err.Error()
@@ -77,6 +77,8 @@ func (h *Handler) CheckDoc(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
+
+	//log.Printf("%#v", exp)
 	if ok {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: exp})
 	}
@@ -104,7 +106,7 @@ func (h *Handler) CheckDocID(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	normalizer, err := internal.NewNormalizer(doc, h.Db, h.WebDir)
+	normalizer, err := carneades.NewNormalizer(doc, h.Db, h.WebDir)
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while trying to normalize document : %s", err)
 		e := err.Error()

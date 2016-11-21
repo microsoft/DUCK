@@ -31,8 +31,6 @@ var (
 		} `json:"entries"`
 	}
 	dih Handler
-
-	datab *db.Database
 )
 
 func TestDictionaryHandler(t *testing.T) {
@@ -41,29 +39,28 @@ func TestDictionaryHandler(t *testing.T) {
 	e = echo.New()
 
 	dih = Handler{}
-	datab = db.NewDatabase(*conf.DBConfig)
-	err := datab.Init()
+	dab, err := db.NewDatabase(*conf.DBConfig)
 	if err != nil {
 		t.Skip("User Handler test failed; was not able to datab.Init()")
 	}
-
+	dih.Db = dab
 	dat, err := ioutil.ReadFile("testdata/dictionary.json")
 
 	if err = json.Unmarshal(dat, &dicts); err != nil {
 		t.Error("Testfixture Dictionary not correctly loading")
 		t.Skip("No testfixtures no dictionary tests")
 	}
-	id, err := datab.PostUser(dicts.User)
+	id, err := dih.Db.PostUser(dicts.User)
 	if err != nil {
 		t.Skip("Not able to save user to mockdb in dictionary test. Skipping tests..")
 	}
 	defer func() {
-		err := datab.DeleteUser(id)
+		err := dih.Db.DeleteUser(id)
 		if err != nil {
 			t.Log("Could not delete user from mockDB in dictionary test this can interfere with other tests")
 		}
 	}()
-	user, err := datab.GetUser(id)
+	user, err := dih.Db.GetUser(id)
 	if err != nil {
 		t.Skip("Not able to read user from mockdb in dictionary test. Skipping tests ..")
 	}

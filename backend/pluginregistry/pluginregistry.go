@@ -2,7 +2,7 @@ package pluginregistry
 
 import "github.com/Microsoft/DUCK/backend/ducklib/structs"
 
-// DBPlugin is the interface the Databse Plugin has to satisfy
+// DBPlugin is the interface the Database plugin has to satisfy
 type DBPlugin interface {
 	Init(config structs.DBConf) error
 	GetLogin(email string) (id string, pw string, err error)
@@ -33,7 +33,7 @@ type DBPlugin interface {
 // DatabasePlugin is the Plugin
 var DatabasePlugin DBPlugin
 
-// RegisterDatabase registers a database
+// RegisterDatabase registers a database and is called by the init function of the plugged in Database.
 func RegisterDatabase(db DBPlugin) {
 	DatabasePlugin = db
 }

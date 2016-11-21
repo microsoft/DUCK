@@ -1,4 +1,4 @@
-package internal
+package carneades
 
 import (
 	"errors"
@@ -131,6 +131,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 
 	// write the argument graph in dot to a temporary file
 	// so that it can be visualized for debugging purposes
+
 	if DEBUG {
 		f, err := ioutil.TempFile(os.TempDir(), "duckGraphml")
 		if err == nil {
