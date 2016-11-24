@@ -1,568 +1,610 @@
 {
-		"document_a":{
-		"pass" : true,
-		"document" : {
-			
-			"owner" : "086ad881e3f71ec73fa3fe10e2003f99",
-			"locale" : "en",
-			"name" : "Customer Doc v1",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i111111111",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "anonymized",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i111111112",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i111111113",
-					"passive" : false
-				}
-			]
-		}
-	}, 
-		"document_b":{
-		"pass" : true,
-		"document" : {
-			
-			"owner" : "086ad881e3f71ec73fa3fe10e2003f99",
-			"locale" : "en",
-			"name" : "Customer Doc v2",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i222222222",
-					"passive" : false
+	"document_a": {
+		"pass": true,
+		"document": {
+			"owner": "086ad881e3f71ec73fa3fe10e2003f99",
+			"locale": "en",
+			"name": "Customer Doc v1",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i111111111",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "anonymized",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i111111112",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i111111113",
+					"passive": false
 				}
 			]
 		}
 	},
-	 "document_c":{
-		"pass" : true,
-		"document" : {
-			
-			"owner" : "086ad881e3f71ec73fa3fe10e2003f99",
-			"locale" : "de",
-			"name" : "Customer Doc v2"
-		}
-	},
-	 "document_d":{
-		"pass" : true,
-		"document" : {
-			
-			"owner" : "086ad881e3f71ec73fa3fe10e2003f99",
-			"locale" : "en",
-			"name" : "Customer Doc v2",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i4222222222",
-					"passive" : false
+	"document_b": {
+		"pass": true,
+		"document": {
+			"owner": "086ad881e3f71ec73fa3fe10e2003f99",
+			"locale": "en",
+			"name": "Customer Doc v2",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i222222222",
+					"passive": false
 				}
 			]
 		}
 	},
-	  "document_e":{
-		"pass" : false,
-		"document" : {
-			
-			"owner" : "086ad881e3f71ec73fa3fe10e2003f99",
-			"locale" : "en",
-			"name" : "",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i5222222222",
-					"passive" : false
+	"document_c": {
+		"pass": true,
+		"document": {
+			"owner": "086ad881e3f71ec73fa3fe10e2003f99",
+			"locale": "de",
+			"name": "Customer Doc v2"
+		}
+	},
+	"document_d": {
+		"pass": true,
+		"document": {
+			"owner": "086ad881e3f71ec73fa3fe10e2003f99",
+			"locale": "en",
+			"name": "Customer Doc v2",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i4222222222",
+					"passive": false
 				}
 			]
 		}
 	},
- "document_f":{
-		"pass" : false,
-		"document" : {
-			
-			"owner" : "086ad881e3f71ec73fa3fe10e2003f99",
-			"locale" : "en",
-			"name" : "Customer Doc v2",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i6222222222",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i6222222222",
-					"passive" : false
+	"document_e": {
+		"pass": false,
+		"document": {
+			"owner": "086ad881e3f71ec73fa3fe10e2003f99",
+			"locale": "en",
+			"name": "",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i5222222222",
+					"passive": false
 				}
 			]
 		}
 	},
-	"document_g":{
-		"pass" : false,
-		"document" : {
-			
-			"owner" : "",
-			"locale" : "xy",
-			"name" : "Customer Doc v2",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i7222222222",
-					"passive" : false
+	"document_f": {
+		"pass": false,
+		"document": {
+			"owner": "086ad881e3f71ec73fa3fe10e2003f99",
+			"locale": "en",
+			"name": "Customer Doc v2",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i6222222222",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i6222222222",
+					"passive": false
 				}
 			]
 		}
 	},
-"document_h":{
-		"pass" : true,
-		"document" : {
-			
-			"owner" : "086ad881e3f71fa3fe10e2003f39",
-			"locale" : "de",
-			"name" : "'''''''\"##))}]=éà",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "i8222222222",
-					"passive" : false
+	"document_g": {
+		"pass": false,
+		"document": {
+			"owner": "",
+			"locale": "xy",
+			"name": "Customer Doc v2",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i7222222222",
+					"passive": false
 				}
 			]
 		}
 	},
-"document_i":{
-		"pass" : true,
-		"document" : {
-			
-			"owner" : "086ad881e3f71fa3fe10e2003f39",
-			"locale" : "de",
-			"name" : "Customer Doc v2",
-			"statements" : [{
-					"useScope" : "the CSP Services",
-					"qualifier" : "identified",
-					"dataCategory" : "credentials",
-					"sourceScope" : "this capability",
-					"action" : "provide",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u1",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u2",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u3",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u4",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u5",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u6",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u7",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u8",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u9",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u10",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u11",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u12",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u13",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u14",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u15",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u16",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u17",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u18",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u19",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "20",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u21",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u22",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u23",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u24",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u25",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u26",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u27",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u28",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u29",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u30",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u31",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u32",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u33",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u34",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u35",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u36",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u37",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u38",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u39",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u40",
-					"passive" : false
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u41",
-					"passive" : true
-				}, {
-					"useScope" : "the CSP Services",
-					"qualifier" : "aggregated data",
-					"dataCategory" : "account data",
-					"sourceScope" : "this capability",
-					"action" : "improve",
-					"resultScope" : "cloud services defined in the service agreement",
-					"trackingId" : "u42",
-					"passive" : false
+	"document_h": {
+		"pass": true,
+		"document": {
+			"owner": "086ad881e3f71fa3fe10e2003f39",
+			"locale": "de",
+			"name": "'''''''\"##))}]=éà",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "i8222222222",
+					"passive": false
+				}
+			]
+		}
+	},
+	"document_i": {
+		"pass": true,
+		"document": {
+			"owner": "086ad881e3f71fa3fe10e2003f39",
+			"locale": "de",
+			"name": "Customer Doc v2",
+			"statements": [
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "identified",
+					"dataCategoryCode": "credentials",
+					"sourceScopeCode": "this capability",
+					"actionCode": "provide",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u1",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u2",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u3",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u4",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u5",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u6",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u7",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u8",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u9",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u10",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u11",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u12",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u13",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u14",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u15",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u16",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u17",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u18",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u19",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "20",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u21",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u22",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u23",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u24",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u25",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u26",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u27",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u28",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u29",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u30",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u31",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u32",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u33",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u34",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u35",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u36",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u37",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u38",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u39",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u40",
+					"passive": false
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u41",
+					"passive": true
+				},
+				{
+					"useScopeCode": "the CSP Services",
+					"qualifierCode": "aggregated data",
+					"dataCategoryCode": "account data",
+					"sourceScopeCode": "this capability",
+					"actionCode": "improve",
+					"resultScopeCode": "cloud services defined in the service agreement",
+					"trackingId": "u42",
+					"passive": false
 				}
 			]
 		}
 	}
-
 }
