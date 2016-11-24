@@ -72,7 +72,7 @@ func loadDocs() error {
 	if err = json.Unmarshal(dat, &documents); err != nil {
 		return fmt.Errorf("Testfixture Documents not correctly loading")
 	}
-	fmt.Printf("%#v", documents)
+
 	return nil
 }
 
@@ -345,22 +345,26 @@ func putUserDictClosure(ids map[string]string) func(t *testing.T) {
 }
 
 func testDatabase_GetDocument(t *testing.T) {
-	type args struct {
-		documentid string
-	}
 	tests := []struct {
-		name     string
-		database *Database
-		args     args
-		want     structs.Document
-		wantErr  bool
+		name       string
+		documentid string
+		want       structs.Document
+		wantErr    bool
 	}{
-	// TODO: Add test cases.
+		{"document_a", documents["document_a"].Document.ID, documents["document_a"].Document, (!documents["document_a"].Pass && documents["document_a"].Document.ID != "")},
+		{"document_b", documents["document_b"].Document.ID, documents["document_b"].Document, (!documents["document_b"].Pass && documents["document_b"].Document.ID != "")},
+		{"document_c", documents["document_c"].Document.ID, documents["document_c"].Document, (!documents["document_c"].Pass && documents["document_c"].Document.ID != "")},
+		{"document_d", documents["document_d"].Document.ID, documents["document_d"].Document, (!documents["document_d"].Pass && documents["document_d"].Document.ID != "")},
+		{"document_e", documents["document_e"].Document.ID, documents["document_e"].Document, (!documents["document_e"].Pass && documents["document_e"].Document.ID != "")},
+		{"document_f", documents["document_f"].Document.ID, documents["document_f"].Document, (!documents["document_f"].Pass && documents["document_f"].Document.ID != "")},
+		{"document_g", documents["document_g"].Document.ID, documents["document_g"].Document, (!documents["document_g"].Pass && documents["document_g"].Document.ID != "")},
+		{"document_h", documents["document_h"].Document.ID, documents["document_h"].Document, (!documents["document_h"].Pass && documents["document_h"].Document.ID != "")},
+		{"document_i", documents["document_i"].Document.ID, documents["document_i"].Document, (!documents["document_i"].Pass && documents["document_i"].Document.ID != "")},
 	}
 	for _, tt := range tests {
-		got, err := tt.database.GetDocument(tt.args.documentid)
+		got, err := testDB.GetDocument(tt.documentid)
 		if (err != nil) != tt.wantErr {
-			t.Errorf("%q. Database.GetDocument() error = %v, wantErr %v", tt.name, err, tt.wantErr)
+			t.Errorf("%q. Database.GetDocument() error = %v, wantErr %v, ID %v", tt.name, err, tt.wantErr, documents[tt.name].Document.ID)
 			continue
 		}
 		if !reflect.DeepEqual(got, tt.want) {
@@ -417,14 +421,14 @@ func testDatabase_PutDocument(t *testing.T) {
 	type args struct {
 		doc structs.Document
 	}
+	t.Error("E2")
+
 	tests := []struct {
 		name     string
 		database *Database
 		args     args
 		wantErr  bool
-	}{
-	// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		if err := tt.database.PutDocument(tt.args.doc); (err != nil) != tt.wantErr {
 			t.Errorf("%q. Database.PutDocument() error = %v, wantErr %v", tt.name, err, tt.wantErr)
@@ -433,27 +437,32 @@ func testDatabase_PutDocument(t *testing.T) {
 }
 
 func testDatabase_PostDocument(t *testing.T) {
-	t.Error("ERROR")
-	type args struct {
-		doc structs.Document
-	}
 	tests := []struct {
-		name     string
-		database *Database
-		args     args
-		wantID   string
-		wantErr  bool
+		name    string
+		doc     structs.Document
+		wantErr bool
 	}{
-	// TODO: Add test cases.
+		{"document_a", documents["document_a"].Document, !documents["document_a"].Pass},
+		{"document_b", documents["document_b"].Document, !documents["document_b"].Pass},
+		{"document_c", documents["document_c"].Document, !documents["document_c"].Pass},
+		{"document_d", documents["document_d"].Document, !documents["document_d"].Pass},
+		{"document_e", documents["document_e"].Document, !documents["document_e"].Pass},
+		{"document_f", documents["document_f"].Document, !documents["document_f"].Pass},
+		{"document_g", documents["document_g"].Document, !documents["document_g"].Pass},
+		{"document_h", documents["document_h"].Document, !documents["document_h"].Pass},
+		{"document_i", documents["document_i"].Document, !documents["document_i"].Pass},
 	}
+
 	for _, tt := range tests {
-		gotID, err := tt.database.PostDocument(tt.args.doc)
+		gotID, err := testDB.PostDocument(tt.doc)
 		if (err != nil) != tt.wantErr {
 			t.Errorf("%q. Database.PostDocument() error = %v, wantErr %v", tt.name, err, tt.wantErr)
 			continue
 		}
-		if gotID != tt.wantID {
-			t.Errorf("%q. Database.PostDocument() = %v, want %v", tt.name, gotID, tt.wantID)
+		if gotID != "" {
+			d := documents[tt.name]
+			d.Document.ID = gotID
+			documents[tt.name] = d
 		}
 	}
 }
