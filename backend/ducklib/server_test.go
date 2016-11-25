@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Microsoft/DUCK/backend/ducklib/structs"
+	"github.com/Microsoft/DUCK/backend/ducklib/config"
 	"github.com/labstack/echo"
 )
 
@@ -15,7 +15,7 @@ import (
 
 func TestGetServer(t *testing.T) {
 	type args struct {
-		conf structs.Configuration
+		conf config.Configuration
 	}
 	tests := []struct {
 		name string
@@ -24,6 +24,7 @@ func TestGetServer(t *testing.T) {
 	}{
 	// TODO: Add test cases.
 	}
+	t.Errorf("GetServer() tests not implemented")
 	for _, tt := range tests {
 		if got := GetServer(tt.args.conf); !reflect.DeepEqual(got, tt.want) {
 			t.Errorf("%q. GetServer() = %v, want %v", tt.name, got, tt.want)

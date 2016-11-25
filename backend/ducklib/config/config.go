@@ -1,5 +1,7 @@
 package config
 
+//TODO rename either package or struct to sth better
+
 import (
 	"encoding/json"
 	"flag"
@@ -13,7 +15,7 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
-var cfg structs.Configuration
+var cfg Configuration
 
 func init() {
 	flag.StringVar(&cfg.WebDir, "webdir", "", "The root directory for serving web content")
@@ -22,12 +24,21 @@ func init() {
 	flag.Parse()
 }
 
+//Configuration contains configuration values like the JWT Key or the RulebaseDir.
+// these values can be set via configuration.json file, environment variables or flags
+type Configuration struct {
+	DBConfig    *structs.DBConf `json:"database,omitempty"`
+	JwtKey      string          `json:"jwtkey,omitempty"`
+	WebDir      string          `json:"webdir,omitempty"`
+	RulebaseDir string          `json:"rulebasedir,omitempty"`
+}
+
 //NewConfiguration is the Constructor for a new structs.Configuration struct.
 //it uses information from a cofiguration file, command flags, environment Variables and its own defaults to
 //decide initial values for the configuration
-func NewConfiguration(confpath string) structs.Configuration {
+func NewConfiguration(confpath string) Configuration {
 
-	c := structs.Configuration{}
+	c := Configuration{}
 
 	//setting defaults
 	c.JwtKey = "secret"
@@ -35,21 +46,21 @@ func NewConfiguration(confpath string) structs.Configuration {
 	c.RulebaseDir = "src/github.com/Microsoft/DUCK/RuleBases"
 
 	//overwrite defaults with information from config file
-	if err := getFileConfig(&c, confpath); err != nil {
+	if err := c.getFileConfig(confpath); err != nil {
 		log.Printf("Could not load configuration file: %s", err)
 
 	}
 	//overwrite with information from environment
-	getEnv(&c)
+	c.getEnv()
 	//overwrite with information from flags
-	getFlags(&c)
+	c.getFlags()
 
-	setAbsPaths(&c)
+	c.setAbsPaths()
 	return c
 }
 
 //If there is an env var GOPATH and RulebaseDir or WebDir are relative paths they are assumed to be ralative to the gopath
-func setAbsPaths(c *structs.Configuration) {
+func (c *Configuration) setAbsPaths() {
 	goPath := os.Getenv("GOPATH")
 	if goPath != "" {
 		log.Println("Found GOPATH, will use gopath for relative paths.")
@@ -64,34 +75,34 @@ func setAbsPaths(c *structs.Configuration) {
 }
 
 //getFlags populates the configuration struct with data from the flags this program is called with
-func getFlags(config *structs.Configuration) {
+func (c *Configuration) getFlags() {
 
 	if cfg.JwtKey != "" {
-		config.JwtKey = cfg.JwtKey
+		c.JwtKey = cfg.JwtKey
 	}
 	if cfg.WebDir != "" {
-		config.WebDir = cfg.WebDir
+		c.WebDir = cfg.WebDir
 	}
 	if cfg.RulebaseDir != "" {
-		config.RulebaseDir = cfg.RulebaseDir
+		c.RulebaseDir = cfg.RulebaseDir
 	}
 
 }
 
 //getFileConfig reads the config from a JSON formatted config file and
 // sets the read values as configuration values
-func getFileConfig(config *structs.Configuration, confpath string) error {
+func (c *Configuration) getFileConfig(confpath string) error {
 	dat, err := ioutil.ReadFile(confpath)
 	if err != nil {
 		return err
 
 	}
-	err = json.Unmarshal(dat, &config)
+	err = json.Unmarshal(dat, &c)
 	return err
 
 }
 
-func getEnv(c *structs.Configuration) {
+func (c *Configuration) getEnv() {
 	//Get Environment Variables
 
 	env := os.Getenv("DUCK_JWTKEY")

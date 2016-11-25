@@ -1,12 +1,5 @@
 package structs
 
-type Configuration struct {
-	DBConfig    *DBConf `json:"database,omitempty"`
-	JwtKey      string  `json:"jwtkey,omitempty"`
-	WebDir      string  `json:"webdir,omitempty"`
-	RulebaseDir string  `json:"rulebasedir,omitempty"`
-}
-
 type DBConf struct {
 	Location string `json:"location"`
 	Port     int    `json:"port,omitempty"`

@@ -22,7 +22,7 @@ import (
 var (
 	doh   Handler
 	datab *db.Database
-	conf  structs.Configuration
+	conf  config.Configuration
 	e     *echo.Echo
 
 	users map[string]struct {
