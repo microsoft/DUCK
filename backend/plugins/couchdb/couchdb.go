@@ -28,8 +28,6 @@ delete Rulebase		✓
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -50,41 +48,6 @@ type Couchbase struct {
 	user     string
 	password string
 	auth     bool //Do we need submit auth info to cb?
-}
-
-// getMap returns a map[string]interface{} containing the unmarshaled JSON from the io.Reader
-func getMap(resp io.Reader) (map[string]interface{}, error) {
-
-	content, err := ioutil.ReadAll(resp)
-	if err != nil {
-		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-
-	//TODO: remove this when not used anymore
-	//fmt.Println(string(content))
-
-	var data map[string]interface{}
-
-	if err := json.Unmarshal(content, &data); err != nil {
-		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	//e := structs.NewHttpError(err, 404)
-
-	return data, nil
-}
-
-func getRows(resp io.Reader) ([]interface{}, error) {
-
-	jsonbody, err := getMap(resp)
-	if err != nil {
-		return nil, err
-	}
-	rows, prs := jsonbody["rows"].([]interface{})
-	//fmt.Println(jsonbody)
-	if !prs || len(rows) < 1 {
-		return nil, structs.NewHTTPError("No Data returned", 502)
-	}
-	return rows, nil
 }
 
 // GetLogin returns ID and Password for the matching username from the couchbase Database
@@ -140,8 +103,7 @@ func (cb *Couchbase) GetUserDict(id string) (structs.Dictionary, error) {
 		return nil, err
 	}
 
-	var u structs.User
-	u.FromValueMap(mp)
+	u := userFromValueMap(mp)
 	//fmt.Printf("%+v\n", mp)
 	return u.GlobalDictionary, nil
 
@@ -156,7 +118,7 @@ func (cb *Couchbase) GetUser(id string) (structs.User, error) {
 		return u, err
 	}
 
-	u.FromValueMap(mp)
+	u = userFromValueMap(mp)
 
 	return u, nil
 
@@ -170,7 +132,7 @@ func (cb *Couchbase) GetDocument(id string) (structs.Document, error) {
 		return doc, err
 	}
 	//fmt.Printf("%+v\n", mp)
-	doc.FromValueMap(mp)
+	doc = docFromValueMap(mp)
 
 	return doc, nil
 
@@ -203,6 +165,7 @@ func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]i
 }
 
 //GetDocumentSummariesForUser returns a list all data use documents a user owns
+//Summaries only include the documents name and ID
 func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 	url := fmt.Sprintf("%s/%s/_design/app/_view/documents_by_user?startkey=[\"%s\",\"\"]&endkey=[\"%s\",{}]",
 		cb.url, cb.database, userid, userid)
@@ -216,7 +179,7 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Docum
 
 	rows, err := getRows(resp.Body)
 	if err != nil {
-		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), http.StatusNotFound))
 	}
 
 	var documents []structs.Document

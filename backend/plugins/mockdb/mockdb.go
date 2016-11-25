@@ -3,6 +3,7 @@ package mockdb
 import (
 	"errors"
 	"log"
+	"net/http"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
@@ -132,6 +133,7 @@ func (m *Mock) UpdateUser(user structs.User) error {
 }
 
 //GetDocumentSummariesForUser returns all documents for a user
+//A summary consists only of Document ID and Name
 func (m *Mock) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 	var l []structs.Document
 
@@ -149,6 +151,9 @@ func (m *Mock) GetDocumentSummariesForUser(userid string) ([]structs.Document, e
 			l = append(l, d)
 
 		}
+	}
+	if len(l) == 0 {
+		return nil, structs.NewHTTPError("No Data returned", http.StatusNotFound)
 	}
 	return l, nil
 }

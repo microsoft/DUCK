@@ -89,14 +89,14 @@ func (database *Database) PostUser(user structs.User) (ID string, err error) {
 	return "", structs.NewHTTPError("User already exists", 409)
 }
 
-//GetUserDict ..
+//GetUserDict returns the dictionary struct of the user.
 func (database *Database) GetUserDict(userid string) (structs.Dictionary, error) {
 
 	return database.db.GetUserDict(userid)
 
 }
 
-//PutUserDict ..
+//PutUserDict sets tthe users dictionary to the specified ditcionary struct.
 func (database *Database) PutUserDict(dict structs.Dictionary, userID string) error {
 
 	return database.db.UpdateUserDict(dict, userID)
@@ -108,35 +108,36 @@ Document DB operations
 
 */
 
-//GetDocument ..
+//GetDocument returns the Document with the specified id.
 func (database *Database) GetDocument(documentid string) (structs.Document, error) {
 
 	return database.db.GetDocument(documentid)
 
 }
 
-//GetDocumentSummariesForUser ..
+//GetDocumentSummariesForUser returns a list all data use documents a user owns.
+//Summaries only include the documents name and ID.
 func (database *Database) GetDocumentSummariesForUser(userid string) ([]structs.Document, error) {
 
 	return database.db.GetDocumentSummariesForUser(userid)
 
 }
 
-//DeleteDocument ..
+//DeleteDocument deletes the Document with the specified id.
 func (database *Database) DeleteDocument(id string) error {
 
 	return database.db.DeleteDocument(id)
 
 }
 
-//PutDocument ..
+//PutDocument updates the given Document with a document in te database with the same ID.
 func (database *Database) PutDocument(doc structs.Document) error {
 
 	return database.db.UpdateDocument(doc)
 
 }
 
-//PostDocument ..
+//PostDocument creates a new document in the database.
 func (database *Database) PostDocument(doc structs.Document) (ID string, err error) {
 	if doc.Name == "" {
 		return "", structs.NewHTTPError("No Document Name submitted", 400)

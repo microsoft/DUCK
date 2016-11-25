@@ -1,10 +1,10 @@
 package structs
 
 type Configuration struct {
-	DBConfig     *DBConf `json:"database,omitempty"`
-	JwtKey       string  `json:"jwtkey,omitempty"`
-	WebDir       string  `json:"webdir,omitempty"`
-	RulebaseDir  string  `json:"rulebasedir,omitempty"`
+	DBConfig    *DBConf `json:"database,omitempty"`
+	JwtKey      string  `json:"jwtkey,omitempty"`
+	WebDir      string  `json:"webdir,omitempty"`
+	RulebaseDir string  `json:"rulebasedir,omitempty"`
 }
 
 type DBConf struct {
@@ -26,6 +26,32 @@ type User struct {
 	Revision         string     `json:"revision"`
 	GlobalDictionary Dictionary `json:"globalDictionary"`
 	//Documents []string `json:"documents"`
+}
+
+//Document struct contains among other things a set of statements, a Unique ID, a name and an owner
+//The Owner field is a foreign key to a User.ID
+type Document struct {
+	ID            string      `json:"id"`
+	Name          string      `json:"name"`
+	Revision      string      `json:"revision"`
+	Owner         string      `json:"owner"`
+	Locale        string      `json:"locale"`
+	Description   string      `json:"description"`
+	AssumptionSet string      `json:"assumptionSet"`
+	Statements    []Statement `json:"statements"`
+	Dictionary    Dictionary  `json:"dictionary"`
+}
+
+//A Statement struct represents one Statement in a document
+type Statement struct {
+	UseScopeCode     string `json:"useScopeCode"`
+	QualifierCode    string `json:"qualifierCode"`
+	DataCategoryCode string `json:"dataCategoryCode"`
+	SourceScopeCode  string `json:"sourceScopeCode"`
+	ActionCode       string `json:"actionCode"`
+	ResultScopeCode  string `json:"resultScopeCode"`
+	TrackingID       string `json:"trackingId"`
+	Passive          bool   `json:"passive"`
 }
 
 type DictionaryEntry struct {
@@ -54,82 +80,6 @@ type ComplianceResponse struct {
 type Login struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
-}
-
-func (u *User) FromValueMap(mp map[string]interface{}) {
-
-	if id, ok := mp["_id"]; ok {
-		u.ID = id.(string)
-	}
-	if rev, ok := mp["_rev"]; ok {
-		u.Revision = rev.(string)
-	}
-	if name, ok := mp["firstname"]; ok {
-		u.Firstname = name.(string)
-	}
-	if owner, ok := mp["lastname"]; ok {
-		u.Lastname = owner.(string)
-	}
-	if owner, ok := mp["password"]; ok {
-		u.Password = owner.(string)
-	}
-	if owner, ok := mp["email"]; ok {
-		u.Email = owner.(string)
-	}
-	if locale, ok := mp["locale"]; ok {
-		u.Locale = locale.(string)
-	}
-	if assumptionSet, ok := mp["assumptionSet"]; ok {
-		u.AssumptionSet = assumptionSet.(string)
-	}
-
-	/*	if docs, prs := mp["documents"].([]interface{}); prs {
-		u.Documents = make([]string, len(docs))
-		for i, v := range docs {
-			u.Documents[i] = v.(string)
-		}
-	}*/
-	if dict, prs := mp["dictionary"].(map[string]interface{}); prs {
-		u.GlobalDictionary = make(Dictionary)
-		u.GlobalDictionary.FromInterfaceMap(dict)
-	}
-
-}
-
-func (d Dictionary) FromInterfaceMap(mp map[string]interface{}) {
-
-	//Map looks like
-	//dictionary:
-	//	map[
-	//		microsoft_excel:map[code:microsoft_excel category:1 value:Microsoft Excel type:scope]
-	//		microsoft_word:map[category:1 value:Microsoft Word type:scope code:microsoft_word]]
-
-	if d == nil {
-		d = make(Dictionary)
-	}
-	for key, value := range mp {
-		var de DictionaryEntry
-
-		value := value.(map[string]interface{})
-		if code, ok := value["code"]; ok {
-			de.Code = code.(string)
-		}
-		if tpe, ok := value["type"]; ok {
-			de.Type = tpe.(string)
-		}
-		if val, ok := value["value"]; ok {
-			de.Value = val.(string)
-		}
-		if category, ok := value["category"]; ok {
-			de.Category = category.(string)
-		}
-		if dictionaryType, ok := value["dictionaryType"]; ok {
-			de.DictionaryType = dictionaryType.(string)
-		}
-
-		d[key] = de
-	}
-
 }
 
 type Rulebase struct {
