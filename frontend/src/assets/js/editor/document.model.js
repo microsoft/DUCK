@@ -235,21 +235,24 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     };
 
     this.complianceCheck = function () {
+        return $q(function (resolve, reject) {
+            if (!context.validateSyntax(true)) {
+                resolve();
+                return;
+            }
+            // FIXME ruleset id
+            DataUseDocumentService.complianceCheck(context.document, "123").then(function (complianceResult) {
+                context.state = complianceResult.compliant;
+                context.document.statements.forEach(function (statement) {
+                    var statementExplanation = complianceResult.map.get(statement.trackingId);
+                    if (statementExplanation == null) {
+                        return;
+                    }
+                    statement.$$statementExplanation = statementExplanation;    // note  $$ signals Angular to ignore this property during serialization
 
-        if (!context.validateSyntax(true)) {
-            return;
-        }
-        // FIXME ruleset id
-        DataUseDocumentService.complianceCheck(context.document, "123").then(function (complianceResult) {
-            context.state = complianceResult.compliant;
-            context.document.statements.forEach(function (statement) {
-                var statementExplanation = complianceResult.map.get(statement.trackingId);
-                if (statementExplanation == null) {
-                    return;
-                }
-                statement.$$statementExplanation = statementExplanation;    // note  $$ signals Angular to ignore this property during serialization
-
-            })
+                }) ;
+                resolve();
+            });
         });
     };
 

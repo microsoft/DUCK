@@ -1,7 +1,8 @@
 var editorModule = angular.module("duck.editor");
 
 editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, AssumptionSetService, DocumentExporter,
-                                                      $stateParams, AbandonComponent, NotificationService, ObjectUtils, $scope, $rootScope) {
+                                                      $stateParams, AbandonComponent, NotificationService, ObjectUtils, $scope, $rootScope,
+                                                      $anchorScroll, $location) {
 
     var controller = this;
 
@@ -89,7 +90,29 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.makeActive = DocumentModel.makeActive;
 
-    controller.complianceCheck = DocumentModel.complianceCheck;
+    controller.complianceCheck = function () {
+        var scrolled = false;
+        DocumentModel.complianceCheck().then(function () {
+            DocumentModel.document.statements.forEach(function (statement) {
+                // scroll document to first statement error
+                if (scrolled) {
+                    return;
+                }
+                if (statement.errors.useScope.active
+                    || statement.errors.qualifier.active
+                    || statement.errors.dataCategory.active
+                    || statement.errors.sourceScope.active
+                    || statement.errors.action.active
+                    || statement.errors.resultScope.active
+
+                ) {
+                    scrolled = true;
+                    $location.hash(statement.trackingId);
+                    $anchorScroll();
+                }
+            });
+        });
+    };
 
     controller.getState = function () {
         return DocumentModel.state;
