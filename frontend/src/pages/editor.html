@@ -103,6 +103,8 @@
                                            ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
                                         <a class="button secondary" ng-class="{'hollow':!statement.passive}"
                                            ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
+                                        <a class="button secondary hollow" ng-click="editorController.duplicateStatement(statement)">
+                                            <i class="fa fa-copy medium-gray"></i> </a>
                                         <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)">
                                             <i class="fa fa-trash medium-gray"></i> </a>
                                     </div>

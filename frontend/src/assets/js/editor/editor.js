@@ -81,6 +81,8 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.deleteStatement = DocumentModel.deleteStatement;
 
+    controller.duplicateStatement = DocumentModel.duplicateStatement;
+
     controller.emptyStatement = DocumentModel.emptyStatement;
 
     controller.makePassive = DocumentModel.makePassive;
