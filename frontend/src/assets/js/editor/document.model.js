@@ -140,7 +140,8 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                 dataCategory: statement.dataCategory,
                 sourceScope: statement.sourceScope,
                 action: statement.action,
-                resultScope: statement.resultScope
+                resultScope: statement.resultScope,
+                passive: statement.passive
             };
             context.addStatementErrorObject(newStatement);
             newStatement.trackingId = UUID.next();
@@ -250,7 +251,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                     }
                     statement.$$statementExplanation = statementExplanation;    // note  $$ signals Angular to ignore this property during serialization
 
-                }) ;
+                });
                 resolve();
             });
         });
