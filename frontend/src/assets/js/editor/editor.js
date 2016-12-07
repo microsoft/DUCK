@@ -127,13 +127,18 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     };
 
     controller.addStatement = function () {
+        var passive = false;
+        if (DocumentModel.document.statements.length > 0) {
+            passive = DocumentModel.document.statements[DocumentModel.document.statements.length-1].passive;
+        }
         DocumentModel.addStatement({
             useScope: null,
             qualifier: null,
             dataCategory: null,
             sourceScope: null,
             action: null,
-            resultScope: null
+            resultScope: null,
+            passive: passive
         });
     };
 
