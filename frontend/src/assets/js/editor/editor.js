@@ -120,7 +120,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             return false;
         }
 
-        return  errors.useScope.active || errors.qualifier.active ||  errors.dataCategory.active ||   errors.sourceScope.active ||   errors.action.active || errors.resultScope.active;
+        return errors.useScope.active || errors.qualifier.active || errors.dataCategory.active || errors.sourceScope.active || errors.action.active || errors.resultScope.active;
     };
 
     controller.downloadDocument = function () {
@@ -192,6 +192,14 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                         statement[fieldName] = "";
                         DocumentModel.setCurrentStatement(statement);
                         EventBus.publish("ui.newTerm");
+                    } else if (fieldName === "sourceScope") {
+                        // if other scopes are empty, default them to the source scope
+                        if (statement.useScope === null || statement.useScope.trim().length === 0) {
+                            statement.useScope = newValue;
+                        }
+                        if (statement.resultScope === null || statement.resultScope.trim().length === 0) {
+                            statement.resultScope = newValue;
+                        }
                     }
                 });
                 var other = controller.watches.put(statement.trackingId, unregister);
