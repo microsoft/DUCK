@@ -94,6 +94,8 @@ func (h *Handler) PostUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, structs.Response{Ok: false, Reason: &e})
 	}
 
+	//TODO: should this happen here or in db.Database.PostUser ?
+
 	//hash password
 	password := []byte(newUser.Password)
 	// Hashing the password with the default cost of 10

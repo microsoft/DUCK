@@ -1,4 +1,4 @@
-package internal
+package carneades
 
 import (
 	"encoding/json"
@@ -24,21 +24,18 @@ type normalizer struct {
 }
 
 //NormalizedDocument wraps structs.Document and adds an extra field 'Parts'.
-//the Parts field maps a slice of codes to one more specific code
+//The Parts field maps a slice of codes to a more specific code
+//
+//  parts:
+//   part1:
+//     - c1
+//     - c2
+//   part2:
+//     - part1
 type NormalizedDocument struct {
 	structs.Document
 	Parts map[string][]string
 }
-
-/*
-parts:
-  azure:
-    - c1
-    - c2
-  p1:
-    - azure
-
-*/
 
 //NewNormalizer returns a new initialized normalizer
 func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*normalizer, error) {

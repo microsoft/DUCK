@@ -47,11 +47,11 @@ func TestDocumentHandler(t *testing.T) {
 	e = echo.New()
 
 	doh = Handler{}
-	datab = db.NewDatabase(*conf.DBConfig)
-	err := datab.Init()
+	dab, err := db.NewDatabase(*conf.DBConfig)
 	if err != nil {
 		t.Skip("User Handler test failed; was not able to datab.Init()")
 	}
+	doh.Db = dab
 
 	dat, err := ioutil.ReadFile("testdata/document.json")
 

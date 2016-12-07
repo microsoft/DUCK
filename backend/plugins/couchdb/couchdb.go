@@ -43,7 +43,7 @@ import (
 //not using default Client: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779
 var netClient = &http.Client{Timeout: time.Second * 10}
 
-//Couchbase implements the pluginregistry.DBPlugin interface for the Couchbase Dabase
+//Couchbase implements the pluginregistry.DBPlugin interface for CouchDB
 type Couchbase struct {
 	url      string
 	database string

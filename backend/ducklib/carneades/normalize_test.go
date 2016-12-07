@@ -1,16 +1,18 @@
-package internal
+package carneades
 
 import (
 	"reflect"
 	"testing"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/db"
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
 func TestNewNormalizer(t *testing.T) {
 	type args struct {
-		doc structs.Document
-		db  *database
+		doc    structs.Document
+		db     *db.Database
+		webdir string
 	}
 	tests := []struct {
 		name    string
@@ -20,9 +22,8 @@ func TestNewNormalizer(t *testing.T) {
 	}{
 	// TODO: Add test cases.
 	}
-	
 	for _, tt := range tests {
-		got, err := NewNormalizer(tt.args.doc, tt.args.db)
+		got, err := NewNormalizer(tt.args.doc, tt.args.db, tt.args.webdir)
 		if (err != nil) != tt.wantErr {
 			t.Errorf("%q. NewNormalizer() error = %v, wantErr %v", tt.name, err, tt.wantErr)
 			continue

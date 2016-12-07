@@ -44,11 +44,11 @@ func TestUserHandler(t *testing.T) {
 	JWT = []byte(conf.JwtKey)
 
 	uh = Handler{}
-	datab = db.NewDatabase(*conf.DBConfig)
-	err := datab.Init()
+	dab, err := db.NewDatabase(*conf.DBConfig)
 	if err != nil {
 		t.Skip("User Handler test failed; was not able to datab.Init()")
 	}
+	uh.Db = dab
 
 	dat, err := ioutil.ReadFile("testdata/user.json")
 

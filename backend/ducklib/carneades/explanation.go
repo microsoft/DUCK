@@ -1,4 +1,4 @@
-package internal
+package carneades
 
 import (
 	"github.com/carneades/carneades-4/src/engine/caes"

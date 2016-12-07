@@ -3,37 +3,23 @@ package ducklib
 import (
 	"log"
 
+	"github.com/Microsoft/DUCK/backend/ducklib/carneades"
 	"github.com/Microsoft/DUCK/backend/ducklib/db"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/dictionaries"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/documents"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/rulebases"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/users"
-	"github.com/Microsoft/DUCK/backend/ducklib/internal"
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
-/*
-//structs
-
-var datab *db.Database
-
-//JWT contains the JWT secret
-var JWT []byte
-
-// Checker is a ComplianceCheckerPlugin
-var checker *internal.ComplianceCheckerPlugin
-
-var config structs.Configuration
-*/
 //GetServer returns Echo instance with predefined routes
 func GetServer(conf structs.Configuration) *echo.Echo {
 	//webDir string, jwtKey []byte, ruleBaseDir string
 
 	//config := conf
-	datab := db.NewDatabase(*conf.DBConfig)
-	err := datab.Init()
+	datab, err := db.NewDatabase(*conf.DBConfig)
 	if err != nil {
 		panic(err)
 	}
@@ -43,7 +29,7 @@ func GetServer(conf structs.Configuration) *echo.Echo {
 
 	log.Printf("Rulebase directory: " + rbd)
 
-	checker, err := internal.MakeComplianceCheckerPlugin(rbd)
+	checker, err := carneades.MakeComplianceCheckerPlugin(rbd)
 	if err != nil {
 		panic(err)
 	}
