@@ -1,7 +1,8 @@
 var editorModule = angular.module("duck.editor");
 
 editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, AssumptionSetService, DocumentExporter,
-                                                      $stateParams, AbandonComponent, NotificationService, ObjectUtils, $scope, $rootScope) {
+                                                      $stateParams, AbandonComponent, NotificationService, ObjectUtils, $scope, $rootScope,
+                                                      $anchorScroll, $location) {
 
     var controller = this;
 
@@ -81,13 +82,37 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
     controller.deleteStatement = DocumentModel.deleteStatement;
 
+    controller.duplicateStatement = DocumentModel.duplicateStatement;
+
     controller.emptyStatement = DocumentModel.emptyStatement;
 
     controller.makePassive = DocumentModel.makePassive;
 
     controller.makeActive = DocumentModel.makeActive;
 
-    controller.complianceCheck = DocumentModel.complianceCheck;
+    controller.complianceCheck = function () {
+        var scrolled = false;
+        DocumentModel.complianceCheck().then(function () {
+            DocumentModel.document.statements.forEach(function (statement) {
+                // scroll document to first statement error
+                if (scrolled) {
+                    return;
+                }
+                if (statement.errors.useScope.active
+                    || statement.errors.qualifier.active
+                    || statement.errors.dataCategory.active
+                    || statement.errors.sourceScope.active
+                    || statement.errors.action.active
+                    || statement.errors.resultScope.active
+
+                ) {
+                    scrolled = true;
+                    $location.hash(statement.trackingId);
+                    $anchorScroll();
+                }
+            });
+        });
+    };
 
     controller.getState = function () {
         return DocumentModel.state;
@@ -102,13 +127,18 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     };
 
     controller.addStatement = function () {
+        var passive = false;
+        if (DocumentModel.document.statements.length > 0) {
+            passive = DocumentModel.document.statements[DocumentModel.document.statements.length-1].passive;
+        }
         DocumentModel.addStatement({
             useScope: null,
             qualifier: null,
             dataCategory: null,
             sourceScope: null,
             action: null,
-            resultScope: null
+            resultScope: null,
+            passive: passive
         });
     };
 
@@ -118,7 +148,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             return false;
         }
 
-        return  errors.useScope.active || errors.qualifier.active ||  errors.dataCategory.active ||   errors.sourceScope.active ||   errors.action.active || errors.resultScope.active;
+        return errors.useScope.active || errors.qualifier.active || errors.dataCategory.active || errors.sourceScope.active || errors.action.active || errors.resultScope.active;
     };
 
     controller.downloadDocument = function () {
@@ -190,6 +220,14 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                         statement[fieldName] = "";
                         DocumentModel.setCurrentStatement(statement);
                         EventBus.publish("ui.newTerm");
+                    } else if (fieldName === "sourceScope") {
+                        // if other scopes are empty, default them to the source scope
+                        if (statement.useScope === null || statement.useScope.trim().length === 0) {
+                            statement.useScope = newValue;
+                        }
+                        if (statement.resultScope === null || statement.resultScope.trim().length === 0) {
+                            statement.resultScope = newValue;
+                        }
                     }
                 });
                 var other = controller.watches.put(statement.trackingId, unregister);

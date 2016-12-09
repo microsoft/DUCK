@@ -45,10 +45,10 @@
                        ng-attr-title="{{'download'|translate}}">
                         <i class="fa fa-download"></i>
                     </a>
-                    <a class="button hollow" ng-click="editorController.exportDocument()"
-                       ng-attr-title="{{'export'|translate}}">
-                        <i class="fa fa-code"></i>
-                    </a>
+                    <!--<a class="button hollow" ng-click="editorController.exportDocument()"-->
+                       <!--ng-attr-title="{{'export'|translate}}">-->
+                        <!--<i class="fa fa-code"></i>-->
+                    <!--</a>-->
                 </div>
                 <div class="button-group small float-right noselect">
                     <button class="button hollow" type="button" data-toggle="example-dropdown">
@@ -95,7 +95,7 @@
                     <li data-ng-repeat="statement in document.statements | compatibleFilter : editorController.filterStatement" data-as-sortable-item
                         ng-class="{'diff-remove': statement._diff}">
                         <div data-as-sortable-item-handle>
-                            <div class="row">
+                            <div class="row" ng-attr-id="{{statement.trackingId}}" >
                                 <!--{{editorController.filterStatement === statement}}&#45;&#45;&#45;&#45;&#45;&#45;-->
                                 <div class="small-3 columns">
                                     <div class="button-group tiny noselect">
@@ -103,6 +103,8 @@
                                            ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
                                         <a class="button secondary" ng-class="{'hollow':!statement.passive}"
                                            ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
+                                        <a class="button secondary hollow" ng-click="editorController.duplicateStatement(statement)">
+                                            <i class="fa fa-copy medium-gray"></i> </a>
                                         <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)">
                                             <i class="fa fa-trash medium-gray"></i> </a>
                                     </div>

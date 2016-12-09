@@ -119,6 +119,40 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     };
 
     /**
+     * Duplicates the statement in the local model (i.e. it is not synchronized to the backend).
+     *
+     * @param statement the statement
+     */
+    this.duplicateStatement = function (statement) {
+        var pos = -1;
+        var found = -1;
+        context.document.statements.forEach(function (element) {
+            pos++;
+
+            if (element === statement) {
+                found = pos;
+            }
+        });
+        if (found >= 0) {
+            var newStatement = {
+                useScope: statement.useScope,
+                qualifier: statement.qualifier,
+                dataCategory: statement.dataCategory,
+                sourceScope: statement.sourceScope,
+                action: statement.action,
+                resultScope: statement.resultScope,
+                passive: statement.passive
+            };
+            context.addStatementErrorObject(newStatement);
+            newStatement.trackingId = UUID.next();
+
+            context.document.statements.splice(found, 0, newStatement);
+            context.dirty = true;
+            context.resetCompliance();
+        }
+    };
+
+    /**
      * Sets the current statement for editing purposes.
      * @param statement the current statement
      */
@@ -202,21 +236,24 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
     };
 
     this.complianceCheck = function () {
+        return $q(function (resolve, reject) {
+            if (!context.validateSyntax(true)) {
+                resolve();
+                return;
+            }
+            // FIXME ruleset id
+            DataUseDocumentService.complianceCheck(context.document, "123").then(function (complianceResult) {
+                context.state = complianceResult.compliant;
+                context.document.statements.forEach(function (statement) {
+                    var statementExplanation = complianceResult.map.get(statement.trackingId);
+                    if (statementExplanation == null) {
+                        return;
+                    }
+                    statement.$$statementExplanation = statementExplanation;    // note  $$ signals Angular to ignore this property during serialization
 
-        if (!context.validateSyntax(true)) {
-            return;
-        }
-        // FIXME ruleset id
-        DataUseDocumentService.complianceCheck(context.document, "123").then(function (complianceResult) {
-            context.state = complianceResult.compliant;
-            context.document.statements.forEach(function (statement) {
-                var statementExplanation = complianceResult.map.get(statement.trackingId);
-                if (statementExplanation == null) {
-                    return;
-                }
-                statement.$$statementExplanation = statementExplanation;    // note  $$ signals Angular to ignore this property during serialization
-
-            })
+                });
+                resolve();
+            });
         });
     };
 
