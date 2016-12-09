@@ -4,20 +4,19 @@ import (
 	"log"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/carneades"
+	"github.com/Microsoft/DUCK/backend/ducklib/config"
 	"github.com/Microsoft/DUCK/backend/ducklib/db"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/dictionaries"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/documents"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/rulebases"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/users"
-	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 //GetServer returns Echo instance with predefined routes
-func GetServer(conf structs.Configuration) *echo.Echo {
+func GetServer(conf config.Configuration) *echo.Echo {
 	//webDir string, jwtKey []byte, ruleBaseDir string
-
 	//config := conf
 	datab, err := db.NewDatabase(*conf.DBConfig)
 	if err != nil {
