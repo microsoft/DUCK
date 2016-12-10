@@ -94,7 +94,7 @@
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
                     <li data-ng-repeat="statement in document.statements | compatibleFilter : editorController.filterStatement" data-as-sortable-item
                         ng-class="{'diff-remove': statement._diff}">
-                        <div data-as-sortable-item-handle>
+                        <div > <!-- add  directive to enable sort: data-as-sortable-item-handle ->
                             <div class="row" ng-attr-id="{{statement.trackingId}}" >
                                 <!--{{editorController.filterStatement === statement}}&#45;&#45;&#45;&#45;&#45;&#45;-->
                                 <div class="small-3 columns">
