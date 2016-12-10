@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	conf structs.Configuration
+	conf config.Configuration
 	e    *echo.Echo
 
 	users map[string]struct {

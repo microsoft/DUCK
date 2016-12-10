@@ -71,7 +71,7 @@ function copyBinary() {
 }
 
 function copyConfig() {
-    return gulp.src("backend/configuration.json")
+    return gulp.src("configuration.json")
         .pipe(gulp.dest("./image/stage"));
 }
 

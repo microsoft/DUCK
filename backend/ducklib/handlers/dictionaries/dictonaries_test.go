@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	conf structs.Configuration
+	conf config.Configuration
 	e    *echo.Echo
 
 	dicts struct {

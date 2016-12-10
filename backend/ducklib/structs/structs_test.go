@@ -5,38 +5,6 @@ import (
 	"testing"
 )
 
-func TestUser_FromValueMap(t *testing.T) {
-	type args struct {
-		mp map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		u    *User
-		args args
-	}{
-	// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		tt.u.FromValueMap(tt.args.mp)
-	}
-}
-
-func TestDictionary_FromInterfaceMap(t *testing.T) {
-	type args struct {
-		mp map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		d    Dictionary
-		args args
-	}{
-	// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		tt.d.FromInterfaceMap(tt.args.mp)
-	}
-}
-
 func TestNewHTTPError(t *testing.T) {
 	type args struct {
 		err  string

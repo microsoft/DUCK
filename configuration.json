@@ -1,0 +1,10 @@
+{
+	"database": {
+		"location": "http://127.0.0.1",
+		"port": 5984,
+		"name": "duck"
+	},
+	"jwtkey": "secret",
+	"webdir": "dist",
+	"rulebasedir": "RuleBases"
+}
