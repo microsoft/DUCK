@@ -86,9 +86,10 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
      * @param locale the language, e.g. "en"
      * @param term the term to match
      * @param categories if true, include only terms that are categories and are not fixed
+     * @param noFilter if true do not filter terms
      * @return {Array} containing matching values in the form {value, label}
      */
-    this.lookup = function (type, locale, term, categories) {
+    this.lookup = function (type, locale, term, categories, noFilter) {
         if (!term) {
             return [];
         }
@@ -100,7 +101,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
             $log.error("Unknown locale when looking up symbol type '" + type + "': " + locale);
             return;
         }
-        if (term.trim().length === 0) {
+        if (term.trim().length === 0 || noFilter) {
             // return all options
             var vals = [];
             symbolTable.entries.forEach(function (entry) {

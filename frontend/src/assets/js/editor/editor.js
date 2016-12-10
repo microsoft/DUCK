@@ -129,7 +129,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     controller.addStatement = function () {
         var passive = false;
         if (DocumentModel.document.statements.length > 0) {
-            passive = DocumentModel.document.statements[DocumentModel.document.statements.length-1].passive;
+            passive = DocumentModel.document.statements[DocumentModel.document.statements.length - 1].passive;
         }
         DocumentModel.addStatement({
             useScope: null,
@@ -194,7 +194,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
          * @return {Array} suggestions matching the input text
          */
         var scopeSuggest = function (term) {
-            var terms = TaxonomyService.lookup("scope", DocumentModel.document.locale, term);
+            var terms = TaxonomyService.lookup("scope", DocumentModel.document.locale, term, true, true);
             terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
             return terms
         };
@@ -282,7 +282,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.qualifierCompletion = {
             suggest: function (term) {
-                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term)
+                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term, true, true)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -291,7 +291,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.dataCategoryCompletion = {
             suggest: function (term) {
-                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term);
+                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term, true, true);
                 terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
                 return terms
             },
@@ -327,7 +327,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                 $scope.currentFieldType = "action";
             },
             suggest: function (term) {
-                return TaxonomyService.lookup("action", DocumentModel.document.locale, term)
+                return TaxonomyService.lookup("action", DocumentModel.document.locale, term, true, true)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -356,7 +356,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     $scope.newCategoryCompletion = {
         suggest: function (term) {
-            return TaxonomyService.lookup($scope.currentFieldType, DocumentModel.document.locale, term, true);
+            return TaxonomyService.lookup($scope.currentFieldType, DocumentModel.document.locale, term, true, true);
         },
         on_select: function (category) {
             controller.newTerm.category = category;
