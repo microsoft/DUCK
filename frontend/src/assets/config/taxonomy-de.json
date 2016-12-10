@@ -290,7 +290,7 @@
       "fixed": true
     },
     {
-      "value": "vermarkten",
+      "value": "vermarkten anbieten oder promoten",
       "code": "market",
       "category": "5",
       "fixed": true
@@ -308,39 +308,27 @@
       "fixed": true
     },
     {
-      "value": "anbieten",
-      "code": "advertise",
-      "category": "6",
-      "fixed": true
-    },
-    {
       "value": "auf der Grundlage der kontextuellen Informationen anbieten",
       "code": "advertise_contextual",
-      "category": "6.1",
+      "category": "5.3",
       "fixed": true
     },
     {
       "value": "auf der Grundlage der Personalisierung anbieten",
       "code": "advertise_personalization",
-      "category": "6.2",
-      "fixed": true
-    },
-    {
-      "value": "promoten",
-      "code": "promote",
-      "category": "7",
+      "category": "5.4",
       "fixed": true
     },
     {
       "value": "auf der Grundlage der kontextuellen Informationen promoten",
       "code": "promote_contextual",
-      "category": "7.1",
+      "category": "5.5",
       "fixed": true
     },
     {
       "value": "auf der Grundlage der Personalisierung promoten",
       "code": "promote_personalization",
-      "category": "7.2",
+      "category": "5.6",
       "fixed": true
     },
     {

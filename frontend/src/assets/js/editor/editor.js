@@ -328,7 +328,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
                 $scope.currentFieldType = "action";
             },
             suggest: function (term) {
-                return TaxonomyService.lookup("action", DocumentModel.document.locale, term, true, true)
+                return TaxonomyService.lookup("action", DocumentModel.document.locale, term, false, true)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
