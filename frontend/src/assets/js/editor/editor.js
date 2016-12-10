@@ -133,7 +133,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         }
         DocumentModel.addStatement({
             useScope: null,
-            qualifier: null,
+            qualifier: TaxonomyService.findTerm("qualifier", "identified_data", DocumentModel.document.locale, "identified") ,
             dataCategory: null,
             sourceScope: null,
             action: null,
