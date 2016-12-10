@@ -1,32 +1,34 @@
-<div class="row padding-bottom-0-5">
-    <form>
-        <div mass-autocomplete>
-            <div ng-init="context={currentField: null}" ng-if="!statement.passive"
-                 ng-include="editorController.getLocalePrefix()+'-edit.html'"></div>
-            <div ng-init="context={currentField: null}" ng-if="statement.passive"
-                 ng-include="editorController.getLocalePrefix()+'-edit-passive.html'"></div>
-        </div>
-    </form>
-</div>
+<div ng-show="!editorController.preview">
+    <div class="row padding-bottom-0-5">
+        <form>
+            <div mass-autocomplete>
+                <div ng-init="context={currentField: null}" ng-if="!statement.passive"
+                     ng-include="editorController.getLocalePrefix()+'-edit.html'"></div>
+                <div ng-init="context={currentField: null}" ng-if="statement.passive"
+                     ng-include="editorController.getLocalePrefix()+'-edit-passive.html'"></div>
+            </div>
+        </form>
+    </div>
 
-
-<div class="row">
-    <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
-        <div ng-repeat="error in statement.errors" class="padding-top-0-5">
-            <error-label fragment="error"></error-label>
-            <span>{{error.message}}</span>
+    <div class="row">
+        <div class="callout secondary" ng-show="editorController.hasErrors(statement)">
+            <div ng-repeat="error in statement.errors" class="padding-top-0-5">
+                <error-label fragment="error"></error-label>
+                <span>{{error.message}}</span>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row padding-top-1  padding-bottom-0-5" ng-show="!editorController.emptyStatement(statement)">
-    <div class="row column">
-        <div ng-if="!statement.passive"
-             ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
-        <div ng-if="statement.passive"
-             ng-include="editorController.getLocalePrefix()+'-preview-passive.html'"></div>
+<div ng-show="editorController.preview">
+    <div class="row  padding-bottom-0-5" ng-show="!editorController.emptyStatement(statement)">
+        <div class="row column">
+            <div ng-if="!statement.passive"
+                 ng-include="editorController.getLocalePrefix()+'-preview.html'"></div>
+            <div ng-if="statement.passive"
+                 ng-include="editorController.getLocalePrefix()+'-preview-passive.html'"></div>
+        </div>
     </div>
+
 </div>
-
-
 

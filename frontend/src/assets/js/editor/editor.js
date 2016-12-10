@@ -11,6 +11,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     controller.assumptionSets = AssumptionSetService.getAssumptionSets();
 
     controller.filterStatement = null; // statement groups to filter on; provided as part of the validation result
+    controller.preview = false;
 
     controller.filterOnStatement = function (statement) {
         // This will trigger the 'compatibleFilter' filter to remove statements determined (from validation) not compatible with the
