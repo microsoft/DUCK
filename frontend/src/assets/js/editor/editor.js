@@ -282,7 +282,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.qualifierCompletion = {
             suggest: function (term) {
-                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term, true, true)
+                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term, false, true)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
