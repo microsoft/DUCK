@@ -39,6 +39,7 @@ function loadConfig() {
 gulp.task("build",
     gulp.series(clean, backend, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy)));
 
+
 // build the distribution
 gulp.task("distro",
     gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy), copyWeb, copyConfig, copyRuleBases, copyBinary, zipit));
@@ -51,6 +52,7 @@ gulp.task("default",
 function clean(done) {
     rimraf(PATHS.dist, done);
     rimraf("./image", done);
+    done();
 }
 
 function copyWeb() {
@@ -80,7 +82,7 @@ function zipit() {
 }
 
 // Copy files out of the assets folder. This task skips over the "img", "js", and "scss" folders, which are parsed separately
-function copy() {
+function copy(done) {
     return gulp.src(PATHS.assets)
         .pipe(gulp.dest(PATHS.dist + "/assets"));
 }
