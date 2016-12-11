@@ -161,7 +161,15 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
             $log.error("Unknown locale when looking up symbol type '" + type + "': " + locale);
             return false;
         }
-        return symbolTable.values.includes(term);
+        var included = false;
+        symbolTable.values.forEach(function (value) {
+            if (value === term) {
+                included = true;
+            }
+        });
+        return included;
+        // don't use includes as IE 11 does not support it
+        // return symbolTable.values.includes(term);
     };
 
     /**
