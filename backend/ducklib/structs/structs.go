@@ -44,7 +44,7 @@ type Statement struct {
 	ActionCode       string  `json:"actionCode"`
 	ResultScopeCode  string  `json:"resultScopeCode"`
 	TrackingID       string  `json:"trackingId"`
-	Tag              *string `json:"tag,omitempty`
+	Tag              *string `json:"tag,omitempty"`
 	Passive          bool    `json:"passive"`
 }
 

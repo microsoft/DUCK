@@ -3,7 +3,7 @@ var gatewayModule = angular.module("duck.gateway");
 /**
  * Manages synchronization of user statement documents with the backend.
  */
-gatewayModule.service('DataUseDocumentService', function (CurrentUser, NotificationService, UUID, $http, $q) {
+gatewayModule.service('DataUseDocumentService', function (CurrentUser, NotificationService, UUID, $http, $q, ObjectUtils) {
 
     var context = this;
     context.runServer = true;
@@ -328,7 +328,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
 
     this.copyStatements = function (document, data) {
         document.statements.forEach(function (statement) {
-            data.statements.push({
+            var newStatement = {
                 trackingId: statement.trackingId,
                 actionCode: statement.actionCode,
                 dataCategoryCode: statement.dataCategoryCode,
@@ -337,7 +337,11 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
                 sourceScopeCode: statement.sourceScopeCode,
                 useScopeCode: statement.useScopeCode,
                 passive: statement.passive
-            })
+            };
+            if (ObjectUtils.notNull(statement.tag)) {
+                newStatement.tag = statement.tag;
+            }
+            data.statements.push(newStatement)
         });
     }
 
