@@ -37,14 +37,15 @@ type Document struct {
 
 //A Statement struct represents one Statement in a document
 type Statement struct {
-	UseScopeCode     string `json:"useScopeCode"`
-	QualifierCode    string `json:"qualifierCode"`
-	DataCategoryCode string `json:"dataCategoryCode"`
-	SourceScopeCode  string `json:"sourceScopeCode"`
-	ActionCode       string `json:"actionCode"`
-	ResultScopeCode  string `json:"resultScopeCode"`
-	TrackingID       string `json:"trackingId"`
-	Passive          bool   `json:"passive"`
+	UseScopeCode     string  `json:"useScopeCode"`
+	QualifierCode    string  `json:"qualifierCode"`
+	DataCategoryCode string  `json:"dataCategoryCode"`
+	SourceScopeCode  string  `json:"sourceScopeCode"`
+	ActionCode       string  `json:"actionCode"`
+	ResultScopeCode  string  `json:"resultScopeCode"`
+	TrackingID       string  `json:"trackingId"`
+	Tag              *string `json:"tag,omitempty`
+	Passive          bool    `json:"passive"`
 }
 
 type DictionaryEntry struct {
