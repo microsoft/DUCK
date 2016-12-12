@@ -290,7 +290,7 @@
       "fixed": true
     },
     {
-      "value": "market",
+      "value": "market promote or advertise",
       "code": "market",
       "category": "5",
       "fixed": true
@@ -308,39 +308,27 @@
       "fixed": true
     },
     {
-      "value": "advertise",
-      "code": "advertise",
-      "category": "6",
-      "fixed": true
-    },
-    {
       "value": "advertise based on contextual information",
       "code": "advertise_contextual",
-      "category": "6.1",
+      "category": "5.3",
       "fixed": true
     },
     {
       "value": "advertise based on personalization",
       "code": "advertise_personalization",
-      "category": "6.2",
-      "fixed": true
-    },
-    {
-      "value": "promote",
-      "code": "promote",
-      "category": "7",
+      "category": "5.4",
       "fixed": true
     },
     {
       "value": "promote based on contextual information",
       "code": "promote_contextual",
-      "category": "7.1",
+      "category": "5.5",
       "fixed": true
     },
     {
       "value": "promote based on personalization",
       "code": "promote_personalization",
-      "category": "7.2",
+      "category": "5.6",
       "fixed": true
     },
     {

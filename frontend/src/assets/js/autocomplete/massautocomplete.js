@@ -278,10 +278,10 @@ angular.module('MassAutoComplete', [])
                             // Navigate the menu when it's open. When it's not open fall back
                             // to default behavior.
                             case KEYS.TAB:
-                                if (!$scope.show_autocomplete)
+                                // uncomment to enable tab next item: if (!$scope.show_autocomplete)
                                     break;
 
-                                e.preventDefault();
+                                // uncomment to enable tab next item: e.preventDefault();
                             /* falls through */
 
                             // Open the menu when results exists but are not displayed. Or,

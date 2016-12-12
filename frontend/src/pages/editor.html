@@ -45,6 +45,10 @@
                        ng-attr-title="{{'download'|translate}}">
                         <i class="fa fa-download"></i>
                     </a>
+                    <a class="button hollow" ng-click="editorController.preview = !editorController.preview"
+                       ng-attr-title="'Toggle Preview'">
+                        <i class="fa fa-file-text-o"></i>
+                    </a>
                     <!--<a class="button hollow" ng-click="editorController.exportDocument()"-->
                        <!--ng-attr-title="{{'export'|translate}}">-->
                         <!--<i class="fa fa-code"></i>-->
@@ -94,7 +98,7 @@
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
                     <li data-ng-repeat="statement in document.statements | compatibleFilter : editorController.filterStatement" data-as-sortable-item
                         ng-class="{'diff-remove': statement._diff}">
-                        <div data-as-sortable-item-handle>
+                        <div > <!-- add  directive to enable sort: data-as-sortable-item-handle ->
                             <div class="row" ng-attr-id="{{statement.trackingId}}" >
                                 <!--{{editorController.filterStatement === statement}}&#45;&#45;&#45;&#45;&#45;&#45;-->
                                 <div class="small-3 columns">

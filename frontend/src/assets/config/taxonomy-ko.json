@@ -289,7 +289,7 @@
       "fixed": true
     },
     {
-      "value": "시장",
+      "value": "시장 광고 홍보",
       "code": "market",
       "category": "5",
       "fixed": true
@@ -307,39 +307,27 @@
       "fixed": true
     },
     {
-      "value": "광고",
-      "code": "advertise",
-      "category": "6",
-      "fixed": true
-    },
-    {
       "value": "컨텍스츄얼 정보 기반 광고",
       "code": "advertise_contextual",
-      "category": "6.1",
+      "category": "5.3",
       "fixed": true
     },
     {
       "value": "개인화 기반 광고",
       "code": "advertise_personalization",
-      "category": "6.2",
-      "fixed": true
-    },
-    {
-      "value": "홍보",
-      "code": "promote",
-      "category": "7",
+      "category": "5.4",
       "fixed": true
     },
     {
       "value": "컨텍스츄얼 기반 홍보",
       "code": "promote_contextual",
-      "category": "7.1",
+      "category": "5.5",
       "fixed": true
     },
     {
       "value": "개인화 기반 홍보",
       "code": "promote_personalization",
-      "category": "7.2",
+      "category": "5.6",
       "fixed": true
     },
     {
