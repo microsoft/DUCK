@@ -101,6 +101,13 @@ func stmtFromInterfaceMap(mp map[string]interface{}) structs.Statement {
 	s.ActionCode = getFieldValue(mp, "actionCode")
 	s.ResultScopeCode = getFieldValue(mp, "resultScopeCode")
 	s.TrackingID = getFieldValue(mp, "trackingId")
+
+	//set Tag only if it is not empty,
+	//when we set tag to an empty string we cannot return null
+	if tag := getFieldValue(mp, "tag"); tag != "" {
+		s.Tag = &tag
+	}
+
 	s.Passive = getFieldBooleanValue(mp, "passive")
 
 	return s

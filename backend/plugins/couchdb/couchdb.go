@@ -382,6 +382,9 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 		stmt["actionCode"] = statement.ActionCode
 		stmt["resultScopeCode"] = statement.ResultScopeCode
 		stmt["trackingId"] = statement.TrackingID
+		if statement.Tag != nil {
+			stmt["tag"] = *statement.Tag
+		}
 
 		if statement.Passive {
 			stmt["passive"] = "true"
