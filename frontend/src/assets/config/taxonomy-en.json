@@ -70,7 +70,7 @@
       "fixed": true
     },
     {
-      "value": "aggregated data",
+      "value": "aggregated",
       "code": "aggregated_data",
       "category": "5",
       "fixed": true
@@ -78,7 +78,7 @@
   ],
   "dataCategory": [
     {
-      "value": "customer content",
+      "value": "customer content data",
       "code": "customer_content",
       "category": "1",
       "fixed": true
@@ -144,13 +144,13 @@
       "fixed": false
     },
     {
-      "value": "telemetry",
+      "value": "telemetry data",
       "code": "derived_data_user_telemetry",
       "category": "2.1.1",
       "fixed": false
     },
     {
-      "value": "connectivity",
+      "value": "connectivity data",
       "code": "derived_data_user_connectivity",
       "category": "2.1.2",
       "fixed": false
@@ -174,7 +174,7 @@
       "fixed": false
     },
     {
-      "value": "content consumption",
+      "value": "content consumption data",
       "code": "derived_data_user_content",
       "category": "2.1.6",
       "fixed": false
@@ -252,7 +252,7 @@
       "fixed": true
     },
     {
-      "value": "customer contact information",
+      "value": "account or administration contact information",
       "code": "account_data_customer",
       "category": "4.1",
       "fixed": false
