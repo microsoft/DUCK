@@ -70,7 +70,7 @@
       "fixed": true
     },
     {
-      "value": "aggregierte daten",
+      "value": "angesammelte",
       "code": "aggregated_data",
       "category": "5",
       "fixed": true
@@ -144,13 +144,13 @@
       "fixed": false
     },
     {
-      "value": "Telemetrie",
+      "value": "Telemetriedaten",
       "code": "derived_data_user_telemetry",
       "category": "2.1.1",
       "fixed": false
     },
     {
-      "value": "Verbindung",
+      "value": "Verbindungsdaten",
       "code": "derived_data_user_connectivity",
       "category": "2.1.2",
       "fixed": false
@@ -174,7 +174,7 @@
       "fixed": false
     },
     {
-      "value": "Konsum von Inhalten",
+      "value": "Daten zum Konsum von Inhalten",
       "code": "derived_data_user_content",
       "category": "2.1.6",
       "fixed": false
