@@ -1,6 +1,14 @@
+# Installation & Start
+
+For instructions on how to install and start this programm please follow the 
+step-by-step instructions provided on the [download page](https://github.com/Microsoft/DUCK/releases).
+
+# Usage
+
 ## Account Creation
 
-The first time after starting the DUCK application a new useraccount has to be created.
+The first time after starting the DUCK application a new 
+useraccount has to be created. 
 
 
 ## Overwiev
@@ -9,9 +17,10 @@ After logging in the document overview  is shown. On this site existing document
 Already populated testdocuments can be created by using the `Create Test Document` button on the upper right.
 The  testdocuments are named after their validation result. As an example, the `No PII Example` testdocument will have no statement that relates to PII.
 
-When hovering over a document, two actions become visible:
+When hovering over a document, three actions become visible:
    - A `Edit` Button which opens the document view and
    - An icon of a bin which will delete that document
+   - An icon of a paper sheet behind another one which will create a copy of this document
 
 ## Document view
 
@@ -26,13 +35,24 @@ The right set of buttons controls the documents language and the form of the sta
 
 ### Statements
 
-- each statement is shown in seperate box
-- has ISO 19944 fields
-- dropdown for each field
-- Buttons:
-    - Active/passive
-    - cops statement
-    - delete statement
+Each statement is shown in its own box. Each box contains the statement as a natural sentence.
+The colored parts of the statement are editable, by clicking on it and then pressing the down arrow,
+ and represent the fields defined in ISO 19944.
+In each box are also an input field for a tag to identify this statement and four buttons. The first two buttons,
+`Active` and `Passive` switch the state of only this statement, independent of the documents state. 
+The other two are already known from the overview and are used to copy and delete this statement.
+
+
+#### Custom Terms
+It is possible to create ustom terms for scope and data category by opening the dropdown menue 
+(click on field & press arrow down key) and then scrolling to the bottom to the `New term...` control.
+
+A new window pops up where the custom term can be defined. The first input field is for 
+the terms name and the second for the category the term should be placed. 
+
+In DUCK are two types of dictionaries in which a custom term can be stored:
+- Document dictionary: the custom term is only accessible for this Document
+- global dictionary: the custom term is accessible in the whole application
 
 
 ### Validation
