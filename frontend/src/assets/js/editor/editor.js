@@ -376,7 +376,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
     controller.addTerm = function () {
         var dictionaryType = controller.newTerm.dictionary === "document" ? "document" : "global";
         var code = controller.newTerm.value.split(" ").join("").toLowerCase(); // replace blank lines and convert to lowercase
-        var categoryCode = TaxonomyService.findCode(DocumentModel.currentFieldType, controller.newTerm.categoryValue, DocumentModel.document.locale, controller.newTerm.categoryValue);
+        var categoryCode = TaxonomyService.findCategory(DocumentModel.currentFieldType, controller.newTerm.categoryValue, DocumentModel.document.locale, controller.newTerm.categoryValue);
         DocumentModel.addTerm(DocumentModel.currentFieldType, code, categoryCode, controller.newTerm.value, dictionaryType);
         var statement = DocumentModel.getCurrentStatement();
         statement[DocumentModel.currentField] = controller.newTerm.value;
