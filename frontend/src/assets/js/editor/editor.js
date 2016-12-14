@@ -134,7 +134,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         }
         DocumentModel.addStatement({
             useScope: null,
-            qualifier: TaxonomyService.findTerm("qualifier", "identified_data", DocumentModel.document.locale, "identified") ,
+            qualifier: TaxonomyService.findTerm("qualifier", "identified_data", DocumentModel.document.locale, "identified"),
             dataCategory: null,
             sourceScope: null,
             action: null,
@@ -195,7 +195,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
          * @return {Array} suggestions matching the input text
          */
         var scopeSuggest = function (term) {
-            var terms = TaxonomyService.lookup("scope", DocumentModel.document.locale, term, true, true);
+            var terms = TaxonomyService.lookup("scope", DocumentModel.document.locale, term, false, true);
             terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
             return terms
         };
@@ -211,6 +211,8 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         var scopeAttach = function (fieldName) {
             $scope.currentField = fieldName;
             $scope.currentFieldType = "scope";
+            DocumentModel.currentFieldType = "scope";  // used to tunnel to new term modal; look to refactor
+            DocumentModel.currentField = fieldName;
             DocumentModel.document.statements.forEach(function (statement) {
                 // Register a watch all all use scopes of statements being edited. The watches monitor for the new term option selected by the user.
                 // If this occurs, an event to open the new term dialog is fired
@@ -292,13 +294,16 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.dataCategoryCompletion = {
             suggest: function (term) {
-                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term, true, true);
+                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term, false, true);
                 terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
                 return terms
             },
             on_attach: function (value) {
                 $scope.currentField = "dataCategory";
                 $scope.currentFieldType = "dataCategory";
+                DocumentModel.currentFieldType = "dataCategory";  // used to tunnel to new term modal; look to refactor
+                DocumentModel.currentField = "dataCategory";
+
                 DocumentModel.document.statements.forEach(function (statement) {
                     var unregister = $scope.$watch(function () {
                         return statement.dataCategory
@@ -326,6 +331,9 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         $scope.actionCompletion = {
             on_attach: function (value) {
                 $scope.currentFieldType = "action";
+                DocumentModel.currentFieldType = "action";  // used to tunnel to new term modal; look to refactor
+                DocumentModel.currentField = "action";
+
             },
             suggest: function (term) {
                 return TaxonomyService.lookup("action", DocumentModel.document.locale, term, false, true)
@@ -357,7 +365,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     $scope.newCategoryCompletion = {
         suggest: function (term) {
-            return TaxonomyService.lookup($scope.currentFieldType, DocumentModel.document.locale, term, true, true);
+            return TaxonomyService.lookup(DocumentModel.currentFieldType, DocumentModel.document.locale, term, true, true);
         },
         on_select: function (category) {
             controller.newTerm.category = category;
@@ -367,9 +375,10 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     controller.addTerm = function () {
         var dictionaryType = controller.newTerm.dictionary === "document" ? "document" : "global";
-        DocumentModel.addTerm($scope.currentFieldType, controller.newTerm.value, controller.newTerm.category.category, controller.newTerm.value, dictionaryType);
+        var code = controller.newTerm.value.split(" ").join("").toLowerCase(); // replace blank lines and convert to lowercase
+        DocumentModel.addTerm(DocumentModel.currentFieldType, code, controller.newTerm.category, controller.newTerm.value, dictionaryType);
         var statement = DocumentModel.getCurrentStatement();
-        statement[$scope.currentField] = controller.newTerm.value;
+        statement[DocumentModel.currentField] = controller.newTerm.value;
         DocumentModel.clearCurrentStatement();
         controller.clear();
     };

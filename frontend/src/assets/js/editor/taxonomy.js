@@ -286,7 +286,8 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
     };
 
     this.formatLabel = function (entry) {
-        var offset = entry.category.split('.').length * 5;
+
+        var offset = entry.category === undefined || entry.category.indexOf(".") <= 0 ? 0 : entry.category.split('.').length * 5;
         var offsetString = "";
         for (var i = 0; i < offset; i++) {
             offsetString = offsetString + "&nbsp;";

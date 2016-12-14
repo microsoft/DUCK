@@ -50,8 +50,8 @@
                         <i class="fa fa-file-text-o"></i>
                     </a>
                     <!--<a class="button hollow" ng-click="editorController.exportDocument()"-->
-                       <!--ng-attr-title="{{'export'|translate}}">-->
-                        <!--<i class="fa fa-code"></i>-->
+                    <!--ng-attr-title="{{'export'|translate}}">-->
+                    <!--<i class="fa fa-code"></i>-->
                     <!--</a>-->
                 </div>
                 <div class="button-group small float-right noselect">
@@ -98,54 +98,55 @@
                 <ul data-as-sortable="editorController.dragControlListeners" data-ng-model="document.statements">
                     <li data-ng-repeat="statement in document.statements | compatibleFilter : editorController.filterStatement" data-as-sortable-item
                         ng-class="{'diff-remove': statement._diff}">
-                        <div > <!-- add  directive to enable sort: data-as-sortable-item-handle ->
+                        <div> <!-- add  directive to enable sort: data-as-sortable-item-handle ->
                             <div class="row" ng-attr-id="{{statement.trackingId}}" >
                                 <!--{{editorController.filterStatement === statement}}&#45;&#45;&#45;&#45;&#45;&#45;-->
-                                <div class="small-3 columns">
-                                    <div class="button-group tiny noselect">
-                                        <a class="button secondary" ng-class="{'hollow':statement.passive}"
-                                           ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
-                                        <a class="button secondary" ng-class="{'hollow':!statement.passive}"
-                                           ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
-                                        <a class="button secondary hollow" ng-click="editorController.duplicateStatement(statement)">
-                                            <i class="fa fa-copy medium-gray"></i> </a>
-                                        <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)">
-                                            <i class="fa fa-trash medium-gray"></i> </a>
-                                    </div>
+                            <div class="small-3 columns">
+                                <div class="button-group tiny noselect">
+                                    <a class="button secondary" ng-class="{'hollow':statement.passive}"
+                                       ng-click="editorController.makeActive(statement)">{{"active"|translate}}</a>
+                                    <a class="button secondary" ng-class="{'hollow':!statement.passive}"
+                                       ng-click="editorController.makePassive(statement)">{{"passive"|translate}}</a>
+                                    <a class="button secondary hollow" ng-click="editorController.duplicateStatement(statement)">
+                                        <i class="fa fa-copy medium-gray"></i> </a>
+                                    <a class="button secondary hollow" ng-click="editorController.deleteStatement(statement)">
+                                        <i class="fa fa-trash medium-gray"></i> </a>
                                 </div>
-                                <div class="small-7 text-right columns" ng-if="statement.$$statementExplanation">
+                            </div>
+
+                            <div class="small-7 text-right columns" ng-if="statement.$$statementExplanation">
                                     <span class="label padding-right-1 right"
                                           ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.consentRequired.value === true}">
                                         {{'consent_not_required'|translate}}
                                     </span>
-                                    <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
+                                <span class="label padding-right-1 right"
+                                      ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.consentRequired.value === false}">
                                         {{'consent_required'|translate}}
                                     </span>
-                                    <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
+                                <span class="label padding-right-1 right"
+                                      ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.pii.value === true}">
                                         {{'does_not_relate_to_pii'|translate}}
                                     </span>
-                                    <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
+                                <span class="label padding-right-1 right"
+                                      ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.pii.value === false}">
                                         {{'relates_pii'|translate}}
                                     </span>
-                                    <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
+                                <span class="label padding-right-1 right"
+                                      ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.li.value === true}">
                                         {{'no_legitimate_interest'|translate}}
                                     </span>
-                                    <span class="label padding-right-1 right"
-                                          ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
+                                <span class="label padding-right-1 right"
+                                      ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.li.value === false}">
                                         {{'legitimate_interest'|translate}}
                                     </span>
-                                </div>
-                                <div class="small-2 right columns">
+                            </div>
+                            <div class="small-2 right columns">
                                     <span class="button-group tiny float-right noselect">
                                         <a ng-if="editorController.isComplianceChecked() && !editorController.filtering()"
                                            class="button hollow"
@@ -158,63 +159,69 @@
                                             {{'main_statement'|translate}}
                                         </span>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="row noselect">
-                                <div class="small-12 columns">
-                                    <del ng-if="statement._diff">
-                                        <div ng-include="'editor.statement.html'"></div>
-                                    </del>
-                                    <div ng-if="!statement._diff" ng-include="'editor.statement.html'"></div>
-                                </div>
                             </div>
                         </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="row columns text-center padding-top-6" ng-if="editorController.noDocument">
-        <i class="fa fa-4x fa-exclamation-triangle medium-gray" aria-hidden="true"></i>
-        <h5>{{"no_document_found"|no_document_found}}</h5>
-    </div>
+                        <div class="row noselect">
+                            <div class="small-12 columns">
+                                <div class=" small-2 padding-left-1">
+                                    <input type="text" class="small " style="font-size: 80% !important" placeholder="tag" ng-model="statement.tag">
+                                </div>
+                            </div>
+                            <div class="small-12 columns">
 
-    <!-- Mass autocomplete div needs to wrap reveal div to workaround positioning problem described here:
-         https://github.com/hakib/MassAutocomplete/issues/13 -->
-    <div ng-controller="NewTermController as termController">
-        <div mass-autocomplete>
-            <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" data-close-on-click="false">
-                <h4>{{"new_term"|translate}}</h4>
-                <form name="newTermForm">
-                    <div class="row padding-top-1">
-                        <input style="min-width: 350px" ng-model="termController.newTerm.value" required>
-                    </div>
-                    <div class="row padding-top-1">
-                        <label>{{"category"|translate}}</label>
-                    </div>
-                    <div class="row">
-                        <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.categoryValue"
-                               mass-autocomplete-item="newCategoryCompletion" required>
-                    </div>
-                    <div class="row padding-top-1">
-                        <fieldset>
-                            <legend>{{"dictionary"|translate}}</legend>
-                            <input type="radio" name="dictionary" value="document" id="docDictionary" ng-model="termController.newTerm.dictionary"
-                                   checked="checked">
-                            <label for="docDictionary">{{"document"|translate}}</label>
-                            <input type="radio" name="dictionary" value="global" id="globalDictionary" ng-model="termController.newTerm.dictionary" required>
-                            <label for="globalDictionary">{{"global"|translate}}</label>
-                        </fieldset>
-                    </div>
-                    <div class="float-right padding-top-2">
-                        <div class="column">
-                            <a class="button small secondary" ng-click="termController.clear()" data-close>{{"cancel_action"|translate}}</a>
-                            <a class="button small" data-close ng-disabled="newTermForm.$invalid"
-                               ng-click="termController.addTerm()">{{"add_action"|translate}}</a>
+                                <del ng-if="statement._diff">
+                                    <div ng-include="'editor.statement.html'"></div>
+                                </del>
+                                <div ng-if="!statement._diff" ng-include="'editor.statement.html'"></div>
+                            </div>
                         </div>
-                    </div>
-                </form>
             </div>
+            </li>
+            </ul>
         </div>
     </div>
+</div>
+<div class="row columns text-center padding-top-6" ng-if="editorController.noDocument">
+    <i class="fa fa-4x fa-exclamation-triangle medium-gray" aria-hidden="true"></i>
+    <h5>{{"no_document_found"|no_document_found}}</h5>
+</div>
+
+<!-- Mass autocomplete div needs to wrap reveal div to workaround positioning problem described here:
+     https://github.com/hakib/MassAutocomplete/issues/13 -->
+<div ng-controller="NewTermController as termController">
+    <div mass-autocomplete>
+        <div class="reveal tiny" id="newTerm" data-reveal data-overlay="false" data-close-on-click="false">
+            <h4>{{"new_term"|translate}}</h4>
+            <form name="newTermForm">
+                <div class="row padding-top-1">
+                    <input style="min-width: 350px" ng-model="termController.newTerm.value" required>
+                </div>
+                <div class="row padding-top-1">
+                    <label>{{"category"|translate}}</label>
+                </div>
+                <div class="row">
+                    <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.categoryValue"
+                           mass-autocomplete-item="newCategoryCompletion" required>
+                </div>
+                <div class="row padding-top-1">
+                    <fieldset>
+                        <legend>{{"dictionary"|translate}}</legend>
+                        <input type="radio" name="dictionary" value="document" id="docDictionary" ng-model="termController.newTerm.dictionary"
+                               checked="checked">
+                        <label for="docDictionary">{{"document"|translate}}</label>
+                        <input type="radio" name="dictionary" value="global" id="globalDictionary" ng-model="termController.newTerm.dictionary" required>
+                        <label for="globalDictionary">{{"global"|translate}}</label>
+                    </fieldset>
+                </div>
+                <div class="float-right padding-top-2">
+                    <div class="column">
+                        <a class="button small secondary" ng-click="termController.clear()" data-close>{{"cancel_action"|translate}}</a>
+                        <a class="button small" data-close ng-disabled="newTermForm.$invalid"
+                           ng-click="termController.addTerm()">{{"add_action"|translate}}</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </div>
