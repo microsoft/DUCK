@@ -79,6 +79,19 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
         return (defaultValue) ? defaultValue : null;
     };
 
+    this.findCategory = function (type, term, locale, defaultValue) {
+        var symbolTable = context.getSymbolTable(type, locale);
+        if (symbolTable === null) {
+            return (defaultValue) ? defaultValue : null;
+        }
+        for (var i = 0; i < symbolTable.entries.length; i++) {
+            if (symbolTable.entries[i].value === term) {
+                return symbolTable.entries[i].category;
+            }
+        }
+        return (defaultValue) ? defaultValue : null;
+    };
+
     /**
      * Performs a fuzzy lookup of a set of values matching the given term.
      *
