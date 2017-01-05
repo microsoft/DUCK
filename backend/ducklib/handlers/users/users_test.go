@@ -16,7 +16,6 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	_ "github.com/Microsoft/DUCK/backend/plugins/mockdb"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/standard"
 )
 
 var (
@@ -89,7 +88,7 @@ func testPostUser(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 		err = uh.PostUser(c)
 		if err != nil {
 			t.Errorf("Test with %s: Error creating User during post:%s", key, err)
@@ -153,7 +152,7 @@ func testPostUserAgain(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 		err = uh.PostUser(c)
 		if err != nil {
 			t.Errorf("Test with %s: Error creating User during post:%s", key, err)
@@ -188,7 +187,7 @@ func testLogin(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 
 		err = uh.Login(c)
 
@@ -277,7 +276,7 @@ func testWrongLogin(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 
 		err = uh.Login(c)
 
@@ -310,7 +309,7 @@ func testPutUser(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 		c.SetParamNames("id")
 		c.SetParamValues(value.User.ID)
 		err = uh.PutUser(c)
@@ -354,7 +353,7 @@ func testDeleteUser(t *testing.T) {
 		}
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 
 		c.SetParamNames("id")
 		c.SetParamValues(userIDs[key])

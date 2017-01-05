@@ -200,11 +200,12 @@ func (h *Handler) Login(c echo.Context) error {
 		token := jwt.New(jwt.SigningMethodHS256)
 
 		// Set claims
-		token.Claims["firstName"] = user.Firstname
-		token.Claims["lastName"] = user.Lastname
-		token.Claims["id"] = user.ID
-		token.Claims["permissions"] = 1024 //FIXME
-		token.Claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
+		claims := token.Claims.(jwt.MapClaims)
+		claims["firstName"] = user.Firstname
+		claims["lastName"] = user.Lastname
+		claims["id"] = user.ID
+		claims["permissions"] = 1024 //FIXME
+		claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
 
 		// Generate encoded token and send it as response.
 		t, err := token.SignedString([]byte(h.JWT))

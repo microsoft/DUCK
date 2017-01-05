@@ -8,7 +8,6 @@ import (
 
 	"github.com/Microsoft/DUCK/backend/ducklib"
 	"github.com/Microsoft/DUCK/backend/ducklib/config"
-	"github.com/labstack/echo/engine/standard"
 
 	//Database lugin, change this if you have another Plugin/database
 	_ "github.com/Microsoft/DUCK/backend/plugins/couchdb"
@@ -50,6 +49,6 @@ func main() {
 	e := ducklib.GetServer(conf)
 
 	//start server
-	e.Run(standard.New(":3000"))
+	e.Logger.Fatal(e.Start(":3000"))
 
 }

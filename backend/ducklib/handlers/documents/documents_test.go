@@ -16,7 +16,6 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	_ "github.com/Microsoft/DUCK/backend/plugins/mockdb"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/standard"
 )
 
 var (
@@ -96,7 +95,7 @@ func testpostDoc(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 		err = doh.PostDoc(c)
 		if err != nil {
 			t.Errorf("Test with %s: Error creating Document during post:%s", key, err)
@@ -168,7 +167,7 @@ func testPutDoc(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 		err = doh.PutDoc(c)
 		if err != nil {
 			t.Errorf("Test with %s: Error creating User during post:%s", key, err)
@@ -215,7 +214,7 @@ func testGetDoc(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 
 		c.SetParamNames("docid")
 		c.SetParamValues(documentIDs[key])
@@ -297,7 +296,7 @@ func testCopyDoc(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 
 		c.SetParamNames("docid")
 		c.SetParamValues(documentIDs[key])
@@ -376,7 +375,7 @@ func testGetDocSummaries(t *testing.T) {
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 		c.SetParamNames("userid")
 		c.SetParamValues(owner)
 		err = doh.GetDocSummaries(c)
@@ -414,7 +413,7 @@ func testDeleteDoc(t *testing.T) {
 		}
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
-		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+		c := e.NewContext(req, rec)
 
 		c.SetParamNames("docid")
 		c.SetParamValues(documentIDs[key])
