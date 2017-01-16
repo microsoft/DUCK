@@ -1,7 +1,7 @@
 # DUCK Application
 
 **_Attention: These are Instructions for Developers._** If you just want to try DUCK, you might want to download it [here](https://github.com/Microsoft/DUCK/releases).
-A user manual can be found [here](docs/usermanual.md), The DUCK architecture is described [here](docs/architecture.md).
+A user manual can be found [here](docs/usermanual.md), the DUCK architecture is described [here](docs/architecture.md).
 
 
 
@@ -112,8 +112,9 @@ The default configuration has these values:
 
 ##### regarding path variables
 
-If rulebasedir or webdir hae an absolute path it is used as an absolute path.
-If it is a relative path it will be assumed to be relative to the GOPATH environment variable if present. If GOPATH is not found the path is assumed to be relative to the go executable.
+If rulebasedir or webdir have an absolute path it is used as an absolute path.
+If it is a relative path it will be assumed to be relative to the GOPATH environment variable if present. 
+If GOPATH is not found, the path is assumed to be relative to the go executable.
 
 #### env
 The environment variable names are prefixed with DUCK_ and all uppercase. Fields in the database object are referenced using the `.` operator, e.g. 
@@ -139,4 +140,4 @@ Main points are:
 >
 >`1, 0, t, f, T, F, true, false, TRUE, FALSE, True, False`
 
-It is *not* possible to configure the database via flags.
+It is *not* possible to configure the database connection via flags.
