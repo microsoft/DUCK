@@ -1,50 +1,48 @@
 package echo
 
 import (
+	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
-	"mime"
 	"mime/multipart"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
-	"time"
-
-	"github.com/labstack/echo/engine"
-	"github.com/labstack/gommon/log"
-
-	"bytes"
-
-	netContext "golang.org/x/net/context"
+	"strings"
 )
 
 type (
 	// Context represents the context of the current HTTP request. It holds request and
 	// response objects, path, path parameters, data and registered handler.
 	Context interface {
-		netContext.Context
+		// Request returns `*http.Request`.
+		Request() *http.Request
 
-		// NetContext returns `http://blog.golang.org/context.Context` interface.
-		NetContext() netContext.Context
+		// SetRequest sets `*http.Request`.
+		SetRequest(*http.Request)
 
-		// SetNetContext sets `http://blog.golang.org/context.Context` interface.
-		SetNetContext(netContext.Context)
+		// Request returns `*Response`.
+		Response() *Response
 
-		// Request returns `engine.Request` interface.
-		Request() engine.Request
+		// IsTLS returns true if HTTP connection is TLS otherwise false.
+		IsTLS() bool
 
-		// Request returns `engine.Response` interface.
-		Response() engine.Response
+		// Scheme returns the HTTP protocol scheme, `http` or `https`.
+		Scheme() string
+
+		// RealIP returns the client's network address based on `X-Forwarded-For`
+		// or `X-Real-IP` request header.
+		RealIP() string
 
 		// Path returns the registered path for the handler.
 		Path() string
 
 		// SetPath sets the registered path for the handler.
 		SetPath(string)
-
-		// P returns path parameter by index.
-		P(int) string
 
 		// Param returns path parameter by name.
 		Param(string) string
@@ -61,41 +59,35 @@ type (
 		// SetParamValues sets path parameter values.
 		SetParamValues(...string)
 
-		// QueryParam returns the query param for the provided name. It is an alias
-		// for `engine.URL#QueryParam()`.
+		// QueryParam returns the query param for the provided name.
 		QueryParam(string) string
 
-		// QueryParams returns the query parameters as map.
-		// It is an alias for `engine.URL#QueryParams()`.
-		QueryParams() map[string][]string
+		// QueryParams returns the query parameters as `url.Values`.
+		QueryParams() url.Values
 
-		// FormValue returns the form field value for the provided name. It is an
-		// alias for `engine.Request#FormValue()`.
+		// QueryString returns the URL query string.
+		QueryString() string
+
+		// FormValue returns the form field value for the provided name.
 		FormValue(string) string
 
-		// FormParams returns the form parameters as map.
-		// It is an alias for `engine.Request#FormParams()`.
-		FormParams() map[string][]string
+		// FormParams returns the form parameters as `url.Values`.
+		FormParams() (url.Values, error)
 
-		// FormFile returns the multipart form file for the provided name. It is an
-		// alias for `engine.Request#FormFile()`.
+		// FormFile returns the multipart form file for the provided name.
 		FormFile(string) (*multipart.FileHeader, error)
 
 		// MultipartForm returns the multipart form.
-		// It is an alias for `engine.Request#MultipartForm()`.
 		MultipartForm() (*multipart.Form, error)
 
 		// Cookie returns the named cookie provided in the request.
-		// It is an alias for `engine.Request#Cookie()`.
-		Cookie(string) (engine.Cookie, error)
+		Cookie(string) (*http.Cookie, error)
 
 		// SetCookie adds a `Set-Cookie` header in HTTP response.
-		// It is an alias for `engine.Response#SetCookie()`.
-		SetCookie(engine.Cookie)
+		SetCookie(*http.Cookie)
 
 		// Cookies returns the HTTP cookies sent with the request.
-		// It is an alias for `engine.Request#Cookies()`.
-		Cookies() []engine.Cookie
+		Cookies() []*http.Cookie
 
 		// Get retrieves data from the context.
 		Get(string) interface{}
@@ -103,18 +95,12 @@ type (
 		// Set saves data in the context.
 		Set(string, interface{})
 
-		// Del deletes data from the context.
-		Del(string)
-
-		// Contains checks if the key exists in the context.
-		Contains(string) bool
-
 		// Bind binds the request body into provided type `i`. The default binder
 		// does it based on Content-Type header.
 		Bind(interface{}) error
 
 		// Render renders a template with data and sends a text/html response with status
-		// code. Templates can be registered using `Echo.SetRenderer()`.
+		// code. Templates can be registered using `Echo.Renderer`.
 		Render(int, string, interface{}) error
 
 		// HTML sends an HTTP response with status code.
@@ -133,18 +119,31 @@ type (
 		// the JSONP payload.
 		JSONP(int, string, interface{}) error
 
+		// JSONPBlob sends a JSONP blob response with status code. It uses `callback`
+		// to construct the JSONP payload.
+		JSONPBlob(int, string, []byte) error
+
 		// XML sends an XML response with status code.
 		XML(int, interface{}) error
 
 		// XMLBlob sends a XML blob response with status code.
 		XMLBlob(int, []byte) error
 
+		// Blob sends a blob response with status code and content type.
+		Blob(int, string, []byte) error
+
+		// Stream sends a streaming response with status code and content type.
+		Stream(int, string, io.Reader) error
+
 		// File sends a response with the content of the file.
 		File(string) error
 
-		// Attachment sends a response from `io.ReaderSeeker` as attachment, prompting
-		// client to save the file.
-		Attachment(io.ReadSeeker, string) error
+		// Attachment sends a response as attachment, prompting client to save the
+		// file.
+		Attachment(string, string) error
+
+		// Inline sends a response as inline, opening the file in the browser.
+		Inline(string, string) error
 
 		// NoContent sends a response with no body and a status code.
 		NoContent(int) error
@@ -162,71 +161,70 @@ type (
 		SetHandler(HandlerFunc)
 
 		// Logger returns the `Logger` instance.
-		Logger() *log.Logger
+		Logger() Logger
 
 		// Echo returns the `Echo` instance.
 		Echo() *Echo
 
-		// ServeContent sends static content from `io.Reader` and handles caching
-		// via `If-Modified-Since` request header. It automatically sets `Content-Type`
-		// and `Last-Modified` response headers.
-		ServeContent(io.ReadSeeker, string, time.Time) error
-
 		// Reset resets the context after request completes. It must be called along
 		// with `Echo#AcquireContext()` and `Echo#ReleaseContext()`.
 		// See `Echo#ServeHTTP()`
-		Reset(engine.Request, engine.Response)
+		Reset(*http.Request, http.ResponseWriter)
 	}
 
 	context struct {
-		netContext netContext.Context
-		request    engine.Request
-		response   engine.Response
-		path       string
-		pnames     []string
-		pvalues    []string
-		store      store
-		handler    HandlerFunc
-		echo       *Echo
+		request  *http.Request
+		response *Response
+		path     string
+		pnames   []string
+		pvalues  []string
+		query    url.Values
+		handler  HandlerFunc
+		store    Map
+		echo     *Echo
 	}
-
-	store map[string]interface{}
 )
 
 const (
-	indexPage = "index.html"
+	defaultMemory = 32 << 20 // 32 MB
+	indexPage     = "index.html"
 )
 
-func (c *context) NetContext() netContext.Context {
-	return c.netContext
-}
-
-func (c *context) SetNetContext(ctx netContext.Context) {
-	c.netContext = ctx
-}
-
-func (c *context) Deadline() (deadline time.Time, ok bool) {
-	return c.netContext.Deadline()
-}
-
-func (c *context) Done() <-chan struct{} {
-	return c.netContext.Done()
-}
-
-func (c *context) Err() error {
-	return c.netContext.Err()
-}
-
-func (c *context) Value(key interface{}) interface{} {
-	return c.netContext.Value(key)
-}
-
-func (c *context) Request() engine.Request {
+func (c *context) Request() *http.Request {
 	return c.request
 }
 
-func (c *context) Response() engine.Response {
+func (c *context) SetRequest(r *http.Request) {
+	c.request = r
+}
+
+func (c *context) Response() *Response {
 	return c.response
+}
+
+func (c *context) IsTLS() bool {
+	return c.request.TLS != nil
+}
+
+func (c *context) Scheme() string {
+	// Can't use `r.Request.URL.Scheme`
+	// See: https://groups.google.com/forum/#!topic/golang-nuts/pMUkBlQBDF0
+	if c.IsTLS() {
+		return "https"
+	}
+	return "http"
+}
+
+func (c *context) RealIP() string {
+	ra := c.request.RemoteAddr
+	if ip := c.request.Header.Get(HeaderXForwardedFor); ip != "" {
+		ra = ip
+	} else if ip := c.request.Header.Get(HeaderXRealIP); ip != "" {
+		ra = ip
+	} else {
+		ra, _, _ = net.SplitHostPort(ra)
+	}
+	return ra
 }
 
 func (c *context) Path() string {
@@ -237,23 +235,22 @@ func (c *context) SetPath(p string) {
 	c.path = p
 }
 
-func (c *context) P(i int) (value string) {
-	l := len(c.pnames)
-	if i < l {
-		value = c.pvalues[i]
-	}
-	return
-}
-
-func (c *context) Param(name string) (value string) {
-	l := len(c.pnames)
+func (c *context) Param(name string) string {
 	for i, n := range c.pnames {
-		if n == name && i < l {
-			value = c.pvalues[i]
-			break
+		if i < len(c.pvalues) {
+			if n == name {
+				return c.pvalues[i]
+			}
+
+			// Param name with aliases
+			for _, p := range strings.Split(n, ",") {
+				if p == name {
+					return c.pvalues[i]
+				}
+			}
 		}
 	}
-	return
+	return ""
 }
 
 func (c *context) ParamNames() []string {
@@ -273,44 +270,65 @@ func (c *context) SetParamValues(values ...string) {
 }
 
 func (c *context) QueryParam(name string) string {
-	return c.request.URL().QueryParam(name)
+	if c.query == nil {
+		c.query = c.request.URL.Query()
+	}
+	return c.query.Get(name)
 }
 
-func (c *context) QueryParams() map[string][]string {
-	return c.request.URL().QueryParams()
+func (c *context) QueryParams() url.Values {
+	if c.query == nil {
+		c.query = c.request.URL.Query()
+	}
+	return c.query
+}
+
+func (c *context) QueryString() string {
+	return c.request.URL.RawQuery
 }
 
 func (c *context) FormValue(name string) string {
 	return c.request.FormValue(name)
 }
 
-func (c *context) FormParams() map[string][]string {
-	return c.request.FormParams()
+func (c *context) FormParams() (url.Values, error) {
+	if strings.HasPrefix(c.request.Header.Get(HeaderContentType), MIMEMultipartForm) {
+		if err := c.request.ParseMultipartForm(defaultMemory); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := c.request.ParseForm(); err != nil {
+			return nil, err
+		}
+	}
+	return c.request.Form, nil
 }
 
 func (c *context) FormFile(name string) (*multipart.FileHeader, error) {
-	return c.request.FormFile(name)
+	_, fh, err := c.request.FormFile(name)
+	return fh, err
 }
 
 func (c *context) MultipartForm() (*multipart.Form, error) {
-	return c.request.MultipartForm()
+	err := c.request.ParseMultipartForm(defaultMemory)
+	return c.request.MultipartForm, err
 }
 
-func (c *context) Cookie(name string) (engine.Cookie, error) {
+func (c *context) Cookie(name string) (*http.Cookie, error) {
 	return c.request.Cookie(name)
 }
 
-func (c *context) SetCookie(cookie engine.Cookie) {
-	c.response.SetCookie(cookie)
+func (c *context) SetCookie(cookie *http.Cookie) {
+	http.SetCookie(c.Response(), cookie)
 }
 
-func (c *context) Cookies() []engine.Cookie {
+func (c *context) Cookies() []*http.Cookie {
 	return c.request.Cookies()
 }
 
 func (c *context) Set(key string, val interface{}) {
 	if c.store == nil {
-		c.store = make(store)
+		c.store = make(Map)
 	}
 	c.store[key] = val
 }
@@ -319,25 +337,16 @@ func (c *context) Get(key string) interface{} {
 	return c.store[key]
 }
 
-func (c *context) Del(key string) {
-	delete(c.store, key)
-}
-
-func (c *context) Contains(key string) bool {
-	_, ok := c.store[key]
-	return ok
-}
-
 func (c *context) Bind(i interface{}) error {
-	return c.echo.binder.Bind(i, c)
+	return c.echo.Binder.Bind(i, c)
 }
 
 func (c *context) Render(code int, name string, data interface{}) (err error) {
-	if c.echo.renderer == nil {
+	if c.echo.Renderer == nil {
 		return ErrRendererNotRegistered
 	}
 	buf := new(bytes.Buffer)
-	if err = c.echo.renderer.Render(buf, name, data, c); err != nil {
+	if err = c.echo.Renderer.Render(buf, name, data, c); err != nil {
 		return
 	}
 	c.response.Header().Set(HeaderContentType, MIMETextHTMLCharsetUTF8)
@@ -362,7 +371,7 @@ func (c *context) String(code int, s string) (err error) {
 
 func (c *context) JSON(code int, i interface{}) (err error) {
 	b, err := json.Marshal(i)
-	if c.echo.Debug() {
+	if c.echo.Debug {
 		b, err = json.MarshalIndent(i, "", "  ")
 	}
 	if err != nil {
@@ -372,10 +381,7 @@ func (c *context) JSON(code int, i interface{}) (err error) {
 }
 
 func (c *context) JSONBlob(code int, b []byte) (err error) {
-	c.response.Header().Set(HeaderContentType, MIMEApplicationJSONCharsetUTF8)
-	c.response.WriteHeader(code)
-	_, err = c.response.Write(b)
-	return
+	return c.Blob(code, MIMEApplicationJSONCharsetUTF8, b)
 }
 
 func (c *context) JSONP(code int, callback string, i interface{}) (err error) {
@@ -383,6 +389,10 @@ func (c *context) JSONP(code int, callback string, i interface{}) (err error) {
 	if err != nil {
 		return err
 	}
+	return c.JSONPBlob(code, callback, b)
+}
+
+func (c *context) JSONPBlob(code int, callback string, b []byte) (err error) {
 	c.response.Header().Set(HeaderContentType, MIMEApplicationJavaScriptCharsetUTF8)
 	c.response.WriteHeader(code)
 	if _, err = c.response.Write([]byte(callback + "(")); err != nil {
@@ -397,7 +407,7 @@ func (c *context) JSONP(code int, callback string, i interface{}) (err error) {
 
 func (c *context) XML(code int, i interface{}) (err error) {
 	b, err := xml.Marshal(i)
-	if c.echo.Debug() {
+	if c.echo.Debug {
 		b, err = xml.MarshalIndent(i, "", "  ")
 	}
 	if err != nil {
@@ -416,6 +426,20 @@ func (c *context) XMLBlob(code int, b []byte) (err error) {
 	return
 }
 
+func (c *context) Blob(code int, contentType string, b []byte) (err error) {
+	c.response.Header().Set(HeaderContentType, contentType)
+	c.response.WriteHeader(code)
+	_, err = c.response.Write(b)
+	return
+}
+
+func (c *context) Stream(code int, contentType string, r io.Reader) (err error) {
+	c.response.Header().Set(HeaderContentType, contentType)
+	c.response.WriteHeader(code)
+	_, err = io.Copy(c.response, r)
+	return
+}
+
 func (c *context) File(file string) error {
 	f, err := os.Open(file)
 	if err != nil {
@@ -425,23 +449,31 @@ func (c *context) File(file string) error {
 
 	fi, _ := f.Stat()
 	if fi.IsDir() {
-		file = filepath.Join(file, "index.html")
+		file = filepath.Join(file, indexPage)
 		f, err = os.Open(file)
 		if err != nil {
 			return ErrNotFound
 		}
+		defer f.Close()
 		if fi, err = f.Stat(); err != nil {
 			return err
 		}
 	}
-	return c.ServeContent(f, fi.Name(), fi.ModTime())
+	http.ServeContent(c.Response(), c.Request(), fi.Name(), fi.ModTime(), f)
+	return nil
 }
 
-func (c *context) Attachment(r io.ReadSeeker, name string) (err error) {
-	c.response.Header().Set(HeaderContentType, ContentTypeByExtension(name))
-	c.response.Header().Set(HeaderContentDisposition, "attachment; filename="+name)
-	c.response.WriteHeader(http.StatusOK)
-	_, err = io.Copy(c.response, r)
+func (c *context) Attachment(file, name string) (err error) {
+	return c.contentDisposition(file, name, "attachment")
+}
+
+func (c *context) Inline(file, name string) (err error) {
+	return c.contentDisposition(file, name, "inline")
+}
+
+func (c *context) contentDisposition(file, name, dispositionType string) (err error) {
+	c.response.Header().Set(HeaderContentDisposition, fmt.Sprintf("%s; filename=%s", dispositionType, name))
+	c.File(file)
 	return
 }
 
@@ -460,7 +492,7 @@ func (c *context) Redirect(code int, url string) error {
 }
 
 func (c *context) Error(err error) {
-	c.echo.httpErrorHandler(err, c)
+	c.echo.HTTPErrorHandler(err, c)
 }
 
 func (c *context) Echo() *Echo {
@@ -475,41 +507,14 @@ func (c *context) SetHandler(h HandlerFunc) {
 	c.handler = h
 }
 
-func (c *context) Logger() *log.Logger {
-	return c.echo.logger
+func (c *context) Logger() Logger {
+	return c.echo.Logger
 }
 
-func (c *context) ServeContent(content io.ReadSeeker, name string, modtime time.Time) error {
-	req := c.Request()
-	res := c.Response()
-
-	if t, err := time.Parse(http.TimeFormat, req.Header().Get(HeaderIfModifiedSince)); err == nil && modtime.Before(t.Add(1*time.Second)) {
-		res.Header().Del(HeaderContentType)
-		res.Header().Del(HeaderContentLength)
-		return c.NoContent(http.StatusNotModified)
-	}
-
-	res.Header().Set(HeaderContentType, ContentTypeByExtension(name))
-	res.Header().Set(HeaderLastModified, modtime.UTC().Format(http.TimeFormat))
-	res.WriteHeader(http.StatusOK)
-	_, err := io.Copy(res, content)
-	return err
-}
-
-// ContentTypeByExtension returns the MIME type associated with the file based on
-// its extension. It returns `application/octet-stream` incase MIME type is not
-// found.
-func ContentTypeByExtension(name string) (t string) {
-	if t = mime.TypeByExtension(filepath.Ext(name)); t == "" {
-		t = MIMEOctetStream
-	}
-	return
-}
-
-func (c *context) Reset(req engine.Request, res engine.Response) {
-	c.netContext = nil
-	c.request = req
-	c.response = res
+func (c *context) Reset(r *http.Request, w http.ResponseWriter) {
+	c.query = nil
 	c.store = nil
-	c.handler = notFoundHandler
+	c.request = r
+	c.response.reset(w)
+	c.handler = NotFoundHandler
 }

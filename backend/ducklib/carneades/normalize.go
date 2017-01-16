@@ -32,9 +32,13 @@ type normalizer struct {
 //     - c2
 //   part2:
 //     - part1
+//IsA translates a custom code into a standard one
+//relationship is as follows: KEY is a VALUE
+//eg. ThingA is a capability, ThingB is a third_party_services
 type NormalizedDocument struct {
 	structs.Document
-	Parts map[string][]string
+	IsA   map[string]string
+	Facts []string
 }
 
 //NewNormalizer returns a new initialized normalizer
@@ -78,54 +82,12 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 
 	//make sure we have every part only once for each code
 	//for this we make a map for every code which we will later transform into a list
-	parts := make(map[string]map[string]struct{})
+	isA := make(map[string]string)
 
-	//get original taxonomy code for each field in each statement
+	// we check if we have missing fields in a Statements
+	//if not we get original taxonomy code for each field in each statement
 	//and save it into parts map
-	//after that we check if we have mising fields in these Statements
 	for _, statement := range n.original.Statements {
-
-		if returnCode := n.getCode("action", statement.ActionCode); returnCode != "" {
-			if parts[statement.ActionCode] == nil {
-				parts[statement.ActionCode] = make(map[string]struct{})
-			}
-			parts[statement.ActionCode][returnCode] = struct{}{}
-		}
-
-		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {
-			if parts[statement.QualifierCode] == nil {
-				parts[statement.QualifierCode] = make(map[string]struct{})
-			}
-			parts[statement.QualifierCode][returnCode] = struct{}{}
-		}
-
-		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
-			if parts[statement.DataCategoryCode] == nil {
-				parts[statement.DataCategoryCode] = make(map[string]struct{})
-			}
-			parts[statement.DataCategoryCode][returnCode] = struct{}{}
-		}
-
-		if returnCode := n.getCode("scope", statement.UseScopeCode); returnCode != "" {
-			if parts[statement.UseScopeCode] == nil {
-				parts[statement.UseScopeCode] = make(map[string]struct{})
-			}
-			parts[statement.UseScopeCode][returnCode] = struct{}{}
-		}
-
-		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
-			if parts[statement.ResultScopeCode] == nil {
-				parts[statement.ResultScopeCode] = make(map[string]struct{})
-			}
-			parts[statement.ResultScopeCode][returnCode] = struct{}{}
-		}
-
-		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
-			if parts[statement.SourceScopeCode] == nil {
-				parts[statement.SourceScopeCode] = make(map[string]struct{})
-			}
-			parts[statement.SourceScopeCode][returnCode] = struct{}{}
-		}
 
 		//if data use category, data category or all scopes are missing, we cant work with this statement
 		if statement.UseScopeCode == "" && statement.ResultScopeCode == "" && statement.SourceScopeCode == "" {
@@ -137,6 +99,58 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 
 		if statement.DataCategoryCode == "" {
 			return n.normalized, fmt.Errorf("statement is missing data category field: %s", statement.TrackingID)
+		}
+
+		//find original code for the one used
+
+		if returnCode := n.getCode("action", statement.ActionCode); returnCode != "" {
+
+			if _, prs := isA[statement.ActionCode]; prs == false {
+				isA[statement.ActionCode] = returnCode
+			} else if prs == true && isA[statement.ActionCode] != returnCode {
+				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ActionCode)
+			}
+
+		}
+
+		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {
+			if _, prs := isA[statement.QualifierCode]; prs == false {
+				isA[statement.QualifierCode] = returnCode
+			} else if prs == true && isA[statement.QualifierCode] != returnCode {
+				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.QualifierCode)
+			}
+		}
+
+		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
+			if _, prs := isA[statement.DataCategoryCode]; prs == false {
+				isA[statement.DataCategoryCode] = returnCode
+			} else if prs == true && isA[statement.DataCategoryCode] != returnCode {
+				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.DataCategoryCode)
+			}
+		}
+
+		if returnCode := n.getCode("scope", statement.UseScopeCode); returnCode != "" {
+			if _, prs := isA[statement.UseScopeCode]; prs == false {
+				isA[statement.UseScopeCode] = returnCode
+			} else if prs == true && isA[statement.UseScopeCode] != returnCode {
+				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.UseScopeCode)
+			}
+		}
+
+		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
+			if _, prs := isA[statement.ResultScopeCode]; prs == false {
+				isA[statement.ResultScopeCode] = returnCode
+			} else if prs == true && isA[statement.ResultScopeCode] != returnCode {
+				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ResultScopeCode)
+			}
+		}
+
+		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
+			if _, prs := isA[statement.SourceScopeCode]; prs == false {
+				isA[statement.SourceScopeCode] = returnCode
+			} else if prs == true && isA[statement.SourceScopeCode] != returnCode {
+				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.SourceScopeCode)
+			}
 		}
 
 		// if qualifier is missing that means the qualifier is "unqualified"
@@ -176,15 +190,6 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 		n.normalized.Statements = append(n.normalized.Statements, statement)
 	}
 
-	//put codes into list
-	if n.normalized.Parts == nil {
-		n.normalized.Parts = make(map[string][]string)
-	}
-	for key, value := range parts {
-		for code := range value {
-			n.normalized.Parts[key] = append(n.normalized.Parts[key], code)
-		}
-	}
 	//put all the other fields from the original into the normalized struct
 	n.normalized.ID = n.original.ID
 	n.normalized.Locale = n.original.Locale
@@ -192,7 +197,20 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 	n.normalized.Owner = n.original.Owner
 	n.normalized.Revision = n.original.Revision
 
+	//write partsOf and isA map into Facts
+	n.getFacts()
+
 	return n.normalized, nil
+}
+
+//getFacts transforms the IsA and Parts maps into a list of CHR facts
+//in the form of "IsA(Thing, capability)." and "PartOf(Thing, OtherThing)."
+func (n *normalizer) getFacts() {
+	for k, v := range n.normalized.IsA {
+		n.normalized.Facts = append(n.normalized.Facts, fmt.Sprintf("isA(%s,%s).", k, v))
+	}
+	//TODO: also add parts to this list: partOf(A,B)
+
 }
 
 // get Code from taxonomy. For this a dictionary entry is retrieved from the codeDict
@@ -240,6 +258,8 @@ func (n *normalizer) getCode(Type string, Code string) string {
 		}
 	}
 	// if this also failed we return nothing
+	//that means we also return nothing if the code is a standard code.
+	//since if that is the case we don't have to translate it.
 	return ""
 
 }

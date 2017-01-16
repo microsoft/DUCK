@@ -22,6 +22,7 @@ func TestNewNormalizer(t *testing.T) {
 	}{
 	// TODO: Add test cases.
 	}
+	t.Errorf("Implement Normalize tests")
 	for _, tt := range tests {
 		got, err := NewNormalizer(tt.args.doc, tt.args.db, tt.args.webdir)
 		if (err != nil) != tt.wantErr {
