@@ -1,5 +1,10 @@
 # DUCK Application
 
+**_Attention: These are Instructions for Developers._** If you just want to try DUCK, you might want to download it [here](https://github.com/Microsoft/DUCK/releases).
+A user manual can be found [here](docs/usermanual.md), The DUCK architecture is described [here](docs/architecture.md).
+
+
+
 This is a Gulp-powered build system with the following features:
 
 - Sass compilation and prefixing
@@ -11,8 +16,6 @@ This is a Gulp-powered build system with the following features:
   - JavaScript compression
   - Image compression
 
-**_Attention: These are Instructions for Developers._** If you want try DUCK, you might want to download it [here](https://github.com/Microsoft/DUCK/releases).
-A user manual can be found [here](docs/usermanual.md), The DUCK architecture is described [here](docs/architecture.md).
 
 ## Installation
 
