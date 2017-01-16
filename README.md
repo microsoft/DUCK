@@ -11,6 +11,9 @@ This is a Gulp-powered build system with the following features:
   - JavaScript compression
   - Image compression
 
+**_Attention: These are Instructions for Developers._** If you want try DUCK, you might want to download it [here](https://github.com/Microsoft/DUCK/releases).
+A user manual can be found [here](usermanual.md), The DUCK architecture is described [here](architecture.md).
+
 ## Installation
 
 The project build requires:
