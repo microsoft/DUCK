@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime/debug"
@@ -38,9 +39,10 @@ func main() {
 	//when there is no GOPATH, the configuration.json should be right next to the executable
 	goPath := os.Getenv("GOPATH")
 	confPath := "configuration.json"
-	if goPath != "" {
+
 		confPath = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json")
 	}
+	log.Printf("using configuration at %s", confPath)
 	// create config
 	conf := config.NewConfiguration(confPath)
 
