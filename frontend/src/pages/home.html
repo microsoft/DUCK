@@ -20,29 +20,22 @@
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
         <h5>{{"no_documents_heading"|translate}}</h5>
     </div>
-    <div class="row small-up-8" ng-if="home.summaries.length > 0">
-        <div class="columns text-center" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
-            <div class="image-wrapper overlay-fade-in" style="width:120px">
-                <div class="document-box"></div>
-                <div class="image-overlay-content">
-                    <div class="text-right padding-top-0-5 padding-right-0-5">
-                        <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
-                            <i class="fa fa-clone white"></i>
-                        </a>
-
-                        <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
-                            <i class="fa fa-trash white"></i>
-                        </a>
-                    </div>
-                    <div class="padding-top-0-5">
-                        <a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>
-                    </div>
-
-                </div>
-                <h6>{{summary.name}}</h6>
-            </div>
-        </div>
+    
+    <div class="row text-left image-wrapper" ng-if="home.summaries.length > 0" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
+       
+            <a href="" ng-click="home.editDocument(summary.id)"><div  class="small-9 columns overview-name overlay-fade-in"><h5>{{summary.name}}</h5></div ></a>
+            <div  class="small-1  columns overview-images">
+            <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
+                <i class="fa fa-clone blue"></i>
+            </a>
+            <a data-open="deleteModal" class="padding-right-1" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
+                <i class="fa fa-trash blue"></i>
+            </a>
+            <!--<a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>-->
+            </div >
+        
     </div>
+    
 
     <div class="reveal tiny" id="deleteModal" data-reveal data-overlay="false">
         <h4>{{'delete'|translate}}</h4>
