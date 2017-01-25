@@ -23,7 +23,7 @@
     
     <div class="row text-left image-wrapper" ng-if="home.summaries.length > 0" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
        
-            <a href="" ng-click="home.editDocument(summary.id)"><div  class="small-9 columns overview-name overlay-fade-in"><h5>{{summary.name}}</h5></div ></a>
+            <a href="" ng-click="home.editDocument(summary.id)"><div  class="small-9 columns overview-name overlay-fade-in"><h6>{{summary.name}}</h6></div ></a>
             <div  class="small-1  columns overview-images">
             <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
                 <i class="fa fa-clone blue"></i>
@@ -52,7 +52,7 @@
     <div class="reveal tiny" id="createModal" data-reveal data-overlay="false">
         <h4> {{"create_document" |translate}}</h4>
         <div class="row padding-top-2">
-            <input ng-model="home.newName" type="text" ng-attr-placeholder="'document_name_placeholder' | translate">
+            <input ng-model="home.newName"  type="text" ng-attr-placeholder="'document_name_placeholder' | translate">
         </div>
         <div class="row float-right padding-top-2">
             <div class="columns ">

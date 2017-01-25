@@ -4,31 +4,55 @@
 
 // image overlay classes
 
+$ptop: 0.7vh;
+$pbottom: 0.1vh;
+
 .image-wrapper {
 
   border-radius: $global-radius;
-  border: 1px solid #777777;
+  //border: 1px solid #bfbfbf;
   border-spacing: 2px;
   margin-bottom: 2px;
+  pointer-events: none;
+  transition: all 0.5s linear;
+  background-color: #f4f4f4;
+  /*&:hover{
+    border: {
+      color: #ffffff;
+      right-color:  #bfbfbf;
+    }
+  }*/
 }
 .overview-name{
-  padding-top: 1.5vh;
-  padding-bottom: 1vh;
   border-radius: 5px;
   margin-left: 1vw;
   color: #444444;
-  transition: all 0.8s ease-in-out;
-}
-
-.overview-name:hover{
-    background-color: #aeaeae;;
-    transition: all 0.2s linear;
-    color: #282828;
+  transition: all 0.6s ease-in-out;
+  pointer-events: auto;
+  padding: {
+    top: $ptop;
+    bottom: $pbottom;
   }
 
+  &:hover{
+    background-color: #aeaeae;;
+    transition: all 0.2s linear;
+    color: #2199e8;
+    //color: #282828;
+  }
+  
+  h6{
+    font-weight: bold;
+  }
+  
+}
+
 .overview-images{
-  padding-top: 1.5vh;
-  padding-bottom: 1vh;
+  pointer-events: auto;
+  padding: {
+    top: $ptop;
+    bottom: $pbottom;
+  }
 }
 
 .image-overlay-content {
