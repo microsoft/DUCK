@@ -35,9 +35,9 @@ func main() {
 	}()
 	//if there is a configuration.json in the same folder as the executed program,
 	//use this one, if not, try GOPATH
-	goPath := os.Getenv("GOPATH")
+
 	confPath := "configuration.json"
-	if _, err := os.Stat("configuration.json"); os.IsNotExist(err) && goPath != "" {
+	if goPath := os.Getenv("GOPATH"); goPath != "" {
 
 		confPath = filepath.Join(goPath, "/src/github.com/Microsoft/DUCK/backend/configuration.json")
 	}
