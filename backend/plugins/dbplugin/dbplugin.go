@@ -1,12 +1,10 @@
 package dbplugin
 
-import "fmt"
-
 type MyDatabase struct {
 }
 
 func (mdb *MyDatabase) Init(url string) error {
-	fmt.Println("Testextension initialized")
+	//fmt.Println("Testextension initialized")
 	return nil
 }
 

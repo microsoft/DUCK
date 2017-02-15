@@ -30,12 +30,9 @@ func getMap(resp io.Reader) (map[string]interface{}, error) {
 	return data, nil
 }
 
-func getRows(resp io.Reader) ([]interface{}, error) {
+func getRows(jsonbody map[string]interface{}) ([]interface{}, error) {
 
-	jsonbody, err := getMap(resp)
-	if err != nil {
-		return nil, err
-	}
+
 	rows, prs := jsonbody["rows"].([]interface{})
 	//fmt.Println(jsonbody)
 	if !prs || len(rows) < 1 {
