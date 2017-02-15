@@ -3,6 +3,7 @@ package config
 //TODO rename either package or struct to sth better
 
 import (
+	"crypto/rand"
 	"encoding/json"
 	"flag"
 	"io/ioutil"
@@ -12,15 +13,19 @@ import (
 
 	"path/filepath"
 
+	"fmt"
+
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
-var cfg Configuration
+var cfgWebDir string
+var cfgJwtKey string
+var cfgRulebaseDir string
 
 func init() {
-	flag.StringVar(&cfg.WebDir, "webdir", "", "The root directory for serving web content")
-	flag.StringVar(&cfg.JwtKey, "jwtkey", "", "The secret used to sign the JWT")
-	flag.StringVar(&cfg.RulebaseDir, "rulebasedir", "", "The Directory to the Rulebases")
+	flag.StringVar(&cfgWebDir, "webdir", "", "The root directory for serving web content")
+	flag.StringVar(&cfgJwtKey, "jwtkey", "", "The secret used to sign the JWT")
+	flag.StringVar(&cfgRulebaseDir, "rulebasedir", "", "The Directory to the Rulebases")
 	flag.Parse()
 }
 
@@ -28,7 +33,7 @@ func init() {
 // these values can be set via configuration.json file, environment variables or flags
 type Configuration struct {
 	DBConfig    *structs.DBConf `json:"database,omitempty"`
-	JwtKey      string          `json:"jwtkey,omitempty"`
+	JwtKey      []byte          `json:"jwtkey,omitempty"`
 	WebDir      string          `json:"webdir,omitempty"`
 	RulebaseDir string          `json:"rulebasedir,omitempty"`
 }
@@ -40,8 +45,13 @@ func NewConfiguration(confpath string) Configuration {
 
 	c := Configuration{}
 
+	key, err := randomJWT()
+	if err != nil {
+		panic(fmt.Sprintf("Could not generate random JWT: %s", err))
+	}
+
 	//setting defaults
-	c.JwtKey = "secret"
+	c.JwtKey = key
 	c.WebDir = "src/github.com/Microsoft/DUCK/frontend/dist"
 	c.RulebaseDir = "src/github.com/Microsoft/DUCK/RuleBases"
 
@@ -77,14 +87,14 @@ func (c *Configuration) setAbsPaths() {
 //getFlags populates the configuration struct with data from the flags this program is called with
 func (c *Configuration) getFlags() {
 
-	if cfg.JwtKey != "" {
-		c.JwtKey = cfg.JwtKey
+	if cfgJwtKey != "" {
+		c.JwtKey = []byte(cfgJwtKey)
 	}
-	if cfg.WebDir != "" {
-		c.WebDir = cfg.WebDir
+	if cfgWebDir != "" {
+		c.WebDir = cfgWebDir
 	}
-	if cfg.RulebaseDir != "" {
-		c.RulebaseDir = cfg.RulebaseDir
+	if cfgRulebaseDir != "" {
+		c.RulebaseDir = cfgRulebaseDir
 	}
 
 }
@@ -107,7 +117,7 @@ func (c *Configuration) getEnv() {
 
 	env := os.Getenv("DUCK_JWTKEY")
 	if env != "" {
-		c.JwtKey = env
+		c.JwtKey = []byte(env)
 	}
 
 	env = os.Getenv("DUCK_WEBDIR")
@@ -144,4 +154,15 @@ func (c *Configuration) getEnv() {
 	if env != "" {
 		c.DBConfig.Name = env
 	}
+}
+
+func randomJWT() ([]byte, error) {
+	c := 10
+	b := make([]byte, c)
+	_, err := rand.Read(b)
+	if err != nil {
+		return nil, err
+	}
+
+	return b, nil
 }
