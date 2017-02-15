@@ -2,7 +2,9 @@
 	"database": {
 		"location": "http://127.0.0.1",
 		"port": 5984,
-		"name": "duck"
+		"name": "duck",
+		"username": "a",
+      "password": "b"
 	},
 	"jwtkey": "secret",
 	"webdir": "src/github.com/Microsoft/DUCK/frontend/dist",

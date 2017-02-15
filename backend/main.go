@@ -33,9 +33,9 @@ func main() {
 		}
 
 	}()
-	//if there is a configuration.json in the same folder as the executed program,
-	//use this one, if not, try GOPATH
-
+	//when GOPATH is set, the person executing this program is probably also
+	//writing code for it, it will thus also be in the goPath
+	//when there is no GOPATH, the configuration.json should be right next to the executable
 	confPath := "configuration.json"
 	if goPath := os.Getenv("GOPATH"); goPath != "" {
 
