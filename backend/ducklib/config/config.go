@@ -157,7 +157,7 @@ func (c *Configuration) getEnv() {
 }
 
 func randomJWT() ([]byte, error) {
-	c := 10
+	c := 28
 	b := make([]byte, c)
 	_, err := rand.Read(b)
 	if err != nil {
