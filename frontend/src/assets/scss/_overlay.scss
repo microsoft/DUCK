@@ -12,16 +12,23 @@ $pbottom: 0.1vh;
   border-radius: $global-radius;
   //border: 1px solid #bfbfbf;
   border-spacing: 2px;
-  margin-bottom: 2px;
+  margin: {
+    bottom: 2px;
+  }
   pointer-events: none;
   transition: all 0.5s linear;
   background-color: #f4f4f4;
-  /*&:hover{
-    border: {
-      color: #ffffff;
-      right-color:  #bfbfbf;
+  
+  &:last-child{
+    margin-bottom: 15vh;
+    border-bottom: {
+      style: solid;
+      width: 1px;
+      color: #c0c0c0;
     }
-  }*/
+
+  }
+
 }
 .overview-name{
   border-radius: 5px;
