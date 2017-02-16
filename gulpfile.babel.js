@@ -190,7 +190,7 @@ var go;
 
 // launch the backend serving the web distribution directory
 function backendCompile(done) {
-    child.spawnSync('go', ['install'], {cwd: "backend", stdio: "inherit"});
+    child.spawnSync('go', ['build'], {cwd: "backend", stdio: "inherit"});
     done();
 }
 
