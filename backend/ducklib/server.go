@@ -23,7 +23,7 @@ func GetServer(conf config.Configuration) *echo.Echo {
 		panic(err)
 	}
 
-	JWT := []byte(conf.JwtKey)
+	JWT := conf.JwtKey
 	rbd := conf.RulebaseDir
 
 	log.Printf("Rulebase directory: " + rbd)

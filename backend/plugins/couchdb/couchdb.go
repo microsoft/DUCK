@@ -26,6 +26,7 @@ delete Rulebase		✓
 */
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -33,6 +34,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"io"
 
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/Microsoft/DUCK/backend/pluginregistry"
@@ -47,6 +50,7 @@ type Couchbase struct {
 	database string
 	user     string
 	password string
+	cookie   *http.Cookie
 	auth     bool //Do we need submit auth info to cb?
 }
 
@@ -55,17 +59,11 @@ func (cb *Couchbase) GetLogin(email string) (id string, pw string, err error) {
 	url := fmt.Sprintf("%s/%s/_design/app/_view/user_login?key=\"%s\"", cb.url, cb.database, email)
 	//cb.url + "/" + cb.database + "/_design/app/_view/user?key='" + username + "'"
 
-	//log.Println("Login query: " + url)
-
-	resp, err := netClient.Get(url)
+	bdy, err := cb.doGet(url)
 	if err != nil {
-		log.Println(err)
-
-		return "", "", structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
+		return "", "", err
 	}
-	defer resp.Body.Close()
-
-	rows, err := getRows(resp.Body)
+	rows, err := getRows(bdy)
 	if err != nil {
 		//Wrap error? http://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully
 
@@ -149,13 +147,7 @@ func (cb *Couchbase) getCouchbaseDocument(cbDocID string) (document map[string]i
 
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, cbDocID)
 
-	resp, err := netClient.Get(url)
-	if err != nil {
-		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	defer resp.Body.Close()
-
-	cbDoc, err := getMap(resp.Body)
+	cbDoc, err := cb.doGet(url)
 
 	if _, prs := cbDoc["_id"]; !prs {
 		return nil, structs.NewHTTPError("No Data", 409)
@@ -170,14 +162,12 @@ func (cb *Couchbase) GetDocumentSummariesForUser(userid string) ([]structs.Docum
 	url := fmt.Sprintf("%s/%s/_design/app/_view/documents_by_user?startkey=[\"%s\",\"\"]&endkey=[\"%s\",{}]",
 		cb.url, cb.database, userid, userid)
 
-	resp, err := netClient.Get(url)
-
+	bdy, err := cb.doGet(url)
 	if err != nil {
-		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
+		return nil, err
 	}
-	defer resp.Body.Close()
 
-	rows, err := getRows(resp.Body)
+	rows, err := getRows(bdy)
 	if err != nil {
 		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), http.StatusNotFound))
 	}
@@ -251,17 +241,7 @@ func (cb *Couchbase) DeleteRulebase(id string, rev string) error {
 func (cb *Couchbase) deleteCbDocument(id string, rev string) error {
 	url := fmt.Sprintf("%s/%s/%s?rev=%s", cb.url, cb.database, id, rev)
 
-	request, err := http.NewRequest(http.MethodDelete, url, strings.NewReader(""))
-	//request.SetBasicAuth("admin", "admin")
-	//request.ContentLength = 0
-	resp, err := netClient.Do(request)
-
-	if err != nil {
-		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	defer resp.Body.Close()
-
-	jsonbody, err := getMap(resp.Body)
+	jsonbody, err := cb.doRequest(http.MethodDelete, url, nil, false)
 	if err != nil {
 		return err
 	}
@@ -403,7 +383,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 
 func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) error {
 
-	var entryReader *strings.Reader
+	var entryReader io.Reader
 	var url string
 	//set url which is different when we want to create a new designfile
 	if !designfile {
@@ -413,8 +393,9 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		if err != nil {
 			return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 500))
 		}
-		entryReader = strings.NewReader(string(entryBytes))
+		entryReader = bytes.NewReader(entryBytes)
 		url = fmt.Sprintf("%s/%s/%s", cb.url, cb.database, entry["_id"])
+
 	} else {
 
 		//if we want to create a new design file, the whole file is in one entry in the entry map
@@ -426,25 +407,13 @@ func (cb *Couchbase) putEntry(entry map[string]interface{}, designfile bool) err
 		entryReader = strings.NewReader(entry["entry"].(string))
 		url = fmt.Sprintf("%s/%s/_design/app", cb.url, cb.database)
 	}
-	//submit data
-	request, err := http.NewRequest(http.MethodPut, url, entryReader)
-	if err != nil {
-		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	//TODO: AUTH
-	//request.SetBasicAuth("admin", "admin")
-	//request.ContentLength = 0
-	resp, err := netClient.Do(request)
-
-	if err != nil {
-		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	defer resp.Body.Close()
+	//submit data &
 	//check if we succeeded, couchdb answers with a map containing the field "ok"
-	jsonbody, err := getMap(resp.Body)
+	jsonbody, err := cb.doRequest(http.MethodPut, url, entryReader, false)
 	if err != nil {
 		return err
 	}
+
 	if _, prs := jsonbody["ok"]; prs {
 		return nil
 	}
@@ -483,37 +452,32 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 		return structs.NewHTTPError("couchDB needs an url entry in config", 400)
 	}
 
+	if config.Username != "" && config.Password != "" {
+		cb.user = config.Username
+		cb.password = config.Password
+		cb.auth = true
+		log.Println("Database Username and Password set.")
+	} else {
+		cb.auth = false
+		log.Println("Username or password missing in couchdb config. Assuming no auth needed. This is *not* recommended.")
+	}
+
 	url := config.Location + ":" + port
 
-	resp, err := netClient.Get(url)
+	jsonbody, err := cb.doGet(url)
 	if err != nil {
-		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	defer resp.Body.Close()
-
-	jsonbody, err := getMap(resp.Body)
-	if err != nil {
-
 		return err
 	}
 
 	cdb, prs := jsonbody["couchdb"].(string)
 	if !prs || cdb != "Welcome" {
+
 		return structs.NewHTTPError("Connection to couchdb failed", 400)
 	}
-
 	cb.url = url
-	//TODO: this will probably not work when like it is
-	cb.auth = false
-	if config.Username != "" && config.Password != "" {
-		cb.user = config.Username
-		cb.password = config.Password
-	} else {
-		log.Println("Username or password missing in couchdb config. Assuming no auth needed")
-	}
 
 	if config.Name == "" {
-		return structs.NewHTTPError("Couchdb needs a database entry in the config file to know the name of the database.", 400)
+		return structs.NewHTTPError("Couchdb needs a database entry in the config file to know the name of the database", 400)
 	}
 	cb.database = config.Name
 
@@ -546,13 +510,7 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 func (cb *Couchbase) testFileExists(id string) (bool, error) {
 	url := fmt.Sprintf("%s/%s/%s", cb.url, cb.database, id)
 
-	resp, err := netClient.Get(url)
-	if err != nil {
-		return false, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	defer resp.Body.Close()
-
-	jsonbody, err := getMap(resp.Body)
+	jsonbody, err := cb.doGet(url)
 	if err != nil {
 		return false, err
 	}
@@ -576,17 +534,7 @@ func (cb *Couchbase) testFileExists(id string) (bool, error) {
 func (cb *Couchbase) createDatabase() error {
 	url := fmt.Sprintf("%s/%s", cb.url, cb.database)
 
-	request, err := http.NewRequest(http.MethodPut, url, strings.NewReader(""))
-	//request.SetBasicAuth("admin", "admin")
-	//request.ContentLength = 0
-	resp, err := netClient.Do(request)
-
-	if err != nil {
-		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	defer resp.Body.Close()
-
-	jsonbody, err := getMap(resp.Body)
+	jsonbody, err := cb.doRequest(http.MethodPut, url, nil, false)
 	if err != nil {
 		return err
 	}
@@ -606,13 +554,7 @@ func (cb *Couchbase) createDatabase() error {
 func (cb *Couchbase) testDBExists() (bool, error) {
 	url := fmt.Sprintf("%s/%s", cb.url, cb.database)
 
-	resp, err := netClient.Get(url)
-	if err != nil {
-		return false, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
-	}
-	defer resp.Body.Close()
-
-	jsonbody, err := getMap(resp.Body)
+	jsonbody, err := cb.doGet(url)
 	if err != nil {
 		return false, err
 	}
@@ -631,6 +573,93 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 		return false, structs.NewHTTPError(e, 502)
 	}
 	return true, nil
+}
+
+func (cb *Couchbase) login() error {
+
+	fmt.Println("login()")
+	data := struct {
+		Name     string `json:"name"`
+		Password string `json:"password"`
+	}{
+		cb.user,
+		cb.password,
+	}
+	databytes, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	bodyReader := bytes.NewReader(databytes)
+
+	request, err := http.NewRequest(http.MethodPost, "http://127.0.0.1:5984/_session", bodyReader)
+	if err != nil {
+		return structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
+	}
+	request.SetBasicAuth(cb.user, cb.password)
+	request.Header.Set("Content-Type", "application/json")
+
+	resp, err := netClient.Do(request)
+	defer resp.Body.Close()
+	if err != nil {
+		return err
+	}
+
+	jsonbody, err := getMap(resp.Body)
+
+	if err != nil {
+		return err
+	}
+
+	if success, ok := jsonbody["ok"]; !ok || success != true {
+		return structs.NewHTTPError("Login to couchdb failed", 400)
+	}
+
+	//fmt.Printf("%#v\n", resp.Cookies()[0])
+
+	cb.cookie = resp.Cookies()[0]
+	return nil
+}
+
+func (cb *Couchbase) doRequest(method, url string, body io.Reader, dologin bool) (map[string]interface{}, error) {
+
+	if dologin {
+		if err := cb.login(); err != nil {
+			return nil, structs.NewHTTPError("Login to couchdb failed", 400)
+		}
+	}
+
+	request, err := http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
+	}
+	if cb.auth && cb.cookie != nil {
+		//fmt.Printf("%s=%s counter: %d url: %s\n", cb.cookie.Name, cb.cookie.Value, counter, url)
+
+		request.Header.Add("Cookie", fmt.Sprintf("%s=%s", cb.cookie.Name, cb.cookie.Value))
+
+	}
+
+	resp, err := netClient.Do(request)
+
+	if err != nil {
+		return nil, structs.WrapErrWith(err, structs.NewHTTPError(err.Error(), 502))
+	}
+	defer resp.Body.Close()
+	//check if we succeeded, couchdb answers with a map containing the field "ok"
+	jsonbody, err := getMap(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	if cb.auth && !dologin {
+		if autherr, prs := jsonbody["reason"]; prs && autherr == "Authentication required." {
+			return cb.doRequest(method, url, body, true)
+		}
+	}
+	return jsonbody, nil
+}
+
+func (cb *Couchbase) doGet(url string) (map[string]interface{}, error) {
+	return cb.doRequest(http.MethodGet, url, nil, false)
 }
 
 func init() {

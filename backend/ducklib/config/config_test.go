@@ -109,7 +109,7 @@ func testEnvGopath(t *testing.T) {
 
 		switch val.envar {
 		case "DUCK_JWTKEY":
-			if c.JwtKey != val.wantval {
+			if string(c.JwtKey) != val.wantval {
 				t.Errorf("Testing environment Variable setting. Key: %s.  Wanted %s, got %s", key, val.wantval, c.JwtKey)
 			}
 		case "DUCK_WEBDIR":
