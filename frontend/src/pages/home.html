@@ -21,19 +21,21 @@
         <h5>{{"no_documents_heading"|translate}}</h5>
     </div>
     
-    <div class="row text-left image-wrapper" ng-if="home.summaries.length > 0" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
-       
-            <a href="" ng-click="home.editDocument(summary.id)"><div  class="small-9 columns overview-name overlay-fade-in"><h6>{{summary.name}}</h6></div ></a>
-            <div  class="small-1  columns overview-images">
-            <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
-                <i class="fa fa-clone blue"></i>
-            </a>
-            <a data-open="deleteModal" class="padding-right-1" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
-                <i class="fa fa-trash blue"></i>
-            </a>
-            <!--<a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>-->
-            </div >
+    <div>
+        <div class="row text-left image-wrapper summary" ng-if="home.summaries.length > 0" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
         
+                <a href="" ng-click="home.editDocument(summary.id)"><div  class="small-9 columns overview-name overlay-fade-in"><h6>{{summary.name}}</h6></div ></a>
+                <div  class="small-1  columns overview-images">
+                    <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
+                        <i class="fa fa-clone blue"></i>
+                    </a>
+                    <a data-open="deleteModal" class="padding-right-1" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
+                        <i class="fa fa-trash blue"></i>
+                    </a>
+                    <!--<a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>-->
+                </div >
+            
+        </div>
     </div>
     
 
