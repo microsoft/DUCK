@@ -1,5 +1,10 @@
 package structs
 
+import (
+	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/labstack/echo"
+)
+
 type DBConf struct {
 	Location string `json:"location"`
 	Port     int    `json:"port,omitempty"`
@@ -33,6 +38,27 @@ type Document struct {
 	AssumptionSet string      `json:"assumptionSet"`
 	Statements    []Statement `json:"statements"`
 	Dictionary    Dictionary  `json:"dictionary"`
+}
+
+//UserIsOwner checks if the user ID from the JWT in the context object is the same as the user ID in the Owner field of this document
+func (d *Document) IsUserOwner(c echo.Context) error {
+
+	user, ok := c.Get("user").(*jwt.Token)
+	if !ok {
+		return NewHTTPError("Could not access jwt", 401)
+	}
+	claims, ok := user.Claims.(jwt.MapClaims)
+	if !ok {
+		return NewHTTPError("Could not convert jwt", 401)
+	}
+	id, ok := claims["id"].(string)
+	if !ok {
+		return NewHTTPError("Could not access user ID from JWT", 401)
+	}
+	if id == d.Owner {
+		return nil
+	}
+	return NewHTTPError("User ID is not Owner ID", 401)
 }
 
 //A Statement struct represents one Statement in a document

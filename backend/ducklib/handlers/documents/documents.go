@@ -6,6 +6,7 @@ import (
 
 	"github.com/Microsoft/DUCK/backend/ducklib/db"
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 )
 
@@ -19,6 +20,27 @@ type Handler struct {
 //Context-Parameter:
 //	userid		a userid string which is showing to the user that owns the documents
 func (h *Handler) GetDocSummaries(c echo.Context) error {
+
+	//check if user in JWT & userid-param is same
+	user, ok := c.Get("user").(*jwt.Token)
+	if !ok {
+		e := "Could not access jwt"
+		return c.JSON(http.StatusForbidden, structs.Response{Ok: false, Reason: &e})
+	}
+	claims, ok := user.Claims.(jwt.MapClaims)
+	if !ok {
+		e := "Could not convert jwt"
+		return c.JSON(http.StatusForbidden, structs.Response{Ok: false, Reason: &e})
+	}
+	id, ok := claims["id"].(string)
+	if !ok {
+		e := "Could not access user ID from JWT"
+		return c.JSON(http.StatusForbidden, structs.Response{Ok: false, Reason: &e})
+	}
+	if id != c.Param("userid") {
+		e := "User ID is not Param ID"
+		return c.JSON(http.StatusForbidden, structs.Response{Ok: false, Reason: &e})
+	}
 
 	docs, err := h.Db.GetDocumentSummariesForUser(c.Param("userid"))
 
@@ -44,6 +66,13 @@ func (h *Handler) GetDoc(c echo.Context) error {
 
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
+	err = doc.IsUserOwner(c)
+	if err != nil {
+		log.Printf("Error in getDocHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusForbidden, structs.Response{Ok: false, Reason: &e})
+	}
 	return c.JSON(http.StatusOK, doc)
 }
 
@@ -62,6 +91,14 @@ func (h *Handler) CopyStatements(c echo.Context) error {
 		log.Printf("Error in copyStatementsHandler trying to get old document from database: %s", err)
 		e := err.Error()
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	err = doc.IsUserOwner(c)
+	if err != nil {
+		log.Printf("Error in getDocHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusForbidden, structs.Response{Ok: false, Reason: &e})
 	}
 
 	newDoc := new(structs.Document)
@@ -93,7 +130,23 @@ func (h *Handler) CopyStatements(c echo.Context) error {
 //Context-Parameter:
 //	docid		a docid string which is pointing to the wanted document
 func (h *Handler) DeleteDoc(c echo.Context) error {
-	err := h.Db.DeleteDocument(c.Param("docid"))
+
+	doc, err := h.Db.GetDocument(c.Param("docid"))
+	if err != nil {
+		log.Printf("Error in deleteDocHandler trying to get document from database: %s", err)
+		e := err.Error()
+		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
+	}
+
+	err = doc.IsUserOwner(c)
+	if err != nil {
+		log.Printf("Error in deleteDocHandler: %s", err)
+		e := err.Error()
+
+		return c.JSON(http.StatusForbidden, structs.Response{Ok: false, Reason: &e})
+	}
+
+	err = h.Db.DeleteDocument(c.Param("docid"))
 	if err != nil {
 		e := err.Error()
 		log.Printf("Error in deleteDocHandler: %s", err)
