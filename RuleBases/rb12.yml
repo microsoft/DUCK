@@ -8,8 +8,8 @@ meta:
 
 
 language:
-  compliant: compliant
-  not_compliant: not compliant
+  compliant/0: compliant
+  not_compliant/0: not compliant
   dataUseStatement/1: dataUseStatement(%s)
   useScope/2: useScope(%s,%s)
   qualifier/2: qualifier(%s,%s)
@@ -66,7 +66,7 @@ argument_schemes:
   - id: duplicates
     weight:
       constant: 0.5
-    variables: [S1,US,S2,Q,DC,A,RS,ID1,ID2,P1,P2]
+    variables: [S1,US,S2,Q,DC,A,RS,ID1,ID2,P1,P2,SS]
     premises:
       - useScope(S1,US)
       - useScope(S2,US)
