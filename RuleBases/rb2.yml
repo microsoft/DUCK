@@ -12,8 +12,8 @@ language:
   consentRequired/1: consentRequired(%s)
   dataCategory/2: dataCategory(%s,%s)
   dataUseStatement/1: dataUseStatement(%s)
-  docConsentRequired: docConsentRequired
-  notDocConsentRequired: notDocConsentRequired
+  docConsentRequired/0: docConsentRequired
+  notDocConsentRequired/0: notDocConsentRequired
   duplicate/2: duplicate(%s,%s)
   equivalentScope/2: equivalentScope(%s,%s)
   extendsScope/2: extendsScope(%s,%s)
@@ -547,7 +547,7 @@ argument_schemes:
   # equivalentScope Rules
 
   - id: equivalentScope0
-    variables: [S1,S2]
+    variables: [S1,S2,S]
     premises:
       - resultScope(S1,S)
       - resultScope(S2,S)
@@ -601,7 +601,7 @@ argument_schemes:
     premises:
       - smallerOrEqualScope(S1,S2)
     deletions:
-       - smallerOrEqualScope(S1,S2)
+      - smallerOrEqualScope(S1,S2)
     conclusions:
       - true
 
@@ -637,7 +637,7 @@ argument_schemes:
     variables: [S1,S2]
     premises:
       - compatiblePurpose(S1,S2)
-    deletions: 
+    deletions:
       - compatiblePurpose(S1,S2)
     conclusions:
       - true
