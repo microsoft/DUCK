@@ -15,6 +15,7 @@ type StmtExplanation struct {
 	Pii               BoolValue `json:"pii"`               // personally identifiable information
 	Li                BoolValue `json:"li"`                // legitimate interest in the pii
 	CompatiblePurpose []string  `json:"compatiblePurpose"` // ids of statements with a proven compatible purpose
+	IdNotRequired     BoolValue `json:"idNotRequired"`     // identification of data subject is not required
 }
 
 type Explanation map[string]StmtExplanation // keys are statement tracking ids
@@ -38,10 +39,10 @@ func stmtId(t terms.Compound) string {
 	return t.Args[6].String()
 }
 
-// ConsentRequired
-func cr(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
-	// find the notConsentRequired statement for this dus
-	goal, ok := terms.ReadString("notConsentRequired(" + dus.String() + ")")
+// isTrue: check whether a given predicate is true/in for a particular
+// data use statement in the argument graph
+func isTrue(predicate string, dus terms.Compound, ag *caes.ArgGraph) BoolValue {
+	goal, ok := terms.ReadString(predicate + "(" + dus.String() + ")")
 	if !ok {
 		return BoolValue{true, true}
 	}
@@ -53,55 +54,26 @@ func cr(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
 		}
 		_, ok = terms.Match(goal, t, b)
 		if ok {
-			v := stmt.Label == caes.In // is notConsentRequired In?
-			return BoolValue{!v, !v}   // consentRequired assumed
+			v := stmt.Label == caes.In
+			return BoolValue{!v, !v}
 		}
 	}
-	return BoolValue{true, true} // consentRequired assumed
+	return BoolValue{true, true}
+}
+
+// ConsentRequired
+func cr(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
+	return isTrue("notConsentRequired", dus, ag)
 }
 
 // Personally Identifiable Information
 func pii(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
-	// find the notPii statement for this dus
-	goal, ok := terms.ReadString("notPii(" + dus.String() + ")")
-	if !ok {
-		return BoolValue{true, true}
-	}
-	for wff, stmt := range ag.Statements {
-		t, ok := terms.ReadString(wff)
-		var b terms.Bindings
-		if !ok {
-			continue
-		}
-		_, ok = terms.Match(goal, t, b)
-		if ok {
-			v := stmt.Label == caes.In // is notPii In?
-			return BoolValue{!v, !v}   // pii assumed
-		}
-	}
-	return BoolValue{true, true} // pii assumed
+	return isTrue("notPii", dus, ag)
 }
 
 // Legitimate Interest
 func li(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
-	// find the li statement for this dus
-	goal, ok := terms.ReadString("li(" + dus.String() + ")")
-	if !ok {
-		return BoolValue{false, true}
-	}
-	for wff, stmt := range ag.Statements {
-		t, ok := terms.ReadString(wff)
-		var b terms.Bindings
-		if !ok {
-			continue
-		}
-		_, ok = terms.Match(goal, t, b)
-		if ok {
-			v := stmt.Label == caes.In // is li In?
-			return BoolValue{v, !v}    // notLi assumed
-		}
-	}
-	return BoolValue{false, true} // notLi assumed
+	return isTrue("li", dus, ag)
 }
 
 // Returns a slice of statements ids, for statements having a purpose
@@ -130,6 +102,12 @@ func cp(dus terms.Compound, ag *caes.ArgGraph) []string {
 	return result
 }
 
+// Returns a slice of ids for statements not
+// requring the identification of the data subject
+func idnr(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
+	return isTrue("idNotRequired", dus, ag)
+}
+
 func (c ComplianceChecker) GetExplanation(theory *caes.Theory, ag *caes.ArgGraph) (Explanation, error) {
 	m := make(map[string]StmtExplanation)
 	for wff, _ := range ag.Statements {
@@ -144,6 +122,7 @@ func (c ComplianceChecker) GetExplanation(theory *caes.Theory, ag *caes.ArgGraph
 				Pii:               pii(dus, ag),
 				Li:                li(dus, ag),
 				CompatiblePurpose: cp(dus, ag),
+				IdNotRequired:     idnr(dus, ag),
 			}
 		}
 	}

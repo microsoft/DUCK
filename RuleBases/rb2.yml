@@ -19,6 +19,8 @@ language:
   extendsScope/2: extendsScope(%s,%s)
   greaterScope/2: greaterScope(%s,%s)
   id/2: id(%s,%s)
+  # identification of data subject is not required
+  idNotRequired/1: idNotRequired(%s) 
   kindOf/2: kindOf(%s,%s)
   lesserScope/2: lesserScope(%s,%s)
   li/1: li(%s)
@@ -799,3 +801,93 @@ argument_schemes:
   #   conclusions:
   #     - consentRequired(S1)
 
+
+  #### EU GDPR Article 11 rules
+
+  - id: idNotRequired1
+    variables: [S]
+    premises:
+      - dataCategory(S,customer_content)
+      - qualifier(S,aggregated_data)
+    conclusions:
+      - idNotRequired(S)
+
+
+  - id: idNotRequired2
+    variables: [S]
+    premises:
+      - dataCategory(S,derived_data)
+      - qualifier(S,aggregated_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired3
+    variables: [S]
+    premises:
+      - dataCategory(S,derived_data)
+      - qualifier(S,anonymized_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired4
+    variables: [S]
+    premises:
+      - dataCategory(S,derived_data)
+      - qualifier(S,unlinked_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired5
+    variables: [S]
+    premises:
+      - dataCategory(S,derived_data_organization)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired6
+    variables: [S]
+    premises:
+      - dataCategory(S,provider_data)
+      - qualifier(S,aggregated_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired7
+    variables: [S]
+    premises:
+      - dataCategory(S,provider_data)
+      - qualifier(S,anonymized_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired8
+    variables: [S]
+    premises:
+      - dataCategory(S,provider_data)
+      - qualifier(S,unlinked_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired9
+    variables: [S]
+    premises:
+      - dataCategory(S,account_data)
+      - qualifier(S,aggregated_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired10
+    variables: [S]
+    premises:
+      - dataCategory(S,account_data)
+      - qualifier(S,anonymized_data)
+    conclusions:
+      - idNotRequired(S)
+
+  - id: idNotRequired11
+    variables: [S]
+    premises:
+      - dataCategory(S,account_data)
+      - qualifier(S,unlinked_data)
+    conclusions:
+      - idNotRequired(S)
