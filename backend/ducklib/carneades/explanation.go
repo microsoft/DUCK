@@ -1,6 +1,8 @@
 package carneades
 
 import (
+	"fmt"
+
 	"github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
 )
@@ -41,10 +43,11 @@ func stmtId(t terms.Compound) string {
 
 // isTrue: check whether a given predicate is true/in for a particular
 // data use statement in the argument graph
-func isTrue(predicate string, dus terms.Compound, ag *caes.ArgGraph) BoolValue {
+func isTrue(predicate string, dus terms.Compound, ag *caes.ArgGraph, defaultValue bool) BoolValue {
 	goal, ok := terms.ReadString(predicate + "(" + dus.String() + ")")
 	if !ok {
-		return BoolValue{true, true}
+		fmt.Println("Improper predicate: " + predicate)
+		return BoolValue{defaultValue, true}
 	}
 	for wff, stmt := range ag.Statements {
 		t, ok := terms.ReadString(wff)
@@ -55,25 +58,27 @@ func isTrue(predicate string, dus terms.Compound, ag *caes.ArgGraph) BoolValue {
 		_, ok = terms.Match(goal, t, b)
 		if ok {
 			v := stmt.Label == caes.In
-			return BoolValue{!v, !v}
+			//negation as failure, so no longer an assumption, no matter the value of v
+			return BoolValue{v, false}
 		}
 	}
-	return BoolValue{true, true}
+	fmt.Println("No match found: " + predicate + "(" + dus.String() + ")")
+	return BoolValue{defaultValue, true}
 }
 
 // ConsentRequired
 func cr(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
-	return isTrue("notConsentRequired", dus, ag)
+	return isTrue("consentRequired", dus, ag, true)
 }
 
 // Personally Identifiable Information
 func pii(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
-	return isTrue("notPii", dus, ag)
+	return isTrue("pii", dus, ag, true)
 }
 
 // Legitimate Interest
 func li(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
-	return isTrue("li", dus, ag)
+	return isTrue("li", dus, ag, false)
 }
 
 // Returns a slice of statements ids, for statements having a purpose
@@ -105,7 +110,7 @@ func cp(dus terms.Compound, ag *caes.ArgGraph) []string {
 // Returns a slice of ids for statements not
 // requring the identification of the data subject
 func idnr(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
-	return isTrue("idNotRequired", dus, ag)
+	return isTrue("idNotRequired", dus, ag, false)
 }
 
 func (c ComplianceChecker) GetExplanation(theory *caes.Theory, ag *caes.ArgGraph) (Explanation, error) {

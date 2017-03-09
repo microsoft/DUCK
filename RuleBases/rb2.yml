@@ -19,7 +19,7 @@ language:
   extendsScope/2: extendsScope(%s,%s)
   greaterScope/2: greaterScope(%s,%s)
   id/2: id(%s,%s)
-  # identification of data subject is not required
+  idRequired/1: idRequired(%s) 
   idNotRequired/1: idNotRequired(%s) 
   kindOf/2: kindOf(%s,%s)
   lesserScope/2: lesserScope(%s,%s)
@@ -43,6 +43,7 @@ issue_schemes:
   docConsent: [docConsentRequired, notDocConsentRequired]
   li: [li(S), notLi(S)]
   pii: [pii(S), notPii(S)]
+  id: [idRequired(S), idNotRequired(S)]
 
 argument_schemes:
 
@@ -804,6 +805,15 @@ argument_schemes:
 
   #### EU GDPR Article 11 rules
 
+  - id: idNotRequired0
+    variables: [S]
+    weight:
+      constant: 0.1
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - idNotRequired(S)  
+  
   - id: idNotRequired1
     variables: [S]
     premises:
