@@ -82,7 +82,10 @@
   "main_statement": "Primary statement",
   "document_saving": "Saving document...",
   "document_saved": "Document saved",
-  "document_validating": "Validating document..."
+  "document_validating": "Validating document...",
+  "id_not_required": "ID Not Required",
+  "id_required": "ID Required"
+
 
 }
 
