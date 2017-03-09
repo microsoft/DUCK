@@ -120,30 +120,40 @@
                                                      'is-hidden': statement.$$statementExplanation.consentRequired.value === true}">
                                         {{'consent_not_required'|translate}}
                                     </span>
-                                <span class="label padding-right-1 right"
+                                    <span class="label padding-right-1 right"
                                       ng-class="{'secondary': statement.$$statementExplanation.consentRequired.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.consentRequired.value === false}">
                                         {{'consent_required'|translate}}
                                     </span>
-                                <span class="label padding-right-1 right"
+                                    <span class="label padding-right-1 right"
                                       ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.pii.value === true}">
                                         {{'does_not_relate_to_pii'|translate}}
                                     </span>
-                                <span class="label padding-right-1 right"
+                                    <span class="label padding-right-1 right"
                                       ng-class="{'secondary': statement.$$statementExplanation.pii.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.pii.value === false}">
                                         {{'relates_pii'|translate}}
                                     </span>
-                                <span class="label padding-right-1 right"
+                                    <span class="label padding-right-1 right"
                                       ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.li.value === true}">
                                         {{'no_legitimate_interest'|translate}}
                                     </span>
-                                <span class="label padding-right-1 right"
+                                    <span class="label padding-right-1 right"
                                       ng-class="{'secondary': statement.$$statementExplanation.li.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.li.value === false}">
                                         {{'legitimate_interest'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                      ng-class="{'secondary': statement.$$statementExplanation.idNotRequired.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.idNotRequired.value === true}">
+                                        {{'id_required'|translate}}
+                                    </span>
+                                    <span class="label padding-right-1 right"
+                                      ng-class="{'secondary': statement.$$statementExplanation.idNotRequired.assumed=== true,
+                                                     'is-hidden': statement.$$statementExplanation.idNotRequired.value === false}">
+                                        {{'id_not_required'|translate}}
                                     </span>
                             </div>
                             <div class="small-2 right columns">
