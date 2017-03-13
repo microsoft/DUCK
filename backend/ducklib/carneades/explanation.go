@@ -1,8 +1,6 @@
 package carneades
 
 import (
-	"fmt"
-
 	"github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/terms"
 )
@@ -46,7 +44,7 @@ func stmtId(t terms.Compound) string {
 func isTrue(predicate string, dus terms.Compound, ag *caes.ArgGraph, defaultValue bool) BoolValue {
 	goal, ok := terms.ReadString(predicate + "(" + dus.String() + ")")
 	if !ok {
-		fmt.Println("Improper predicate: " + predicate)
+		//fmt.Println("Improper predicate: " + predicate)
 		return BoolValue{defaultValue, true}
 	}
 	for wff, stmt := range ag.Statements {
@@ -62,7 +60,7 @@ func isTrue(predicate string, dus terms.Compound, ag *caes.ArgGraph, defaultValu
 			return BoolValue{v, false}
 		}
 	}
-	fmt.Println("No match found: " + predicate + "(" + dus.String() + ")")
+	//fmt.Println("No match found: " + predicate + "(" + dus.String() + ")")
 	return BoolValue{defaultValue, true}
 }
 
