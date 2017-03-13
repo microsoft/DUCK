@@ -1,80 +1,70 @@
 {
 	"PII_NO": {
 		"description": "No PII Example",
-		"statements": [
-			{
+		"statements": [{
 				"actionCode": "improve",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "unlinked_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "provide",
 				"dataCategoryCode": "derived_data_organization",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "improve",
 				"dataCategoryCode": "provider_data_authentication",
 				"qualifierCode": "pseudonymized_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "service",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "improve",
 				"dataCategoryCode": "customer_content_financial",
 				"qualifierCode": "anonymized_data",
 				"resultScopeCode": "service",
 				"sourceScopeCode": "csp_services",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "share_provide",
 				"dataCategoryCode": "provider_data_authentication",
 				"qualifierCode": "unlinked_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "third_party_partners",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "provide",
 				"dataCategoryCode": "provider_data_operations",
 				"qualifierCode": "anonymized_data",
 				"resultScopeCode": "service",
 				"sourceScopeCode": "third_party_services",
 				"useScopeCode": "service"
-			},
-			{
+			}, {
 				"actionCode": "improve",
 				"dataCategoryCode": "customer_content_financial",
 				"qualifierCode": "aggregated_data",
 				"resultScopeCode": "services_agreement",
 				"sourceScopeCode": "csp_products",
 				"useScopeCode": "csp_services"
-			},
-			{
+			}, {
 				"actionCode": "market",
 				"dataCategoryCode": "derived_data_organization",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "csp_services",
 				"sourceScopeCode": "csp_services",
 				"useScopeCode": "third_party_services"
-			},
-			{
+			}, {
 				"actionCode": "market",
 				"dataCategoryCode": "provider_data_authentication",
 				"qualifierCode": "pseudonymized_data",
 				"resultScopeCode": "csp_products",
 				"sourceScopeCode": "services_agreement",
 				"useScopeCode": "csp_products"
-			},
-			{
+			}, {
 				"actionCode": "share",
 				"dataCategoryCode": "customer_content_opinions",
 				"qualifierCode": "unlinked_data",
@@ -86,88 +76,77 @@
 	},
 	"PII_YES": {
 		"description": "PII Example",
-		"statements": [
-			{
+		"statements": [{
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "customer_content_credentials",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "pseudonymized_data",
 				"dataCategoryCode": "derived_data_user_connectivity",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "customer_content_genetic",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "pseudonymized_data",
 				"dataCategoryCode": "customer_content_children",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "derived_data_user_social",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "account_data_payment",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "pseudonymized_data",
 				"dataCategoryCode": "provider_data_operations",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "pseudonymized_data",
 				"dataCategoryCode": "account_data_payment",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "customer_content_financial",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "pseudonymized_data",
 				"dataCategoryCode": "derived_data_user_telemetry",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "services_agreement"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "derived_data_user_browsing",
@@ -179,80 +158,70 @@
 	},
 	"LI_YES": {
 		"description": "Legitimate Interest Example",
-		"statements": [
-			{
+		"statements": [{
 				"actionCode": "provide",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "improve",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "services_agreement",
 				"sourceScopeCode": "services_agreement",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "personalize",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "service",
 				"sourceScopeCode": "service",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "upgrades",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "market",
 				"dataCategoryCode": "derived_data_user_contact",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "service"
-			},
-			{
+			}, {
 				"actionCode": "provide",
 				"dataCategoryCode": "derived_data_user_demographic",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "service",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "third_party_services"
-			},
-			{
+			}, {
 				"actionCode": "improve",
 				"dataCategoryCode": "customer_content_biometric",
 				"qualifierCode": "pseudonymized_data",
 				"resultScopeCode": "csp_services",
 				"sourceScopeCode": "third_party_services",
 				"useScopeCode": "third_party_services"
-			},
-			{
+			}, {
 				"actionCode": "personalize",
 				"dataCategoryCode": "customer_content_financial",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "capability",
 				"sourceScopeCode": "csp_services",
 				"useScopeCode": "csp_services"
-			},
-			{
+			}, {
 				"actionCode": "upgrades",
 				"dataCategoryCode": "derived_data_user_location",
 				"qualifierCode": "pseudonymized_data",
 				"resultScopeCode": "service",
 				"sourceScopeCode": "csp_products",
 				"useScopeCode": "service"
-			},
-			{
+			}, {
 				"actionCode": "advertise_personalization",
 				"dataCategoryCode": "derived_data_user_biometric",
 				"qualifierCode": "identified_data",
@@ -264,80 +233,70 @@
 	},
 	"LI_NO": {
 		"description": "No Legitimate Interest Example",
-		"statements": [
-			{
+		"statements": [{
 				"actionCode": "provide",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "pseudonymized_data",
 				"resultScopeCode": "services_agreement",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "improve",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "third_party_partners",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "service"
-			},
-			{
+			}, {
 				"actionCode": "personalize",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "csp_services",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "upgrades",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "csp_services",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "share_provide",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "csp_products",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "share",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "service",
 				"sourceScopeCode": "capability",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "promote_contextual",
 				"dataCategoryCode": "account_data_payment",
 				"qualifierCode": "pseudonymized_data",
 				"resultScopeCode": "services_agreement",
 				"sourceScopeCode": "third_party_services",
 				"useScopeCode": "csp_products"
-			},
-			{
+			}, {
 				"actionCode": "personalize",
 				"dataCategoryCode": "derived_data_user_demographic",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "csp_services",
 				"sourceScopeCode": "service",
 				"useScopeCode": "csp_services"
-			},
-			{
+			}, {
 				"actionCode": "share_provide",
 				"dataCategoryCode": "derived_data_user_social",
 				"qualifierCode": "pseudonymized_data",
 				"resultScopeCode": "csp_products",
 				"sourceScopeCode": "third_party_services",
 				"useScopeCode": "capability"
-			},
-			{
+			}, {
 				"actionCode": "upgrades",
 				"dataCategoryCode": "account_data_customer",
 				"qualifierCode": "identified_data",
@@ -349,48 +308,42 @@
 	},
 	"DEMO_DOCUMENT1": {
 		"description": "Demo Document",
-		"statements": [
-			{
+		"statements": [{
 				"useScopeCode": "service",
 				"qualifierCode": "anonymized_data",
 				"dataCategoryCode": "customer_content",
 				"sourceScopeCode": "service",
 				"actionCode": "market",
 				"resultScopeCode": "csp_products"
-			},
-			{
+			}, {
 				"useScopeCode": "service",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "provider_data_operations",
 				"sourceScopeCode": "service",
 				"actionCode": "personalize",
 				"resultScopeCode": "service"
-			},
-			{
+			}, {
 				"useScopeCode": "service",
 				"qualifierCode": "unlinked_data",
 				"dataCategoryCode": "derived_data_user_location",
 				"sourceScopeCode": "service",
 				"actionCode": "improve",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "service",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "derived_data_user_profiling",
 				"sourceScopeCode": "service",
 				"actionCode": "personalize",
 				"resultScopeCode": "csp_services"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "unlinked_data",
 				"dataCategoryCode": "customer_content_credentials",
 				"sourceScopeCode": "csp_services",
 				"actionCode": "improve",
 				"resultScopeCode": "csp_products"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "customer_content_financial",
@@ -400,34 +353,111 @@
 			}
 		]
 	},
+	"ID_REQIRED": {
+		"description": "ID Required Example",
+		"statements": [{
+				"actionCode": "provide",
+				"dataCategoryCode": "account_data",
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			}, {
+				"actionCode": "provide",
+				"dataCategoryCode": "customer_content",
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			}, {
+				"actionCode": "provide",
+				"dataCategoryCode": "customer_content",
+				"qualifierCode": "anonymized_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			}, {
+				"actionCode": "provide",
+				"dataCategoryCode": "provider_data_operations",
+				"qualifierCode": "pseudonymized_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			}, {
+				"actionCode": "improve",
+				"dataCategoryCode": "derived_data_user_content",
+				"qualifierCode": "pseudonymized_data",
+				"resultScopeCode": "services_agreement",
+				"sourceScopeCode": "services_agreement",
+				"useScopeCode": "service"
+			}
+		]
+	},
+	"ID_NOT_REQUIRED": {
+		"description": "ID Not Required Example",
+		"statements": [{
+				"actionCode": "improve",
+				"dataCategoryCode": "customer_content_credentials",
+				"qualifierCode": "aggregated_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "service"
+			}, {
+				"actionCode": "personalize",
+				"dataCategoryCode": "derived_data_user_connectivity",
+				"qualifierCode": "anonymized_data",
+				"resultScopeCode": "service",
+				"sourceScopeCode": "service",
+				"useScopeCode": "capability"
+			}, {
+				"actionCode": "provide",
+				"dataCategoryCode": "derived_data_organization",
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			}, {
+				"actionCode": "upgrades",
+				"dataCategoryCode": "derived_data_organization",
+				"qualifierCode": "pseudonymized_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "csp_services"
+			}, {
+				"actionCode": "provide",
+				"dataCategoryCode": "account_data",
+				"passive": "false",
+				"qualifierCode": "unlinked_data",
+				"resultScopeCode": "service",
+				"sourceScopeCode": "service",
+				"useScopeCode": "capability"
+			}
+		]
+	},
 	"NO_CONSENT_REQUIRED": {
 		"description": "Consent not required example",
-		"statements": [
-			{
+		"statements": [{
 				"useScopeCode": "csp_services",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "customer_content_credentials",
 				"sourceScopeCode": "service",
 				"actionCode": "provide",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "customer_content_biometric",
 				"sourceScopeCode": "capability",
 				"actionCode": "improve",
 				"resultScopeCode": "capability"
-			},
-			{
+			}, {
 				"useScopeCode": "third_party_services",
 				"qualifierCode": "unlinked_data",
 				"dataCategoryCode": "provider_data_authentication",
 				"sourceScopeCode": "service",
 				"actionCode": "personalize",
 				"resultScopeCode": "service"
-			},
-			{
+			}, {
 				"useScopeCode": "service",
 				"qualifierCode": "unlinked_data",
 				"dataCategoryCode": "provider_data_authentication",
@@ -439,24 +469,21 @@
 	},
 	"CONSENT_REQUIRED": {
 		"description": "Consent required example",
-		"statements": [
-			{
+		"statements": [{
 				"useScopeCode": "capability",
 				"qualifierCode": "pseudonymized_data",
 				"dataCategoryCode": "customer_content_credentials",
 				"sourceScopeCode": "capability",
 				"actionCode": "provide",
 				"resultScopeCode": "services_agreement"
-			},
-			{
+			}, {
 				"useScopeCode": "capability",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "account_data_payment",
 				"sourceScopeCode": "third_party_services",
 				"actionCode": "promote_contextual",
 				"resultScopeCode": "services_agreement"
-			},
-			{
+			}, {
 				"useScopeCode": "csp_services",
 				"qualifierCode": "identified_data",
 				"dataCategoryCode": "derived_data_user_demographic",
