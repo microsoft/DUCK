@@ -1,12 +1,13 @@
+
 {
-	"database": {
-		"location": "http://127.0.0.1",
-		"port": 5984,
-		"name": "duck",
-		"username": "a",
-      "password": "b"
-	},
-	"jwtkey": "secret",
-	"webdir": "src/github.com/Microsoft/DUCK/frontend/dist",
-	"rulebasedir": "src/github.com/Microsoft/DUCK/RuleBases"
+    "database": {
+	"location": "http://127.0.0.1",
+	"port": 5984,
+	"name": "duck",
+	"username": "a",
+	"password": "b"
+    },
+    "jwtkey": "c2VjcmV0",
+    "webdir": "src/github.com/Microsoft/DUCK/frontend/dist",
+    "rulebasedir": "src/github.com/Microsoft/DUCK/RuleBases"
 }

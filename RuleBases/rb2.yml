@@ -805,14 +805,14 @@ argument_schemes:
 
   #### EU GDPR Article 11 rules
 
-  - id: idNotRequired0
+  - id: idRequired
     variables: [S]
     weight:
       constant: 0.1
     premises:
       - dataUseStatement(S)
     conclusions:
-      - idNotRequired(S)  
+      - idRequired(S)  
   
   - id: idNotRequired1
     variables: [S]
