@@ -105,10 +105,12 @@ The default configuration has these values:
       name: "duck"
 	  username: ""
 	  password: ""
-  jwtkey: "secret"
+  jwtkey: "c2VjcmV0"
   webdir: "/src/github.com/Microsoft/DUCK/frontend/dist"
   rulebasedir: "/src/github.com/Microsoft/DUCK/RuleBases"
 ```
+##### jwtkey
+The field jwtkey is a base64 encoded string. If this field is empty, a random key will be generated.
 
 ##### regarding path variables
 
