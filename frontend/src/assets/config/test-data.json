@@ -75,7 +75,7 @@
 				"useScopeCode": "csp_products"
 			},
 			{
-				"actionCode": "advertise",
+				"actionCode": "share",
 				"dataCategoryCode": "customer_content_opinions",
 				"qualifierCode": "unlinked_data",
 				"resultScopeCode": "third_party_services",
@@ -298,7 +298,7 @@
 				"useScopeCode": "capability"
 			},
 			{
-				"actionCode": "advertise",
+				"actionCode": "share_provide",
 				"dataCategoryCode": "customer_content_credentials",
 				"qualifierCode": "identified_data",
 				"resultScopeCode": "csp_products",
