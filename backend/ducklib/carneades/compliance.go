@@ -114,7 +114,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 			Metadata: make(map[string]interface{}),
 			Text:     stmtId,
 			Args:     []*caes.Argument{}}
-		ag.Assumptions[stmtId] = true
+		ag.Assumptions = append(ag.Assumptions, stmtId)
 		ag.Statements[stmtId] = stmt
 	}
 	// derive arguments by applying the theory of the argument graph to
