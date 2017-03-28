@@ -1,6 +1,9 @@
 package config
 
 import (
+	"encoding/base64"
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -41,6 +44,7 @@ func TestConfig(t *testing.T) {
 	//t.Error("AHHHHHH")
 	t.Run("File=1", testNoFile)
 	t.Run("File=2", testWrongFile)
+	t.Run("File=3", testCorrectFile)
 	t.Run("Env=1", testEnvGopath)
 
 	//set env to prior values
@@ -71,6 +75,72 @@ func testWrongFile(t *testing.T) {
 	//should be default
 	if c.DBConfig != nil {
 		t.Errorf("Configuration with no File: Database Object should be nil, is %+v", c.DBConfig)
+	}
+
+}
+func testCorrectFile(t *testing.T) {
+
+	c := NewConfiguration(correctPath)
+	goPath := os.Getenv("GOPATH")
+
+	dat, err := ioutil.ReadFile(correctPath)
+	if err != nil {
+		t.Error("Skipped")
+		t.Skip("Could not load testing config file")
+
+	}
+	var i map[string]interface{}
+	err = json.Unmarshal(dat, &i)
+	if err != nil {
+		t.Error("Skipped")
+		t.Skip("Could not load testing config file")
+
+	}
+	str, ok := i["jwtkey"].(string)
+	if !ok {
+		t.Error("Skipped")
+		t.Skip("Could not load jwtkey from testing config file")
+
+	}
+	j, err := base64.StdEncoding.DecodeString(str)
+	if !ok {
+		t.Error("Skipped")
+		t.Skip("Could not decode jwtkey in byte")
+
+	}
+
+	if len(c.JwtKey) != len(j) {
+		t.Errorf("Configuration with correct File: JWT Key does not equal correct key got: %s, want: %s", c.JwtKey, j)
+	}
+
+	for l := range j {
+		if j[l] != c.JwtKey[l] {
+			t.Errorf("Configuration with correct File: JWT Key does not equal correct key got: %s, want: %s", c.JwtKey, j)
+		}
+
+	}
+	rb := i["rulebasedir"].(string)
+	wb := i["webdir"].(string)
+
+	if goPath != "" {
+		if !filepath.IsAbs(rb) {
+			rb = filepath.Join(goPath, rb)
+		}
+
+		if !filepath.IsAbs(wb) {
+			wb = filepath.Join(goPath, wb)
+		}
+	}
+
+	if c.RulebaseDir != rb {
+		t.Errorf("Configuration with correct File: RulebaseDir does not equal correct Dir. got: %s, want: %s", c.RulebaseDir, rb)
+	}
+	if c.WebDir != wb {
+		t.Errorf("Configuration with correct File: WebDir does not equal correct Dir. got: %s, want: %s", c.WebDir, wb)
+	}
+
+	if c.DBConfig == nil {
+		t.Errorf("Configuration with correct File: DBConfig is nil, should not be nil")
 	}
 
 }
