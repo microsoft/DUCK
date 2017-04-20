@@ -10,6 +10,7 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/documents"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/rulebases"
 	"github.com/Microsoft/DUCK/backend/ducklib/handlers/users"
+	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -20,7 +21,17 @@ func GetServer(conf config.Configuration) *echo.Echo {
 	//config := conf
 	datab, err := db.NewDatabase(*conf.DBConfig)
 	if err != nil {
-		panic(err)
+		switch t := err.(type) {
+		case structs.HTTPError:
+			e := err
+			if t.Cause != nil {
+				log.Printf("Database error: " + err.Error())
+				e = t.Cause
+			}
+			panic(e)
+		default:
+			panic(err)
+		}
 	}
 
 	JWT := conf.JwtKey

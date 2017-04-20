@@ -459,14 +459,14 @@ func (cb *Couchbase) Init(config structs.DBConf) error {
 		log.Println("Database Username and Password set.")
 	} else {
 		cb.auth = false
-		log.Println("Username or password missing in couchdb config. Assuming no auth needed. This is *not* recommended.")
+		log.Println("Warning: Username or password missing in couchdb config. Assuming no auth needed. This is *not* recommended.")
 	}
 
 	url := config.Location + ":" + port
 
 	jsonbody, err := cb.doGet(url)
 	if err != nil {
-		return err
+		return structs.WrapErrWith(err, structs.NewHTTPError("Could not connect to CouchDB, please check if CouchDB is available", 500))
 	}
 
 	cdb, prs := jsonbody["couchdb"].(string)
@@ -548,7 +548,7 @@ func (cb *Couchbase) createDatabase() error {
 		return structs.NewHTTPError(reason, 502)
 	}
 
-	return structs.NewHTTPError("Could not decrypt Couchbase response", 502)
+	return structs.NewHTTPError("Could not decrypt CouchDB response", 502)
 }
 
 func (cb *Couchbase) testDBExists() (bool, error) {
@@ -556,7 +556,8 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 
 	jsonbody, err := cb.doGet(url)
 	if err != nil {
-		return false, err
+
+		return false, structs.WrapErrWith(err, structs.NewHTTPError("Could not connect to CouchDB, please check if CouchDB is available", 500))
 	}
 
 	cdb, prs := jsonbody["db_name"]
@@ -564,7 +565,7 @@ func (cb *Couchbase) testDBExists() (bool, error) {
 
 		cdb, prs = jsonbody["error"]
 		if !prs {
-			return false, structs.NewHTTPError("Could not decrypt Couchbase response", 502)
+			return false, structs.NewHTTPError("Could not decrypt CouchDB response", 502)
 		}
 		e := cdb.(string)
 		if e == "not_found" {
