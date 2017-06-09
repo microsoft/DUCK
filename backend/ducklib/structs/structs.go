@@ -128,6 +128,7 @@ func NewHTTPError(err string, code int) HTTPError {
 	return HTTPError{err, code, nil}
 }
 
+// WrapErrWith wraps herr around err by setting err as Cause of herr
 func WrapErrWith(err error, herr HTTPError) HTTPError {
 	herr.Cause = err
 	return herr
