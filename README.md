@@ -22,10 +22,10 @@ This is a Gulp-powered build system with the following features:
 The project build requires:
 
 - [Git](https://git-scm.com/)
-- [Go] (https://golang.org/)  (1.7 or later)
+- [Go](https://golang.org/)  (1.7 or later)
 - [NodeJS](https://nodejs.org/en/) (0.12 or greater, LTS version >4.0.0 recommended)
 - [CouchDB](http://couchdb.apache.org/) (1.6 or greater)
-- [SWI Prolog] (http://swi-prolog.org) (Development Release 7.3)
+- [SWI Prolog](http://swi-prolog.org) (Development Release 7.3)
 
 ### Setup
 
