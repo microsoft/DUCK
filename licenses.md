@@ -16,4 +16,7 @@ This document tracks third-party software distributed by this project:
 - CouchDB [https://www.apache.org/licenses/LICENSE-2.0]
 - Carneades [https://github.com/carneades/carneades-4/blob/master/LICENSE]
 - Go programming Language [https://golang.org/LICENSE]
+- Go Yaml parser [https://github.com/go-yaml/yaml/blob/v2/LICENSE] and [https://github.com/go-yaml/yaml/blob/v2/LICENSE.libyaml]
+- SWI Prolog [http://www.swi-prolog.org/license.html]
+
 
