@@ -83,8 +83,8 @@
   "document_saving": "Saving document...",
   "document_saved": "Document saved",
   "document_validating": "Validating document...",
-  "id_not_required": "ID Not Required",
-  "id_required": "ID Required"
+  "id_not_required": "Data Subject Rights Apply",
+  "id_required": "Data Subject’s Consent Not Required According to Art. 11"
 }
 
 
