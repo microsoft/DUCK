@@ -28,19 +28,19 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="padding-right-1">
-                        <a href="#"><i class="fa fa-file-text-o"></i> </a>
-                        <ul class="top-bar-menu vertical">
-                            <li ng-repeat="assumptionSet in main.assumptionSets">
+                    <!--<li class="padding-right-1">-->
+                        <!--<a href="#"><i class="fa fa-file-text-o"></i> </a>-->
+                        <!--<ul class="top-bar-menu vertical">-->
+                            <!--<li ng-repeat="assumptionSet in main.assumptionSets">-->
 
-                                <a ng-click="main.setDefaultAssumptionSet(assumptionSet.id)" href="">
-                                    <span class="fa fa-check padding-right-1" ng-show="assumptionSet.id === main.CurrentUser.assumptionSet"></span>
-                                    <span class="fa fa-check padding-right-1" style="color: #0A0A0A" ng-show="assumptionSet.id !== main.CurrentUser.assumptionSet"></span>
-                                    {{assumptionSet.name}}
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                                <!--<a ng-click="main.setDefaultAssumptionSet(assumptionSet.id)" href="">-->
+                                    <!--<span class="fa fa-check padding-right-1" ng-show="assumptionSet.id === main.CurrentUser.assumptionSet"></span>-->
+                                    <!--<span class="fa fa-check padding-right-1" style="color: #0A0A0A" ng-show="assumptionSet.id !== main.CurrentUser.assumptionSet"></span>-->
+                                    <!--{{assumptionSet.name}}-->
+                                <!--</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
                     <li>
                         <a data-open="signoutModal" class="button secondary hollow">{{"sign_out" | translate}}</a>
                     </li>
