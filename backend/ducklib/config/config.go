@@ -1,3 +1,7 @@
+// Data Use Statement Compliance Checker (DUCK)
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
+
 package config
 
 //TODO rename either package or struct to sth better

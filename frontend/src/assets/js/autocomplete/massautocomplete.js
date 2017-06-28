@@ -1,3 +1,7 @@
+// Data Use Statement Compliance Checker (DUCK)
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
+
 angular.module('MassAutoComplete', [])
     .directive('massAutocomplete', ["$timeout", "$window", "$document", "$q", function ($timeout, $window, $document, $q) {
         'use strict';
