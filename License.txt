@@ -1,7 +1,7 @@
 ------------------------------------------ START OF LICENSE -----------------------------------------
 Data Use Statement Compliance Checker (DUCK)
 Copyright (c) Microsoft Corporation
-Licensed under the MIT license.
+MIT License
 
 AngularJS
 Copyright (c) 2010-2017 Google, Inc. http://angularjs.org
@@ -27,7 +27,7 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 JSHashtable fork
 https://github.com/enriquecastl/jshashtable
 JS Hashset fork
-https://github.com/enriquecastl/jshashset] 
+https://github.com/enriquecastl/jshashset]
 Copyright (c) enriquecastl
 Fuse.js
 Copyright (c) 2016 Kiro Risk
@@ -194,7 +194,7 @@ Mozilla Public License Version 2.0
     means any form of the work other than Source Code Form.
  
 1.7. "Larger Work"
-    means a work that combines Covered Software with other material, in 
+    means a work that combines Covered Software with other material, in
     a separate file or files, that is not Covered Software.
  
 1.8. "License"
@@ -426,4 +426,3 @@ prior to termination shall survive termination.
 *  basis, without warranty of any kind, either expressed, implied, or  *
 *  statutory, including, without limitation, warranties that the       *
 *  Covered Software is free of defects, merchantable, fit for a  
- 
