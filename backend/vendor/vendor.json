@@ -3,16 +3,28 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "0Qa6wqFgYj03I5zu5U8OoNPuJlE=",
+			"checksumSHA1": "rk9j2QZDJorxwAyno7FAosHeqAw=",
 			"path": "github.com/carneades/carneades-4/src/engine/caes",
-			"revision": "50c849b6d4e0595a0d1ad7e7a419669f21205274",
-			"revisionTime": "2016-03-30T21:29:41Z"
+			"revision": "e697c28917b8effa0b4df1b6f66235310a1383e3",
+			"revisionTime": "2017-07-12T18:29:25Z"
 		},
 		{
-			"checksumSHA1": "e1vrCddsenUF5IsJPqgcgAbDg4s=",
+			"checksumSHA1": "UnEvkPbHeluuLXTy1aT93fG2Y4w=",
+			"path": "github.com/carneades/carneades-4/src/engine/caes/encoding/graphml",
+			"revision": "e697c28917b8effa0b4df1b6f66235310a1383e3",
+			"revisionTime": "2017-07-12T18:29:25Z"
+		},
+		{
+			"checksumSHA1": "y/bnuuIjeVyl3ymoIy/Ez5hYflI=",
+			"path": "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml",
+			"revision": "e697c28917b8effa0b4df1b6f66235310a1383e3",
+			"revisionTime": "2017-07-12T18:29:25Z"
+		},
+		{
+			"checksumSHA1": "fvbF4vSigEJnrsoCO8cBnxeajvI=",
 			"path": "github.com/carneades/carneades-4/src/engine/terms",
-			"revision": "50c849b6d4e0595a0d1ad7e7a419669f21205274",
-			"revisionTime": "2016-03-30T21:29:41Z"
+			"revision": "e697c28917b8effa0b4df1b6f66235310a1383e3",
+			"revisionTime": "2017-07-12T18:29:25Z"
 		},
 		{
 			"checksumSHA1": "ZEPb+i1t8UkxXJcE0NrFZGNMN/o=",
@@ -21,6 +33,24 @@
 			"revisionTime": "2016-06-16T19:15:56Z",
 			"version": "v3.0.0",
 			"versionExact": "v3.0.0"
+		},
+		{
+			"checksumSHA1": "zMv1VV7LSsJ0id9NZUC9SQCNxio=",
+			"path": "github.com/hfried/GoCHR/src/engine/CHR",
+			"revision": "763e8418eab6bebe7fd7d577daa6f6991960f951",
+			"revisionTime": "2017-07-12T18:38:05Z"
+		},
+		{
+			"checksumSHA1": "VyJnPZZJk9mAcjXBUsVTo6tOd6k=",
+			"path": "github.com/hfried/GoCHR/src/engine/parser",
+			"revision": "763e8418eab6bebe7fd7d577daa6f6991960f951",
+			"revisionTime": "2017-07-12T18:38:05Z"
+		},
+		{
+			"checksumSHA1": "djzIfBLIMbrgZUo9N3xLWRfvkyU=",
+			"path": "github.com/hfried/GoCHR/src/engine/terms",
+			"revision": "763e8418eab6bebe7fd7d577daa6f6991960f951",
+			"revisionTime": "2017-07-12T18:38:05Z"
 		},
 		{
 			"checksumSHA1": "v0pKU64nVzjlqjhZN/vEmyK2JcM=",
