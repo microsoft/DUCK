@@ -1,3 +1,7 @@
+// Data Use Statement Compliance Checker (DUCK)
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
+
 var editorModule = angular.module("duck.editor");
 
 editorModule.controller("EditorController", function (DocumentModel, TaxonomyService, EventBus, LocaleService, AssumptionSetService, DocumentExporter,

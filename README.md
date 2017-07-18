@@ -3,6 +3,8 @@
 **_Attention: These are Instructions for Developers._** If you just want to try DUCK, you might want to download it [here](https://github.com/Microsoft/DUCK/releases).
 A user manual can be found [here](docs/usermanual.md), the DUCK architecture is described [here](docs/architecture.md).
 
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 
 This is a Gulp-powered build system with the following features:

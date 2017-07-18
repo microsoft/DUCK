@@ -1,3 +1,7 @@
+// Data Use Statement Compliance Checker (DUCK)
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
+
 var homeModule = angular.module("duck.home");
 
 homeModule.controller("HomeController", function (DataUseDocumentService, DocumentModel, $state) {
