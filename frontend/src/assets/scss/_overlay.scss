@@ -8,11 +8,62 @@
 
 // image overlay classes
 
+$ptop: 0.7vh;
+$pbottom: 0.1vh;
+
 .image-wrapper {
-  overflow: hidden;
-  position: relative;
-  text-align: center;
+
   border-radius: $global-radius;
+  //border: 1px solid #bfbfbf;
+  border-spacing: 2px;
+  margin: {
+    bottom: 2px;
+  }
+  pointer-events: none;
+  transition: all 0.5s linear;
+  background-color: #f4f4f4;
+  
+  &:last-child{
+    margin-bottom: 15vh;
+    border-bottom: {
+      style: solid;
+      width: 1px;
+      color: #c0c0c0;
+    }
+
+  }
+
+}
+.overview-name{
+  border-radius: 5px;
+  margin-left: 1vw;
+  color: #444444;
+  transition: all 0.6s ease-in-out;
+  pointer-events: auto;
+  padding: {
+    top: $ptop;
+    bottom: $pbottom;
+  }
+
+  &:hover{
+    background-color: #aeaeae;;
+    transition: all 0.2s linear;
+    color: #2199e8;
+    //color: #282828;
+  }
+  
+  h6{
+    font-weight: bold;
+  }
+  
+}
+
+.overview-images{
+  pointer-events: auto;
+  padding: {
+    top: $ptop;
+    bottom: $pbottom;
+  }
 }
 
 .image-overlay-content {
@@ -22,56 +73,8 @@
   overflow: hidden;
   top: 20%;
   left: 0;
+
+ 
+
 }
 
-.overlay-fade-in {
-
-  p {
-    letter-spacing: 0.15em;
-    color: #f4f4f4;
-    font-size: 28px;
-    opacity: 0;
-    transition: all 0.2s linear;
-  }
-
-  img {
-    transition: all 0.2s linear;
-  }
-
-  .document-box {
-    width: 120px;
-    height: 160px;
-    border: 1px solid #777777;
-    border-radius: 3px;
-  }
-
-  .image-overlay-content {
-    opacity: 0;
-    background-color: rgba(20, 33, 40, .7);
-    transition: all 0.4s ease-in-out;
-    padding-bottom: 5em !important;
-
-  }
-
-  &:hover img {
-    //transform: scale(1.2);
-  }
-
-  &:hover .image-overlay-content {
-    opacity: 1;
-  }
-
-  &:hover h2, p, .button {
-    opacity: 1;
-  }
-
-  &:hover p {
-    transition-delay: 0.1s;
-  }
-
-  &:hover .button {
-    transition-delay: 0.2s;
-  }
-}
-
-// end image overlay classes

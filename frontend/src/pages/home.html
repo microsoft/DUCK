@@ -11,7 +11,7 @@
             <label for="search-box" class="search-label middle"><i class="fa fa-search"></i></label>
         </div>
         <div class="small-4 columns">
-            <input id="search-box" class="search-box" ng-model="home.summaryFilter" type="text" ng-attr-placeholder="{{'search_docs_placeholder'|translate}}">
+            <input id="search-box" class="search-box" ng-model="home.summaryFilter.name" type="text" ng-attr-placeholder="{{'search_docs_placeholder'|translate}}">
         </div>
         <div class="small-4 columns text-right">
             <!--<label for="exampleFileUpload" class="button"><i class="fa fa-cloud-upload"></i> {{"upload_file"|translate}}</label>-->
@@ -24,29 +24,24 @@
     <div class="row column text-center padding-top-6" ng-if="home.summaries.length === 0">
         <h5>{{"no_documents_heading"|translate}}</h5>
     </div>
-    <div class="row small-up-8" ng-if="home.summaries.length > 0">
-        <div class="columns text-center" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
-            <div class="image-wrapper overlay-fade-in" style="width:120px">
-                <div class="document-box"></div>
-                <div class="image-overlay-content">
-                    <div class="text-right padding-top-0-5 padding-right-0-5">
-                        <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
-                            <i class="fa fa-clone white"></i>
-                        </a>
-
-                        <a data-open="deleteModal" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
-                            <i class="fa fa-trash white"></i>
-                        </a>
-                    </div>
-                    <div class="padding-top-0-5">
-                        <a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>
-                    </div>
-
-                </div>
-                <h6>{{summary.name}}</h6>
-            </div>
+    
+    <div>
+        <div class="row text-left image-wrapper summary" ng-if="home.summaries.length > 0" ng-repeat="summary in home.summaries | filter: home.summaryFilter| orderBy:'name'">
+        
+                <a href="" ng-click="home.editDocument(summary.id)"><div  class="small-9 columns overview-name overlay-fade-in"><h6>{{summary.name}}</h6></div ></a>
+                <div  class="small-1  columns overview-images">
+                    <a class="padding-right-1" data-open="copyModal" ng-click="home.toCopy = summary" href="" ng-attr-title="{{'copy'|translate}}">
+                        <i class="fa fa-clone blue"></i>
+                    </a>
+                    <a data-open="deleteModal" class="padding-right-1" ng-click="home.toDelete = summary" href="" ng-attr-title="{{'delete'|translate}}">
+                        <i class="fa fa-trash blue"></i>
+                    </a>
+                    <!--<a href="" class="button" ng-click="home.editDocument(summary.id)">{{'edit'|translate}}</a>-->
+                </div >
+            
         </div>
     </div>
+    
 
     <div class="reveal tiny" id="deleteModal" data-reveal data-overlay="false">
         <h4>{{'delete'|translate}}</h4>
@@ -63,7 +58,7 @@
     <div class="reveal tiny" id="createModal" data-reveal data-overlay="false">
         <h4> {{"create_document" |translate}}</h4>
         <div class="row padding-top-2">
-            <input ng-model="home.newName" type="text" ng-attr-placeholder="'document_name_placeholder' | translate">
+            <input ng-model="home.newName"  type="text" ng-attr-placeholder="'document_name_placeholder' | translate">
         </div>
         <div class="row float-right padding-top-2">
             <div class="columns ">
