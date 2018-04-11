@@ -42,7 +42,7 @@
     "js-yaml": "^3.4.6",
     "rimraf": "^2.4.3",
     "yargs": "^3.8.0",
-    "gulp-go": "~1.1.0",
+    "gulp-go-windows-fork": "~1.1.0",
     "gulp-add-src": "~0.2.0 ",
     "gulp-zip": "~3.2.0"
   },

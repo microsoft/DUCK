@@ -7,7 +7,7 @@ import gulp from "gulp";
 import rimraf from "rimraf";
 import yaml from "js-yaml";
 import fs from "fs";
-import gulpgo from "gulp-go";
+import gulpgo from "gulp-go-windows-fork";
 import gutil from "gulp-util";
 import child from "child_process";
 import addsrc from "gulp-add-src";
