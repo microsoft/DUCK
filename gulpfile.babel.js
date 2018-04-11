@@ -21,7 +21,7 @@ const $ = plugins();
 const PRODUCTION = !!(yargs.argv.production);
 
 // Load settings from settings.yml
-const {COMPATIBILITY, PORT, UNCSS_OPTIONS, PATHS} = loadConfig();
+const { COMPATIBILITY, PORT, UNCSS_OPTIONS, PATHS } = loadConfig();
 
 
 if (process.env.GOPATH === undefined || process.env.GOPATH === null) {
@@ -42,7 +42,7 @@ gulp.task("build",
 
 // build the distribution
 gulp.task("distro",
-    gulp.series(clean, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy), copyWeb, copyConfig, copyRuleBases, copyBinary, zipit));
+    gulp.series(clean, cleanImage, backendCompile, gulp.parallel(pages, sass, vendorJS, javascript, images, config, partials, fonts, copy), copyWeb, copyConfig, copyRuleBases, copyBinary, zipit));
 
 // Build the site, run the server, and watch for file changes
 gulp.task("default",
@@ -50,9 +50,12 @@ gulp.task("default",
 
 // Delete the "dist" folder every time a build starts.
 function clean(done) {
-    rimraf(PATHS.dist, done);
+    rimraf(PATHS.dist + "/*", done);
+}
+// Delete the "image" folder every time a build starts.
+function cleanImage(done) {
     rimraf("./image", done);
-    done();
+
 }
 
 function copyWeb() {
@@ -114,7 +117,7 @@ function sass() {
         .pipe($.concat('app.css'))
         .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
         .pipe(gulp.dest(PATHS.dist + "/assets/css"))
-        .pipe(browser.reload({stream: true}));
+        .pipe(browser.reload({ stream: true }));
 }
 
 // Combine JavaScript into one file. In production, the file is minified.
@@ -190,13 +193,13 @@ var go;
 
 // launch the backend serving the web distribution directory
 function backendCompile(done) {
-    child.spawnSync('go', ['build'], {cwd: "backend", stdio: "inherit"});
+    child.spawnSync('go', ['build'], { cwd: "backend", stdio: "inherit" });
     done();
 }
 
 // launch the backend serving the web distribution directory
 function backend(done) {
-    go = gulpgo.run("main.go", ["--webdir", "src/github.com/Microsoft/DUCK/" + PATHS.dist], {cwd: "backend", stdio: "inherit"});
+    go = gulpgo.run("main.go", ["--webdir", "src/github.com/Microsoft/DUCK/" + PATHS.dist], { cwd: "backend", stdio: "inherit" });
     done();
 }
 
