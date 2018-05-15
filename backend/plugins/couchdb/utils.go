@@ -5,7 +5,6 @@ package couchdb
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"strconv"
@@ -83,7 +82,7 @@ func docFromValueMap(mp map[string]interface{}) structs.Document {
 
 		}
 	}
-	fmt.Println(d.Statements)
+	//fmt.Println(d.Statements)
 	//add Dictionary
 	if dict, prs := mp["dictionary"].(map[string]interface{}); prs {
 		d.Dictionary = dictFromInterfaceMap(dict)
@@ -104,35 +103,22 @@ func stmtFromInterfaceMap(mp map[string]interface{}) structs.Statement {
 	s.TrackingID = getFieldValue(mp, "trackingId")
 
 	s.DataCategories = make([]structs.DataCategories, 0)
-	fmt.Println("DATACATEGORIES")
+
 	if dcs, prs := mp["dataCategories"].([]interface{}); prs {
-		fmt.Println(dcs)
+		//fmt.Println(dcs)
 
 		for _, dcmap := range dcs {
-			fmt.Println(dcmap)
+
 			var dc structs.DataCategories
 
 			dc.DataCategoryCode = getFieldValue(dcmap.(map[string]interface{}), "dataCategoryCode")
 			dc.QualifierCode = getFieldValue(dcmap.(map[string]interface{}), "qualifierCode")
-
 			if interf, ok := dcmap.(map[string]interface{})["operator"]; ok {
-				fmt.Println("Value:")
-				value, ok := interf.(float64)
-				fmt.Println(value)
-				if ok {
-
-					//i, err := strconv.Atoi(value)
-					//if err != nil {
-
+				if value, ok := interf.(float64); ok {
 					dc.Op = structs.Operator(int(value))
-					//}
 				}
-				
-				fmt.Println("Valueend")
 			}
-			fmt.Println(dcmap.(map[string]interface{})["operator"])
-			fmt.Println(dc)
-			//s := stmtFromInterfaceMap(dc.(map[string]interface{}))
+
 			s.DataCategories = append(s.DataCategories, dc)
 
 		}
@@ -143,9 +129,7 @@ func stmtFromInterfaceMap(mp map[string]interface{}) structs.Statement {
 	if tag := getFieldValue(mp, "tag"); tag != "" {
 		s.Tag = &tag
 	}
-
 	s.Passive = getFieldBooleanValue(mp, "passive")
-
 	return s
 }
 

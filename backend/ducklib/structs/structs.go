@@ -4,6 +4,9 @@
 package structs
 
 import (
+	"bytes"
+	"encoding/json"
+
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 )
@@ -85,11 +88,43 @@ const (
 	EXCEPT
 )
 
+var operatorId = map[Operator]string{
+	AND:    "and",
+	EXCEPT: "except",
+}
+
+var operatorName = map[string]Operator{
+	"and":    AND,
+	"except": EXCEPT,
+}
+
+func (o Operator) String() string {
+	return operatorId[o]
+}
+
+func (o *Operator) MarshalJSON() ([]byte, error) {
+	buffer := bytes.NewBufferString(`"`)
+	buffer.WriteString(operatorId[*o])
+	buffer.WriteString(`"`)
+	return buffer.Bytes(), nil
+}
+
+func (o *Operator) UnmarshalJSON(b []byte) error {
+	// unmarshal as string
+	var s string
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+	// lookup value
+	*o = operatorName[s]
+	return nil
+}
+
 type DataCategories struct {
 	Op               Operator `json:"operator"`
-	QualifierCode    string           `json:"qualifierCode"`
+	QualifierCode    string   `json:"qualifierCode"`
 	DataCategoryCode string   `json:"dataCategoryCode"`
-
 }
 
 type DictionaryEntry struct {

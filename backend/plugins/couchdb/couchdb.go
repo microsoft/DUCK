@@ -376,8 +376,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 				dcat["qualifierCode"] = cat.QualifierCode
 				dcat["dataCategoryCode"] = cat.DataCategoryCode
 				dcat["operator"] = cat.Op
-				fmt.Println(cat.Op)
-				fmt.Println(dcat["operator"])
+
 				dcats = append(dcats, dcat)
 			}
 			stmt["dataCategories"] = dcats
