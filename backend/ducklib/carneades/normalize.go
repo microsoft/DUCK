@@ -41,8 +41,11 @@ type normalizer struct {
 //eg. ThingA is a capability, ThingB is a third_party_services
 type NormalizedDocument struct {
 	structs.Document
-	IsA   map[string]string
-	Facts []string
+	UseScopeLocation    string
+	SourceScopeLocation string
+	ResultScopeLocation string
+	IsA                 map[string]string
+	Facts               []string
 }
 
 //NewNormalizer returns a new initialized normalizer
@@ -80,6 +83,11 @@ func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*norma
 	return &norm, nil
 }
 
+//GetLocation sets the Loaction fields in the Normalized Document
+func (n *normalizer) GetLocation() error {
+	return nil
+}
+
 //Normalize normalizes a Document for further validation
 func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 	n.normalized = new(NormalizedDocument)
@@ -114,7 +122,6 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			} else if prs == true && isA[statement.ActionCode] != returnCode {
 				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ActionCode)
 			}
-
 		}
 
 		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {

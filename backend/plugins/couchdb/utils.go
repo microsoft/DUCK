@@ -5,6 +5,7 @@ package couchdb
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"strconv"
@@ -34,7 +35,6 @@ func getMap(resp io.Reader) (map[string]interface{}, error) {
 }
 
 func getRows(jsonbody map[string]interface{}) ([]interface{}, error) {
-
 
 	rows, prs := jsonbody["rows"].([]interface{})
 	//fmt.Println(jsonbody)
@@ -83,6 +83,7 @@ func docFromValueMap(mp map[string]interface{}) structs.Document {
 
 		}
 	}
+	fmt.Println(d.Statements)
 	//add Dictionary
 	if dict, prs := mp["dictionary"].(map[string]interface{}); prs {
 		d.Dictionary = dictFromInterfaceMap(dict)
@@ -101,6 +102,41 @@ func stmtFromInterfaceMap(mp map[string]interface{}) structs.Statement {
 	s.ActionCode = getFieldValue(mp, "actionCode")
 	s.ResultScopeCode = getFieldValue(mp, "resultScopeCode")
 	s.TrackingID = getFieldValue(mp, "trackingId")
+
+	s.DataCategories = make([]structs.DataCategories, 0)
+	fmt.Println("DATACATEGORIES")
+	if dcs, prs := mp["dataCategories"].([]interface{}); prs {
+		fmt.Println(dcs)
+
+		for _, dcmap := range dcs {
+			fmt.Println(dcmap)
+			var dc structs.DataCategories
+
+			dc.DataCategoryCode = getFieldValue(dcmap.(map[string]interface{}), "dataCategoryCode")
+			dc.QualifierCode = getFieldValue(dcmap.(map[string]interface{}), "qualifierCode")
+
+			if interf, ok := dcmap.(map[string]interface{})["operator"]; ok {
+				fmt.Println("Value:")
+				value, ok := interf.(float64)
+				fmt.Println(value)
+				if ok {
+
+					//i, err := strconv.Atoi(value)
+					//if err != nil {
+
+					dc.Op = structs.Operator(int(value))
+					//}
+				}
+				
+				fmt.Println("Valueend")
+			}
+			fmt.Println(dcmap.(map[string]interface{})["operator"])
+			fmt.Println(dc)
+			//s := stmtFromInterfaceMap(dc.(map[string]interface{}))
+			s.DataCategories = append(s.DataCategories, dc)
+
+		}
+	}
 
 	//set Tag only if it is not empty,
 	//when we set tag to an empty string we cannot return null

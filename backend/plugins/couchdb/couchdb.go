@@ -355,9 +355,9 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	}
 	entryMap["dictionary"] = dict
 
-	var stmts []map[string]string
+	var stmts []map[string]interface{}
 	for _, statement := range d.Statements {
-		stmt := make(map[string]string)
+		stmt := make(map[string]interface{})
 		stmt["useScopeCode"] = statement.UseScopeCode
 		stmt["qualifierCode"] = statement.QualifierCode
 		stmt["dataCategoryCode"] = statement.DataCategoryCode
@@ -367,6 +367,20 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 		stmt["trackingId"] = statement.TrackingID
 		if statement.Tag != nil {
 			stmt["tag"] = *statement.Tag
+		}
+
+		if statement.DataCategories != nil {
+			var dcats []map[string]interface{}
+			for _, cat := range statement.DataCategories {
+				dcat := make(map[string]interface{})
+				dcat["qualifierCode"] = cat.QualifierCode
+				dcat["dataCategoryCode"] = cat.DataCategoryCode
+				dcat["operator"] = cat.Op
+				fmt.Println(cat.Op)
+				fmt.Println(dcat["operator"])
+				dcats = append(dcats, dcat)
+			}
+			stmt["dataCategories"] = dcats
 		}
 
 		if statement.Passive {
