@@ -11,7 +11,7 @@ The first time after starting the DUCK application a new
 useraccount has to be created. 
 
 
-## Overwiev
+## Overview
 After logging in the document overview  is shown. On this site existing documents can be accessed and new ones created.
 
 Already populated testdocuments can be created by using the `Create Test Document` button on the upper right.
