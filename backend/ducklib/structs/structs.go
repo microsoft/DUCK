@@ -4,6 +4,9 @@
 package structs
 
 import (
+	"bytes"
+	"encoding/json"
+
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 )
@@ -66,15 +69,62 @@ func (d *Document) IsUserOwner(c echo.Context) error {
 
 //A Statement struct represents one Statement in a document
 type Statement struct {
-	UseScopeCode     string  `json:"useScopeCode"`
-	QualifierCode    string  `json:"qualifierCode"`
-	DataCategoryCode string  `json:"dataCategoryCode"`
-	SourceScopeCode  string  `json:"sourceScopeCode"`
-	ActionCode       string  `json:"actionCode"`
-	ResultScopeCode  string  `json:"resultScopeCode"`
-	TrackingID       string  `json:"trackingId"`
-	Tag              *string `json:"tag,omitempty"`
-	Passive          bool    `json:"passive"`
+	UseScopeCode     string           `json:"useScopeCode"`
+	QualifierCode    string           `json:"qualifierCode"`
+	DataCategoryCode string           `json:"dataCategoryCode"`
+	DataCategories   []DataCategories `json:"dataCategories"`
+	SourceScopeCode  string           `json:"sourceScopeCode"`
+	ActionCode       string           `json:"actionCode"`
+	ResultScopeCode  string           `json:"resultScopeCode"`
+	TrackingID       string           `json:"trackingId"`
+	Tag              *string          `json:"tag,omitempty"`
+	Passive          bool             `json:"passive"`
+}
+
+type Operator int
+
+const (
+	AND Operator = iota
+	EXCEPT
+)
+
+var operatorId = map[Operator]string{
+	AND:    "and",
+	EXCEPT: "except",
+}
+
+var operatorName = map[string]Operator{
+	"and":    AND,
+	"except": EXCEPT,
+}
+
+func (o Operator) String() string {
+	return operatorId[o]
+}
+
+func (o *Operator) MarshalJSON() ([]byte, error) {
+	buffer := bytes.NewBufferString(`"`)
+	buffer.WriteString(operatorId[*o])
+	buffer.WriteString(`"`)
+	return buffer.Bytes(), nil
+}
+
+func (o *Operator) UnmarshalJSON(b []byte) error {
+	// unmarshal as string
+	var s string
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+	// lookup value
+	*o = operatorName[s]
+	return nil
+}
+
+type DataCategories struct {
+	Op               Operator `json:"operator"`
+	QualifierCode    string   `json:"qualifierCode"`
+	DataCategoryCode string   `json:"dataCategoryCode"`
 }
 
 type DictionaryEntry struct {

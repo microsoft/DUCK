@@ -103,6 +103,10 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
             statement.sourceScope = TaxonomyService.findTerm("scope", statement.sourceScopeCode, document.locale, statement.sourceScopeCode);
             statement.action = TaxonomyService.findTerm("action", statement.actionCode, document.locale, statement.actionCode);
             statement.resultScope = TaxonomyService.findTerm("scope", statement.resultScopeCode, document.locale, statement.resultScopeCode);
+            statement.dataCategories.forEach(function (datacategory) {
+                datacategory.qualifier = TaxonomyService.findTerm("qualifier", datacategory.qualifierCode, document.locale, datacategory.qualifierCode);
+                datacategory.dataCategory = TaxonomyService.findTerm("dataCategory", datacategory.dataCategoryCode, document.locale, datacategory.dataCategoryCode);
+            });
             // console.log(statement.useScope + ", " + statement.qualifier + ", " + statement.dataCategory + ", " + statement.sourceScope
             //     + ", " + statement.action + ", " + statement.resultScope);
         });
@@ -141,6 +145,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
                 useScope: statement.useScope,
                 qualifier: statement.qualifier,
                 dataCategory: statement.dataCategory,
+                dataCategories: statement.dataCategories,
                 sourceScope: statement.sourceScope,
                 action: statement.action,
                 resultScope: statement.resultScope,
@@ -189,12 +194,12 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
 
     this.addStatementErrorObject = function (statement) {
         statement.errors = {
-            useScope: {active: false, level: null, action: false},
-            qualifier: {active: false, level: null, action: false},
-            dataCategory: {active: false, level: null, action: false},
-            sourceScope: {active: false, level: null, action: false},
-            action: {active: false, level: null, action: false},
-            resultScope: {active: false, level: null, action: false}
+            useScope: { active: false, level: null, action: false },
+            qualifier: { active: false, level: null, action: false },
+            dataCategory: { active: false, level: null, action: false },
+            sourceScope: { active: false, level: null, action: false },
+            action: { active: false, level: null, action: false },
+            resultScope: { active: false, level: null, action: false }
         };
 
     };
@@ -209,7 +214,7 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      */
     this.addTerm = function (type, code, category, value, dictionaryType) {
         if (dictionaryType === "document") {
-            context.document.dictionary.put(value, {value: value, type: type, code: code, category: category, dictionaryType: "document"});
+            context.document.dictionary.put(value, { value: value, type: type, code: code, category: category, dictionaryType: "document" });
         } else {
             GlobalDictionary.addTerm(type, code, category, value);
         }
@@ -406,4 +411,3 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
         });
     }
 });
-    

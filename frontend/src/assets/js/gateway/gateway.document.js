@@ -185,7 +185,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
 
             if (false) {
                 if (document.statements.length != 4) {
-                    resolve({compliant: "COMPLIANT"});
+                    resolve({ compliant: "COMPLIANT" });
                     return;
                 }
                 var complianceResult = {
@@ -194,27 +194,27 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
                 };
 
                 complianceResult.explanation[document.statements[0].trackingId] = {
-                    consentRequired: {value: true, assumed: false},
-                    pii: {value: true, assumed: false},
-                    li: {value: true, assumed: false},
+                    consentRequired: { value: true, assumed: false },
+                    pii: { value: true, assumed: false },
+                    li: { value: true, assumed: false },
                     compatiblePurpose: [document.statements[1].trackingId]
                 };
                 complianceResult.explanation[document.statements[1].trackingId] = {
-                    consentRequired: {value: true, assumed: false},
-                    pii: {value: true, assumed: true},
-                    li: {value: true, assumed: true},
+                    consentRequired: { value: true, assumed: false },
+                    pii: { value: true, assumed: true },
+                    li: { value: true, assumed: true },
                     compatiblePurpose: [document.statements[0].trackingId]
                 };
                 complianceResult.explanation[document.statements[2].trackingId] = {
-                    consentRequired: {value: true, assumed: false},
-                    pii: {value: false, assumed: false},
-                    li: {value: false, assumed: false},
+                    consentRequired: { value: true, assumed: false },
+                    pii: { value: false, assumed: false },
+                    li: { value: false, assumed: false },
                     compatiblePurpose: []
                 };
                 complianceResult.explanation[document.statements[3].trackingId] = {
-                    consentRequired: {value: false, assumed: false},
-                    pii: {value: false, assumed: false},
-                    li: {value: true, assumed: false},
+                    consentRequired: { value: false, assumed: false },
+                    pii: { value: false, assumed: false },
+                    li: { value: true, assumed: false },
                     compatiblePurpose: []
                 };
                 NotificationService.clear();
@@ -325,7 +325,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
         var entries = document.dictionary.entries();
         entries.forEach(function (entry) {
             var term = entry[1];
-            data.dictionary[entry[0]] = {value: term.value, type: term.type, code: term.code, category: term.category, dictionaryType: "document"};
+            data.dictionary[entry[0]] = { value: term.value, type: term.type, code: term.code, category: term.category, dictionaryType: "document" };
         });
         return data;
     };
@@ -336,16 +336,29 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
                 trackingId: statement.trackingId,
                 actionCode: statement.actionCode,
                 dataCategoryCode: statement.dataCategoryCode,
+                dataCategories: [],
                 qualifierCode: statement.qualifierCode,
                 resultScopeCode: statement.resultScopeCode,
                 sourceScopeCode: statement.sourceScopeCode,
                 useScopeCode: statement.useScopeCode,
                 passive: statement.passive
+
             };
             if (ObjectUtils.notNull(statement.tag)) {
                 newStatement.tag = statement.tag;
             }
+            statement.dataCategories.forEach(function (dataCategory) {
+                var newCategory = {
+                    dataCategoryCode: dataCategory.dataCategoryCode,
+                    qualifierCode: dataCategory.qualifierCode,
+                    operator: dataCategory.operator
+                }
+                newStatement.dataCategories.push(newCategory);
+            });
+
             data.statements.push(newStatement)
+
+
         });
     }
 
