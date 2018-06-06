@@ -58,7 +58,7 @@ func (h *Handler) CheckDoc(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	normDoc, err := normalizer.CreateDict()
+	normDoc, err := normalizer.GetNormalized()
 	if err != nil {
 		log.Printf("Error in checkDocHandler while normalizing: %s", err)
 		e := err.Error()
@@ -120,7 +120,7 @@ func (h *Handler) CheckDocID(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	normDoc, err := normalizer.CreateDict()
+	normDoc, err := normalizer.GetNormalized()
 	if err != nil {
 		log.Printf("Error in checkDocIDHandler while normalizing: %s", err)
 		e := err.Error()

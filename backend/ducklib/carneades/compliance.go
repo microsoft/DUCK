@@ -12,7 +12,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 	"github.com/carneades/carneades-4/src/engine/caes"
 	"github.com/carneades/carneades-4/src/engine/caes/encoding/graphml"
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
@@ -103,16 +102,22 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 		} else {
 			passive = false
 		}
-		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%t))",
+		fmt.Println("Location:")
+		fmt.Println(s.UseScopeLocation)
+		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%t))",
 			s.UseScopeCode,
+			s.UseScopeLocation,
 			s.QualifierCode,
 			s.DataCategoryCode,
 			s.SourceScopeCode,
+			s.SourceScopeLocation,
 			s.ActionCode,
 			s.ResultScopeCode,
+			s.ResultScopeLocation,
 			s.TrackingID,
+			s.PlaceInStruct,
 			passive)
-
+		fmt.Println(stmtId)
 		stmt := &caes.Statement{
 			Id:       stmtId,
 			Metadata: make(map[string]interface{}),
@@ -164,7 +169,7 @@ func removeStatement(d *NormalizedDocument, i int) (*NormalizedDocument, error) 
 	d2 := *d
 	// replace the statements with a copy, but with the selected
 	// statement removed.
-	d2.Statements = []structs.Statement{}
+	d2.Statements = []NormalizedStatement{}
 	for j, _ := range d.Statements {
 		if i != j {
 			d2.Statements = append(d2.Statements, d.Statements[j])

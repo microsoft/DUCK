@@ -48,18 +48,18 @@ issue_schemes:
 argument_schemes:
 
   - id: selectors
-    variables: [UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive]
+    variables: [UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive]
     premises:
-      - dataUseStatement(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive))
+      - dataUseStatement(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive))
     conclusions:
-      - useScope(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),UseScope)
-      - qualifier(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),Qualifier)
-      - dataCategory(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),DataCategory)
-      - sourceScope(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),SourceScope)
-      - action(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),Action)
-      - resultScope(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),ResultScope)
-      - id(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),ID)
-      - passive(dus(UseScope,Qualifier,DataCategory,SourceScope,Action,ResultScope,ID,Passive),Passive)
+      - useScope(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),UseScope)
+      - qualifier(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),Qualifier)
+      - dataCategory(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),DataCategory)
+      - sourceScope(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),SourceScope)
+      - action(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),Action)
+      - resultScope(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),ResultScope)
+      - id(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),ID)
+      - passive(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),Passive)
 
   # kindOf Rules
 
