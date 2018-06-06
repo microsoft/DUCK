@@ -41,17 +41,26 @@ type normalizer struct {
 //eg. ThingA is a capability, ThingB is a third_party_services
 type NormalizedDocument struct {
 	structs.Document
+	Statements []NormalizedStatement
+	IsA        map[string]string
+	Facts      []string
+}
+
+type NormalizedStatement struct {
+	structs.Statement
 	UseScopeLocation    string
 	SourceScopeLocation string
 	ResultScopeLocation string
-	IsA                 map[string]string
-	Facts               []string
+	PlaceInStruct       int
 }
 
 //NewNormalizer returns a new initialized normalizer
 func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*normalizer, error) {
 	//norm := Normalizer{original: doc, database: db}
 	norm := normalizer{original: doc}
+
+	//put everything into new
+
 	user, err := db.GetUser(doc.Owner)
 	if err != nil {
 		return &norm, err
@@ -83,14 +92,67 @@ func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*norma
 	return &norm, nil
 }
 
+func (n *normalizer) GetNormalized() (*NormalizedDocument, error) {
+
+	n.normalized = new(NormalizedDocument)
+	//put all the other fields from the original into the normalized struct
+	n.normalized.ID = n.original.ID
+	n.normalized.Locale = n.original.Locale
+	n.normalized.Name = n.original.Name
+	n.normalized.Owner = n.original.Owner
+	n.normalized.Revision = n.original.Revision
+
+	//creates dict and moves statements into norm dict
+	if err := n.CreateDict(); err != nil {
+		return n.normalized, err
+	}
+
+	if err := n.SetLocation(); err != nil {
+		return n.normalized, err
+	}
+
+	if err := n.Straighten(); err != nil {
+		return n.normalized, err
+	}
+
+	return n.normalized, nil
+}
+
+//Straighten moves the except and and clauses int their own statements
+func (n *normalizer) Straighten() error {
+	/*for _, stmt := range n.original.Statements {
+		for i, dcat := range stmt.DataCategories {
+			if dcat.Op == structs.AND {
+				statement := new(structs.Statement)
+
+			}
+		}
+	}*/
+	return nil
+}
+
 //GetLocation sets the Loaction fields in the Normalized Document
-func (n *normalizer) GetLocation() error {
+func (n *normalizer) SetLocation() error {
+	fmt.Println("SETLOCATION")
+	for i, stmt := range n.normalized.Statements {
+		if stmt.UseScopeLocation == "" {
+			n.normalized.Statements[i].UseScopeLocation = "null"
+			fmt.Println("null")
+		} else {
+			fmt.Println("full")
+		}
+		if stmt.SourceScopeLocation == "" {
+			n.normalized.Statements[i].SourceScopeLocation = "null"
+		}
+		if stmt.ResultScopeLocation == "" {
+			n.normalized.Statements[i].ResultScopeLocation = "null"
+		}
+	}
 	return nil
 }
 
 //Normalize normalizes a Document for further validation
-func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
-	n.normalized = new(NormalizedDocument)
+func (n *normalizer) CreateDict() error {
 
 	//make sure we have every part only once for each code
 	//for this we make a map for every code which we will later transform into a list
@@ -103,14 +165,14 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 
 		//if data use category, data category or all scopes are missing, we cant work with this statement
 		if statement.UseScopeCode == "" && statement.ResultScopeCode == "" && statement.SourceScopeCode == "" {
-			return n.normalized, fmt.Errorf("statement is missing all scope fields: %s", statement.TrackingID)
+			return fmt.Errorf("statement is missing all scope fields: %s", statement.TrackingID)
 		}
 		if statement.ActionCode == "" {
-			return n.normalized, fmt.Errorf("statement is missing data use field: %s", statement.TrackingID)
+			return fmt.Errorf("statement is missing data use field: %s", statement.TrackingID)
 		}
 
 		if statement.DataCategoryCode == "" {
-			return n.normalized, fmt.Errorf("statement is missing data category field: %s", statement.TrackingID)
+			return fmt.Errorf("statement is missing data category field: %s", statement.TrackingID)
 		}
 
 		//find original code for the one used
@@ -120,7 +182,7 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			if _, prs := isA[statement.ActionCode]; prs == false {
 				isA[statement.ActionCode] = returnCode
 			} else if prs == true && isA[statement.ActionCode] != returnCode {
-				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ActionCode)
+				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ActionCode)
 			}
 		}
 
@@ -128,7 +190,7 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			if _, prs := isA[statement.QualifierCode]; prs == false {
 				isA[statement.QualifierCode] = returnCode
 			} else if prs == true && isA[statement.QualifierCode] != returnCode {
-				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.QualifierCode)
+				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.QualifierCode)
 			}
 		}
 
@@ -136,7 +198,7 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			if _, prs := isA[statement.DataCategoryCode]; prs == false {
 				isA[statement.DataCategoryCode] = returnCode
 			} else if prs == true && isA[statement.DataCategoryCode] != returnCode {
-				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.DataCategoryCode)
+				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.DataCategoryCode)
 			}
 		}
 
@@ -144,7 +206,7 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			if _, prs := isA[statement.UseScopeCode]; prs == false {
 				isA[statement.UseScopeCode] = returnCode
 			} else if prs == true && isA[statement.UseScopeCode] != returnCode {
-				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.UseScopeCode)
+				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.UseScopeCode)
 			}
 		}
 
@@ -152,7 +214,7 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			if _, prs := isA[statement.ResultScopeCode]; prs == false {
 				isA[statement.ResultScopeCode] = returnCode
 			} else if prs == true && isA[statement.ResultScopeCode] != returnCode {
-				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ResultScopeCode)
+				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ResultScopeCode)
 			}
 		}
 
@@ -160,7 +222,7 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			if _, prs := isA[statement.SourceScopeCode]; prs == false {
 				isA[statement.SourceScopeCode] = returnCode
 			} else if prs == true && isA[statement.SourceScopeCode] != returnCode {
-				return n.normalized, fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.SourceScopeCode)
+				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.SourceScopeCode)
 			}
 		}
 
@@ -198,20 +260,26 @@ func (n *normalizer) CreateDict() (*NormalizedDocument, error) {
 			}
 		}
 		//add statement to normalized Document
-		n.normalized.Statements = append(n.normalized.Statements, statement)
-	}
+		normstmt := NormalizedStatement{}
+		normstmt.ActionCode = statement.ActionCode
+		normstmt.DataCategories = make([]structs.DataCategories, len(statement.DataCategories))
+		copy(normstmt.DataCategories, statement.DataCategories)
+		normstmt.DataCategoryCode = statement.DataCategoryCode
+		normstmt.Passive = statement.Passive
+		normstmt.QualifierCode = statement.QualifierCode
+		normstmt.ResultScopeCode = statement.ResultScopeCode
+		normstmt.SourceScopeCode = statement.SourceScopeCode
+		normstmt.Tag = statement.Tag
+		normstmt.TrackingID = statement.TrackingID
+		normstmt.UseScopeCode = statement.UseScopeCode
 
-	//put all the other fields from the original into the normalized struct
-	n.normalized.ID = n.original.ID
-	n.normalized.Locale = n.original.Locale
-	n.normalized.Name = n.original.Name
-	n.normalized.Owner = n.original.Owner
-	n.normalized.Revision = n.original.Revision
+		n.normalized.Statements = append(n.normalized.Statements, normstmt)
+	}
 
 	//write partsOf and isA map into Facts
 	n.getFacts()
 
-	return n.normalized, nil
+	return nil
 }
 
 //getFacts transforms the IsA and Parts maps into a list of CHR facts
@@ -277,6 +345,6 @@ func (n *normalizer) getCode(Type string, Code string) string {
 
 //Denormalize denormalizes a Document after validation
 func (n *normalizer) Denormalize() *structs.Document {
-	// we have the original, so why Denormalize?
+	// we have the original
 	return &n.original
 }
