@@ -102,8 +102,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 		} else {
 			passive = false
 		}
-		fmt.Println("Location:")
-		fmt.Println(s.UseScopeLocation)
+
 		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%t))",
 			s.UseScopeCode,
 			s.UseScopeLocation,
@@ -117,7 +116,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 			s.TrackingID,
 			s.PlaceInStruct,
 			passive)
-		fmt.Println(stmtId)
+
 		stmt := &caes.Statement{
 			Id:       stmtId,
 			Metadata: make(map[string]interface{}),
@@ -127,10 +126,10 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 		ag.Statements[stmtId] = stmt
 
 	}
-	// derive arguments by applying the theory of the argument graph to
-	// its assumptions
+	// add statements for the is a relationships in the document
+	// to the argument graph, and assume them to be true.
 	for k, v := range document.IsA {
-		isa := fmt.Sprintf("isA(isa(%s,%s))", k, v)
+		isa := fmt.Sprintf("isA(%s,%s)", k, v)
 		fmt.Println(isa)
 		stmt := &caes.Statement{
 			Id:       isa,
@@ -140,7 +139,8 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 		ag.Assumptions = append(ag.Assumptions, isa)
 		ag.Statements[isa] = stmt
 	}
-
+	// derive arguments by applying the theory of the argument graph to
+	// its assumptions
 	err := ag.Infer()
 	if err != nil {
 		return false, nil, err
