@@ -347,6 +347,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
             if (ObjectUtils.notNull(statement.tag)) {
                 newStatement.tag = statement.tag;
             }
+            if(ObjectUtils.notNull(statement.dataCategories)){
             statement.dataCategories.forEach(function (dataCategory) {
                 var newCategory = {
                     dataCategoryCode: dataCategory.dataCategoryCode,
@@ -355,7 +356,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
                 }
                 newStatement.dataCategories.push(newCategory);
             });
-
+        }
             data.statements.push(newStatement)
 
 
