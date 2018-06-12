@@ -128,12 +128,13 @@ func (n *normalizer) Straighten() error {
 			}
 		}
 	}*/
+
 	return nil
 }
 
 //GetLocation sets the Loaction fields in the Normalized Document
 func (n *normalizer) SetLocation() error {
-	fmt.Println("SETLOCATION")
+
 	for i, stmt := range n.normalized.Statements {
 		if stmt.UseScopeLocation == "" {
 			n.normalized.Statements[i].UseScopeLocation = "null"
@@ -274,11 +275,13 @@ func (n *normalizer) CreateDict() error {
 		normstmt.UseScopeCode = statement.UseScopeCode
 
 		n.normalized.Statements = append(n.normalized.Statements, normstmt)
+
 	}
-
+	n.normalized.IsA = isA
 	//write partsOf and isA map into Facts
-	n.getFacts()
-
+	//n.getFacts() -> while we only have isa, this happens in compliance.go
+	fmt.Println(n.normalized.IsA)
+	fmt.Println(n.normalized.Facts)
 	return nil
 }
 
