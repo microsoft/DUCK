@@ -125,9 +125,21 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 			Args:     []*caes.Argument{}}
 		ag.Assumptions = append(ag.Assumptions, stmtId)
 		ag.Statements[stmtId] = stmt
+
 	}
 	// derive arguments by applying the theory of the argument graph to
 	// its assumptions
+	for k, v := range document.IsA {
+		isa := fmt.Sprintf("isA(isa(%s,%s))", k, v)
+		fmt.Println(isa)
+		stmt := &caes.Statement{
+			Id:       isa,
+			Metadata: make(map[string]interface{}),
+			Text:     isa,
+			Args:     []*caes.Argument{}}
+		ag.Assumptions = append(ag.Assumptions, isa)
+		ag.Statements[isa] = stmt
+	}
 
 	err := ag.Infer()
 	if err != nil {
