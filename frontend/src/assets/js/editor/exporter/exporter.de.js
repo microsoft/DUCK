@@ -14,7 +14,13 @@ editorModule.run(function (DocumentExporter) {
     DocumentExporter.register("text/plain", "de", function (document) {
         var text = "";
         document.statements.forEach(function (statement) {
-            text = text + statement.useScope + " anwendungen " + statement.qualifier + " " + statement.dataCategory + " von " + statement.sourceScope
+            text = text + statement.useScope + " anwendungen " + statement.qualifier + " " + statement.dataCategory;
+
+            statement.dataCategories.forEach(function(category){
+                text = text + " " + category.operator + " " + category.qualifier + " " + category.dataCategory;
+            });
+
+            text = text + " von " + statement.sourceScope
                 + " nach " + statement.action + " das" + " " + statement.resultScope + ".\n\n";
         });
         return new Blob([text], {type: 'text/plain;charset=utf-8'});

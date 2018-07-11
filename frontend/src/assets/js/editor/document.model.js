@@ -269,9 +269,19 @@ editorModule.service("DocumentModel", function (CurrentUser, TaxonomyService, Gl
      * Saves the local model to the backend.
      */
     this.save = function () {
+        context.prepareDataCategories();
         var promise = DataUseDocumentService.saveDocument(context.document);
         context.dirty = false;
         return promise;
+    };
+
+    this.prepareDataCategories = function(){
+        context.document.statements.forEach(function(statement){
+            statement.dataCategories.forEach(function(category){
+                category.qualifierCode = TaxonomyService.findCode("qualifier", category.qualifier, context.document.locale, category.qualifier);
+                category.dataCategoryCode = TaxonomyService.findCode("dataCategory", category.dataCategory, context.document.locale, category.dataCategory);
+            });
+        });
     };
 
     /**

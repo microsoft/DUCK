@@ -2,5 +2,5 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.-->
 
-{{statement.useScope |capitalizeInitial}} uses {{statement.qualifier}} {{statement.dataCategory}} from {{statement.sourceScope}} to
+{{statement.useScope |capitalizeInitial}} uses {{statement.qualifier}} {{statement.dataCategory}} <span ng-repeat="category in statement.dataCategories"> {{category.operator}} {{category.qualifier}} {{category.dataCategory}}</span> from {{statement.sourceScope}} to
 {{statement.action}} the {{statement.resultScope}}

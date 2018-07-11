@@ -2,5 +2,5 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.-->
 
-{{statement.qualifier |capitalizeInitial}} {{statement.dataCategory}} von {{statement.sourceScope}} wirb von {{statement.useScope}} nach {{statement.action}}
+{{statement.qualifier |capitalizeInitial}} {{statement.dataCategory}} <span ng-repeat="category in statement.dataCategories"> {{category.operator}} {{category.qualifier}} {{category.dataCategory}}</span> von {{statement.sourceScope}} wirb von {{statement.useScope}} nach {{statement.action}}
 das {{statement.resultScope}}
