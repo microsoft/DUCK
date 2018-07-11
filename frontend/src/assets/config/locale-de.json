@@ -86,6 +86,7 @@
   "id_not_required": "Data Subject’s Consent Not Required According to Art. 11",
   "id_required": "Data Subject Rights Apply",
   "add_category": "Kategorie hinzufügen",
+  "delete_category": "Kategorie löschen",
   "and": "und",
   "except": "außer"
 }
