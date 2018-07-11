@@ -1,15 +1,15 @@
 meta:
   title: DUCK Rulebase
-  description:
+  description: with locations
   version: 0.51
   id: 123   # hack, until the user can select the rulebase with the user interface.
 
 language:
   action/2: action(%s,%s)
+  apaEu/1: apaEu(%s)
   compatiblePurpose/2: compatiblePurpose(%s,%s)
-#   notCompatiblePurpse/2: notCompatiblePurpose(%s,%s)
-  notConsentRequired/1: notConsentRequired(%s)
   consentRequired/1: consentRequired(%s)
+  consentRequired2TransferPii/1: consentRequired2TransferPii(%s) 
   dataCategory/2: dataCategory(%s,%s)
   dataUseStatement/1: dataUseStatement(%s)
   docConsentRequired/0: docConsentRequired
@@ -21,9 +21,14 @@ language:
   id/2: id(%s,%s)
   idRequired/1: idRequired(%s) 
   idNotRequired/1: idNotRequired(%s) 
+  isInEu/1: isInEu(%s)
   kindOf/2: kindOf(%s,%s)
   lesserScope/2: lesserScope(%s,%s)
   li/1: li(%s)
+  #   notCompatiblePurpse/2: notCompatiblePurpose(%s,%s)
+  notConsentRequired/1: notConsentRequired(%s)
+  notConsentRequired2TransferPii/1: notConsentRequired2TransferPii(%s)
+  notTransferPii/1: notTransferPii(%s)
   notLi/1: notLi(%s)
   pii/1: pii(%s)
   notPii/1: notPii(%s)
@@ -31,10 +36,14 @@ language:
   partOf/2: partOf(%s,%s)
   qualifier/2: qualifier(%s,%s)
   resultScope/2: resultScope(%s,%s)
+  resultScopeLocation/2:  resultScopeLocation(%s,%s)
   smallerOrEqualScope/2: smallerOrEqualScope(%s,%s)
   scope/2: scope(%s,%s)
   sourceScope/2: sourceScope(%s,%s)
+  sourceScopeLocation/2:  sourceScopeLocation(%s,%s)
+  transferPii/1: transferPii(%s)
   useScope/2: useScope(%s,%s)
+  useScopeLocation/2: useScopeLocation(%s,%s)
 
 
 issue_schemes:
@@ -44,6 +53,8 @@ issue_schemes:
   li: [li(S), notLi(S)]
   pii: [pii(S), notPii(S)]
   id: [idRequired(S), idNotRequired(S)]
+  transferPii: [transferPii(S), notTransferPii(S)]
+  consentRequired2TransferPii: [consentRequired2TransferPii(S), notConsentRequired2TransferPii(S)]
 
 argument_schemes:
 
@@ -53,11 +64,14 @@ argument_schemes:
       - dataUseStatement(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive))
     conclusions:
       - useScope(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),UseScope)
+      - useScopeLocation(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive), UseScopeLocation)
       - qualifier(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),Qualifier)
       - dataCategory(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),DataCategory)
       - sourceScope(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),SourceScope)
+      - sourceScopeLocation(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),SourceScopeLocation)
       - action(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),Action)
       - resultScope(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),ResultScope)
+      - resultScopeLocation(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),ResultScopeLocation)
       - id(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),ID)
       - passive(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),Passive)
 
@@ -901,4 +915,358 @@ argument_schemes:
       - qualifier(S,unlinked_data)
     conclusions:
       - idNotRequired(S)
+      
+  ### EU GDPR Article 44-50 - data transferPii
+  ###  
+  ### empty scope location
+  - id: emtyUseScopeLocation01
+    variables: [S]
+    deletions: 
+      - useScopeLocation(S,null)
+    conclusions:
+      - true  
+
+  - id: emtySourceScopeLocation01
+    variables: [S]
+    deletions: 
+      - sourceScopeLocation(S,null)
+    conclusions:
+      - true  
+      
+  - id: emtyersultScopeLocation01
+    variables: [S]
+    deletions: 
+      - resultScopeLocation(S,null)
+    conclusions:
+      - true  
+  
+  ### transferPII
+
+  - id: notTransferPII01
+    variables: [S]
+    weight:
+      constant: 0.1
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - notTransferPii(S)  
+      
+  - id: TransferPII01
+    variables: [S,L]
+    premises: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - transferPii(S)  
+
+  - id: TransferPII02
+    variables: [S,L]
+    premises:
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - transferPii(S)  
+      
+  - id: TransferPII03
+    variables: [S,L]
+    premises:
+      - resultScopeLocation(S,L)
+    conclusions:
+      - transferPii(S)   
+
+  ### transfer inside EU
+  - id: isEu01
+    conclusions:
+      - isInEu(eu)
+  - id: isEu02
+    conclusions:
+      - isInEu(austria)
+  - id: isEu03
+    conclusions:
+      - isInEu(belgium)
+  - id: isEu04
+    conclusions:
+      - isInEu(bulgaria)
+  - id: isEu05
+    conclusions:
+      - isInEu(croatia)
+  - id: isEu06
+    conclusions:
+      - isInEu(cyprus)
+  - id: isEu07
+    conclusions:
+      - isInEu(czech_republic)
+  - id: isEu08
+    conclusions:
+      - isInEu(denmark)
+  - id: isEu09
+    conclusions:
+      - isInEu(estonia)
+  - id: isEu10
+    conclusions:
+      - isInEu(finland)
+  - id: isEu11
+    conclusions:
+      - isInEu(france)
+  - id: isEu12
+    conclusions:
+      - isInEu(germany)
+  - id: isEu13
+    conclusions:
+      - isInEu(greece)
+  - id: isEu14
+    conclusions:
+      - isInEu(hungary)
+  - id: isEu15
+    conclusions:
+      - isInEu(ireland)
+  - id: isEu16
+    conclusions:
+      - isInEu(italy)
+  - id: isEu17
+    conclusions:
+      - isInEu(latvia)
+  - id: isEu18
+    conclusions:
+      - isInEu(lithuania)
+  - id: isEu19
+    conclusions:
+      - isInEu(luxembourg)
+  - id: isEu20
+    conclusions:
+      - isInEu(malta)
+  - id: isEu21
+    conclusions:
+      - isInEu(netherlands)
+  - id: isEu22
+    conclusions:
+      - isInEu(poland)
+  - id: isEu23
+    conclusions:
+      - isInEu(portugal)
+  - id: isEu24
+    conclusions:
+      - isInEu(romania)
+  - id: isEu25
+    conclusions:
+      - isInEu(slovakia)
+  - id: isEu26
+    conclusions:
+      - isInEu(slovenia)
+  - id: isEu27
+    conclusions:
+      - isInEu(spain)
+  - id: isEu28
+    conclusions:
+      - isInEu(sweden)
+  # adequacy protection as EU
+  - id: apaEu01
+    conclusions:
+      - apaEu(dach)
+  - id: apaEu01
+    conclusions:
+      - apaEu(andorra)
+  - id: apaEu01
+    conclusions:
+      - apaEu(argentina)
+  - id: apaEu01
+    conclusions:
+      - apaEu(canada)
+  - id: apaEu01
+    conclusions:
+      - apaEu(faroe_islands)
+  - id: apaEu01
+    conclusions:
+      - apaEu(guernsey)
+  - id: apaEu01
+    conclusions:
+      - apaEu(israel)
+  - id: apaEu01
+    conclusions:
+      - apaEu(isle_of_man)
+  - id: apaEu01
+    conclusions:
+      - apaEu(jersey)
+  - id: apaEu01
+    conclusions:
+      - apaEu(new_zealand)
+  - id: apaEu01
+    conclusions:
+      - apaEu(switzerland)
+  - id: apaEu01
+    conclusions:
+      - apaEu(uruguay)
+  - id: apaEu01
+    conclusions:
+      - apaEu(us)
+      
+  ## Scope Location in EU 
+  
+  - id: scopeLocationInEu01
+    variables: [S,L]
+    premises: 
+      - isInEu(L)
+    deletions: 
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - true 
+      
+  - id: scopeLocationInEu02
+    variables: [S,L]
+    premises: 
+      - isInEu(L)
+    deletions: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - true  
+      
+  - id: scopeLocationInEu03
+    variables: [S,L]
+    premises: 
+      - isInEu(L)
+    deletions: 
+      - resultScopeLocation(S,L)
+    conclusions:
+      - true  
+      
+  ## Scope Location with adequacy protection as EU 
+  
+  - id: scopeLocationApaEu01
+    variables: [S,L]
+    premises: 
+      - apaEu(L)
+    deletions: 
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - true 
+      
+  - id: scopeLocationApaEu02
+    variables: [S,L]
+    premises: 
+      - apaEu(L)
+    deletions: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - true  
+      
+  - id: scopeLocationApaEu03
+    variables: [S,L]
+    premises: 
+      - apaEu(L)
+    deletions: 
+      - resultScopeLocation(S,L)
+    conclusions:
+      - true  
+      
+  ### ScopeLocation and not PII
+
+  - id: scopeLocationNoPii01
+    variables: [S,L]
+    premises: 
+      - notPii(S)
+    deletions: 
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - true 
+      
+  - id: scopeLocationNoPii02
+    variables: [S,L]
+    premises: 
+      - notPii(S)
+    deletions: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - true  
+      
+  - id: scopeLocationNoPii03
+    variables: [S,L]
+    premises: 
+      - notPii(S)
+    deletions: 
+      - resultScopeLocation(S,L)
+    conclusions:
+      - true  
+  ### ScopeLocation and not Legitimate Interest
+
+  - id: scopeLocationLi01
+    variables: [S,L]
+    premises: 
+      - li(S)
+    deletions: 
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - true 
+      
+  - id: scopeLocationLi02
+    variables: [S,L]
+    premises: 
+      - li(S)
+    deletions: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - true  
+      
+  - id: scopeLocationLi03
+    variables: [S,L]
+    premises: 
+      - li(S)
+    deletions: 
+      - resultScopeLocation(S,L)
+    conclusions:
+      - true  
+  
+  ## other Scope location ==> Consent Required to Transfer PII
+  
+  - id: consentRequired2TransferPii01
+    variables: [S,L]
+    premises: 
+      - sourceScopeLocation(S,L)
+    deletions: 
+      - notConsentRequired(S)
+    conclusions:
+      - consentRequired(S)
+      - consentRequired2TransferPii(S)      
+      
+  - id: consentRequired2TransferPii02
+    variables: [S,L]
+    premises: 
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - consentRequired2TransferPii(S) 
+  
+  - id: consentRequired2TransferPii03
+    variables: [S,L]
+    premises: 
+      - useScopeLocation(S,L)
+    deletions: 
+      - notConsentRequired(S)
+    conclusions:
+      - consentRequired(S)
+      - consentRequired2TransferPii(S)      
+      
+  - id: consentRequired2TransferPii04
+    variables: [S,L]
+    premises: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - consentRequired2TransferPii(S) 
+  
+  - id: consentRequired2TransferPii01
+    variables: [S,L]
+    premises: 
+      - resultScopeLocation(S,L)
+    deletions: 
+      - notConsentRequired(S)
+    conclusions:
+      - consentRequired(S)
+      - consentRequired2TransferPii(S)      
+      
+  - id: consentRequired2TransferPii02
+    variables: [S,L]
+    premises: 
+      - resultScopeLocation(S,L)
+    conclusions:
+      - consentRequired2TransferPii(S) 
+  
+
+
+
 

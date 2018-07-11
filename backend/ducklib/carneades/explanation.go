@@ -15,11 +15,13 @@ type BoolValue struct {
 }
 
 type StmtExplanation struct {
-	ConsentRequired   BoolValue `json:"consentRequired"`   // informed consent required
-	Pii               BoolValue `json:"pii"`               // personally identifiable information
-	Li                BoolValue `json:"li"`                // legitimate interest in the pii
-	CompatiblePurpose []string  `json:"compatiblePurpose"` // ids of statements with a proven compatible purpose
-	IdNotRequired     BoolValue `json:"idNotRequired"`     // identification of data subject is not required
+	ConsentRequired             BoolValue `json:"consentRequired"`             // informed consent required
+	Pii                         BoolValue `json:"pii"`                         // personally identifiable information
+	Li                          BoolValue `json:"li"`                          // legitimate interest in the pii
+	CompatiblePurpose           []string  `json:"compatiblePurpose"`           // ids of statements with a proven compatible purpose
+	IdNotRequired               BoolValue `json:"idNotRequired"`               // identification of data subject is not required
+	TransferPii                 BoolValue `json:"transferPii"`                 // is there a location for a scope ans pii
+	ConsentRequired2TransferPii BoolValue `json:"consentRequired2TransferPii"` // informed consent required to transfer pii
 }
 
 type Explanation map[string]StmtExplanation // keys are statement tracking ids
@@ -32,15 +34,15 @@ func isDataUseStatement(t terms.Term) bool {
 	p, _ := terms.Predicate(t2)
 	if p == "dataUseStatement" {
 		return true
-	} else {
-		return false
 	}
+	return false
+
 }
 
 // stmtId: selects the id in a DUS term and returns
 // it as a string
 func stmtId(t terms.Compound) string {
-	return t.Args[6].String()
+	return t.Args[9].String()
 }
 
 // isTrue: check whether a given predicate is true/in for a particular
@@ -115,21 +117,32 @@ func idnr(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
 	return isTrue("idNotRequired", dus, ag, false)
 }
 
+func tpii(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
+	return isTrue("transferPii", dus, ag, false)
+}
+
+func cr2tpii(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
+	return isTrue("consentRequired2TransferPii", dus, ag, false)
+}
+
 func (c ComplianceChecker) GetExplanation(theory *caes.Theory, ag *caes.ArgGraph) (Explanation, error) {
 	m := make(map[string]StmtExplanation)
-	for wff, _ := range ag.Statements {
+	for wff := range ag.Statements {
 		t, ok := terms.ReadString(wff)
 		if !ok {
 			continue
 		}
+
 		if isDataUseStatement(t) {
 			dus := t.(terms.Compound).Args[0].(terms.Compound)
 			m[stmtId(dus)] = StmtExplanation{
-				ConsentRequired:   cr(dus, ag),
-				Pii:               pii(dus, ag),
-				Li:                li(dus, ag),
-				CompatiblePurpose: cp(dus, ag),
-				IdNotRequired:     idnr(dus, ag),
+				ConsentRequired:             cr(dus, ag),
+				Pii:                         pii(dus, ag),
+				Li:                          li(dus, ag),
+				CompatiblePurpose:           cp(dus, ag),
+				IdNotRequired:               idnr(dus, ag),
+				TransferPii:                 tpii(dus, ag),
+				ConsentRequired2TransferPii: cr2tpii(dus, ag),
 			}
 		}
 	}

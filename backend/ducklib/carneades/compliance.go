@@ -130,7 +130,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 	// to the argument graph, and assume them to be true.
 	for k, v := range document.IsA {
 		isa := fmt.Sprintf("isA(%s,%s)", k, v)
-		fmt.Println(isa)
+
 		stmt := &caes.Statement{
 			Id:       isa,
 			Metadata: make(map[string]interface{}),
@@ -163,7 +163,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 	// return true iff the notDocConsentRequired statement is in
 	s, ok := ag.Statements["notDocConsentRequired"]
 	if !ok {
-		return false, nil, errors.New("notDocConsentRequired is not a statement in the argument graph.")
+		return false, nil, errors.New("notDocConsentRequired is not a statement in the argument graph")
 	}
 	e, err := c.GetExplanation(theory, ag)
 	if err != nil {

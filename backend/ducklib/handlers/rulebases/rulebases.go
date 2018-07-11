@@ -70,6 +70,7 @@ func (h *Handler) CheckDoc(c echo.Context) error {
 		}
 	}
 	ok, exp, err := h.Checker.IsCompliant(id, normDoc)
+
 	if err != nil {
 		log.Printf("Error in checkDocHandler while checking for compliance: %s", err)
 		e := err.Error()
@@ -80,12 +81,13 @@ func (h *Handler) CheckDoc(c echo.Context) error {
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 		}
 	}
+	flatExp := carneades.FoldExplanation(exp)
 
-	//log.Printf("%#v", exp)
+	//log.Printf("%#v", flatExp)
 	if ok {
-		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: exp})
+		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: flatExp})
 	}
-	return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "NON_COMPLIANT", Explanation: exp})
+	return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "NON_COMPLIANT", Explanation: flatExp})
 }
 
 //CheckDocID checks a document from the database against a rulebase for compliance
