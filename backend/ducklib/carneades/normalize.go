@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"strings"
 
 	"path/filepath"
 
@@ -111,25 +112,122 @@ func (n *normalizer) GetNormalized() (*NormalizedDocument, error) {
 		return n.normalized, err
 	}
 
-	if err := n.Straighten(); err != nil {
+	if err := n.Unfold(); err != nil {
 		return n.normalized, err
 	}
 
 	return n.normalized, nil
 }
 
+type snippet struct {
+	Name      string
+	Something string
+}
+
 //Straighten moves the except and and clauses int their own statements
-func (n *normalizer) Straighten() error {
-	/*for _, stmt := range n.original.Statements {
+func (n *normalizer) Unfold() error {
+	for h, stmt := range n.normalized.Statements {
+		stmt.PlaceInStruct = 0
+		except := false
 		for i, dcat := range stmt.DataCategories {
-			if dcat.Op == structs.AND {
-				statement := new(structs.Statement)
 
+			//if first ist except:
+			//TODO: Except handling in one function for both cases
+			if dcat.Op == structs.EXCEPT {
+				except = true
+				cats := n.getCategories(n.normalized.Statements[h].DataCategoryCode)
+				for j := i; j < len(stmt.DataCategories); j++ {
+					cats[stmt.DataCategories[j].DataCategoryCode] = nil
+				}
+
+				k := i
+				for cat, snip := range cats {
+					if snip != nil {
+						statement := createFromStatement(stmt, cat, dcat.QualifierCode)
+						statement.PlaceInStruct = k
+						statement.TrackingID = statement.TrackingID + "-" + fmt.Sprint(k)
+						n.normalized.Statements = append(n.normalized.Statements, statement)
+						k++
+					}
+				}
+				n.normalized.Statements = append(n.normalized.Statements[:h], n.normalized.Statements[h+1])
+				break
 			}
-		}
-	}*/
 
+			if dcat.Op == structs.AND && stmt.DataCategories[i+1].Op != structs.EXCEPT && !except {
+
+				statement := createFromStatement(stmt, dcat.DataCategoryCode, dcat.QualifierCode)
+				statement.PlaceInStruct = i
+				statement.TrackingID = statement.TrackingID + "-" + fmt.Sprint(i)
+				n.normalized.Statements = append(n.normalized.Statements, statement)
+			}
+
+			if stmt.DataCategories[i+1].Op == structs.EXCEPT {
+				except = true
+				cats := n.getCategories(dcat.DataCategoryCode)
+				for j := i + 1; j < len(stmt.DataCategories); j++ {
+					cats[stmt.DataCategories[j].DataCategoryCode] = nil
+				}
+
+				k := i
+				for cat, snip := range cats {
+					if snip != nil {
+						statement := createFromStatement(stmt, cat, dcat.QualifierCode)
+						statement.PlaceInStruct = k
+						statement.TrackingID = statement.TrackingID + "-" + fmt.Sprint(k)
+						n.normalized.Statements = append(n.normalized.Statements, statement)
+						k++
+					}
+				}
+				break
+			}
+
+		}
+		n.normalized.Statements[h].DataCategories = nil
+	}
 	return nil
+}
+
+func (n *normalizer) getCategories(code string) map[string]*snippet {
+	cat := make(map[string]*snippet, 0)
+
+	tax := n.docTaxonomy["dataCategory"]
+	filterCat := ""
+	filterCatLength := 0
+
+	for _, c := range tax {
+		if c.Code == code {
+			filterCat = c.Category
+			filterCatLength = len(strings.Split(filterCat, "."))
+		}
+	}
+
+	for _, c := range tax {
+		if strings.HasPrefix(c.Category, filterCat) && len(strings.Split(c.Category, ".")) == filterCatLength+1 {
+			cat[c.Code] = &snippet{c.Code, c.Category}
+
+		}
+	}
+
+	return cat
+}
+
+func createFromStatement(stmt NormalizedStatement, DataCategoryCode string, QualifierCode string) NormalizedStatement {
+	statement := new(NormalizedStatement)
+	statement.DataCategoryCode = DataCategoryCode
+	statement.QualifierCode = QualifierCode
+
+	statement.ActionCode = stmt.ActionCode
+	statement.Passive = stmt.Passive
+	statement.ResultScopeCode = stmt.ResultScopeCode
+	statement.ResultScopeLocation = stmt.ResultScopeLocation
+	statement.SourceScopeCode = stmt.SourceScopeCode
+	statement.SourceScopeLocation = stmt.SourceScopeLocation
+	statement.Tag = stmt.Tag
+	statement.TrackingID = stmt.TrackingID
+	statement.UseScopeCode = stmt.UseScopeCode
+	statement.UseScopeLocation = stmt.UseScopeLocation
+	return *statement
 }
 
 //GetLocation sets the Loaction fields in the Normalized Document
@@ -138,9 +236,6 @@ func (n *normalizer) SetLocation() error {
 	for i, stmt := range n.normalized.Statements {
 		if stmt.UseScopeLocation == "" {
 			n.normalized.Statements[i].UseScopeLocation = "null"
-			fmt.Println("null")
-		} else {
-			fmt.Println("full")
 		}
 		if stmt.SourceScopeLocation == "" {
 			n.normalized.Statements[i].SourceScopeLocation = "null"
@@ -177,23 +272,6 @@ func (n *normalizer) CreateDict() error {
 		}
 
 		//find original code for the one used
-
-		if returnCode := n.getCode("action", statement.ActionCode); returnCode != "" {
-
-			if _, prs := isA[statement.ActionCode]; prs == false {
-				isA[statement.ActionCode] = returnCode
-			} else if prs == true && isA[statement.ActionCode] != returnCode {
-				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ActionCode)
-			}
-		}
-
-		if returnCode := n.getCode("qualifier", statement.QualifierCode); returnCode != "" {
-			if _, prs := isA[statement.QualifierCode]; prs == false {
-				isA[statement.QualifierCode] = returnCode
-			} else if prs == true && isA[statement.QualifierCode] != returnCode {
-				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.QualifierCode)
-			}
-		}
 
 		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
 			if _, prs := isA[statement.DataCategoryCode]; prs == false {
@@ -280,8 +358,8 @@ func (n *normalizer) CreateDict() error {
 	n.normalized.IsA = isA
 	//write partsOf and isA map into Facts
 	//n.getFacts() -> while we only have isa, this happens in compliance.go
-	fmt.Println(n.normalized.IsA)
-	fmt.Println(n.normalized.Facts)
+	//	fmt.Println(n.normalized.IsA)
+	//	fmt.Println(n.normalized.Facts)
 	return nil
 }
 
@@ -344,6 +422,68 @@ func (n *normalizer) getCode(Type string, Code string) string {
 	//since if that is the case we don't have to translate it.
 	return ""
 
+}
+
+//FoldExplanation folds explanations for multiple statements that are just one statement with and/except cluases back into one
+func FoldExplanation(Exp Explanation) Explanation {
+	NewExp := make(Explanation)
+
+	for stmtid, stmtexp := range Exp {
+		id := strings.Split(stmtid, "-")[0]
+		if _, ok := NewExp[id]; !ok {
+			NewExp[id] = stmtexp
+		} else {
+
+			cr := BoolValue{
+				Assumed: NewExp[id].ConsentRequired.Assumed && stmtexp.ConsentRequired.Assumed,
+				Value:   NewExp[id].ConsentRequired.Value || stmtexp.ConsentRequired.Value,
+			}
+			pii := BoolValue{
+				Assumed: NewExp[id].Pii.Assumed && stmtexp.Pii.Assumed,
+				Value:   NewExp[id].Pii.Value || stmtexp.Pii.Value,
+			}
+			li := BoolValue{
+				Assumed: NewExp[id].Li.Assumed && stmtexp.Li.Assumed,
+				Value:   NewExp[id].Li.Value || stmtexp.Li.Value,
+			}
+
+			inr := BoolValue{
+				Assumed: NewExp[id].IdNotRequired.Assumed && stmtexp.IdNotRequired.Assumed,
+				Value:   NewExp[id].IdNotRequired.Value || stmtexp.IdNotRequired.Value,
+			}
+			tpii := BoolValue{
+				Assumed: NewExp[id].TransferPii.Assumed && stmtexp.TransferPii.Assumed,
+				Value:   NewExp[id].TransferPii.Value || stmtexp.TransferPii.Value,
+			}
+			cr2tpii := BoolValue{
+				Assumed: NewExp[id].ConsentRequired2TransferPii.Assumed && stmtexp.ConsentRequired2TransferPii.Assumed,
+				Value:   NewExp[id].ConsentRequired2TransferPii.Value || stmtexp.ConsentRequired2TransferPii.Value,
+			}
+
+			cpTemp := NewExp[id].CompatiblePurpose
+			cpTemp = append(cpTemp, stmtexp.CompatiblePurpose...)
+			cp := make([]string, 0)
+			for _, cid := range cpTemp {
+				if strings.Split(cid, "-")[0] != id {
+					cp = append(cp, strings.Split(cid, "-")[0])
+				}
+
+			}
+
+			newstmtexp := StmtExplanation{
+				ConsentRequired:             cr,
+				Pii:                         pii,
+				Li:                          li,
+				CompatiblePurpose:           cp,
+				IdNotRequired:               inr,
+				TransferPii:                 tpii,
+				ConsentRequired2TransferPii: cr2tpii,
+			}
+
+			NewExp[id] = newstmtexp
+		}
+	}
+	return NewExp
 }
 
 //Denormalize denormalizes a Document after validation
