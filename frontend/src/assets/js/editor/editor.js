@@ -143,8 +143,48 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
             sourceScope: null,
             action: null,
             resultScope: null,
-            passive: passive
+            passive: passive,
+            dataCategories: []
         });
+    };
+
+    controller.addNewCategory = function(statement, operator){
+        if(controller.existingExceptOperator(statement)){
+            if(operator == "and"){
+                statement.dataCategories.push({
+                    "operator": operator,
+                    "qualifierCode": "",
+                    "dataCategoryCode": ""
+                });
+            }
+        }
+        else{
+            /*
+            var categoryCode = TaxonomyService.findCategory("dataCategory", statement.dataCategories[statement.dataCategories.length-1].dataCategory, DocumentModel.document.locale, statement.dataCategories[statement.dataCategories.length-1].dataCategory);
+            console.log("categoryCode " + categoryCode);
+            */
+
+            statement.dataCategories.push({
+                    "operator": operator,
+                    "qualifierCode": "",
+                    "dataCategoryCode": ""
+            });
+        }
+
+    };
+
+    controller.existingExceptOperator = function(statement){
+        var existing = false;
+        statement.dataCategories.forEach(function(category){
+            if(category.operator == 'except'){
+                existing = true;
+            }
+        });
+        return existing;
+    };
+
+    controller.deleteCategory = function(statement, index){
+        statement.dataCategories.splice(index, 1);
     };
 
     controller.hasErrors = function (statement) {
@@ -157,11 +197,22 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
     };
 
     controller.downloadDocument = function () {
+        prepareDataCategories();
         DocumentExporter.export("text/plain", DocumentModel.document);
     };
 
     controller.exportDocument = function () {
+        prepareDataCategories();
         DocumentExporter.export("text/plain", DocumentModel.document, "json");
+    };
+
+    var prepareDataCategories = function(){
+        DocumentModel.document.statements.forEach(function(statement){
+            statement.dataCategories.forEach(function(category){
+                category.qualifierCode = TaxonomyService.findCode("qualifier", category.qualifier, DocumentModel.document.locale, category.qualifier);
+                category.dataCategoryCode = TaxonomyService.findCode("dataCategory", category.dataCategory, DocumentModel.document.locale, category.dataCategory);
+            });
+        });
     };
 
     DocumentModel.initialize(documentId).then(function () {

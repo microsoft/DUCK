@@ -19,10 +19,10 @@ editorModule.run(function (DocumentExporter) {
                 "useScopeCode": statement.useScopeCode,
                 "qualifierCode": statement.qualifierCode,
                 "dataCategoryCode": statement.dataCategoryCode,
+                "dataCategories": statement.dataCategories,
                 "sourceScopeCode": statement.sourceScopeCode,
                 "actionCode": statement.actionCode,
                 "resultScopeCode": statement.resultScopeCode
-
             });
         });
         var text = angular.toJson(exportObject);

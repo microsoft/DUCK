@@ -84,8 +84,9 @@
   "document_saved": "Document saved",
   "document_validating": "Validating document...",
   "id_not_required": "Data Subject’s Consent Not Required According to Art. 11",
-  "id_required": "Data Subject Rights Apply"
-
-
+  "id_required": "Data Subject Rights Apply",
+  "add_category": "Add Category",
+  "and": "and",
+  "except": "except"
 }
 
