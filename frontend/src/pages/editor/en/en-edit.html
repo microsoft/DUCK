@@ -2,86 +2,91 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.-->
 
-<div ng-controller="EditorController as editorController">
-    <div class="row padding-left-1">
-        <error-label fragment="statement.errors.useScope"></error-label>
-        <input error-marker="statement.errors.useScope" placeholder="use scope" ng-model="statement.useScope" class="use-scope-field"
-            mass-autocomplete-item="useScopeCompletion" ng-attr-title="{{'use_scope'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
-            ng-focus="context.currentField = 'use_scope'" ng-blur="context.currentField = null">
-        <span ng-show="context.currentField === 'use_scope'" style="font-size: 80%">
+<!--<div class="row padding-left-1" ng-show="context.currentField === null || context.currentField === undefined">-->
+<!--&nbsp;-->
+<!--</div>-->
+<!--<div class="row padding-left-1">-->
+<!--<h6 class="medium-gray">{{context.currentField | translate}}</h6>-->
+<!--</div>-->
+<div class="row padding-left-1">
+    <error-label fragment="statement.errors.useScope"></error-label>
+    <input error-marker="statement.errors.useScope" placeholder="use scope" ng-model="statement.useScope" class="use-scope-field"
+        mass-autocomplete-item="useScopeCompletion" ng-attr-title="{{'use_scope'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
+        ng-focus="context.currentField = 'use_scope'" ng-blur="context.currentField = null">
+    <span ng-show="context.currentField === 'use_scope'" class="medium-gray" style="font-size: 80%">
+        <i class="fa fa-long-arrow-down"></i>
+    </span>
+    uses
+    <span>
+        <error-label fragment="statement.errors.qualifier"></error-label>
+        <input error-marker="statement.errors.qualifier" placeholder="qualifier" ng-model="statement.qualifier" class="qualifier-field"
+            mass-autocomplete-item="qualifierCompletion" ng-attr-title="{{'qualifier'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
+            ng-focus="context.currentField = 'qualifier'" ng-blur="context.currentField = null">
+        <span ng-show="context.currentField === 'qualifier'" class="medium-gray" style="font-size: 80%">
             <i class="fa fa-chevron-down blue"></i>
         </span>
-        uses
+        <error-label fragment="statement.errors.dataCategory"></error-label>
+        <input error-marker="statement.errors.dataCategory" placeholder="data category" ng-model="statement.dataCategory" class="data-category-field"
+            mass-autocomplete-item="dataCategoryCompletion" ng-attr-title="{{'data_category'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
+            ng-focus="context.currentField = 'data_category'" ng-blur="context.currentField = null">
+        <span ng-show="context.currentField === 'data_category'" class="medium-gray" style="font-size: 80%">
+            <i class="fa fa-chevron-down blue"></i>
+        </span>
+    </span>
+    <span ng-repeat="category in statement.dataCategories">
+        {{ category.operator }}
+
         <span>
             <error-label fragment="statement.errors.qualifier"></error-label>
-            <input error-marker="statement.errors.qualifier" placeholder="qualifier" ng-model="statement.qualifier" class="qualifier-field"
+            <input error-marker="statement.errors.qualifier" placeholder="qualifier" ng-model="category.qualifier" class="qualifier-field"
                 mass-autocomplete-item="qualifierCompletion" ng-attr-title="{{'qualifier'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
                 ng-focus="context.currentField = 'qualifier'" ng-blur="context.currentField = null">
             <span ng-show="context.currentField === 'qualifier'" class="medium-gray" style="font-size: 80%">
                 <i class="fa fa-chevron-down blue"></i>
             </span>
             <error-label fragment="statement.errors.dataCategory"></error-label>
-            <input error-marker="statement.errors.dataCategory" placeholder="data category" ng-model="statement.dataCategory" class="data-category-field"
-                mass-autocomplete-item="dataCategoryCompletion" ng-attr-title="{{'data_category'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
-                ng-focus="context.currentField = 'data_category'" ng-blur="context.currentField = null">
+            <input error-marker="statement.errors.dataCategory" placeholder="data category" ng-model="category.dataCategory" class="data-category-field"
+                mass-autocomplete-item="dataCategoryCompletion" ng-attr-title="{{'data_category'|translate}}" pu-elastic-input
+                style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'data_category'" ng-blur="context.currentField = null">
             <span ng-show="context.currentField === 'data_category'" class="medium-gray" style="font-size: 80%">
                 <i class="fa fa-chevron-down blue"></i>
             </span>
+            <a href="" class="" ng-click="editorController.deleteCategory(statement, $index)" ng-attr-title="{{'delete_category'|translate}}">
+                <i class="fa fa-trash"></i>
+            </a>
         </span>
-        <span ng-repeat="category in statement.dataCategories">
-            {{category.operator}}
-            <span>
-                <error-label fragment="statement.errors.qualifier"></error-label>
-                <input error-marker="statement.errors.qualifier" placeholder="qualifier" ng-model="category.qualifier" class="qualifier-field"
-                    mass-autocomplete-item="qualifierCompletion" ng-attr-title="{{'qualifier'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
-                    ng-focus="context.currentField = 'qualifier'" ng-blur="context.currentField = null">
-                <span ng-show="context.currentField === 'qualifier'" class="medium-gray" style="font-size: 80%">
-                    <i class="fa fa-chevron-down blue"></i>
-                </span>
-                <error-label fragment="statement.errors.dataCategory"></error-label>
-                <input error-marker="statement.errors.dataCategory" placeholder="data category" ng-model="category.dataCategory" class="data-category-field"
-                    mass-autocomplete-item="dataCategoryCompletion" ng-attr-title="{{'data_category'|translate}}" pu-elastic-input
-                    style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'data_category'" ng-blur="context.currentField = null">
-                <span ng-show="context.currentField === 'data_category'" class="medium-gray" style="font-size: 80%">
-                    <i class="fa fa-chevron-down blue"></i>
-                </span>
-                <a href="" class="" ng-click="editorController.deleteCategory(statement, $index)" ng-attr-title="{{'delete_category'|translate}}">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </span>
-        </span>
-        <a href="" class="" ng-click="editorController.addNewCategory(statement, 'and')" ng-attr-title="{{'add_category'|translate}}">
+    </span>
+    <a href="" class="" ng-click="editorController.addNewCategory(statement, 'and')" ng-attr-title="{{'add_category'|translate}}">
                         <i class="fa fa-plus"></i>
                     </a>
-        <a ng-if ="!editorController.existingExceptOperator(statement)" href="" class="" ng-click="editorController.addNewCategory(statement, 'except')" ng-attr-title="{{'add_category'|translate}}">
-            <i class="fa fa-minus"></i>
-        </a>
-        <a ng-if ="editorController.existingExceptOperator(statement)" href="" class="" ng-attr-title="{{'add_category'|translate}}">
-            <i class="fa fa-minus medium-gray"></i>
-        </a>
-        from
-        <error-label fragment="statement.errors.sourceScope"></error-label>
-        <input error-marker="statement.errors.sourceScope" placeholder="source scope" ng-model="statement.sourceScope" class="source-scope-field"
-            mass-autocomplete-item="sourceScopeCompletion" ng-attr-title="{{'source_scope'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
-            ng-focus="context.currentField = 'source_scope'" ng-blur="context.currentField = null">
-        <span ng-show="context.currentField === 'source_scope'" class="medium-gray" style="font-size: 80%">
-            <i class="fa fa-chevron-down blue"></i>
-        </span>
-        to
-        <error-label fragment="statement.errors.action"></error-label>
-        <input error-marker="statement.errors.action" placeholder="action" ng-model="statement.action" class="action-field" mass-autocomplete-item="actionCompletion"
-            ng-attr-title="{{'action'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'action'"
-            ng-blur="context.currentField = null">
-        <span ng-show="context.currentField === 'action'" class="medium-gray" style="font-size: 80%">
-            <i class="fa fa-chevron-down blue"></i>
-        </span>
+    <a ng-if ="!editorController.existingExceptOperator(statement)" href="" class="" ng-click="editorController.addNewCategory(statement, 'except')" ng-attr-title="{{'add_category'|translate}}">
+        <i class="fa fa-minus"></i>
+    </a>
+    <a ng-if ="editorController.existingExceptOperator(statement)" href="" class="" ng-attr-title="{{'add_category'|translate}}">
+        <i class="fa fa-minus medium-gray"></i>
+    </a>
+    from
+    <error-label fragment="statement.errors.sourceScope"></error-label>
+    <input error-marker="statement.errors.sourceScope" placeholder="source scope" ng-model="statement.sourceScope" class="source-scope-field"
+        mass-autocomplete-item="sourceScopeCompletion" ng-attr-title="{{'source_scope'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
+        ng-focus="context.currentField = 'source_scope'" ng-blur="context.currentField = null">
+    <span ng-show="context.currentField === 'source_scope'" class="medium-gray" style="font-size: 80%">
+        <i class="fa fa-long-arrow-down"></i>
+    </span>
+    to
+    <error-label fragment="statement.errors.action"></error-label>
+    <input error-marker="statement.errors.action" placeholder="action" ng-model="statement.action" class="action-field" mass-autocomplete-item="actionCompletion"
+        ng-attr-title="{{'action'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'action'"
+        ng-blur="context.currentField = null">
+    <span ng-show="context.currentField === 'action'" class="medium-gray" style="font-size: 80%">
+        <i class="fa fa-long-arrow-down"></i>
+    </span>
 
-        <error-label fragment="statement.errors.resultScope"></error-label>
-        <input error-marker="statement.errors.resultScope" placeholder="result scope" ng-model="statement.resultScope" class="result-scope-field"
-            mass-autocomplete-item="resultScopeCompletion" ng-attr-title="{{'result_scope'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
-            ng-focus="context.currentField = 'result_scope'" ng-blur="context.currentField = null">
-        <span ng-show="context.currentField === 'result_scope'" class="medium-gray" style="font-size: 80%">
-            <i class="fa fa-chevron-down blue"></i>
-        </span>
-    </div>
+    <error-label fragment="statement.errors.resultScope"></error-label>
+    <input error-marker="statement.errors.resultScope" placeholder="result scope" ng-model="statement.resultScope" class="result-scope-field"
+        mass-autocomplete-item="resultScopeCompletion" ng-attr-title="{{'result_scope'|translate}}" pu-elastic-input style="min-width: 10px; max-width: 1000px;"
+        ng-focus="context.currentField = 'result_scope'" ng-blur="context.currentField = null">
+    <span ng-show="context.currentField === 'result_scope'" class="medium-gray" style="font-size: 80%">
+        <i class="fa fa-long-arrow-down"></i>
+    </span>
 </div>
