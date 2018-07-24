@@ -131,6 +131,7 @@ type DictionaryEntry struct {
 	Value          string `json:"value"`
 	Type           string `json:"type"`
 	Code           string `json:"code"`
+	Location       string `json:"location"`
 	Category       string `json:"category"`
 	DictionaryType string `json:"dictionaryType"`
 }

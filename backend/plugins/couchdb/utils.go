@@ -82,7 +82,7 @@ func docFromValueMap(mp map[string]interface{}) structs.Document {
 
 		}
 	}
-	//fmt.Println(d.Statements)
+
 	//add Dictionary
 	if dict, prs := mp["dictionary"].(map[string]interface{}); prs {
 		d.Dictionary = dictFromInterfaceMap(dict)
@@ -215,6 +215,9 @@ func dictFromInterfaceMap(mp map[string]interface{}) structs.Dictionary {
 		}
 		if category, ok := value["category"]; ok {
 			de.Category = category.(string)
+		}
+		if location, ok := value["location"]; ok {
+			de.Location = location.(string)
 		}
 		if dictionaryType, ok := value["dictionaryType"]; ok {
 			de.DictionaryType = dictionaryType.(string)

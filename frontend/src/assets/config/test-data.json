@@ -1,4 +1,56 @@
 {
+	"LOCATION": {
+		"description": "Location Test",
+		"dictionary": {
+			"sdfsdf": {
+				"value": "sdfsdf",
+				"type": "scope",
+				"code": "sdfsdf",
+				"category": "2",
+				"dictionaryType": "document"
+			},
+			"sourceinde": {
+				"value": "sourceinde",
+				"type": "scope",
+				"code": "sourceinde",
+				"category": "1",
+				"dictionaryType": "document"
+			}
+		},
+		  "statements": [
+			{
+			  "actionCode": "provide",
+			  "dataCategories": [
+				{
+				  "dataCategoryCode": "customer_content",
+				  "operator": "and",
+				  "qualifierCode": "identified_data"
+				},
+				{
+				  "dataCategoryCode": "customer_content_credentials",
+				  "operator": "except",
+				  "qualifierCode": "identified_data"
+				},
+				{
+				  "dataCategoryCode": "customer_content_contact",
+				  "operator": "and",
+				  "qualifierCode": "identified_data"
+				},
+				{
+				  "dataCategoryCode": "customer_content_health",
+				  "operator": "and",
+				  "qualifierCode": "identified_data"
+				}
+			  ],
+			  "dataCategoryCode": "derived_data_user",
+			  "passive": false,
+			  "qualifierCode": "identified_data",
+			  "resultScopeCode": "sdfsdf",
+			  "sourceScopeCode": "services_agreement",
+			  "useScopeCode": "sourceinde"
+			}
+		  ]
+	},
 	"PII_NO": {
 		"description": "No PII Example",
 		"statements": [{

@@ -258,6 +258,7 @@ func (n *normalizer) CreateDict() error {
 	//if not we get original taxonomy code for each field in each statement
 	//and save it into parts map
 	for _, statement := range n.original.Statements {
+		normstmt := NormalizedStatement{}
 
 		//if data use category, data category or all scopes are missing, we cant work with this statement
 		if statement.UseScopeCode == "" && statement.ResultScopeCode == "" && statement.SourceScopeCode == "" {
@@ -266,35 +267,34 @@ func (n *normalizer) CreateDict() error {
 		if statement.ActionCode == "" {
 			return fmt.Errorf("statement is missing data use field: %s", statement.TrackingID)
 		}
-
 		if statement.DataCategoryCode == "" {
 			return fmt.Errorf("statement is missing data category field: %s", statement.TrackingID)
 		}
 
 		//find original code for the one used
-
 		if returnCode := n.getCode("dataUseCategory", statement.DataCategoryCode); returnCode != "" {
 			if _, prs := isA[statement.DataCategoryCode]; prs == false {
 				isA[statement.DataCategoryCode] = returnCode
 			} else if prs == true && isA[statement.DataCategoryCode] != returnCode {
 				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.DataCategoryCode)
 			}
-		}
 
+		}
 		if returnCode := n.getCode("scope", statement.UseScopeCode); returnCode != "" {
 			if _, prs := isA[statement.UseScopeCode]; prs == false {
 				isA[statement.UseScopeCode] = returnCode
 			} else if prs == true && isA[statement.UseScopeCode] != returnCode {
 				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.UseScopeCode)
 			}
+			normstmt.UseScopeLocation = n.getLocationFromCode(statement.UseScopeCode)
 		}
-
 		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
 			if _, prs := isA[statement.ResultScopeCode]; prs == false {
 				isA[statement.ResultScopeCode] = returnCode
 			} else if prs == true && isA[statement.ResultScopeCode] != returnCode {
 				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ResultScopeCode)
 			}
+			normstmt.ResultScopeLocation = n.getLocationFromCode(statement.ResultScopeCode)
 		}
 
 		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
@@ -303,6 +303,7 @@ func (n *normalizer) CreateDict() error {
 			} else if prs == true && isA[statement.SourceScopeCode] != returnCode {
 				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.SourceScopeCode)
 			}
+			normstmt.SourceScopeLocation = n.getLocationFromCode(statement.SourceScopeCode)
 		}
 
 		// if qualifier is missing that means the qualifier is "unqualified"
@@ -339,7 +340,7 @@ func (n *normalizer) CreateDict() error {
 			}
 		}
 		//add statement to normalized Document
-		normstmt := NormalizedStatement{}
+
 		normstmt.ActionCode = statement.ActionCode
 		normstmt.DataCategories = make([]structs.DataCategories, len(statement.DataCategories))
 		copy(normstmt.DataCategories, statement.DataCategories)
@@ -373,6 +374,24 @@ func (n *normalizer) getFacts() {
 
 }
 
+func (n *normalizer) getLocationFromCode(Code string) string {
+	if Code == "" {
+		return ""
+	}
+
+	dicto, prso := n.original.Dictionary[Code]
+	if prso {
+		return dicto.Location
+	}
+
+	dictg, prsg := n.GlobalDict[Code]
+	if prsg {
+		return dictg.Location
+	}
+
+	return ""
+}
+
 // get Code from taxonomy. For this a dictionary entry is retrieved from the codeDict
 //in the taxonomy is then looked for the category of the dictionary entry since this
 //should be the same regardless of the code value the corresponding code in the
@@ -393,27 +412,24 @@ func (n *normalizer) getCode(Type string, Code string) string {
 	// document dictionary takes precendence
 	if prso {
 		tax, prs := n.docTaxonomy[Type]
-		if !prs {
-			return ""
-		}
-
-		for _, typ := range tax {
-			if dicto.Category == typ.Category {
-				return typ.Code
+		if prs {
+			for _, typ := range tax {
+				if dicto.Category == typ.Category {
+					return typ.Code
+				}
 			}
 		}
+
 	}
 	//if we found a code in the document dict and were able to match it to a code in the taxonomy
 	//we have already returned, if we failed we will try to look for a code from the user/global dict
 	if prsg {
 		tax, prs := n.docTaxonomy[Type]
-		if !prs {
-			return ""
-		}
-
-		for _, typ := range tax {
-			if dictg.Category == typ.Category {
-				return typ.Code
+		if prs {
+			for _, typ := range tax {
+				if dictg.Category == typ.Category {
+					return typ.Code
+				}
 			}
 		}
 	}
@@ -421,7 +437,6 @@ func (n *normalizer) getCode(Type string, Code string) string {
 	//that means we also return nothing if the code is a standard code.
 	//since if that is the case we don't have to translate it.
 	return ""
-
 }
 
 //FoldExplanation folds explanations for multiple statements that are just one statement with and/except cluases back into one

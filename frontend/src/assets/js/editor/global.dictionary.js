@@ -19,8 +19,8 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $http, $q) {
         return dictionary.get(value);
     };
 
-    this.addTerm = function (type, code, category, value) {
-        var item = {value: value, type: type, code: code, category: category, dictionaryType: "global"};
+    this.addTerm = function (type, code, category,location, value) {
+        var item = {value: value, type: type, code: code, category: category,location:location, dictionaryType: "global"};
         context.dictionary.put(value, item);
         return $q(function (resolve, reject) {
             $http.put('/v1/users/'+CurrentUser.id + "/dictionary/" + code, item).success(function (data) {
@@ -40,7 +40,7 @@ editorModule.service("GlobalDictionary", function (CurrentUser, $http, $q) {
     this.initialize = function () {
         $http.get('/v1/users/' + CurrentUser.id + "/dictionary").success(function (data) {
             angular.forEach(data, function(term){
-               context.dictionary.put(term.value,{value: term.value, type: term.type, code: term.code, category: term.category, dictionaryType: "global"});
+               context.dictionary.put(term.value,{value: term.value, type: term.type, code: term.code,location:term.location, category: term.category, dictionaryType: "global"});
             });
         }).error(function (data, status) {
             reject(status);
