@@ -978,122 +978,122 @@ argument_schemes:
       - isInEu(eu)
   - id: isEu02
     conclusions:
-      - isInEu(austria)
+      - isInEu(at)
   - id: isEu03
     conclusions:
-      - isInEu(belgium)
+      - isInEu(be)
   - id: isEu04
     conclusions:
-      - isInEu(bulgaria)
+      - isInEu(bg)
   - id: isEu05
     conclusions:
-      - isInEu(croatia)
+      - isInEu(hr)
   - id: isEu06
     conclusions:
-      - isInEu(cyprus)
+      - isInEu(cy)
   - id: isEu07
     conclusions:
-      - isInEu(czech_republic)
+      - isInEu(cz)
   - id: isEu08
     conclusions:
-      - isInEu(denmark)
+      - isInEu(dk)
   - id: isEu09
     conclusions:
-      - isInEu(estonia)
+      - isInEu(ee)
   - id: isEu10
     conclusions:
-      - isInEu(finland)
+      - isInEu(fi)
   - id: isEu11
     conclusions:
-      - isInEu(france)
+      - isInEu(fr)
   - id: isEu12
     conclusions:
-      - isInEu(germany)
+      - isInEu(de)
   - id: isEu13
     conclusions:
-      - isInEu(greece)
+      - isInEu(gr)
   - id: isEu14
     conclusions:
-      - isInEu(hungary)
+      - isInEu(hu)
   - id: isEu15
     conclusions:
-      - isInEu(ireland)
+      - isInEu(ie)
   - id: isEu16
     conclusions:
-      - isInEu(italy)
+      - isInEu(it)
   - id: isEu17
     conclusions:
-      - isInEu(latvia)
+      - isInEu(lv)
   - id: isEu18
     conclusions:
-      - isInEu(lithuania)
+      - isInEu(lt)
   - id: isEu19
     conclusions:
-      - isInEu(luxembourg)
+      - isInEu(lu)
   - id: isEu20
     conclusions:
-      - isInEu(malta)
+      - isInEu(mt)
   - id: isEu21
     conclusions:
-      - isInEu(netherlands)
+      - isInEu(nl)
   - id: isEu22
     conclusions:
-      - isInEu(poland)
+      - isInEu(pl)
   - id: isEu23
     conclusions:
-      - isInEu(portugal)
+      - isInEu(pt)
   - id: isEu24
     conclusions:
-      - isInEu(romania)
+      - isInEu(ro)
   - id: isEu25
     conclusions:
-      - isInEu(slovakia)
+      - isInEu(sk)
   - id: isEu26
     conclusions:
-      - isInEu(slovenia)
+      - isInEu(si)
   - id: isEu27
     conclusions:
-      - isInEu(spain)
+      - isInEu(es)
   - id: isEu28
     conclusions:
-      - isInEu(sweden)
+      - isInEu(se)
   # adequacy protection as EU
   - id: apaEu01
     conclusions:
       - apaEu(dach)
   - id: apaEu01
     conclusions:
-      - apaEu(andorra)
+      - apaEu(ad)
   - id: apaEu01
     conclusions:
-      - apaEu(argentina)
+      - apaEu(ar)
   - id: apaEu01
     conclusions:
-      - apaEu(canada)
+      - apaEu(ca)
   - id: apaEu01
     conclusions:
-      - apaEu(faroe_islands)
+      - apaEu(fo)
   - id: apaEu01
     conclusions:
-      - apaEu(guernsey)
+      - apaEu(gg)
   - id: apaEu01
     conclusions:
-      - apaEu(israel)
+      - apaEu(il)
   - id: apaEu01
     conclusions:
-      - apaEu(isle_of_man)
+      - apaEu(im)
   - id: apaEu01
     conclusions:
-      - apaEu(jersey)
+      - apaEu(je)
   - id: apaEu01
     conclusions:
-      - apaEu(new_zealand)
+      - apaEu(nz)
   - id: apaEu01
     conclusions:
-      - apaEu(switzerland)
+      - apaEu(ch)
   - id: apaEu01
     conclusions:
-      - apaEu(uruguay)
+      - apaEu(uy)
   - id: apaEu01
     conclusions:
       - apaEu(us)
