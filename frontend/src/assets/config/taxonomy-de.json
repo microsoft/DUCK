@@ -362,12 +362,6 @@
       "code": "noneu",
       "category": "3",
       "fixed": true
-    },
-    {
-      "value": "Abkhazia",
-      "code": "globally",
-      "category": "4.1",
-      "fixed": true
     },{
       "value": "Afghanistan",
       "code": "af",

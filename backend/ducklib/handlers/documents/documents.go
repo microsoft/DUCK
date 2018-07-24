@@ -168,7 +168,7 @@ func (h *Handler) DeleteDoc(c echo.Context) error {
 //Returns the new version if successful
 func (h *Handler) PutDoc(c echo.Context) error {
 	/*
-		resp, err := ioutil.ReadAll(c.Request().Body())
+		resp, err := ioutil.ReadAll(c.Request().Body)
 		if err != nil {
 			e := err.Error()
 			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
@@ -182,7 +182,7 @@ func (h *Handler) PutDoc(c echo.Context) error {
 		log.Printf("Error in putDocHandler while trying to bind new doc to struct: %s", err)
 		return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
 	}
-
+	//log.Printf("%#v", doc)
 	err := h.Db.PutDocument(*doc)
 	if err != nil {
 		e := err.Error()
