@@ -346,6 +346,7 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	for key, val := range d.Dictionary {
 		dc := make(map[string]string)
 		dc["value"] = val.Value
+		dc["location"] = val.Location
 		dc["type"] = val.Type
 		dc["code"] = val.Code
 		dc["category"] = val.Category
