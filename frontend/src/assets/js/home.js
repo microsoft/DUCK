@@ -56,9 +56,15 @@ homeModule.controller("HomeController", function (DataUseDocumentService, Docume
                     DocumentModel.addStatement(statement);
                 });
                 DocumentModel.lookupAndSetTerms(DocumentModel.document);
-
+                var dict = home.testData[type].dictionary
+                if (typeof dict !== "undefined") {
+                    for (var key in dict) {
+                        var term = dict[key];
+                        DocumentModel.addTerm(term.type, term.code, term.category,term.location, term.value, "document");
+                      }
+                }
                 DocumentModel.save().then(function () {
-                    $state.go('main.editor', {documentId: document.id});
+                    $state.go('main.editor', { documentId: document.id });
                 });
             });
         }, function (error) {
