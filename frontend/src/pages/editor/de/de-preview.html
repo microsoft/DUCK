@@ -2,4 +2,4 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.-->
 
-{{statement.useScope |capitalizeInitial}} anwendungen {{statement.qualifier}} {{statement.dataCategory}}<span ng-repeat="category in statement.dataCategories"> <span ng-if="category.operator=='and'">und</span><span ng-if="category.operator=='except'">außer</span> {{category.qualifier}} {{category.dataCategory}}</span> von {{statement.sourceScope}} nach {{statement.action}} das {{statement.resultScope}}
+{{statement.useScope |capitalizeInitial}} verwendet {{statement.qualifier}} {{statement.dataCategory}}<span ng-repeat="category in statement.dataCategories"> <span ng-if="category.operator=='and'">und</span><span ng-if="category.operator=='except'">außer</span> {{category.qualifier}} {{category.dataCategory}}</span> von {{statement.sourceScope}}, um {{statement.resultScope}} {{statement.action}}

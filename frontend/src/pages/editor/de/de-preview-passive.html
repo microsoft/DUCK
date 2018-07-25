@@ -2,5 +2,4 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.-->
 
-{{statement.qualifier |capitalizeInitial}} {{statement.dataCategory}} <span ng-repeat="category in statement.dataCategories"> <span ng-if="category.operator=='and'">und</span><span ng-if="category.operator=='except'">außer</span> {{category.qualifier}} {{category.dataCategory}}</span> von {{statement.sourceScope}} wirb von {{statement.useScope}} nach {{statement.action}}
-das {{statement.resultScope}}
+{{statement.qualifier |capitalizeInitial}} {{statement.dataCategory}} <span ng-repeat="category in statement.dataCategories"> <span ng-if="category.operator=='and'">und</span><span ng-if="category.operator=='except'">außer</span> {{category.qualifier}} {{category.dataCategory}}</span> von {{statement.sourceScope}} wird von {{statement.useScope}} verwendet, um {{statement.resultScope}} {{statement.action}}
