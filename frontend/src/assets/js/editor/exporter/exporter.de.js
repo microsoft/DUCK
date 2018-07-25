@@ -14,14 +14,15 @@ editorModule.run(function (DocumentExporter) {
     DocumentExporter.register("text/plain", "de", function (document) {
         var text = "";
         document.statements.forEach(function (statement) {
-            text = text + statement.useScope + " anwendungen " + statement.qualifier + " " + statement.dataCategory;
+            text = text + statement.useScope + " verwendet " + statement.qualifier + " " + statement.dataCategory;
 
             statement.dataCategories.forEach(function(category){
-                text = text + " " + category.operator + " " + category.qualifier + " " + category.dataCategory;
+                var op = category.operator=="and" ? "und" : "außer";
+                text = text + " " + op + " " + category.qualifier + " " + category.dataCategory;
             });
 
             text = text + " von " + statement.sourceScope
-                + " nach " + statement.action + " das" + " " + statement.resultScope + ".\n\n";
+                + ", um "  + statement.resultScope +  statement.action + ".\n\n";
         });
         return new Blob([text], {type: 'text/plain;charset=utf-8'});
     });
