@@ -197,11 +197,11 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
      * @param value the term value
      * @param dictionaryType the type of dictionary, e.g. global or document
      */
-    this.addTerm = function (type, code, category, value, dictionaryType) {
+    this.addTerm = function (type, code, category,location , value, dictionaryType) {
         // deactivate all dictionaries, add the new term to the deactivated terms and reactivate the terms; this preserves sort order and may be faster 
         // than iterating over all dictionaries to determine the insertion point
         var entries = context.deactivateDictionaries();
-        entries.push({type: type, code: code, category: category, value: value, dictionaryType: dictionaryType, dictionary: true});
+        entries.push({type: type, code: code, category: category, location:location, value: value, dictionaryType: dictionaryType, dictionary: true});
         context.activate([entries]);
 
     };
@@ -239,6 +239,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                             type: term.type,
                             code: term.code,
                             category: term.category,
+                            location: term.location,
                             dictionary: true,
                             dictionaryType: term.dictionaryType
                         });
@@ -249,7 +250,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                 }
                 if (!inserted) {
                     // no category, add at the end
-                    symbolTable.entries.push({value: term.value, code: term.code, dictionary: true, dictionaryType: term.dictionaryType});
+                    symbolTable.entries.push({value: term.value,location: term.location, code: term.code, dictionary: true, dictionaryType: term.dictionaryType});
                     symbolTable.values.push(term.value);
                 }
             })
