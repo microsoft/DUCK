@@ -325,7 +325,7 @@ gatewayModule.service('DataUseDocumentService', function (CurrentUser, Notificat
         var entries = document.dictionary.entries();
         entries.forEach(function (entry) {
             var term = entry[1];
-            data.dictionary[entry[0]] = { value: term.value, type: term.type, code: term.code, category: term.category, dictionaryType: "document" };
+            data.dictionary[entry[0]] = { value: term.value, type: term.type, code: term.code, location:term.location, category: term.category, dictionaryType: "document" };
         });
         return data;
     };
