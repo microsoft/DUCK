@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 
 	"path/filepath"
@@ -126,16 +127,23 @@ type snippet struct {
 
 //Straighten moves the except and and clauses int their own statements
 func (n *normalizer) Unfold() error {
+	normalized := make([]NormalizedStatement, 0)
+	log.Printf("n.normalized.Statements: %#+v\n", n.normalized.Statements)
 	for h, stmt := range n.normalized.Statements {
 		stmt.PlaceInStruct = 0
 		except := false
 		for i, dcat := range stmt.DataCategories {
-
-			//if first ist except:
-			//TODO: Except handling in one function for both cases
-			if dcat.Op == structs.EXCEPT {
+			log.Printf("i: %#+v ,len: %#+v\n", i, len(stmt.DataCategories)-1)
+			//if except, the first one or the one after this one
+			if dcat.Op == structs.EXCEPT || (len(stmt.DataCategories)-1 > i && stmt.DataCategories[i+1].Op == structs.EXCEPT) {
+				log.Println("in 1")
+				code := dcat.DataCategoryCode
+				if dcat.Op == structs.EXCEPT {
+					code = n.normalized.Statements[h].DataCategoryCode
+				}
+				cats := n.getCategories(code)
 				except = true
-				cats := n.getCategories(n.normalized.Statements[h].DataCategoryCode)
+
 				for j := i; j < len(stmt.DataCategories); j++ {
 					cats[stmt.DataCategories[j].DataCategoryCode] = nil
 				}
@@ -146,45 +154,34 @@ func (n *normalizer) Unfold() error {
 						statement := createFromStatement(stmt, cat, dcat.QualifierCode)
 						statement.PlaceInStruct = k
 						statement.TrackingID = statement.TrackingID + "-" + fmt.Sprint(k)
-						n.normalized.Statements = append(n.normalized.Statements, statement)
+						statement.DataCategories = nil
+						normalized = append(normalized, statement)
 						k++
 					}
 				}
-				n.normalized.Statements = append(n.normalized.Statements[:h], n.normalized.Statements[h+1])
+
 				break
 			}
 
-			if dcat.Op == structs.AND && stmt.DataCategories[i+1].Op != structs.EXCEPT && !except {
+			// handling and when
+			// - either this is an AND and the next one is not an EXCEPT
+			// - or this one is the last one and an AND
+			// - only if we did not yet have had an EXCEPT
 
+			if ((len(stmt.DataCategories)-1 > i && dcat.Op == structs.AND && stmt.DataCategories[i+1].Op != structs.EXCEPT) || (len(stmt.DataCategories)-1 == i && dcat.Op == structs.AND)) && !except {
+				log.Println("in 2")
+				log.Printf("dcat: %#+v\n", dcat)
 				statement := createFromStatement(stmt, dcat.DataCategoryCode, dcat.QualifierCode)
 				statement.PlaceInStruct = i
 				statement.TrackingID = statement.TrackingID + "-" + fmt.Sprint(i)
-				n.normalized.Statements = append(n.normalized.Statements, statement)
-			}
-
-			if stmt.DataCategories[i+1].Op == structs.EXCEPT {
-				except = true
-				cats := n.getCategories(dcat.DataCategoryCode)
-				for j := i + 1; j < len(stmt.DataCategories); j++ {
-					cats[stmt.DataCategories[j].DataCategoryCode] = nil
-				}
-
-				k := i
-				for cat, snip := range cats {
-					if snip != nil {
-						statement := createFromStatement(stmt, cat, dcat.QualifierCode)
-						statement.PlaceInStruct = k
-						statement.TrackingID = statement.TrackingID + "-" + fmt.Sprint(k)
-						n.normalized.Statements = append(n.normalized.Statements, statement)
-						k++
-					}
-				}
-				break
+				statement.DataCategories = nil
+				normalized = append(normalized, statement)
 			}
 
 		}
-		n.normalized.Statements[h].DataCategories = nil
 	}
+	//log.Printf("%v", normalized)
+	n.normalized.Statements = normalized
 	return nil
 }
 
@@ -287,6 +284,9 @@ func (n *normalizer) CreateDict() error {
 				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.UseScopeCode)
 			}
 			normstmt.UseScopeLocation = n.getLocationFromCode(statement.UseScopeCode)
+			if normstmt.UseScopeLocation != "" {
+				log.Printf("UseScopeLocation: %#v", normstmt.UseScopeLocation)
+			}
 		}
 		if returnCode := n.getCode("scope", statement.ResultScopeCode); returnCode != "" {
 			if _, prs := isA[statement.ResultScopeCode]; prs == false {
@@ -295,6 +295,9 @@ func (n *normalizer) CreateDict() error {
 				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.ResultScopeCode)
 			}
 			normstmt.ResultScopeLocation = n.getLocationFromCode(statement.ResultScopeCode)
+			if normstmt.ResultScopeLocation != "" {
+				log.Printf("UseScopeLocation: %#v", normstmt.ResultScopeLocation)
+			}
 		}
 
 		if returnCode := n.getCode("scope", statement.SourceScopeCode); returnCode != "" {
@@ -304,6 +307,9 @@ func (n *normalizer) CreateDict() error {
 				return fmt.Errorf("The following custom code can be two or more things, which should not be possible: %s", statement.SourceScopeCode)
 			}
 			normstmt.SourceScopeLocation = n.getLocationFromCode(statement.SourceScopeCode)
+			if normstmt.SourceScopeLocation != "" {
+				log.Printf("UseScopeLocation: %#v", normstmt.SourceScopeLocation)
+			}
 		}
 
 		// if qualifier is missing that means the qualifier is "unqualified"

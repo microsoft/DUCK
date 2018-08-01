@@ -367,19 +367,19 @@
   ],
   "location": [
     {
-      "value": "in europe",
+      "value": "in Europa",
       "code": "eu",
       "category": "1",
       "fixed": true
     },
     {
-      "value": "worldwide",
+      "value": "weltweit",
       "code": "globally",
       "category": "2",
       "fixed": true
     },
     {
-      "value": "outside of europe",
+      "value": "außerhalb von Europa",
       "code": "noneu",
       "category": "3",
       "fixed": true
@@ -391,25 +391,25 @@
       "fixed": true
     },
     {
-      "value": "\u00c5land Islands",
+      "value": "\u00c5landinseln",
       "code": "ax",
       "category": "4.2",
       "fixed": true
     },
     {
-      "value": "Albania",
+      "value": "Albanien",
       "code": "al",
       "category": "4.3",
       "fixed": true
     },
     {
-      "value": "Algeria",
+      "value": "Algerien",
       "code": "dz",
       "category": "4.4",
       "fixed": true
     },
     {
-      "value": "American Samoa",
+      "value": "Amerikanisch-Samoa",
       "code": "as",
       "category": "4.5",
       "fixed": true
@@ -433,7 +433,7 @@
       "fixed": true
     },
     {
-      "value": "Antarctica",
+      "value": "Antarktis",
       "code": "aq",
       "category": "4.9",
       "fixed": true
@@ -445,13 +445,13 @@
       "fixed": true
     },
     {
-      "value": "Argentina",
+      "value": "Argentinien",
       "code": "ar",
       "category": "4.11",
       "fixed": true
     },
     {
-      "value": "Armenia",
+      "value": "Armenien",
       "code": "am",
       "category": "4.12",
       "fixed": true
@@ -463,25 +463,25 @@
       "fixed": true
     },
     {
-      "value": "Ascension Island",
+      "value": "Ascension",
       "code": "ac",
       "category": "4.14",
       "fixed": true
     },
     {
-      "value": "Australia",
+      "value": "Australien",
       "code": "au",
       "category": "4.15",
       "fixed": true
     },
     {
-      "value": "Austria",
+      "value": "\u00d6sterreich",
       "code": "at",
       "category": "4.16",
       "fixed": true
     },
     {
-      "value": "Azerbaijan",
+      "value": "Aserbaidschan",
       "code": "az",
       "category": "4.17",
       "fixed": true
@@ -499,7 +499,7 @@
       "fixed": true
     },
     {
-      "value": "Bangladesh",
+      "value": "Bangladesch",
       "code": "bd",
       "category": "4.20",
       "fixed": true
@@ -517,7 +517,7 @@
       "fixed": true
     },
     {
-      "value": "Belgium",
+      "value": "Belgien",
       "code": "be",
       "category": "4.23",
       "fixed": true
@@ -547,49 +547,49 @@
       "fixed": true
     },
     {
-      "value": "Bolivia",
+      "value": "Bolivien",
       "code": "bo",
       "category": "4.28",
       "fixed": true
     },
     {
-      "value": "Bosnia & Herzegovina",
+      "value": "Bosnien und Herzegowina",
       "code": "ba",
       "category": "4.29",
       "fixed": true
     },
     {
-      "value": "Botswana",
+      "value": "Botsuana",
       "code": "bw",
       "category": "4.30",
       "fixed": true
     },
     {
-      "value": "Brazil",
+      "value": "Brasilien",
       "code": "br",
       "category": "4.31",
       "fixed": true
     },
     {
-      "value": "British Indian Ocean Territory",
+      "value": "Britisches Territorium im Indischen Ozean",
       "code": "io",
       "category": "4.32",
       "fixed": true
     },
     {
-      "value": "British Virgin Islands",
+      "value": "Britische Jungferninseln",
       "code": "vg",
       "category": "4.33",
       "fixed": true
     },
     {
-      "value": "Brunei",
+      "value": "Brunei Darussalam",
       "code": "bn",
       "category": "4.34",
       "fixed": true
     },
     {
-      "value": "Bulgaria",
+      "value": "Bulgarien",
       "code": "bg",
       "category": "4.35",
       "fixed": true
@@ -607,49 +607,49 @@
       "fixed": true
     },
     {
-      "value": "Cambodia",
+      "value": "Kambodscha",
       "code": "kh",
       "category": "4.38",
       "fixed": true
     },
     {
-      "value": "Cameroon",
+      "value": "Kamerun",
       "code": "cm",
       "category": "4.39",
       "fixed": true
     },
     {
-      "value": "Canada",
+      "value": "Kanada",
       "code": "ca",
       "category": "4.40",
       "fixed": true
     },
     {
-      "value": "Canary Islands",
+      "value": "Kanarische Inseln",
       "code": "ic",
       "category": "4.41",
       "fixed": true
     },
     {
-      "value": "Cape Verde",
+      "value": "Cabo Verde",
       "code": "cv",
       "category": "4.42",
       "fixed": true
     },
     {
-      "value": "Caribbean Netherlands",
+      "value": "Bonaire, Sint Eustatius und Saba",
       "code": "bq",
       "category": "4.43",
       "fixed": true
     },
     {
-      "value": "Cayman Islands",
+      "value": "Kaimaninseln",
       "code": "ky",
       "category": "4.44",
       "fixed": true
     },
     {
-      "value": "Central African Republic",
+      "value": "Zentralafrikanische Republik",
       "code": "cf",
       "category": "4.45",
       "fixed": true
@@ -661,7 +661,7 @@
       "fixed": true
     },
     {
-      "value": "Chad",
+      "value": "Tschad",
       "code": "td",
       "category": "4.47",
       "fixed": true
@@ -679,43 +679,43 @@
       "fixed": true
     },
     {
-      "value": "Christmas Island",
+      "value": "Weihnachtsinsel",
       "code": "cx",
       "category": "4.50",
       "fixed": true
     },
     {
-      "value": "Cocos (Keeling) Islands",
+      "value": "Kokosinseln",
       "code": "cc",
       "category": "4.51",
       "fixed": true
     },
     {
-      "value": "Colombia",
+      "value": "Kolumbien",
       "code": "co",
       "category": "4.52",
       "fixed": true
     },
     {
-      "value": "Comoros",
+      "value": "Komoren",
       "code": "km",
       "category": "4.53",
       "fixed": true
     },
     {
-      "value": "Congo - Brazzaville",
+      "value": "Kongo - Brazzaville",
       "code": "cg",
       "category": "4.54",
       "fixed": true
     },
     {
-      "value": "Congo - Kinshasa",
+      "value": "Kongo - Kinshasa",
       "code": "cd",
       "category": "4.55",
       "fixed": true
     },
     {
-      "value": "Cook Islands",
+      "value": "Cookinseln",
       "code": "ck",
       "category": "4.56",
       "fixed": true
@@ -733,13 +733,13 @@
       "fixed": true
     },
     {
-      "value": "Croatia",
+      "value": "Kroatien",
       "code": "hr",
       "category": "4.59",
       "fixed": true
     },
     {
-      "value": "Cuba",
+      "value": "Kuba",
       "code": "cu",
       "category": "4.60",
       "fixed": true
@@ -751,19 +751,19 @@
       "fixed": true
     },
     {
-      "value": "Cyprus",
+      "value": "Zypern",
       "code": "cy",
       "category": "4.62",
       "fixed": true
     },
     {
-      "value": "Czechia",
+      "value": "Tschechien",
       "code": "cz",
       "category": "4.63",
       "fixed": true
     },
     {
-      "value": "Denmark",
+      "value": "D\u00e4nemark",
       "code": "dk",
       "category": "4.64",
       "fixed": true
@@ -775,7 +775,7 @@
       "fixed": true
     },
     {
-      "value": "Djibouti",
+      "value": "Dschibuti",
       "code": "dj",
       "category": "4.66",
       "fixed": true
@@ -787,7 +787,7 @@
       "fixed": true
     },
     {
-      "value": "Dominican Republic",
+      "value": "Dominikanische Republik",
       "code": "do",
       "category": "4.68",
       "fixed": true
@@ -799,7 +799,7 @@
       "fixed": true
     },
     {
-      "value": "Egypt",
+      "value": "\u00c4gypten",
       "code": "eg",
       "category": "4.70",
       "fixed": true
@@ -811,7 +811,7 @@
       "fixed": true
     },
     {
-      "value": "Equatorial Guinea",
+      "value": "\u00c4quatorialguinea",
       "code": "gq",
       "category": "4.72",
       "fixed": true
@@ -823,67 +823,67 @@
       "fixed": true
     },
     {
-      "value": "Estonia",
+      "value": "Estland",
       "code": "ee",
       "category": "4.74",
       "fixed": true
     },
     {
-      "value": "Ethiopia",
+      "value": "\u00c4thiopien",
       "code": "et",
       "category": "4.75",
       "fixed": true
     },
     {
-      "value": "Falkland Islands",
+      "value": "Falklandinseln",
       "code": "fk",
       "category": "4.77",
       "fixed": true
     },
     {
-      "value": "Faroe Islands",
+      "value": "F\u00e4r\u00f6er",
       "code": "fo",
       "category": "4.78",
       "fixed": true
     },
     {
-      "value": "Fiji",
+      "value": "Fidschi",
       "code": "fj",
       "category": "4.79",
       "fixed": true
     },
     {
-      "value": "Finland",
+      "value": "Finnland",
       "code": "fi",
       "category": "4.80",
       "fixed": true
     },
     {
-      "value": "France",
+      "value": "Frankreich",
       "code": "fr",
       "category": "4.81",
       "fixed": true
     },
     {
-      "value": "French Guiana",
+      "value": "Franz\u00f6sisch-Guayana",
       "code": "gf",
       "category": "4.82",
       "fixed": true
     },
     {
-      "value": "French Polynesia",
+      "value": "Franz\u00f6sisch-Polynesien",
       "code": "pf",
       "category": "4.83",
       "fixed": true
     },
     {
-      "value": "French Southern Territories",
+      "value": "Franz\u00f6sische S\u00fcd- und Antarktisgebiete",
       "code": "tf",
       "category": "4.84",
       "fixed": true
     },
     {
-      "value": "Gabon",
+      "value": "Gabun",
       "code": "ga",
       "category": "4.85",
       "fixed": true
@@ -895,13 +895,13 @@
       "fixed": true
     },
     {
-      "value": "Georgia",
+      "value": "Georgien",
       "code": "ge",
       "category": "4.87",
       "fixed": true
     },
     {
-      "value": "Germany",
+      "value": "Deutschland",
       "code": "de",
       "category": "4.88",
       "fixed": true
@@ -919,13 +919,13 @@
       "fixed": true
     },
     {
-      "value": "Greece",
+      "value": "Griechenland",
       "code": "gr",
       "category": "4.91",
       "fixed": true
     },
     {
-      "value": "Greenland",
+      "value": "Gr\u00f6nland",
       "code": "gl",
       "category": "4.92",
       "fixed": true
@@ -991,31 +991,31 @@
       "fixed": true
     },
     {
-      "value": "Hong Kong saR China",
+      "value": "Sonderverwaltungszone Hongkong",
       "code": "hk",
       "category": "4.103",
       "fixed": true
     },
     {
-      "value": "Hungary",
+      "value": "Ungarn",
       "code": "hu",
       "category": "4.104",
       "fixed": true
     },
     {
-      "value": "Iceland",
+      "value": "Island",
       "code": "is",
       "category": "4.105",
       "fixed": true
     },
     {
-      "value": "India",
+      "value": "Indien",
       "code": "in",
       "category": "4.106",
       "fixed": true
     },
     {
-      "value": "Indonesia",
+      "value": "Indonesien",
       "code": "id",
       "category": "4.107",
       "fixed": true
@@ -1027,13 +1027,13 @@
       "fixed": true
     },
     {
-      "value": "Iraq",
+      "value": "Irak",
       "code": "iq",
       "category": "4.109",
       "fixed": true
     },
     {
-      "value": "Ireland",
+      "value": "Irland",
       "code": "ie",
       "category": "4.110",
       "fixed": true
@@ -1051,13 +1051,13 @@
       "fixed": true
     },
     {
-      "value": "Italy",
+      "value": "Italien",
       "code": "it",
       "category": "4.113",
       "fixed": true
     },
     {
-      "value": "Jamaica",
+      "value": "Jamaika",
       "code": "jm",
       "category": "4.114",
       "fixed": true
@@ -1075,19 +1075,19 @@
       "fixed": true
     },
     {
-      "value": "Jordan",
+      "value": "Jordanien",
       "code": "jo",
       "category": "4.117",
       "fixed": true
     },
     {
-      "value": "Kazakhstan",
+      "value": "Kasachstan",
       "code": "kz",
       "category": "4.118",
       "fixed": true
     },
     {
-      "value": "Kenya",
+      "value": "Kenia",
       "code": "ke",
       "category": "4.119",
       "fixed": true
@@ -1111,7 +1111,7 @@
       "fixed": true
     },
     {
-      "value": "Kyrgyzstan",
+      "value": "Kirgisistan",
       "code": "kg",
       "category": "4.123",
       "fixed": true
@@ -1123,13 +1123,13 @@
       "fixed": true
     },
     {
-      "value": "Latvia",
+      "value": "Lettland",
       "code": "lv",
       "category": "4.125",
       "fixed": true
     },
     {
-      "value": "Lebanon",
+      "value": "Libanon",
       "code": "lb",
       "category": "4.126",
       "fixed": true
@@ -1147,7 +1147,7 @@
       "fixed": true
     },
     {
-      "value": "Libya",
+      "value": "Libyen",
       "code": "ly",
       "category": "4.129",
       "fixed": true
@@ -1159,25 +1159,25 @@
       "fixed": true
     },
     {
-      "value": "Lithuania",
+      "value": "Litauen",
       "code": "lt",
       "category": "4.131",
       "fixed": true
     },
     {
-      "value": "Luxembourg",
+      "value": "Luxemburg",
       "code": "lu",
       "category": "4.132",
       "fixed": true
     },
     {
-      "value": "Macau saR China",
+      "value": "Sonderverwaltungsregion Macau",
       "code": "mo",
       "category": "4.133",
       "fixed": true
     },
     {
-      "value": "Macedonia",
+      "value": "Mazedonien",
       "code": "mk",
       "category": "4.134",
       "fixed": true
@@ -1201,7 +1201,7 @@
       "fixed": true
     },
     {
-      "value": "Maldives",
+      "value": "Malediven",
       "code": "mv",
       "category": "4.138",
       "fixed": true
@@ -1219,7 +1219,7 @@
       "fixed": true
     },
     {
-      "value": "Marshall Islands",
+      "value": "Marshallinseln",
       "code": "mh",
       "category": "4.141",
       "fixed": true
@@ -1231,7 +1231,7 @@
       "fixed": true
     },
     {
-      "value": "Mauritania",
+      "value": "Mauretanien",
       "code": "mr",
       "category": "4.143",
       "fixed": true
@@ -1249,19 +1249,19 @@
       "fixed": true
     },
     {
-      "value": "Mexico",
+      "value": "Mexiko",
       "code": "mx",
       "category": "4.146",
       "fixed": true
     },
     {
-      "value": "Micronesia",
+      "value": "Mikronesien",
       "code": "fm",
       "category": "4.147",
       "fixed": true
     },
     {
-      "value": "Moldova",
+      "value": "Republik Moldau",
       "code": "md",
       "category": "4.148",
       "fixed": true
@@ -1273,7 +1273,7 @@
       "fixed": true
     },
     {
-      "value": "Mongolia",
+      "value": "Mongolei",
       "code": "mn",
       "category": "4.150",
       "fixed": true
@@ -1291,19 +1291,19 @@
       "fixed": true
     },
     {
-      "value": "Morocco",
+      "value": "Marokko",
       "code": "ma",
       "category": "4.153",
       "fixed": true
     },
     {
-      "value": "Mozambique",
+      "value": "Mosambik",
       "code": "mz",
       "category": "4.154",
       "fixed": true
     },
     {
-      "value": "Myanmar (Burma)",
+      "value": "Myanmar",
       "code": "mm",
       "category": "4.155",
       "fixed": true
@@ -1327,19 +1327,19 @@
       "fixed": true
     },
     {
-      "value": "Netherlands",
+      "value": "Niederlande",
       "code": "nl",
       "category": "4.159",
       "fixed": true
     },
     {
-      "value": "New Caledonia",
+      "value": "Neukaledonien",
       "code": "nc",
       "category": "4.160",
       "fixed": true
     },
     {
-      "value": "New Zealand",
+      "value": "Neuseeland",
       "code": "nz",
       "category": "4.161",
       "fixed": true
@@ -1369,25 +1369,25 @@
       "fixed": true
     },
     {
-      "value": "Norfolk Island",
+      "value": "Norfolkinsel",
       "code": "nf",
       "category": "4.166",
       "fixed": true
     },
     {
-      "value": "North Korea",
+      "value": "Nordkorea",
       "code": "kp",
       "category": "4.167",
       "fixed": true
     },
     {
-      "value": "Northern Mariana Islands",
+      "value": "N\u00f6rdliche Marianen",
       "code": "mp",
       "category": "4.168",
       "fixed": true
     },
     {
-      "value": "Norway",
+      "value": "Norwegen",
       "code": "no",
       "category": "4.169",
       "fixed": true
@@ -1411,7 +1411,7 @@
       "fixed": true
     },
     {
-      "value": "Palestinian Territories",
+      "value": "Pal\u00e4stinensische Autonomiegebiete",
       "code": "ps",
       "category": "4.173",
       "fixed": true
@@ -1423,7 +1423,7 @@
       "fixed": true
     },
     {
-      "value": "Papua New Guinea",
+      "value": "Papua-Neuguinea",
       "code": "pg",
       "category": "4.175",
       "fixed": true
@@ -1441,13 +1441,13 @@
       "fixed": true
     },
     {
-      "value": "Philippines",
+      "value": "Philippinen",
       "code": "ph",
       "category": "4.178",
       "fixed": true
     },
     {
-      "value": "Pitcairn Islands",
+      "value": "Pitcairninseln",
       "code": "pn",
       "category": "4.179",
       "fixed": true
@@ -1471,7 +1471,7 @@
       "fixed": true
     },
     {
-      "value": "Qatar",
+      "value": "Katar",
       "code": "qa",
       "category": "4.183",
       "fixed": true
@@ -1483,19 +1483,19 @@
       "fixed": true
     },
     {
-      "value": "Romania",
+      "value": "Rum\u00e4nien",
       "code": "ro",
       "category": "4.185",
       "fixed": true
     },
     {
-      "value": "Russia",
+      "value": "Russland",
       "code": "ru",
       "category": "4.186",
       "fixed": true
     },
     {
-      "value": "Rwanda",
+      "value": "Ruanda",
       "code": "rw",
       "category": "4.187",
       "fixed": true
@@ -1513,13 +1513,13 @@
       "fixed": true
     },
     {
-      "value": "S\u00e3o Tom\u00e9 & Pr\u00edncipe",
+      "value": "S\u00e3o Tom\u00e9 und Pr\u00edncipe",
       "code": "st",
       "category": "4.190",
       "fixed": true
     },
     {
-      "value": "Saudi Arabia",
+      "value": "Saudi-Arabien",
       "code": "sa",
       "category": "4.191",
       "fixed": true
@@ -1531,13 +1531,13 @@
       "fixed": true
     },
     {
-      "value": "Serbia",
+      "value": "Serbien",
       "code": "rs",
       "category": "4.193",
       "fixed": true
     },
     {
-      "value": "Seychelles",
+      "value": "Seychellen",
       "code": "sc",
       "category": "4.194",
       "fixed": true
@@ -1549,7 +1549,7 @@
       "fixed": true
     },
     {
-      "value": "Singapore",
+      "value": "Singapur",
       "code": "sg",
       "category": "4.196",
       "fixed": true
@@ -1561,19 +1561,19 @@
       "fixed": true
     },
     {
-      "value": "Slovakia",
+      "value": "Slowakei",
       "code": "sk",
       "category": "4.198",
       "fixed": true
     },
     {
-      "value": "Slovenia",
+      "value": "Slowenien",
       "code": "si",
       "category": "4.199",
       "fixed": true
     },
     {
-      "value": "Solomon Islands",
+      "value": "Salomonen",
       "code": "sb",
       "category": "4.200",
       "fixed": true
@@ -1585,31 +1585,31 @@
       "fixed": true
     },
     {
-      "value": "South Africa",
+      "value": "S\u00fcdafrika",
       "code": "za",
       "category": "4.202",
       "fixed": true
     },
     {
-      "value": "South Georgia & South Sandwich Islands",
+      "value": "S\u00fcdgeorgien und die S\u00fcdlichen Sandwichinseln",
       "code": "gs",
       "category": "4.203",
       "fixed": true
     },
     {
-      "value": "South Korea",
+      "value": "S\u00fcdkorea",
       "code": "kr",
       "category": "4.204",
       "fixed": true
     },
     {
-      "value": "South Sudan",
+      "value": "S\u00fcdsudan",
       "code": "ss",
       "category": "4.205",
       "fixed": true
     },
     {
-      "value": "Spain",
+      "value": "Spanien",
       "code": "es",
       "category": "4.206",
       "fixed": true
@@ -1657,7 +1657,7 @@
       "fixed": true
     },
     {
-      "value": "St. Vincent & Grenadines",
+      "value": "St. Vincent und die Grenadinen",
       "code": "vc",
       "category": "4.214",
       "fixed": true
@@ -1675,7 +1675,7 @@
       "fixed": true
     },
     {
-      "value": "Svalbard & Jan Mayen",
+      "value": "Spitzbergen",
       "code": "sj",
       "category": "4.217",
       "fixed": true
@@ -1687,19 +1687,19 @@
       "fixed": true
     },
     {
-      "value": "Sweden",
+      "value": "Schweden",
       "code": "se",
       "category": "4.219",
       "fixed": true
     },
     {
-      "value": "Switzerland",
+      "value": "Schweiz",
       "code": "ch",
       "category": "4.220",
       "fixed": true
     },
     {
-      "value": "Syria",
+      "value": "Syrien",
       "code": "sy",
       "category": "4.221",
       "fixed": true
@@ -1711,13 +1711,13 @@
       "fixed": true
     },
     {
-      "value": "Tajikistan",
+      "value": "Tadschikistan",
       "code": "tj",
       "category": "4.223",
       "fixed": true
     },
     {
-      "value": "Tanzania",
+      "value": "Tansania",
       "code": "tz",
       "category": "4.224",
       "fixed": true
@@ -1729,7 +1729,7 @@
       "fixed": true
     },
     {
-      "value": "Timor-Leste",
+      "value": "Osttimor",
       "code": "tl",
       "category": "4.226",
       "fixed": true
@@ -1753,7 +1753,7 @@
       "fixed": true
     },
     {
-      "value": "Trinidad & Tobago",
+      "value": "Trinidad und Tobago",
       "code": "tt",
       "category": "4.230",
       "fixed": true
@@ -1765,13 +1765,13 @@
       "fixed": true
     },
     {
-      "value": "Tunisia",
+      "value": "Tunesien",
       "code": "tn",
       "category": "4.232",
       "fixed": true
     },
     {
-      "value": "Turkey",
+      "value": "T\u00fcrkei",
       "code": "tr",
       "category": "4.233",
       "fixed": true
@@ -1783,7 +1783,7 @@
       "fixed": true
     },
     {
-      "value": "Turks & Caicos Islands",
+      "value": "Turks- und Caicosinseln",
       "code": "tc",
       "category": "4.235",
       "fixed": true
@@ -1795,13 +1795,13 @@
       "fixed": true
     },
     {
-      "value": "U.S. Outlying Islands",
+      "value": "Amerikanische \u00dcberseeinseln",
       "code": "um",
       "category": "4.237",
       "fixed": true
     },
     {
-      "value": "U.S. Virgin Islands",
+      "value": "Amerikanische Jungferninseln",
       "code": "vi",
       "category": "4.238",
       "fixed": true
@@ -1819,19 +1819,19 @@
       "fixed": true
     },
     {
-      "value": "United Arab Emirates",
+      "value": "Vereinigte Arabische Emirate",
       "code": "ae",
       "category": "4.241",
       "fixed": true
     },
     {
-      "value": "United Kingdom",
+      "value": "Vereinigtes K\u00f6nigreich",
       "code": "gb",
       "category": "4.242",
       "fixed": true
     },
     {
-      "value": "United States",
+      "value": "Vereinigte Staaten",
       "code": "us",
       "category": "4.244",
       "fixed": true
@@ -1843,7 +1843,7 @@
       "fixed": true
     },
     {
-      "value": "Uzbekistan",
+      "value": "Usbekistan",
       "code": "uz",
       "category": "4.246",
       "fixed": true
@@ -1855,7 +1855,7 @@
       "fixed": true
     },
     {
-      "value": "Vatican City",
+      "value": "Vatikanstadt",
       "code": "va",
       "category": "4.248",
       "fixed": true
@@ -1879,25 +1879,25 @@
       "fixed": true
     },
     {
-      "value": "Western Sahara",
+      "value": "Westsahara",
       "code": "eh",
       "category": "4.252",
       "fixed": true
     },
     {
-      "value": "Yemen",
+      "value": "Jemen",
       "code": "ye",
       "category": "4.253",
       "fixed": true
     },
     {
-      "value": "Zambia",
+      "value": "Sambia",
       "code": "zm",
       "category": "4.254",
       "fixed": true
     },
     {
-      "value": "Zimbabwe",
+      "value": "Simbabwe",
       "code": "zw",
       "category": "4.255",
       "fixed": true
