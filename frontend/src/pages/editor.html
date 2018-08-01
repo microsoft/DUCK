@@ -153,9 +153,25 @@
                                                      'is-hidden': statement.$$statementExplanation.idNotRequired.value === true}">
                                     {{'id_required'|translate}}
                                 </span>
-                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.idNotRequired.assumed=== true,
+                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.idNotRequired.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.idNotRequired.value === false}">
                                     {{'id_not_required'|translate}}
+                                </span>
+                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.transferPii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.transferPii.value === true}">
+                                    {{'transfer_pii'|translate}}
+                                </span>
+                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.transferPii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.transferPii.value === false}">
+                                    {{'does_not_transfer_pii'|translate}}
+                                </span>
+                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.consentRequired2TransferPii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.consentRequired2TransferPii.value === true}">
+                                    {{'consent_required_2_transfer_pii'|translate}}
+                                </span>
+                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.consentRequired2TransferPii.assumed === true,
+                                                     'is-hidden': statement.$$statementExplanation.consentRequired2TransferPii.value === false}">
+                                    {{'consent_not_required_2_transfer_pii'|translate}}
                                 </span>
                             </div>
                             <div class="small-2 right columns">
@@ -205,6 +221,13 @@
                 </div>
                 <div class="row">
                     <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.categoryValue" mass-autocomplete-item="newCategoryCompletion"
+                        required>
+                </div>
+                <div class="row padding-top-1">
+                    <label>{{"location"|translate}}</label>
+                </div>
+                <div class="row">
+                    <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.locationValue" mass-autocomplete-item="newLocationCompletion"
                         required>
                 </div>
                 <div class="row padding-top-1">

@@ -318,6 +318,7 @@ func (cb *Couchbase) putUser(u structs.User) error {
 	for key, val := range u.GlobalDictionary {
 		dc := make(map[string]string)
 		dc["value"] = val.Value
+		dc["location"] = val.Location
 		dc["type"] = val.Type
 		dc["code"] = val.Code
 		dc["category"] = val.Category

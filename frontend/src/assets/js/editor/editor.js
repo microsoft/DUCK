@@ -250,7 +250,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
          * @return {Array} suggestions matching the input text
          */
         var scopeSuggest = function (term) {
-            var terms = TaxonomyService.lookup("scope", DocumentModel.document.locale, term, false, true);
+            var terms = TaxonomyService.lookup("scope", DocumentModel.document.locale, term, false, false, false);
             terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
             return terms
         };
@@ -316,7 +316,6 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
         $scope.useScopeCompletion = {
             suggest: scopeSuggest,
             on_attach: function (value) {
-                console.log("attached:" + value);
                 scopeAttach("useScope");
             },
             on_detach: scopeDetach
@@ -340,7 +339,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.qualifierCompletion = {
             suggest: function (term) {
-                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term, false, true)
+                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term, false, true, false)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -349,7 +348,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.dataCategoryCompletion = {
             suggest: function (term) {
-                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term, false, true);
+                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term, false, true, false);
                 terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
                 return terms
             },
@@ -391,7 +390,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
             },
             suggest: function (term) {
-                return TaxonomyService.lookup("action", DocumentModel.document.locale, term, false, true)
+                return TaxonomyService.lookup("action", DocumentModel.document.locale, term, false, true, false)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -408,22 +407,36 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
         value: null,
         category: null,
         categoryValue: null,
-        dictionary: "document"
+        dictionary: "document",
+        location: null,
+        locationValue: null
     };
 
     controller.clear = function () {
         controller.newTerm.value = null;
         controller.newTerm.category = null;
         controller.newTerm.categoryValue = null;
-        controller.newTerm.dictionary = "document"
+        controller.newTerm.dictionary = "document";
+        controller.newTerm.location = null;
+        controller.newTerm.locationValue = null;
     };
 
     $scope.newCategoryCompletion = {
         suggest: function (term) {
-            return TaxonomyService.lookup(DocumentModel.currentFieldType, DocumentModel.document.locale, term, true, true);
+            return TaxonomyService.lookup(DocumentModel.currentFieldType, DocumentModel.document.locale, term, true, false, false);
         },
         on_select: function (category) {
             controller.newTerm.category = category;
+        },
+        auto_select_first: true
+    };
+
+    $scope.newLocationCompletion = {
+        suggest: function (term) {
+            return TaxonomyService.lookup("location", DocumentModel.document.locale, term, false, false, true);
+        },
+        on_select: function (location) {
+            controller.newTerm.location = location;
         },
         auto_select_first: true
     };
@@ -432,7 +445,8 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
         var dictionaryType = controller.newTerm.dictionary === "document" ? "document" : "global";
         var code = controller.newTerm.value.split(" ").join("").toLowerCase(); // replace blank lines and convert to lowercase
         var categoryCode = TaxonomyService.findCategory(DocumentModel.currentFieldType, controller.newTerm.categoryValue, DocumentModel.document.locale, controller.newTerm.categoryValue);
-        DocumentModel.addTerm(DocumentModel.currentFieldType, code, categoryCode, controller.newTerm.value, dictionaryType);
+        var locationCode = TaxonomyService.findLocation("location", controller.newTerm.locationValue, DocumentModel.document.locale, controller.newTerm.locationValue);
+        DocumentModel.addTerm(DocumentModel.currentFieldType, code, categoryCode, locationCode, controller.newTerm.value, dictionaryType);
         var statement = DocumentModel.getCurrentStatement();
         statement[DocumentModel.currentField] = controller.newTerm.value;
         DocumentModel.clearCurrentStatement();

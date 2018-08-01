@@ -30,6 +30,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                 context.populate(locale, "qualifier", taxonomy["qualifier"]);
                 context.populate(locale, "dataCategory", taxonomy["dataCategory"]);
                 context.populate(locale, "action", taxonomy["dataUseCategory"]);
+                context.populate(locale, "location", taxonomy["location"]);
             }).error(function (data, status) {
                 $log.error("Taxonomy for locale not found: " + locale);
             });
@@ -54,6 +55,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
             typeCache = new Hashtable();
             context.cache.put(type, typeCache);
         }
+
         typeCache.put(locale, {entries: entries, values: values, fuse: fuse});
     };
 
@@ -96,6 +98,20 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
         return (defaultValue) ? defaultValue : null;
     };
 
+    this.findLocation = function (type, term, locale, defaultValue) {
+        var symbolTable = context.getSymbolTable(type, locale);
+        if (symbolTable === null) {
+            return (defaultValue) ? defaultValue : null;
+        }
+
+        for (var i = 0; i < symbolTable.entries.length; i++) {
+            if (symbolTable.entries[i].value === term) {
+                return symbolTable.entries[i].category;
+            }
+        }
+        return (defaultValue) ? defaultValue : null;
+    };
+
     /**
      * Performs a fuzzy lookup of a set of values matching the given term.
      *
@@ -103,10 +119,11 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
      * @param locale the language, e.g. "en"
      * @param term the term to match
      * @param categories if true, include only terms that are categories and are not fixed
+     * @param locations if true, include only terms that are locations and are not fixed
      * @param noFilter if true do not filter terms
      * @return {Array} containing matching values in the form {value, label}
      */
-    this.lookup = function (type, locale, term, categories, noFilter) {
+    this.lookup = function (type, locale, term, categories, noFilter, locations) {
         if (!term) {
             return [];
         }
@@ -118,6 +135,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
             $log.error("Unknown locale when looking up symbol type '" + type + "': " + locale);
             return;
         }
+
         if (term.trim().length === 0 || noFilter) {
             // return all options
             var vals = [];
@@ -137,8 +155,16 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                     return !term.dictionary && !term.fixed;
                 })
             }
+            if (locations) {
+                // filter terms that are not locations
+                vals = vals.filter(function (term) {
+                    return !term.dictionary && term.fixed;
+                });
+            }
+
             return vals;
         }
+
         var ret = symbolTable.fuse
             .search(term)
             .slice(0, 10)
@@ -159,6 +185,14 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                 return !term.dictionary
             })
         }
+
+        if (locations) {
+            // filter terms that are not locations
+            ret = ret.filter(function (term) {
+                return !term.dictionary
+            })
+        }
+
         return ret;
     };
 
@@ -197,11 +231,11 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
      * @param value the term value
      * @param dictionaryType the type of dictionary, e.g. global or document
      */
-    this.addTerm = function (type, code, category,location , value, dictionaryType) {
+    this.addTerm = function (type, code, category, value, location, dictionaryType) {
         // deactivate all dictionaries, add the new term to the deactivated terms and reactivate the terms; this preserves sort order and may be faster 
         // than iterating over all dictionaries to determine the insertion point
         var entries = context.deactivateDictionaries();
-        entries.push({type: type, code: code, category: category, location:location, value: value, dictionaryType: dictionaryType, dictionary: true});
+        entries.push({type: type, code: code, category: category, value: value, location: location, dictionaryType: dictionaryType, dictionary: true});
         context.activate([entries]);
 
     };
@@ -250,7 +284,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                 }
                 if (!inserted) {
                     // no category, add at the end
-                    symbolTable.entries.push({value: term.value,location: term.location, code: term.code, dictionary: true, dictionaryType: term.dictionaryType});
+                    symbolTable.entries.push({value: term.value, code: term.code, dictionary: true, dictionaryType: term.dictionaryType});
                     symbolTable.values.push(term.value);
                 }
             })
@@ -324,6 +358,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
 
     this.getSymbolTable = function (type, locale) {
         var typeCache = context.cache.get(type);
+
         if (typeCache == null) {
             $log.error("Unknown symbol type: " + type);
             return null;

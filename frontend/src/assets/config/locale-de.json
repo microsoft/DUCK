@@ -90,7 +90,12 @@
   "add_category": "Kategorie hinzufügen",
   "delete_category": "Kategorie löschen",
   "and": "und",
-  "except": "außer"
+  "except": "außer",
+  "location": "Standort",
+  "transfer_pii": "transfer_pii",
+  "does_not_transfer_pii": "does_not_transfer_pii",
+  "consent_required_2_transfer_pii": "consent_required_2_transfer_pii",
+  "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii"
 }
 
 
