@@ -295,20 +295,20 @@ editorModule.service("DocumentModel", function(
    * @param value the term value
    * @param dictionaryType the type of dictionary, e.g. global or document
    */
-  this.addTerm = function(type, code, category,location, value, dictionaryType) {
+  this.addTerm = function(type, code, category, location, value, dictionaryType) {
     if (dictionaryType === "document") {
       context.document.dictionary.put(value, {
         value: value,
         type: type,
         code: code,
-        loaction: location,
+        location: location,
         category: category,
         dictionaryType: "document"
       });
     } else {
-      GlobalDictionary.addTerm(type, code, category,location, value);
+      GlobalDictionary.addTerm(type, code, category, location, value);
     }
-    TaxonomyService.addTerm(type, code, category, value, dictionaryType);
+    TaxonomyService.addTerm(type, code, category, value, location, dictionaryType);
   };
 
   this.makePassive = function(statement) {

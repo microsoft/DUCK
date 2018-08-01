@@ -88,6 +88,11 @@
   "add_category": "Add Category",
   "delete_category": "Delete Category",
   "and": "and",
-  "except": "except"
+  "except": "except",
+  "location": "location",
+  "transfer_pii": "transfer_pii",
+  "does_not_transfer_pii": "does_not_transfer_pii",
+  "consent_required_2_transfer_pii": "consent_required_2_transfer_pii",
+  "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii"
 }
 
