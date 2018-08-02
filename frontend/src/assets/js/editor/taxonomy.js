@@ -106,7 +106,7 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
 
         for (var i = 0; i < symbolTable.entries.length; i++) {
             if (symbolTable.entries[i].value === term) {
-                return symbolTable.entries[i].category;
+                return symbolTable.entries[i].code;
             }
         }
         return (defaultValue) ? defaultValue : null;
@@ -338,17 +338,20 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
     };
 
     this.formatLabel = function (entry) {
-
         var offset = entry.category === undefined || entry.category.indexOf(".") <= 0 ? 0 : entry.category.split('.').length * 5;
         var offsetString = "";
         for (var i = 0; i < offset; i++) {
             offsetString = offsetString + "&nbsp;";
         }
-        if (!entry.dictionary) {
+        if (!entry.dictionary && !entry.location) {
 
             return $sce.trustAsHtml("<div class='clearfix'><div class='float-left'><strong>" + offsetString + entry.value + "</strong></div>" +
                 "<div class='dark-gray float-right'  style='z-index:10000'</div>" +
                 "<div class='dark-gray float-right'>ISO/IEC</div>" +
+                "</div>");
+        }else if(entry.location){
+            return $sce.trustAsHtml("<div class='clearfix'><div class='float-left'><strong>" + offsetString + entry.value + "</strong></div>" +
+                "<div class='dark-gray float-right'  style='z-index:10000'</div>" +
                 "</div>");
         } else {
             return $sce.trustAsHtml(offsetString + "&nbsp;&nbsp;&nbsp;&nbsp;" + entry.value);

@@ -339,7 +339,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.qualifierCompletion = {
             suggest: function (term) {
-                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term, false, true, false)
+                return TaxonomyService.lookup("qualifier", DocumentModel.document.locale, term, false, false, false)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
@@ -348,7 +348,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
         $scope.dataCategoryCompletion = {
             suggest: function (term) {
-                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term, false, true, false);
+                var terms = TaxonomyService.lookup("dataCategory", DocumentModel.document.locale, term, false, false, false);
                 terms.push({value: "_new", label: "<span class='primary-text'>New term...</span>"});
                 return terms
             },
@@ -390,7 +390,7 @@ editorModule.controller("EditorController", function (DocumentModel, TaxonomySer
 
             },
             suggest: function (term) {
-                return TaxonomyService.lookup("action", DocumentModel.document.locale, term, false, true, false)
+                return TaxonomyService.lookup("action", DocumentModel.document.locale, term, false, false, false)
             },
             on_detach: function (value) {
                 DocumentModel.validateSyntax();
