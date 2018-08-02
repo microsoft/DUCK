@@ -11,6 +11,7 @@ editorModule.service("DocumentModel", function(
   TaxonomyService,
   GlobalDictionary,
   DataUseDocumentService,
+  NotificationService,
   $q,
   UUID,
   ObjectUtils
@@ -336,6 +337,7 @@ editorModule.service("DocumentModel", function(
   this.complianceCheck = function() {
     return $q(function(resolve, reject) {
       if (!context.validateSyntax(true)) {
+        NotificationService.display('document_not_valid', 2000);
         resolve();
         return;
       }

@@ -66,7 +66,7 @@
            ng-attr-title="{{'source_scope'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'source_scope'" ng-blur="context.currentField = null">
     <span ng-show="context.currentField === 'source_scope'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
-    wird von
+    werden von
     <error-label fragment="statement.errors.useScope"></error-label>
     <input error-marker="statement.errors.useScope"
            placeholder="{{'use_scope_passive'|translate}}e"
@@ -77,15 +77,7 @@
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'use_scope'" ng-blur="context.currentField = null">
     <span ng-show="context.currentField === 'use_scope'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
     verwendet, um
-    <error-label fragment="statement.errors.action"></error-label>
-    <input error-marker="statement.errors.action"
-           placeholder="{{'action'|translate}}"
-           ng-model="statement.action"
-           class="action-field"
-           mass-autocomplete-item="actionCompletion"
-           ng-attr-title="{{'action'|translate}}"
-           pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'action'" ng-blur="context.currentField = null">
-    <span ng-show="context.currentField === 'action'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
+    
     <error-label fragment="statement.errors.resultScope"></error-label>
     <input error-marker="statement.errors.resultScope"
            placeholder="{{'result_scope_passive'|translate}}"
@@ -95,4 +87,13 @@
            ng-attr-title="{{'result_scope_passive'|translate}}"
            pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'result_scope'" ng-blur="context.currentField = null">
     <span ng-show="context.currentField === 'result_scope'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
+    <error-label fragment="statement.errors.action"></error-label>
+    <input error-marker="statement.errors.action"
+           placeholder="{{'action'|translate}}"
+           ng-model="statement.action"
+           class="action-field"
+           mass-autocomplete-item="actionCompletion"
+           ng-attr-title="{{'action'|translate}}"
+           pu-elastic-input style="min-width: 10px; max-width: 1000px;" ng-focus="context.currentField = 'action'" ng-blur="context.currentField = null">
+    <span ng-show="context.currentField === 'action'" class="medium-gray" style="font-size: 80%"><i class="fa fa-long-arrow-down"></i> </span>
 </div>

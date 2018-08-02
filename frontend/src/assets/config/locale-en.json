@@ -93,6 +93,7 @@
   "transfer_pii": "transfer_pii",
   "does_not_transfer_pii": "does_not_transfer_pii",
   "consent_required_2_transfer_pii": "consent_required_2_transfer_pii",
-  "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii"
+  "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii",
+  "document_not_valid":"One or more Problems werde detected in this document."
 }
 
