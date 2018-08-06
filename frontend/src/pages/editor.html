@@ -223,12 +223,14 @@
                     <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.categoryValue" mass-autocomplete-item="newCategoryCompletion"
                         required>
                 </div>
-                <div class="row padding-top-1">
-                    <label>{{"location"|translate}}</label>
-                </div>
-                <div class="row">
-                    <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.locationValue" mass-autocomplete-item="newLocationCompletion"
-                        required>
+                <div ng-show="currentFieldType == 'scope'">
+                    <div class="row padding-top-1" >
+                        <label>{{"location"|translate}}</label>
+                    </div>
+                    <div class="row">
+                        <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.locationValue" mass-autocomplete-item="newLocationCompletion"
+                            required>
+                    </div>
                 </div>
                 <div class="row padding-top-1">
                     <fieldset>
