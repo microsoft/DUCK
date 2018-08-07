@@ -129,6 +129,8 @@ type DataCategories struct {
 
 type DictionaryEntry struct {
 	Value          string `json:"value"`
+	Case_1         string `json:"case_1"`
+	Case_2         string `json:"case_2"`
 	Type           string `json:"type"`
 	Code           string `json:"code"`
 	Location       string `json:"location"`
