@@ -428,7 +428,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
         on_select: function (category) {
             controller.newTerm.category = category;
         },
-        auto_select_first: true
+        auto_select_first: false
     };
 
     $scope.newLocationCompletion = {
@@ -438,7 +438,7 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
         on_select: function (location) {
             controller.newTerm.location = location;
         },
-        auto_select_first: true
+        auto_select_first: false
     };
 
     controller.addTerm = function () {
