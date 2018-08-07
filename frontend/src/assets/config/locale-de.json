@@ -96,8 +96,8 @@
   "does_not_transfer_pii": "does_not_transfer_pii",
   "consent_required_2_transfer_pii": "consent_required_2_transfer_pii",
   "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii",
-  "case 1": "1. Fall",
-  "case 2": "2. Fall"
+  "case_1": "1. Fall",
+  "case_2": "2. Fall"
 }
 
 
