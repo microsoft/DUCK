@@ -93,6 +93,8 @@
   "transfer_pii": "transfer_pii",
   "does_not_transfer_pii": "does_not_transfer_pii",
   "consent_required_2_transfer_pii": "consent_required_2_transfer_pii",
-  "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii"
+  "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii",
+  "case_1": "Case 1",
+  "case_2": "Case 2"
 }
 

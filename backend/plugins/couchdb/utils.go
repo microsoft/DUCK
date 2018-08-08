@@ -213,6 +213,12 @@ func dictFromInterfaceMap(mp map[string]interface{}) structs.Dictionary {
 		if val, ok := value["value"]; ok {
 			de.Value = val.(string)
 		}
+		if case_1, ok := value["case_1"]; ok {
+			de.Case_1 = case_1.(string)
+		}
+		if case_2, ok := value["case_2"]; ok {
+			de.Case_2 = case_2.(string)
+		}
 		if category, ok := value["category"]; ok {
 			de.Category = category.(string)
 		}
