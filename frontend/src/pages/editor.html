@@ -9,9 +9,9 @@
                 <h4>{{document.name}}</h4>
             </div>
             <div ng-if="editorController.isComplianceChecked() && editorController.filtering()" class="label secondary fixed-filter-right">
-                {{'filtering_compatible'|translate}} -
+                
                 <a class="white" ng-click="editorController.showAllStatements()">
-                    {{'show_all_action'|translate}}
+                    {{'filtering_compatible'|translate}} - {{'show_all_action'|translate}}
                 </a>
             </div>
             <div class="middle fixed-message">
