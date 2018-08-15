@@ -318,6 +318,8 @@ func (cb *Couchbase) putUser(u structs.User) error {
 	for key, val := range u.GlobalDictionary {
 		dc := make(map[string]string)
 		dc["value"] = val.Value
+		dc["case_1"] = val.Case_1
+		dc["case_2"] = val.Case_2
 		dc["location"] = val.Location
 		dc["type"] = val.Type
 		dc["code"] = val.Code
@@ -347,6 +349,8 @@ func (cb *Couchbase) putDocument(d structs.Document) error {
 	for key, val := range d.Dictionary {
 		dc := make(map[string]string)
 		dc["value"] = val.Value
+		dc["case_1"] = val.Case_1
+		dc["case_2"] = val.Case_2
 		dc["location"] = val.Location
 		dc["type"] = val.Type
 		dc["code"] = val.Code

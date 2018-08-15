@@ -96,7 +96,9 @@
   "does_not_transfer_pii": "does_not_transfer_pii",
   "consent_required_2_transfer_pii": "consent_required_2_transfer_pii",
   "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii",
-  "document_not_valid":"Es wurden Fehler im Dokument erkannt"
+  "document_not_valid":"Es wurden Fehler im Dokument erkannt",
+  "case_1": "1. Fall",
+  "case_2": "2. Fall"
 }
 
 
