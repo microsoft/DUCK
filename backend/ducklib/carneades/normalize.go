@@ -128,15 +128,19 @@ type snippet struct {
 //Straighten moves the except and and clauses int their own statements
 func (n *normalizer) Unfold() error {
 	normalized := make([]NormalizedStatement, 0)
-	log.Printf("n.normalized.Statements: %#+v\n", n.normalized.Statements)
+
 	for h, stmt := range n.normalized.Statements {
+
 		stmt.PlaceInStruct = 0
 		except := false
+		if stmt.DataCategories == nil || len(stmt.DataCategories) == 0 {
+			normalized = append(normalized, stmt)
+		}
 		for i, dcat := range stmt.DataCategories {
-			log.Printf("i: %#+v ,len: %#+v\n", i, len(stmt.DataCategories)-1)
+
 			//if except, the first one or the one after this one
 			if dcat.Op == structs.EXCEPT || (len(stmt.DataCategories)-1 > i && stmt.DataCategories[i+1].Op == structs.EXCEPT) {
-				log.Println("in 1")
+
 				code := dcat.DataCategoryCode
 				if dcat.Op == structs.EXCEPT {
 					code = n.normalized.Statements[h].DataCategoryCode
@@ -169,8 +173,8 @@ func (n *normalizer) Unfold() error {
 			// - only if we did not yet have had an EXCEPT
 
 			if ((len(stmt.DataCategories)-1 > i && dcat.Op == structs.AND && stmt.DataCategories[i+1].Op != structs.EXCEPT) || (len(stmt.DataCategories)-1 == i && dcat.Op == structs.AND)) && !except {
-				log.Println("in 2")
-				log.Printf("dcat: %#+v\n", dcat)
+				//log.Println("in 2")
+				//log.Printf("dcat: %#+v\n", dcat)
 				statement := createFromStatement(stmt, dcat.DataCategoryCode, dcat.QualifierCode)
 				statement.PlaceInStruct = i
 				statement.TrackingID = statement.TrackingID + "-" + fmt.Sprint(i)
@@ -180,7 +184,7 @@ func (n *normalizer) Unfold() error {
 
 		}
 	}
-	//log.Printf("%v", normalized)
+	//log.Printf("n: %v", normalized)
 	n.normalized.Statements = normalized
 	return nil
 }
