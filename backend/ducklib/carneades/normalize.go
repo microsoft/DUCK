@@ -17,7 +17,9 @@ import (
 	"github.com/Microsoft/DUCK/backend/ducklib/structs"
 )
 
-type normalizer struct {
+//Normalizer is the main struct with all methods to normalize a struct into something carneades can work with
+// to be initialized with NewNormalizer()
+type Normalizer struct {
 	original    structs.Document
 	normalized  *NormalizedDocument
 	docTaxonomy structs.Taxonomy
@@ -26,7 +28,7 @@ type normalizer struct {
 	//categoryDict map[string]map[string]*structs.DictionaryEntry
 	//codeDict     map[string]map[string]*structs.DictionaryEntry
 	//  [azure]-> DictionaryEntry
-	GlobalDict structs.Dictionary
+	globalDict structs.Dictionary
 }
 
 //NormalizedDocument wraps structs.Document and adds an extra field 'Parts'.
@@ -48,6 +50,7 @@ type NormalizedDocument struct {
 	Facts      []string
 }
 
+//NormalizedStatement wraps structs.Statement to add Location fields and a number field to identify it later
 type NormalizedStatement struct {
 	structs.Statement
 	UseScopeLocation    string
@@ -57,9 +60,9 @@ type NormalizedStatement struct {
 }
 
 //NewNormalizer returns a new initialized normalizer
-func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*normalizer, error) {
+func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*Normalizer, error) {
 	//norm := Normalizer{original: doc, database: db}
-	norm := normalizer{original: doc}
+	norm := Normalizer{original: doc}
 
 	//put everything into new
 
@@ -78,7 +81,7 @@ func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*norma
 	//	category : "2",
 	//	dictionaryType : "global"
 	//})
-	norm.GlobalDict = user.GlobalDictionary
+	norm.globalDict = user.GlobalDictionary
 
 	//Taxonomy
 
@@ -94,7 +97,8 @@ func NewNormalizer(doc structs.Document, db *db.Database, webdir string) (*norma
 	return &norm, nil
 }
 
-func (n *normalizer) GetNormalized() (*NormalizedDocument, error) {
+//GetNormalized returns a normalized document carneades can work with
+func (n *Normalizer) GetNormalized() (*NormalizedDocument, error) {
 
 	n.normalized = new(NormalizedDocument)
 	//put all the other fields from the original into the normalized struct
@@ -105,15 +109,15 @@ func (n *normalizer) GetNormalized() (*NormalizedDocument, error) {
 	n.normalized.Revision = n.original.Revision
 
 	//creates dict and moves statements into norm dict
-	if err := n.CreateDict(); err != nil {
+	if err := n.createDict(); err != nil {
 		return n.normalized, err
 	}
 
-	if err := n.SetLocation(); err != nil {
+	if err := n.setLocation(); err != nil {
 		return n.normalized, err
 	}
 
-	if err := n.Unfold(); err != nil {
+	if err := n.unfold(); err != nil {
 		return n.normalized, err
 	}
 
@@ -125,8 +129,8 @@ type snippet struct {
 	Something string
 }
 
-//Straighten moves the except and and clauses int their own statements
-func (n *normalizer) Unfold() error {
+//Unfold moves the except and and clauses int their own statements
+func (n *Normalizer) unfold() error {
 	normalized := make([]NormalizedStatement, 0)
 
 	for h, stmt := range n.normalized.Statements {
@@ -189,7 +193,7 @@ func (n *normalizer) Unfold() error {
 	return nil
 }
 
-func (n *normalizer) getCategories(code string) map[string]*snippet {
+func (n *Normalizer) getCategories(code string) map[string]*snippet {
 	cat := make(map[string]*snippet, 0)
 
 	tax := n.docTaxonomy["dataCategory"]
@@ -231,8 +235,8 @@ func createFromStatement(stmt NormalizedStatement, DataCategoryCode string, Qual
 	return *statement
 }
 
-//GetLocation sets the Loaction fields in the Normalized Document
-func (n *normalizer) SetLocation() error {
+//setLocation sets the Loaction fields in the Normalized Document
+func (n *Normalizer) setLocation() error {
 
 	for i, stmt := range n.normalized.Statements {
 		if stmt.UseScopeLocation == "" {
@@ -248,8 +252,8 @@ func (n *normalizer) SetLocation() error {
 	return nil
 }
 
-//Normalize normalizes a Document for further validation
-func (n *normalizer) CreateDict() error {
+//createDict normalizes a Document for further validation
+func (n *Normalizer) createDict() error {
 
 	//make sure we have every part only once for each code
 	//for this we make a map for every code which we will later transform into a list
@@ -366,6 +370,7 @@ func (n *normalizer) CreateDict() error {
 		n.normalized.Statements = append(n.normalized.Statements, normstmt)
 
 	}
+	fmt.Println(isA)
 	n.normalized.IsA = isA
 	//write partsOf and isA map into Facts
 	//n.getFacts() -> while we only have isa, this happens in compliance.go
@@ -376,7 +381,7 @@ func (n *normalizer) CreateDict() error {
 
 //getFacts transforms the IsA and Parts maps into a list of CHR facts
 //in the form of "IsA(Thing, capability)." and "PartOf(Thing, OtherThing)."
-func (n *normalizer) getFacts() {
+func (n *Normalizer) getFacts() {
 	for k, v := range n.normalized.IsA {
 		n.normalized.Facts = append(n.normalized.Facts, fmt.Sprintf("isA(%s,%s).", k, v))
 	}
@@ -384,7 +389,7 @@ func (n *normalizer) getFacts() {
 
 }
 
-func (n *normalizer) getLocationFromCode(Code string) string {
+func (n *Normalizer) getLocationFromCode(Code string) string {
 	if Code == "" {
 		return ""
 	}
@@ -394,7 +399,7 @@ func (n *normalizer) getLocationFromCode(Code string) string {
 		return dicto.Location
 	}
 
-	dictg, prsg := n.GlobalDict[Code]
+	dictg, prsg := n.globalDict[Code]
 	if prsg {
 		return dictg.Location
 	}
@@ -406,7 +411,7 @@ func (n *normalizer) getLocationFromCode(Code string) string {
 //in the taxonomy is then looked for the category of the dictionary entry since this
 //should be the same regardless of the code value the corresponding code in the
 //taxonomy is then returned if one is found
-func (n *normalizer) getCode(Type string, Code string) string {
+func (n *Normalizer) getCode(Type string, Code string) string {
 
 	//if code is empty return
 	if Code == "" || Type == "" {
@@ -414,11 +419,12 @@ func (n *normalizer) getCode(Type string, Code string) string {
 	}
 
 	dicto, prso := n.original.Dictionary[Code]
-	dictg, prsg := n.GlobalDict[Code]
+	dictg, prsg := n.globalDict[Code]
 
 	if !prso && !prsg {
 		return ""
 	}
+
 	// document dictionary takes precendence
 	if prso {
 		tax, prs := n.docTaxonomy[Type]
@@ -431,6 +437,7 @@ func (n *normalizer) getCode(Type string, Code string) string {
 		}
 
 	}
+
 	//if we found a code in the document dict and were able to match it to a code in the taxonomy
 	//we have already returned, if we failed we will try to look for a code from the user/global dict
 	if prsg {
@@ -443,6 +450,7 @@ func (n *normalizer) getCode(Type string, Code string) string {
 			}
 		}
 	}
+
 	// if this also failed we return nothing
 	//that means we also return nothing if the code is a standard code.
 	//since if that is the case we don't have to translate it.
@@ -473,8 +481,8 @@ func FoldExplanation(Exp Explanation) Explanation {
 			}
 
 			inr := BoolValue{
-				Assumed: NewExp[id].IdNotRequired.Assumed && stmtexp.IdNotRequired.Assumed,
-				Value:   NewExp[id].IdNotRequired.Value || stmtexp.IdNotRequired.Value,
+				Assumed: NewExp[id].IDNotRequired.Assumed && stmtexp.IDNotRequired.Assumed,
+				Value:   NewExp[id].IDNotRequired.Value || stmtexp.IDNotRequired.Value,
 			}
 			tpii := BoolValue{
 				Assumed: NewExp[id].TransferPii.Assumed && stmtexp.TransferPii.Assumed,
@@ -500,7 +508,7 @@ func FoldExplanation(Exp Explanation) Explanation {
 				Pii:                         pii,
 				Li:                          li,
 				CompatiblePurpose:           cp,
-				IdNotRequired:               inr,
+				IDNotRequired:               inr,
 				TransferPii:                 tpii,
 				ConsentRequired2TransferPii: cr2tpii,
 			}
@@ -512,7 +520,7 @@ func FoldExplanation(Exp Explanation) Explanation {
 }
 
 //Denormalize denormalizes a Document after validation
-func (n *normalizer) Denormalize() *structs.Document {
+func (n *Normalizer) Denormalize() *structs.Document {
 	// we have the original
 	return &n.original
 }

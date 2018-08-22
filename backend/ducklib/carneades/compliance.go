@@ -17,6 +17,7 @@ import (
 	y "github.com/carneades/carneades-4/src/engine/caes/encoding/yaml"
 )
 
+// DEBUG is set to true to print debug information and save a graphml file of the graph in the temp folder
 const DEBUG = false
 
 type Canceller chan struct{}
@@ -42,16 +43,16 @@ func MakeComplianceChecker() *ComplianceChecker {
 	return &ComplianceChecker{make(map[string]VersionedTheory)}
 }
 
-// GetTheory: Retrieve the theory for the given ruleBaseId. If no version of the
+// GetTheory retrieves the theory for the given ruleBaseID. If no version of the
 // rulebase has been compiled or its revision is not equal to the revision
 // used to compile the theory,
 // the theory is first updated, by reading the JSON source from rbSrc,
 // and compiling the rulebase into a theory and updating the Theories of the
 // ComplianceChecker.
 // If there are no errors, the returned error will be nil.
-func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc io.Reader) (*caes.Theory, error) {
+func (c ComplianceChecker) GetTheory(ruleBaseID string, revision string, rbSrc io.Reader) (*caes.Theory, error) {
 
-	vt, found := c.Theories[ruleBaseId]
+	vt, found := c.Theories[ruleBaseID]
 	if !found || revision != vt.revision {
 
 		// Compile the rulebase, update the theory cache and return the
@@ -63,7 +64,7 @@ func (c ComplianceChecker) GetTheory(ruleBaseId string, revision string, rbSrc i
 		}
 		log.Printf("rulebase successfully imported, with %d schemes and %d predicates\n", len(ag.Theory.ArgSchemes), len(ag.Theory.Language))
 		log.Printf("title: %s\n", ag.Metadata["title"].(string))
-		c.Theories[ruleBaseId] = VersionedTheory{revision, ag.Theory}
+		c.Theories[ruleBaseID] = VersionedTheory{revision, ag.Theory}
 		return ag.Theory, nil
 	}
 	fmt.Printf("rulebase successfully imported\n")
@@ -103,7 +104,7 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 			passive = false
 		}
 
-		stmtId := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%t))",
+		stmtID := fmt.Sprintf("dataUseStatement(dus(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%t))",
 			s.UseScopeCode,
 			s.UseScopeLocation,
 			s.QualifierCode,
@@ -118,18 +119,22 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 			passive)
 
 		stmt := &caes.Statement{
-			Id:       stmtId,
+			Id:       stmtID,
 			Metadata: make(map[string]interface{}),
-			Text:     stmtId,
+			Text:     stmtID,
 			Args:     []*caes.Argument{}}
-		ag.Assumptions = append(ag.Assumptions, stmtId)
-		ag.Statements[stmtId] = stmt
+		ag.Assumptions = append(ag.Assumptions, stmtID)
+		ag.Statements[stmtID] = stmt
 
 	}
 	// add statements for the is a relationships in the document
 	// to the argument graph, and assume them to be true.
+
 	for k, v := range document.IsA {
 		isa := fmt.Sprintf("isA(%s,%s)", k, v)
+		if DEBUG {
+			log.Println(isa)
+		}
 
 		stmt := &caes.Statement{
 			Id:       isa,
@@ -138,6 +143,9 @@ func (c ComplianceChecker) IsCompliant(theory *caes.Theory, document *Normalized
 			Args:     []*caes.Argument{}}
 		ag.Assumptions = append(ag.Assumptions, isa)
 		ag.Statements[isa] = stmt
+	}
+	if DEBUG && (document.IsA == nil || len(document.IsA) == 0) {
+		log.Println("IsA is empty.")
 	}
 	// derive arguments by applying the theory of the argument graph to
 	// its assumptions
@@ -182,7 +190,7 @@ func removeStatement(d *NormalizedDocument, i int) (*NormalizedDocument, error) 
 	// replace the statements with a copy, but with the selected
 	// statement removed.
 	d2.Statements = []NormalizedStatement{}
-	for j, _ := range d.Statements {
+	for j := range d.Statements {
 		if i != j {
 			d2.Statements = append(d2.Statements, d.Statements[j])
 		}
@@ -190,25 +198,23 @@ func removeStatement(d *NormalizedDocument, i int) (*NormalizedDocument, error) 
 	return &d2, nil
 }
 
-/*
-	CompliantDocuments does the following:
-		* Translates the data use statements in the document into Carneades assumptions (terms)
-		* Applies the theory to the assumptions, using the Carneades inference engine,
-		  to construct a Carneades argument graph
-	    * Evaluates the argument graph to label the statements in the graph in, out or undecided.
-		* Starts a coroutine to search for compliant data use documents and returns a channel of pointers
-		  to the compliant documents found. If the input document is compliant, the bool result will be true
-		  and the channel returned will be closed. If the input document is not
-		  compliant, the bool result will be false, and compliant alternative documents based in
-		  input document will returned in the channel. The documents returend will have
-		  minimal changes sufficient to achieve compliance. The input document is not modified.
-		  The coroutine closes the channel when it has finished the search for compliant documents.
-	An error will be returned only if was not possible to check the compliance of the input document,
-	before starting the coroutine to search for compliant alternatives.
-	The caller must bind c to a newly constructed Canceller, with MakeCanceller().
-	If no error is returned (i.e. error is nil) the caller should call c.Cancel() when no further
-	documents are needed, to cause the coroutine to be terminated.
-
+//CompliantDocuments does the following:
+/*	* Translates the data use statements in the document into Carneades assumptions (terms)
+	* Applies the theory to the assumptions, using the Carneades inference engine,
+	  to construct a Carneades argument graph
+    * Evaluates the argument graph to label the statements in the graph in, out or undecided.
+	* Starts a coroutine to search for compliant data use documents and returns a channel of pointers
+	  to the compliant documents found. If the input document is compliant, the bool result will be true
+	  and the channel returned will be closed. If the input document is not
+	  compliant, the bool result will be false, and compliant alternative documents based in
+	  input document will returned in the channel. The documents returend will have
+	  minimal changes sufficient to achieve compliance. The input document is not modified.
+	  The coroutine closes the channel when it has finished the search for compliant documents.
+An error will be returned only if was not possible to check the compliance of the input document,
+before starting the coroutine to search for compliant alternatives.
+The caller must bind c to a newly constructed Canceller, with MakeCanceller().
+If no error is returned (i.e. error is nil) the caller should call c.Cancel() when no further
+documents are needed, to cause the coroutine to be terminated.
 */
 func (c ComplianceChecker) CompliantDocuments(theory *caes.Theory, doc *NormalizedDocument, cncl Canceller) (bool, <-chan *NormalizedDocument, error) {
 	compliant, _, err := c.IsCompliant(theory, doc)

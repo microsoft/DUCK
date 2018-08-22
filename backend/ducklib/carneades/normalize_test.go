@@ -48,7 +48,7 @@ func Test_normalizer_CreateDict(t *testing.T) {
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
-		err := tt.n.CreateDict()
+		err := tt.n.createDict()
 		if (err != nil) != tt.wantErr {
 			t.Errorf("%q. normalizer.CreateDict() error = %v, wantErr %v", tt.name, err, tt.wantErr)
 			continue

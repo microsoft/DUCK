@@ -1,6 +1,7 @@
 // Data Use Statement Compliance Checker (DUCK)
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
+
 package carneades
 
 import (
@@ -173,10 +174,10 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 		temp, ok := <-docChan
 		if !ok {
 			// no further compliant documents available
-			fmt.Println("No more compliant documents available\n")
+			fmt.Println("No more compliant documents available")
 			return false, docs, nil
 		}
-		fmt.Println("Compliant Document Found: %+v \n", temp)
+		fmt.Printf("Compliant Document Found: %+v \n", temp)
 		docs = append(docs, temp)
 	}
 
