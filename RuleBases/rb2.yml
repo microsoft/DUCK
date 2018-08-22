@@ -16,12 +16,13 @@ language:
   notDocConsentRequired/0: notDocConsentRequired
   duplicate/2: duplicate(%s,%s)
   equivalentScope/2: equivalentScope(%s,%s)
-  extendsScope/2: extendsScope(%s,%s)
-  greaterScope/2: greaterScope(%s,%s)
+  #  extendsScope/2: extendsScope(%s,%s)
+  #  greaterScope/2: greaterScope(%s,%s)
   id/2: id(%s,%s)
   idRequired/1: idRequired(%s) 
   idNotRequired/1: idNotRequired(%s) 
   isInEu/1: isInEu(%s)
+  isA/2: isA(%s,%s)
   kindOf/2: kindOf(%s,%s)
   lesserScope/2: lesserScope(%s,%s)
   li/1: li(%s)
@@ -33,12 +34,12 @@ language:
   pii/1: pii(%s)
   notPii/1: notPii(%s)
   passive/2: passive(%s,%t)
-  partOf/2: partOf(%s,%s)
+  # partOf/2: partOf(%s,%s)
   qualifier/2: qualifier(%s,%s)
   resultScope/2: resultScope(%s,%s)
   resultScopeLocation/2:  resultScopeLocation(%s,%s)
   smallerOrEqualScope/2: smallerOrEqualScope(%s,%s)
-  scope/2: scope(%s,%s)
+  #  scope/2: scope(%s,%s)
   sourceScope/2: sourceScope(%s,%s)
   sourceScopeLocation/2:  sourceScopeLocation(%s,%s)
   transferPii/1: transferPii(%s)
@@ -75,6 +76,34 @@ argument_schemes:
       - id(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),ID)
       - passive(dus(UseScope,UseScopeLocation,Qualifier,DataCategory,SourceScope,SourceScopeLocation,Action,ResultScope,ResultScopeLocation,ID,Place,Passive),Passive)
 
+  # isA rules
+  - id: isA01
+    variables: [X,Y,S]
+    premises:
+      - isA(X,Y)
+    deletions:
+      - resultScope(S,X)
+    conclusions:
+      - resultScope(S,Y)
+ 
+  - id: isA02
+    variables: [X,Y,S]
+    premises:
+      - isA(X,Y)
+    deletions:
+      - sourceScope(S,X)
+    conclusions:
+      - sourceScope(S,Y) 
+        
+  - id: isA03
+    variables: [X,Y,S]
+    premises:
+      - isA(X,Y)
+    deletions:
+      - useScope(S,X)
+    conclusions:
+      - useScope(S,Y)
+
   # kindOf Rules
 
   - id: kindOfTransitivity
@@ -87,13 +116,13 @@ argument_schemes:
 
   # partOf Rules
   
-  - id: partOfTransitivity
-    variables: [X,Y,Z]
-    premises:
-      - partOf(X,Y)
-      - partOf(Y,Z)
-    conclusions:
-      - partOf(X,Z)
+  # - id: partOfTransitivity
+    # variables: [X,Y,Z]
+    # premises:
+      # - partOf(X,Y)
+      # - partOf(Y,Z)
+    # conclusions:
+      # - partOf(X,Z)
 
   # Data Qualifier Rules
 
@@ -116,33 +145,33 @@ argument_schemes:
   # independent scope.  For example, the service scope includes
   # the capability scope.
   
-  - id: scope1
-    variables: [S]
-    premises:
-      - scope(S,csp_products)
-    conclusions:
-      - scope(S,csp_services)
+  # - id: scope1
+    # variables: [S]
+    # premises:
+      # - scope(S,csp_products)
+    # conclusions:
+      # - scope(S,csp_services)
 
-  - id: scope2
-    variables: [S]
-    premises:
-      - scope(S,csp_services)
-    conclusions:
-      - scope(S,services_agreement)
+  # - id: scope2
+    # variables: [S]
+    # premises:
+      # - scope(S,csp_services)
+    # conclusions:
+      # - scope(S,services_agreement)
 
-  - id: scope3
-    variables: [S]
-    premises:
-      - scope(S,services_agreement)
-    conclusions:
-      - scope(S,service)
+  # - id: scope3
+    # variables: [S]
+    # premises:
+      # - scope(S,services_agreement)
+    # conclusions:
+      # - scope(S,service)
 
-  - id: scope4
-    variables: [S]
-    premises:
-      - scope(S,service)
-    conclusions:
-      - scope(S,cability)
+  # - id: scope4
+    # variables: [S]
+    # premises:
+      # - scope(S,service)
+    # conclusions:
+      # - scope(S,cability)
 
   # Data Category Rules
 
@@ -559,8 +588,7 @@ argument_schemes:
       - resultScope(S,service)
     conclusions:
       - li(S)
-
-
+  
   # equivalentScope Rules
 
   - id: equivalentScope0
@@ -940,38 +968,7 @@ argument_schemes:
     conclusions:
       - true  
   
-  ### transferPII
-
-  - id: notTransferPII01
-    variables: [S]
-    weight:
-      constant: 0.1
-    premises:
-      - dataUseStatement(S)
-    conclusions:
-      - notTransferPii(S)  
-      
-  - id: TransferPII01
-    variables: [S,L]
-    premises: 
-      - useScopeLocation(S,L)
-    conclusions:
-      - transferPii(S)  
-
-  - id: TransferPII02
-    variables: [S,L]
-    premises:
-      - sourceScopeLocation(S,L)
-    conclusions:
-      - transferPii(S)  
-      
-  - id: TransferPII03
-    variables: [S,L]
-    premises:
-      - resultScopeLocation(S,L)
-    conclusions:
-      - transferPii(S)   
-
+  
   ### transfer inside EU
   - id: isEu01
     conclusions:
@@ -1212,7 +1209,39 @@ argument_schemes:
       - resultScopeLocation(S,L)
     conclusions:
       - true  
-  
+      
+  ### transferPII
+
+  - id: notTransferPII01
+    variables: [S]
+    weight:
+      constant: 0.1
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - notTransferPii(S)  
+      
+  - id: TransferPII01
+    variables: [S,L]
+    premises: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - transferPii(S)  
+
+  - id: TransferPII02
+    variables: [S,L]
+    premises:
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - transferPii(S)  
+      
+  - id: TransferPII03
+    variables: [S,L]
+    premises:
+      - resultScopeLocation(S,L)
+    conclusions:
+      - transferPii(S)   
+
   ## other Scope location ==> Consent Required to Transfer PII
   
   - id: consentRequired2TransferPii01
