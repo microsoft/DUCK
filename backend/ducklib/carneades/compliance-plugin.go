@@ -47,7 +47,7 @@ func MakeComplianceCheckerPlugin(ruleBaseDir string) (*ComplianceCheckerPlugin, 
 	return &ComplianceCheckerPlugin{MakeComplianceChecker(), ruleBaseDir, make(map[string]RuleBaseDescription)}, nil
 }
 
-// ComplianceCheckerPlugin.Init: For each file in RuleBaseDir:
+// Intialize For each file in RuleBaseDir:
 //    1. Parse the YAML and extract the id, version, title and description
 //    2. Call checker.GetTheory function to compile each rulebase into a
 //       Carneades theory and cache the theory.

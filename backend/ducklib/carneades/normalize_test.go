@@ -20,10 +20,10 @@ func TestNewNormalizer(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *normalizer
+		want    *Normalizer
 		wantErr bool
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	t.Errorf("Implement Normalize tests")
 	for _, tt := range tests {
@@ -41,20 +41,20 @@ func TestNewNormalizer(t *testing.T) {
 func Test_normalizer_CreateDict(t *testing.T) {
 	tests := []struct {
 		name    string
-		n       *normalizer
+		n       *Normalizer
 		want    *NormalizedDocument
 		wantErr bool
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
-		got, err := tt.n.CreateDict()
+		err := tt.n.CreateDict()
 		if (err != nil) != tt.wantErr {
 			t.Errorf("%q. normalizer.CreateDict() error = %v, wantErr %v", tt.name, err, tt.wantErr)
 			continue
 		}
-		if !reflect.DeepEqual(got, tt.want) {
-			t.Errorf("%q. normalizer.CreateDict() = %v, want %v", tt.name, got, tt.want)
+		if !reflect.DeepEqual(tt.n.normalized.IsA, tt.want) {
+			t.Errorf("%q. normalizer.CreateDict() = %v, want %v", tt.name, tt.n.normalized.IsA, tt.want)
 		}
 	}
 }
@@ -66,11 +66,11 @@ func Test_normalizer_getCode(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		n    *normalizer
+		n    *Normalizer
 		args args
 		want string
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		if got := tt.n.getCode(tt.args.Type, tt.args.Code); got != tt.want {
@@ -82,10 +82,10 @@ func Test_normalizer_getCode(t *testing.T) {
 func Test_normalizer_Denormalize(t *testing.T) {
 	tests := []struct {
 		name string
-		n    *normalizer
+		n    *Normalizer
 		want *structs.Document
 	}{
-	// TODO: Add test cases.
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		if got := tt.n.Denormalize(); !reflect.DeepEqual(got, tt.want) {

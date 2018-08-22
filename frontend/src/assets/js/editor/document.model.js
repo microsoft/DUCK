@@ -298,7 +298,7 @@ editorModule.service("DocumentModel", function(
    */
   this.addTerm = function(type, code, category, location, value, dictionaryType, case_1, case_2) {
     if (dictionaryType === "document") {
-      context.document.dictionary.put(value, {
+      context.document.dictionary.put(code, {
         value: value,
         case_1: case_1,
         case_2: case_2,
