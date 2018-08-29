@@ -231,11 +231,13 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
      * @param value the term value
      * @param dictionaryType the type of dictionary, e.g. global or document
      */
-    this.addTerm = function (type, code, category, value, location, dictionaryType, case_1, case_2) {
-        // deactivate all dictionaries, add the new term to the deactivated terms and reactivate the terms; this preserves sort order and may be faster 
+    //this.addTerm = function (type, code, category, value, location, dictionaryType, case_1, case_2) {
+    this.addTerm = function (type, code, category, value, location, dictionaryType) {
+        // deactivate all dictionaries, add the new term to the deactivated terms and reactivate the terms; this preserves sort order and may be faster
         // than iterating over all dictionaries to determine the insertion point
         var entries = context.deactivateDictionaries();
-        entries.push({type: type, code: code, case_1: case_1, case_2: case_2, category: category, value: value, location: location, dictionaryType: dictionaryType, dictionary: true});
+        //entries.push({type: type, code: code, case_1: case_1, case_2: case_2, category: category, value: value, location: location, dictionaryType: dictionaryType, dictionary: true});
+        entries.push({type: type, code: code, category: category, value: value, location: location, dictionaryType: dictionaryType, dictionary: true});
         context.activate([entries]);
 
     };
@@ -271,8 +273,10 @@ editorModule.service("TaxonomyService", function (LocaleService, $http, $sce, $l
                     if (term.category === symbolTable.entries[i].category) {
                         symbolTable.entries.splice(i + 1, 0, {
                             value: term.value,
+                            /*
                             case_1: term.case_1,
                             case_2: term.case_2,
+                            */
                             type: term.type,
                             code: term.code,
                             category: term.category,
