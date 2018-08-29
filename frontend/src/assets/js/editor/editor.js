@@ -405,8 +405,10 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
     var controller = this;
     controller.newTerm = {
         value: null,
+        /*
         case_1: null,
         case_2: null,
+        */
         category: null,
         categoryValue: null,
         dictionary: "document",
@@ -416,8 +418,10 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
 
     controller.clear = function () {
         controller.newTerm.value = null;
+        /*
         controller.newTerm.case_1 = null;
         controller.newTerm.case_2 = null;
+        */
         controller.newTerm.category = null;
         controller.newTerm.categoryValue = null;
         controller.newTerm.dictionary = "document";
@@ -448,12 +452,15 @@ editorModule.controller("NewTermController", function (DocumentModel, TaxonomySe
     controller.addTerm = function () {
         var dictionaryType = controller.newTerm.dictionary === "document" ? "document" : "global";
         var code = controller.newTerm.value.split(" ").join("").toLowerCase(); // replace blank lines and convert to lowercase
+        /*
         var case_1 = controller.newTerm.case_1;
         var case_2 = controller.newTerm.case_2;
+        */
 
         var categoryCode = TaxonomyService.findCategory(DocumentModel.currentFieldType, controller.newTerm.categoryValue, DocumentModel.document.locale, controller.newTerm.categoryValue);
         var locationCode = TaxonomyService.findLocation("location", controller.newTerm.locationValue, DocumentModel.document.locale, controller.newTerm.locationValue);
-        DocumentModel.addTerm(DocumentModel.currentFieldType, code, categoryCode, locationCode, controller.newTerm.value, dictionaryType, case_1, case_2);
+        //DocumentModel.addTerm(DocumentModel.currentFieldType, code, categoryCode, locationCode, controller.newTerm.value, dictionaryType, case_1, case_2);
+        DocumentModel.addTerm(DocumentModel.currentFieldType, code, categoryCode, locationCode, controller.newTerm.value, dictionaryType);
         var statement = DocumentModel.getCurrentStatement();
         statement[DocumentModel.currentField] = controller.newTerm.value;
         DocumentModel.clearCurrentStatement();
