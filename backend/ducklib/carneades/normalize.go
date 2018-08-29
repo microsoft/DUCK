@@ -304,7 +304,7 @@ func (n *Normalizer) createDict() error {
 			}
 			normstmt.ResultScopeLocation = n.getLocationFromCode(statement.ResultScopeCode)
 			if normstmt.ResultScopeLocation != "" {
-				log.Printf("UseScopeLocation: %#v", normstmt.ResultScopeLocation)
+				log.Printf("ResultScopeLocation: %#v", normstmt.ResultScopeLocation)
 			}
 		}
 
