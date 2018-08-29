@@ -217,6 +217,7 @@
                     <input style="min-width: 350px" ng-model="termController.newTerm.value" required>
                 </div>
 
+                <!--
                 <div ng-show="currentFieldType == 'scope'">
                     <div class="row padding-top-1">
                         <label>{{"case_1"|translate}}</label>
@@ -232,6 +233,7 @@
                         <input style="min-width: 350px" ng-model="termController.newTerm.case_2" required>
                     </div>
                 </div>
+                -->
 
                 <div class="row padding-top-1">
                     <label>{{"category"|translate}}</label>
@@ -245,8 +247,7 @@
                         <label>{{"location"|translate}}</label>
                     </div>
                     <div class="row">
-                        <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.locationValue" mass-autocomplete-item="newLocationCompletion"
-                            required>
+                        <input pu-elastic-input style="min-width: 350px" ng-model="termController.newTerm.locationValue" mass-autocomplete-item="newLocationCompletion">
                     </div>
                 </div>
                 <div class="row padding-top-1">
