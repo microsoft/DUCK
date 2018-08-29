@@ -9,22 +9,30 @@ import (
 	"github.com/carneades/carneades-4/src/engine/terms"
 )
 
+//BoolValue explains a field in the StmtExplanation in more detail.
+// Value is true, when the field applies at all
+//assumed is false, when the value of the Value field could be proven by carneades
 type BoolValue struct {
 	Value   bool `json:"value"`
 	Assumed bool `json:"assumed"` // if true assumed, otherwise proven
 }
 
+//StmtExplanation represents the Explanation for one Statement.
+//If the original statement has one or more and or except clauses,
+//a StmtExplanation represents only one of these clauses
 type StmtExplanation struct {
 	ConsentRequired             BoolValue `json:"consentRequired"`             // informed consent required
 	Pii                         BoolValue `json:"pii"`                         // personally identifiable information
 	Li                          BoolValue `json:"li"`                          // legitimate interest in the pii
 	CompatiblePurpose           []string  `json:"compatiblePurpose"`           // ids of statements with a proven compatible purpose
-	IdNotRequired               BoolValue `json:"idNotRequired"`               // identification of data subject is not required
+	IDNotRequired               BoolValue `json:"idNotRequired"`               // identification of data subject is not required
 	TransferPii                 BoolValue `json:"transferPii"`                 // is there a location for a scope ans pii
 	ConsentRequired2TransferPii BoolValue `json:"consentRequired2TransferPii"` // informed consent required to transfer pii
 }
 
-type Explanation map[string]StmtExplanation // keys are statement tracking ids
+//Explanation contains the StmtExplanantions for each statement
+// keys are statement tracking ids
+type Explanation map[string]StmtExplanation
 
 func isDataUseStatement(t terms.Term) bool {
 	t2, ok := t.(terms.Compound)
@@ -41,7 +49,7 @@ func isDataUseStatement(t terms.Term) bool {
 
 // stmtId: selects the id in a DUS term and returns
 // it as a string
-func stmtId(t terms.Compound) string {
+func stmtID(t terms.Compound) string {
 	return t.Args[9].String()
 }
 
@@ -104,7 +112,7 @@ func cp(dus terms.Compound, ag *caes.ArgGraph) []string {
 		if ok {
 			if stmt.Label == caes.In {
 				dus2 := t.(terms.Compound).Args[1].(terms.Compound)
-				result = append(result, stmtId(dus2))
+				result = append(result, stmtID(dus2))
 			}
 		}
 	}
@@ -125,6 +133,7 @@ func cr2tpii(dus terms.Compound, ag *caes.ArgGraph) BoolValue {
 	return isTrue("consentRequired2TransferPii", dus, ag, false)
 }
 
+//GetExplanation returns the Explanation struct filled with explanations for each Statement
 func (c ComplianceChecker) GetExplanation(theory *caes.Theory, ag *caes.ArgGraph) (Explanation, error) {
 	m := make(map[string]StmtExplanation)
 	for wff := range ag.Statements {
@@ -135,12 +144,12 @@ func (c ComplianceChecker) GetExplanation(theory *caes.Theory, ag *caes.ArgGraph
 
 		if isDataUseStatement(t) {
 			dus := t.(terms.Compound).Args[0].(terms.Compound)
-			m[stmtId(dus)] = StmtExplanation{
+			m[stmtID(dus)] = StmtExplanation{
 				ConsentRequired:             cr(dus, ag),
 				Pii:                         pii(dus, ag),
 				Li:                          li(dus, ag),
 				CompatiblePurpose:           cp(dus, ag),
-				IdNotRequired:               idnr(dus, ag),
+				IDNotRequired:               idnr(dus, ag),
 				TransferPii:                 tpii(dus, ag),
 				ConsentRequired2TransferPii: cr2tpii(dus, ag),
 			}

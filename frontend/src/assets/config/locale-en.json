@@ -84,9 +84,9 @@
   "document_saved": "Document saved",
   "document_validating": "Validating document...",
   "id_not_required": "Data Subject’s Consent Not Required According to Art. 11",
-  "id_required": "Data Subject Rights Apply",
-  "add_category": "Add Category",
-  "delete_category": "Delete Category",
+  "id_required": "Data Subject Rights Apply According to Art. 11",
+  "add_category": "Add Data Category",
+  "delete_category": "Delete  Data Category",
   "and": "and",
   "except": "except",
   "location": "location",
@@ -94,7 +94,7 @@
   "does_not_transfer_pii": "does_not_transfer_pii",
   "consent_required_2_transfer_pii": "consent_required_2_transfer_pii",
   "consent_not_required_2_transfer_pii": "consent_not_required_2_transfer_pii",
-  "document_not_valid":"One or more Problems werde detected in this document.",
+  "document_not_valid":"One or more Problems were detected in this document.",
   "case_1": "Case 1",
   "case_2": "Case 2"
 }

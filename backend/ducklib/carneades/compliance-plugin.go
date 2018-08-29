@@ -1,6 +1,7 @@
 // Data Use Statement Compliance Checker (DUCK)
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
+
 package carneades
 
 import (
@@ -47,7 +48,7 @@ func MakeComplianceCheckerPlugin(ruleBaseDir string) (*ComplianceCheckerPlugin, 
 	return &ComplianceCheckerPlugin{MakeComplianceChecker(), ruleBaseDir, make(map[string]RuleBaseDescription)}, nil
 }
 
-// ComplianceCheckerPlugin.Init: For each file in RuleBaseDir:
+// Intialize For each file in RuleBaseDir:
 //    1. Parse the YAML and extract the id, version, title and description
 //    2. Call checker.GetTheory function to compile each rulebase into a
 //       Carneades theory and cache the theory.
@@ -173,10 +174,10 @@ func (c *ComplianceCheckerPlugin) CompliantDocuments(ruleBaseID string, document
 		temp, ok := <-docChan
 		if !ok {
 			// no further compliant documents available
-			fmt.Println("No more compliant documents available\n")
+			fmt.Println("No more compliant documents available")
 			return false, docs, nil
 		}
-		fmt.Println("Compliant Document Found: %+v \n", temp)
+		fmt.Printf("Compliant Document Found: %+v \n", temp)
 		docs = append(docs, temp)
 	}
 

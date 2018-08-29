@@ -60,10 +60,10 @@
                         <i class="fa fa-plus"></i>
                     </a>
     <a ng-if ="!editorController.existingExceptOperator(statement)" href="" class="" ng-click="editorController.addNewCategory(statement, 'except')" ng-attr-title="{{'add_category'|translate}}">
-        <i class="fa fa-minus"></i>
+        <i class="fa fa-times-circle"></i>
     </a>
     <a ng-if ="editorController.existingExceptOperator(statement)" href="" class="" ng-attr-title="{{'add_category'|translate}}">
-        <i class="fa fa-minus medium-gray"></i>
+        <i class="fa fa-times-circle medium-gray"></i>
     </a>
     from
     <error-label fragment="statement.errors.sourceScope"></error-label>
