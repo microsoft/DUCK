@@ -946,7 +946,19 @@ argument_schemes:
       
   ### EU GDPR Article 44-50 - data transferPii
   ###  
+  
+  - id: notConsentRequired2TransferPii00
+    variables: [S]
+    weight:
+      constant: 0.1
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - notConsentRequired2TransferPii(S)  
+  
   ### empty scope location
+  
+  
   - id: emtyUseScopeLocation01
     variables: [S]
     deletions: 
@@ -1124,6 +1136,56 @@ argument_schemes:
     conclusions:
       - true  
       
+  ### transferPII
+
+  - id: notTransferPII01
+    variables: [S]
+    weight:
+      constant: 0.1
+    premises:
+      - dataUseStatement(S)
+    conclusions:
+      - notTransferPii(S)  
+  
+  - id: transferPII01
+    variables: [S,L]
+    premises: 
+      - useScopeLocation(S,L)
+    conclusions:
+      - transferPii(S)  
+
+  - id: transferPII02
+    variables: [S,L]
+    premises:
+      - resultScopeLocation(S,L)
+    conclusions:
+      - transferPii(S) 
+
+  - id: transferPII03
+    variables: [S,L]
+    premises: 
+      - sourceScopeLocation(S,L)
+    conclusions:
+      - transferPii(S) 
+
+  - id: transferPII04
+    variables: [S,L]
+    premises: 
+      - transferPii(S)
+    deletions: 
+      - transferPii(S) 
+    conclusions:
+      - true 
+      
+  - id: transferPII05
+    variables: [S,L]
+    premises: 
+      - notPii(S)
+    deletions: 
+      - transferPii(S) 
+    conclusions:
+      - notTransferPii(S)  
+
   ## Scope Location with adequacy protection as EU 
   
   - id: scopeLocationApaEu01
@@ -1209,38 +1271,6 @@ argument_schemes:
       - resultScopeLocation(S,L)
     conclusions:
       - true  
-      
-  ### transferPII
-
-  - id: notTransferPII01
-    variables: [S]
-    weight:
-      constant: 0.1
-    premises:
-      - dataUseStatement(S)
-    conclusions:
-      - notTransferPii(S)  
-      
-  - id: TransferPII01
-    variables: [S,L]
-    premises: 
-      - useScopeLocation(S,L)
-    conclusions:
-      - transferPii(S)  
-
-  - id: TransferPII02
-    variables: [S,L]
-    premises:
-      - sourceScopeLocation(S,L)
-    conclusions:
-      - transferPii(S)  
-      
-  - id: TransferPII03
-    variables: [S,L]
-    premises:
-      - resultScopeLocation(S,L)
-    conclusions:
-      - transferPii(S)   
 
   ## other Scope location ==> Consent Required to Transfer PII
   
