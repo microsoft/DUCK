@@ -153,22 +153,15 @@
                                                      'is-hidden': statement.$$statementExplanation.idNotRequired.value === true}">
                                     {{'id_required'|translate}}
                                 </span>
-                            <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.transferPii.assumed === true,
-                                                     'is-hidden': statement.$$statementExplanation.transferPii.value === false}">
+                            <span class="label padding-right-1 right info" ng-class="{'is-hidden': statement.$$statementExplanation.transferPii.value === false}">
                                     {{'transfer_pii'|translate}}
                                 </span>
-                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.transferPii.assumed === true,
-                                                     'is-hidden': statement.$$statementExplanation.transferPii.value === true}">
-                                    {{'does_not_transfer_pii'|translate}}
-                                </span>
+                               
                                 <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.consentRequired2TransferPii.assumed === true,
                                                      'is-hidden': statement.$$statementExplanation.consentRequired2TransferPii.value === false}">
                                     {{'consent_required_2_transfer_pii'|translate}}
                                 </span>
-                                <span class="label padding-right-1 right" ng-class="{'secondary': statement.$$statementExplanation.consentRequired2TransferPii.assumed === true,
-                                                     'is-hidden': statement.$$statementExplanation.consentRequired2TransferPii.value === true}">
-                                    {{'consent_not_required_2_transfer_pii'|translate}}
-                                </span>
+                               
                             </div>
                             <div class="small-2 right columns">
                                 <span class="button-group tiny float-right noselect">

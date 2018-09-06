@@ -2,53 +2,165 @@
 	"LOCATION": {
 		"description": "Location Test",
 		"dictionary": {
-			"sdfsdf": {
-				"value": "sdfsdf",
+			"services listed in the service agreement in the EU": {
+				"value": "services listed in the service agreement in the EU",
 				"type": "scope",
-				"code": "sdfsdf",
-				"category": "2",
+				"code": "services_agreement_eu",
+				"category": "3",
+				"location":"eu",
 				"dictionaryType": "document"
 			},
-			"sourceinde": {
-				"value": "sourceinde",
+			"this capability in the EU": {
+				"value": "this capability in the EU",
 				"type": "scope",
-				"code": "sourceinde",
+				"code": "capability_eu",
 				"category": "1",
+				"location":"eu",
+				"dictionaryType": "document"
+			},
+			"services listed in the service agreement in the US": {
+				"value": "services listed in the service agreement in the US",
+				"type": "scope",
+				"code": "services_agreement_us",
+				"category": "3",
+				"location":"us",
+				"dictionaryType": "document"
+			},
+			"this capability in the US": {
+				"value": "this capability in the US",
+				"type": "scope",
+				"code": "capability_us",
+				"category": "1",
+				"location":"us",
+				"dictionaryType": "document"
+			},
+			"services listed in the service agreement in Peru": {
+				"value": "services listed in the service agreement in Peru",
+				"type": "scope",
+				"code": "services_agreement_peru",
+				"category": "3",
+				"location":"pe",
+				"dictionaryType": "document"
+			},
+			"this capability in Peru": {
+				"value": "this capability in Peru",
+				"type": "scope",
+				"code": "capability_peru",
+				"category": "1",
+				"location":"pe",
 				"dictionaryType": "document"
 			}
 		},
 		  "statements": [
 			{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "anonymized_data",
+				"resultScopeCode": "services_agreement",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "services_agreement",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "capability",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
 			  "actionCode": "provide",
-			  "dataCategories": [
-				{
-				  "dataCategoryCode": "customer_content",
-				  "operator": "and",
-				  "qualifierCode": "identified_data"
-				},
-				{
-				  "dataCategoryCode": "customer_content_credentials",
-				  "operator": "except",
-				  "qualifierCode": "identified_data"
-				},
-				{
-				  "dataCategoryCode": "customer_content_contact",
-				  "operator": "and",
-				  "qualifierCode": "identified_data"
-				},
-				{
-				  "dataCategoryCode": "customer_content_health",
-				  "operator": "and",
-				  "qualifierCode": "identified_data"
-				}
-			  ],
-			  "dataCategoryCode": "derived_data_user",
+			  "dataCategories": [],
+			  "dataCategoryCode": "customer_content_credentials",
 			  "passive": false,
-			  "qualifierCode": "identified_data",
-			  "resultScopeCode": "sdfsdf",
-			  "sourceScopeCode": "services_agreement",
-			  "useScopeCode": "sourceinde"
-			}
+			  "qualifierCode": "anonymized_data",
+			  "resultScopeCode": "services_agreement_eu",
+			  "sourceScopeCode": "capability",
+			  "useScopeCode": "capability"
+			},{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "services_agreement_eu",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "capability_eu",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "anonymized_data",
+				"resultScopeCode": "services_agreement_us",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "services_agreement_us",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "capability_us",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "anonymized_data",
+				"resultScopeCode": "services_agreement_peru",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "services_agreement_peru",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  },{
+				"actionCode": "provide",
+				"dataCategories": [],
+				"dataCategoryCode": "customer_content_credentials",
+				"passive": false,
+				"qualifierCode": "identified_data",
+				"resultScopeCode": "capability_peru",
+				"sourceScopeCode": "capability",
+				"useScopeCode": "capability"
+			  }
 		  ]
 	},
 	"PII_NO": {
@@ -546,7 +658,7 @@
 		]
 	},
 	"CATEGORIES_EXAMPLE": {
-		"description": "multiple categories example",
+		"description": "Example with multiple data categories ",
 		 "statements": [
         {
             "useScopeCode": "services_agreement",
