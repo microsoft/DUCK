@@ -47,13 +47,13 @@
             </a>
         </span>
     </span>
-    <a href="" class="" ng-click="editorController.addNewCategory(statement, 'and')" ng-attr-title="{{'add_category'|translate}}">
+    <a href="" class="" ng-click="editorController.addNewCategory(statement, 'and')" ng-attr-title="{{'add_and'|translate}}">
                         <i class="fa fa-plus"></i>
                     </a>
-    <a ng-if ="!editorController.existingExceptOperator(statement)" href="" class="" ng-click="editorController.addNewCategory(statement, 'except')" ng-attr-title="{{'add_category'|translate}}">
+    <a ng-if ="!editorController.existingExceptOperator(statement)" href="" class="" ng-click="editorController.addNewCategory(statement, 'except')" ng-attr-title="{{'add_except'|translate}}">
         <i class="fa fa-times-circle"></i>
     </a>
-    <a ng-if ="editorController.existingExceptOperator(statement)" href="" class="" ng-attr-title="{{'add_category'|translate}}">
+    <a ng-if ="editorController.existingExceptOperator(statement)" href="" class="" ng-attr-title="{{'add_except'|translate}}">
         <i class="fa fa-times-circle medium-gray"></i>
     </a>
     von
