@@ -146,14 +146,6 @@ func (h *Handler) PostUser(c echo.Context) error {
 
 //Login handles the login Process
 func (h *Handler) Login(c echo.Context) error {
-	/*	resp, err := ioutil.ReadAll(c.Request().Body())
-		if err != nil {
-			e := err.Error()
-			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-		}
-		fmt.Println("USER: ")
-		fmt.Println(string(resp))
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false})*/
 	u := new(structs.Login)
 	if err := c.Bind(u); err != nil {
 		log.Printf("Error in loginHandler trying to bind user to struct: %s", err)
@@ -177,7 +169,6 @@ func (h *Handler) Login(c echo.Context) error {
 			return c.JSON(http.StatusUnauthorized, structs.Response{Ok: false, Reason: &e})
 		}
 	}
-	//log.Printf("id: %s, pw: %s", id, pw)
 
 	correct := true
 	err = bcrypt.CompareHashAndPassword([]byte(hashedpw), []byte(u.Password))
