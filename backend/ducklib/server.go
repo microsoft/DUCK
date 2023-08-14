@@ -21,8 +21,6 @@ import (
 
 //GetServer returns Echo instance with predefined routes
 func GetServer(conf config.Configuration) *echo.Echo {
-	//webDir string, jwtKey []byte, ruleBaseDir string
-	//config := conf
 	datab, err := db.NewDatabase(*conf.DBConfig)
 	if err != nil {
 		switch t := err.(type) {
@@ -99,11 +97,8 @@ func GetServer(conf config.Configuration) *echo.Echo {
 
 	//rulebase resources
 	ruh := rulebases.Handler{Db: datab, WebDir: conf.WebDir, Checker: checker}
-	rulebases := api.Group("/rulebases", jwtMiddleware) //base URI
-	rulebases.GET("", ruh.GetRulebases)                 //Returns a dictionary with all available Rulebases
-	//rulebases.POST("/", postRsHandler)                                //create a rulebase
-	//rulebases.DELETE("/:id", deleteRsHandler)                         //delete a rulebase
-	//rulebases.PUT("/:setid", putRsHandler)                            //update a rulebase
+	rulebases := api.Group("/rulebases", jwtMiddleware)             //base URI
+	rulebases.GET("", ruh.GetRulebases)                             //Returns a dictionary with all available Rulebases
 	rulebases.PUT("/:baseid/documents", ruh.CheckDoc)               //process provided document against rulebase
 	rulebases.PUT("/:baseid/documents/:documentid", ruh.CheckDocID) //process document against rulebase
 
