@@ -26,15 +26,6 @@ type Handler struct {
 //	baseid			the id of the rulebase
 // 	in RequestBody	the document
 func (h *Handler) CheckDoc(c echo.Context) error {
-	/*
-		resp, err := ioutil.ReadAll(c.Request().Body())
-		if err != nil {
-			e := err.Error()
-			return c.JSON(http.StatusNotFound, structs.Response{Ok: false, Reason: &e})
-		}
-		fmt.Println(string(resp))
-		return c.JSON(http.StatusNotFound, structs.Response{Ok: false})
-	*/
 	id := c.Param("baseid")
 	doc := new(structs.Document)
 	if err := c.Bind(doc); err != nil {
@@ -83,7 +74,6 @@ func (h *Handler) CheckDoc(c echo.Context) error {
 	}
 	flatExp := carneades.FoldExplanation(exp)
 
-	//log.Printf("%#v", flatExp)
 	if ok {
 		return c.JSON(http.StatusOK, structs.ComplianceResponse{Compliant: "COMPLIANT", Explanation: flatExp})
 	}
