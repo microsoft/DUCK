@@ -42,7 +42,7 @@
     "gulp-uncss": "^1.0.6",
     "gulp-util": "^3.0.8",
     "gulp-zip": "^4.1.0",
-    "js-yaml": "^3.11.0",
+    "js-yaml": "^4.1.1",
     "rimraf": "^2.6.2",
     "yargs": "^11.0.0"
   },
